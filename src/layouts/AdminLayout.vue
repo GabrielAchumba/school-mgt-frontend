@@ -1,436 +1,200 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpR fFf" class="bg-primary">
 
-    <q-header class="bg-primary text-white" height-hint="98">
-      <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="left = !left" />
+     <q-header class="q-py-sm bg-primary text-accent" :style="'border-bottom: 2px solid '+ theme_color">
+        <q-toolbar>
+          <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          aria-label="Menu"
+          class="bg-primary text-accent"
+          @click="leftDrawerOpen = !leftDrawerOpen"
+        />
+         <img src='/statics/lhdi.png' width=100 height=40>
+        <q-space ></q-space>
+      <q-tabs shrink>
 
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg">
-          </q-avatar>
-          
-        </q-toolbar-title>
+        <q-btn
+          @click="toggleButton" 
+          avatar>
+            <q-avatar
+            v-if="getIsUserPhoto()" 
+            class="bg-primary text-accent">
+  	        <q-img
+                  :src="IdentityModel.base64String"
+                />
+  	      </q-avatar>
+          <q-avatar
+            v-else
+            class="bg-primary text-accent">
+  	        {{ IdentityModel.firstName.charAt(0) }}
+  	      </q-avatar>
+          <q-menu
+            fit>
+                      <q-list dense class="text-accent text-caption bg-primary">
+                        <q-item
+                            class="bg-primary text-accent">
+                            <q-item-section avatar>
+                            <div class="row text-center flex flex-center q-pb-lg">
+                              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
+                              <div 
+                              class="q-pa-md" style="font-family: Lato;" 
+                              avatar>
+                                <q-avatar 
+                                v-if="getIsUserPhoto()" 
+                                class="bg-primary text-accent">
+                                   <q-img
+                                      :src="IdentityModel.base64String"
+                                    />
+                                  </q-avatar>
+                                  <q-avatar 
+                                  v-else
+                                  class="bg-primary text-accent">
+                                    {{ IdentityModel.firstName.charAt(0) }}
+                                  </q-avatar>
+                              </div>
+                              <div 
+                              class="q-pa-md" style="font-family: Lato;">
+                                <p class="bg-primary text-accent">
+                                    {{ IdentityModel.firstName }} {{ IdentityModel.lastName }}
+                                  </p>
+                              </div>
+                              </div>
+                            </div>
+                            </q-item-section>
+                        </q-item>
 
-        <q-btn stretch flat label="Options" 
-       @click="showOptions" />
-        <q-btn stretch flat label="Report" 
-       @click="reportAction" />
-        <q-btn dense flat round icon="menu" @click="right = !right" />
+                            <q-item
+                            class="bg-primary accent-white">
+                            <q-item-section avatar>
+                            <div class="row text-center flex flex-center q-pb-lg">
+                              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
+                                <q-btn 
+                                  class="q-mr-md bg-accent text-primary" 
+                                  size="12px" 
+                                  :style="'min-height:auto; padding:1px;'" 
+                                  dense icon="color_lens"
+                                  @click="logoutUser">
+                                      Logout
+                                    </q-btn>
+                              </div>
+                              </div>
+                            </q-item-section>
+                            </q-item>
+                      </q-list>
+              </q-menu>
+        </q-btn>
+      </q-tabs> 
+        
       </q-toolbar>
     </q-header>
 
-  <!--   <q-drawer 
-    show-if-above v-model="left" 
-    side="left" 
-    :breakpoint="767"
-    :width="200"
-    bordered
-    content-class="bg-primary">
-      
-       <q-card>
-
-         <q-card-section class="bg-primary text-white">
-            <div class="text-h6">Headers</div>
-          </q-card-section>
-
-          <q-card-section>
-
-              <q-list bordered padding>
-
-                <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.lGASelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>LGA</p>
-                    </q-item-section>
-                </q-item>
-
-                <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.examTypeSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Type of Exam</p>
-                    </q-item-section>
-                </q-item>
-
-                <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.finalOverallGradeSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Overall Grade</p>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.genderSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Gender</p>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.gradeSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Grade</p>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.levelSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Class</p>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.schoolCategorySelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>School Category</P>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.schoolNameSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Name of School</P>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.scoreSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Exam Score</p>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="IsColumnsSelected.subjectSelected" />
-                    </q-item-section>
-
-                    <q-item-section>
-                        <p>Subject</p>
-                    </q-item-section>
-                </q-item>
-                </q-list>
-
-          </q-card-section>
-
-     </q-card>
-
-    </q-drawer> -->
-
     <q-drawer 
-    show-if-above v-model="right" 
-    side="right" 
-    :breakpoint="767"
-    bordered
-    content-class="bg-primary">
+      v-model="leftDrawerOpen"
+      :breakpoint="767"
+      :width="200"
+      bordered
+      content-class="bg-primary text-accent"
+    >
+      <q-list dark>
 
-     <q-card>
+         <q-item
+         v-for="nav in navs" 
+         :key="nav.label"
+        :to="nav.to"
+        clickable
+            class="bg-primary text-accent">
+          <q-item-section avatar>
+            <q-item-label>{{ nav.label }}</q-item-label>       
+          </q-item-section>
+        </q-item>
 
-         <q-card-section class="bg-primary text-white">
-            <div class="text-h6">Sort Variables</div>
-          </q-card-section>
-
-          <q-card-section>
-
-              <q-list bordered padding>
-
-                <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isLGAOfOriginSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.lGAOfOrigin"
-                            :options ="AuthDTO.LGAs"
-                            label="LGA">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isExamTypeSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.examType"
-                            :options ="AuthDTO.ExamTypes"
-                            label="Type of Exam">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isFinalOverallGradeSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.finalOverallGrade"
-                            :options ="AuthDTO.OverallGrades"
-                            label="Overall Grade">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isGenderSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.gender"
-                            :options ="genders"
-                            label="Gender">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isGradeSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.grade"
-                            :options ="AuthDTO.Grades"
-                            label="Grade">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.islevelSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.level"
-                            :options ="AuthDTO.Levels"
-                            label="Class">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isSchoolCategorySelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.schoolCategory"
-                            :options ="AuthDTO.Schools"
-                            label="School Category">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isSchoolNameSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.schoolName"
-                            :options ="AuthDTO.SchoolNames"
-                            label="Name of School">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isScoreSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.score"
-                            :options ="ExamScores"
-                            label="Exam Score (Begin)">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isScoreSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.scoreEnd"
-                            :options ="ExamScores"
-                            label="Exam Score (End)">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                 <q-item tag="label" v-ripple>
-                    <q-item-section side top>
-                    <q-checkbox v-model="SortVariable.isSubjectSelected"/>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-select 
-                            color="grey-3" 
-                            outlined label-color="primary"
-                             v-model="SortVariable.subject"
-                            :options ="AuthDTO.PrimarySubjects"
-                            label="Primary School Subject">
-                        </q-select>
-                    </q-item-section>
-                </q-item>
-
-                </q-list>
-
-          </q-card-section>
-
-     </q-card>
-      
+      </q-list>
     </q-drawer>
 
     <q-page-container>
-         <q-dialog v-model="PrimaryOptionCutOffCDialog">
-          <createprimary-app></createprimary-app>
-        </q-dialog>
 
-        <q-dialog v-model="SecondaryOptionCutOffCDialog">
-          <createsecondary-app></createsecondary-app>
-        </q-dialog>
-         <q-dialog v-model="PrimaryOptionCutOffUDialog">
-          <updateprimary-app></updateprimary-app>
-        </q-dialog>
-
-        <q-dialog v-model="SecondaryOptionCutOffUDialog">
-          <updatesecondary-app></updatesecondary-app>
-        </q-dialog>
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import createprimary from 'components/administrators/createprimary.vue';
-import createsecondary from 'components/administrators/createsecondary.vue';
-import updateprimary from 'components/administrators/updateprimary.vue';
-import updatesecondary from 'components/administrators/updatesecondary.vue';
+
 export default {
-    computed:{
-         PrimaryOptionCutOffCDialog() {
-          return this.$store.getters['administratorStore/PrimaryOptionCutOffCDialog'];
+  name: 'AdminLayout',
+  computed: {
+        IdentityModel() {
+            return this.$store.getters['authenticationStore/IdentityModel'];
         },
-        SecondaryOptionCutOffCDialog() {
-          return this.$store.getters['administratorStore/SecondaryOptionCutOffCDialog'];
+        Loginstatus() {
+          return this.$store.getters['authenticationStore/Loginstatus'];
         },
-        PrimaryOptionCutOffUDialog() {
-          return this.$store.getters['administratorStore/PrimaryOptionCutOffUDialog'];
+        theme_color(){
+          return this.$store.getters['authenticationStore/theme_color'];
         },
-        SecondaryOptionCutOffUDialog() {
-          return this.$store.getters['administratorStore/SecondaryOptionCutOffUDialog'];
-        },
-        SortVariable() {
-            return this.$store.getters['administratorStore/SortVariable'];
-        },
-        AuthDTO(){
-            return this.$store.getters['authenticationStore/AuthDTO'];
-        },
-        genders(){
-            return this.$store.getters['clientStore/genders'];
-        },
-        ExamScores(){
-            return this.$store.getters['authenticationStore/ExamScores'];
-        },
-        IsColumnsSelected(){
-            return this.$store.getters['administratorStore/IsColumnsSelected'];
+        adminNavBarList(){
+          return this.$store.getters['administratorStore/adminNavBarList'];
         }
-    },
-    components: {
-        'createprimary-app' : createprimary,
-        'createsecondary-app' : createsecondary,
-        'updateprimary-app' : updateprimary,
-        'updatesecondary-app' : updatesecondary
-    },
+      },
+  components: {
+
+  },
   data () {
     return {
-      left: true,
-      right: false,
-      navs: [
-              {
-                label:'Analysis',
-                icon: 'group',
-                to:'/admin'
-              }
-            ]
+      leftDrawerOpen: true,
+      showAccountDetails: false,
+      rightMenuIcon: "menu",
+      navs: []
     }
   },
   methods:{
-      reportAction(){
-          this.$store.dispatch('administratorStore/ReadSortModels');
-      },
-      showOptions(){
-          this.$router.push('/options');
+    getIsUserPhoto(){
+      var context = this;
+      if(context.IdentityModel.base64String != "" &&
+      context.IdentityModel.base64String != undefined){
+        return true
+      }else{
+        return false
       }
+    },
+    toggleButton(){
+      var context = this;
+
+      if(context.showAccountDetails == true){
+        context.showAccountDetails = false;
+      }else{
+        context.showAccountDetails = true;
+      }
+    },
+    logoutUser(){
+      this.$store.dispatch('authenticationStore/Logout')
+    },
+    scrollToElement(identityvalue){
+      if(identityvalue == 'id_about_us'){
+        this.$router.push('/about');
+      }
+
+      if(identityvalue == 'id_services'){
+        this.$router.push('/streams');
+      }
+
+      if(identityvalue == 'id_team'){
+        this.$router.push('/team');
+      }
+    },
   },
   created(){
-    this.$store.dispatch('authenticationStore/LoadList');
+    var context = this;
+    if(context.IdentityModel.designation == "CEO") {
+      context.navs = context.adminNavBarList.map((row) => {
+        return {
+          ...row,
+        }
+      })
+    }
   }
 }
 </script>

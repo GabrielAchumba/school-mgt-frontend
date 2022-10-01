@@ -2,57 +2,13 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/AuthenticationLayout.vue'),
     children: [
       { 
         path: '/', 
-        component: () => import('pages/home/index.vue') 
+        component: () => import('pages/authentication/landing.vue') 
         
-      },
-      { 
-        path: '/contact', 
-        component: () => import('pages/home/contactus.vue') 
-      },
-      { 
-        path: '/about', 
-        component: () => import('pages/home/aboutus.vue') 
-      },
-      { 
-        path: '/profiles', 
-        component: () => import('pages/personalprofile/index.vue') 
-      },
-      { 
-        path: '/achievements', 
-        component: () => import('pages/achievements/index.vue') 
-      },
-      { 
-        path: '/educations', 
-        component: () => import('pages/educations/index.vue') 
-      },
-      {
-      path: '/employments', 
-      component: () => import('pages/employment/index.vue') 
-      },
-      {
-      path: '/qualifications', 
-      component: () => import('pages/qualifications/index.vue') 
-      },
-      {
-      path: '/skills', 
-      component: () => import('pages/skills/index.vue') 
-      },
-      {
-      path: '/hobbies', 
-      component: () => import('pages/Hobbies/index.vue') 
-      },
-      {
-      path: '/references', 
-      component: () => import('pages/references/index.vue') 
-      },
-      {
-        path: '/statementofresults', 
-        component: () => import('pages/statementOfResults/index.vue') 
-        }
+      }
     ]
   },
   {
@@ -61,14 +17,20 @@ const routes = [
     children: [
       { 
         path: '/admin', 
-        component: () => import('pages/administrators/index.vue') 
+        component: () => import('pages/administrators/landing.vue') 
         
       },
+    ]
+  },
+  {
+    path: '/users',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
       { 
-        path: '/options', 
-        component: () => import('pages/administrators/options.vue') 
+        path: '/users', 
+        component: () => import('pages/users/landing.vue') 
         
-      }
+      },
     ]
   }
 ]

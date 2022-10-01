@@ -1,296 +1,82 @@
 import { $http } from 'boot/axios' 
 
 const state = {
-    SortModels: [],
-    SortVariable: {
-        schoolName: "",
-        isSchoolNameSelected: false,
-        finalOverallGrade: "",
-        isFinalOverallGradeSelected: false,
-        schoolCategory: "",
-        isSchoolCategorySelected: false,
-        level: "",
-        islevelSelected: false,
-        subject: "",
-        isSubjectSelected: false,
-        grade: "",
-        isGradeSelected: false,
-        score: "0",
-        scoreEnd: "100",
-        isScoreSelected: false,
-        examType: "",
-        isExamTypeSelected: false,
-        gender: "",
-        isGenderSelected: false,
-        lGAOfOrigin: "",
-        isLGAOfOriginSelected: false
+    adminNavBarList: [
+          {
+            label:'Profile',
+            to:'/profile'
+          },
+          {
+            label:'Staff',
+            to:'/staff'
+          },
+          {
+            label:'Class Rooms',
+            to:'/class-rooms'
+          },
+          {
+            label:'Subjects',
+            to:'/subjects'
+          },
+    ],
+    AdminDTO: {},
+    SelectedAdmin: {},
+    Administrators: [],
+    isSuperAdmin: false,
+    PhotoDto:{
+      base64String: "",
+      fileName: "",
     },
-    IsColumnsSelected: {
-      fullNameSelected: true,
-      subjectSelected: true,
-      scoreSelected: true,
-      gradeSelected: true,
-      levelSelected: true,
-      schoolNameSelected: true,
-      schoolCategorySelected: true,
-      lGASelected: true,
-      examTypeSelected: true,
-      finalOverallGradeSelected: true,
-      genderSelected: true
-      
-    },
-    SecondaryCutOffs: [],
-    PrimaryCutOffs: [],
-    SelectedPrimaryCutOff: {},
-    SelectedSecondaryCutOff: {},
-    PrimaryOptionCutOffCDialog: false,
-    SecondaryOptionCutOffCDialog: false,
-    PrimaryOptionCutOffUDialog: false,
-    SecondaryOptionCutOffUDialog: false
-
+    UploadProgress: "0%",
   }
 
   const getters = {
-    PrimaryOptionCutOffUDialog(state){
-      return state.PrimaryOptionCutOffUDialog;
+    adminNavBarList(state){
+      return state.adminNavBarList;
     },
-    SecondaryOptionCutOffUDialog(state){
-      return state.SecondaryOptionCutOffUDialog;
+    AdminDTO(state){
+      return state.AdminDTO;
     },
-    PrimaryOptionCutOffCDialog(state){
-      return state.PrimaryOptionCutOffCDialog;
+    SelectedAdmin(state){
+      return state.SelectedAdmin;
     },
-    SecondaryOptionCutOffCDialog(state){
-      return state.SecondaryOptionCutOffCDialog;
+    Administrators(state){
+      return state.Administrators;
     },
-    SecondaryCutOffs(state){
-      return state.SecondaryCutOffs;
+    isSuperAdmin(state){
+      return state.isSuperAdmin;
     },
-    PrimaryCutOffs(state){
-      return state.PrimaryCutOffs;
+    PhotoDto(state){
+      return state.PhotoDto;
     },
-    SelectedPrimaryCutOff(state){
-      return state.SelectedPrimaryCutOff;
-    },
-    SelectedSecondaryCutOff(state){
-      return state.SelectedSecondaryCutOff;
-    },
-    SortModels (state) {
-    return state.SortModels;
-  },
-  SortVariable (state){
-      return state.SortVariable;
-  },
-  IsColumnsSelected(state){
-    return state.IsColumnsSelected;
-  }
+    UploadProgress(state){
+      return state.UploadProgress;
+    }
 }
 
 const mutations = {
-
-  ReadSortModels(state, payload){
-    state.SortModels = payload
-    this.$router.push('/admin');
+  CreateAdministrator(state, payload){
+    state.AdminDTO = payload;
   },
-  ReadPrimaryOptionCutOff(state, payload){
-    state.PrimaryCutOffs = payload;
+  UpdateSelectedAdmin(state, payload){
+    state.SelectedAdmin = payload;
   },
-  CreatePrimaryOptionCutOff(state, payload){
-    state.PrimaryCutOffs = payload;
-    state.PrimaryOptionCutOffCDialog = false;
+  GetAdministrators(state, payload){
+    state.Administrators = payload;
   },
-  UpdatePrimaryOptionCutOff(state, payload){
-    state.PrimaryCutOffs = payload;
-    state.PrimaryOptionCutOffUDialog = false;
+  UpdateIsSuperAdmin(state, payload){
+    state.isSuperAdmin = payload;
   },
-  DeletePrimaryOptionCutOff(state, payload){
-    state.PrimaryCutOffs = payload;
+  UploadFile(state, payload){
+    state.PhotoDto.base64String = payload.base64String;
+    state.PhotoDto.fileName = payload.fileName;
   },
-  ReadSecondaryOptionCutOff(state, payload){
-    state.SecondaryCutOffs = payload;
+  GetUploadProgress(state, payload){
+    state.UploadProgress = payload;
   },
-  CreateSecondaryOptionCutOff(state, payload){
-    state.SecondaryCutOffs = payload;
-    state.SecondaryOptionCutOffCDialog = false;
-  },
-  UpdateSecondaryOptionCutOff(state, payload){
-    state.SecondaryCutOffs = payload;
-    state.SecondaryOptionCutOffUDialog = false;
-  },
-  DeleteSecondaryOptionCutOff(state, payload){
-    state.SecondaryCutOffs = payload;
-  },
-  ShowPrimaryOptionCutOffCDialog(state){
-    state.PrimaryOptionCutOffCDialog = true;
-    console.log(state.PrimaryOptionCutOffCDialog)
-  },
-  ShowPrimaryOptionCutOffUDialog(state, payload){
-    state.SelectedPrimaryCutOff = payload
-    state.PrimaryOptionCutOffUDialog = true;
-  },
-  HidePrimaryOptionCutOffCDialog(state){
-    state.PrimaryOptionCutOffCDialog = false;
-  },
-  HidePrimaryOptionCutOffUDialog(state){
-    state.PrimaryOptionCutOffUDialog = false;
-  },
-  ShowSecondaryOptionCutOffCDialog(state){
-    state.SecondaryOptionCutOffCDialog = true;
-  },
-  ShowSecondaryOptionCutOffUDialog(state, payload){
-    state.SelectedSecondaryCutOff = payload;
-    state.SecondaryOptionCutOffUDialog = true;
-  },
-  HideSecondaryOptionCutOffCDialog(state){
-    state.SecondaryOptionCutOffCDialog = false;
-  },
-  HideSecondaryOptionCutOffUDialog(state){
-    state.SecondaryOptionCutOffUDialog = false;
-  }
-  
 }
 
-const actions = {
-    ReadSortModels(context)
-    {
-      return new Promise((resolve, reject) => {
-         $http.post('SortModels/GetSortedTable', state.SortVariable)
-          .then(response => {
-              
-            //context.commit('SetColumns');
-            context.commit('ReadSortModels', response.data);
-                         
-              resolve(response)
-              
-          })
-          .catch(error => {   
-            reject(error)
-          })
-      })
-    },
-    ReadPrimaryOptionCutOff(context){
-      return new Promise((resolve, reject) => {
-        $http.get('PrimaryCutOffs')
-         .then(response => {
-
-           context.commit('ReadPrimaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    CreatePrimaryOptionCutOff(context, payload){
-      return new Promise((resolve, reject) => {
-        $http.post('PrimaryCutOffs', payload)
-         .then(response => {
-             
-           context.commit('CreatePrimaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    UpdatePrimaryOptionCutOff(context, payload){
-      return new Promise((resolve, reject) => {
-        $http.put('PrimaryCutOffs/' + payload.id, payload)
-         .then(response => {
-             
-           context.commit('UpdatePrimaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    DeletePrimaryOptionCutOff(context, payload){
-      return new Promise((resolve, reject) => {
-        $http.delete('PrimaryCutOffs/' + payload.id)
-         .then(response => {
-             
-           context.commit('DeletePrimaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    ReadSecondaryOptionCutOff(context){
-      return new Promise((resolve, reject) => {
-        $http.get('SecondaryCutOffs')
-         .then(response => {
-             
-           context.commit('ReadSecondaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    CreateSecondaryOptionCutOff(context, payload){
-      return new Promise((resolve, reject) => {
-        $http.post('SecondaryCutOffs', payload)
-         .then(response => {
-             
-           context.commit('CreateSecondaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    UpdateSecondaryOptionCutOff(context, payload){
-      return new Promise((resolve, reject) => {
-        $http.put('SecondaryCutOffs/'+payload.id, payload)
-         .then(response => {
-             
-           context.commit('UpdateSecondaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    },
-    DeleteSecondaryOptionCutOff(context, payload){
-      return new Promise((resolve, reject) => {
-        $http.delete('SecondaryCutOffs/'+ payload.id)
-         .then(response => {
-             
-           context.commit('DeleteSecondaryOptionCutOff', response.data);
-                        
-             resolve(response)
-             
-         })
-         .catch(error => {   
-           reject(error)
-         })
-     })
-    }
-
-
-}
+const actions = {}
 
 export default {
   namespaced: true,

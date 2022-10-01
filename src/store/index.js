@@ -1,18 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import authenticationStore from './modules/authenticationStore'
-import clientStore from './modules/clientStore'
-import personalprofileStore from './modules/personalprofileStore'
-import achivementStore from './modules/achivementStore'
-import hobbiesStore from './modules/hobbiesStore'
-import qualificationStore from './modules/qualificationStore'
-import skillStore from './modules/skillStore'
-import educationStore from './modules/educationStore'
-import employmentStore from './modules/employmentStore'
-import referenceStore from './modules/referenceStore'
-import statementOfResultsStore from './modules/statementOfResultsStore'
-import administratorStore from './modules/administratorStore'
+/* import authenticationStore from './modules/authenticationStore' */
 
 
 Vue.use(Vuex)
@@ -29,18 +18,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      authenticationStore,
-      clientStore,
-      personalprofileStore,
-      achivementStore,
-      hobbiesStore,
-      qualificationStore,
-      skillStore,
-      educationStore,
-      employmentStore,
-      referenceStore,
-      statementOfResultsStore,
-      administratorStore
+     /*  authenticationStore, */
     },
 
     // enable strict mode (adds overhead!)
