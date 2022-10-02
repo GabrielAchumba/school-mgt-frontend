@@ -68,11 +68,11 @@ export default {
     methods:{
          cancelMessageBox(){
              var context  =  this;
-             this.$emit(context.cancelEvent);    
+             this.$emit(context.cancelEvent, context.title);    
         },
         oKMessageBox(){
             var context  =  this;
-            this.$emit(context.okayEvent); 
+            this.$emit(context.okayEvent, context.title); 
         }
     }
 };

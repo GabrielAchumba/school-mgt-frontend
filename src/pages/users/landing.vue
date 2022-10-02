@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary">
+  <div class="bg-primary q-pa-md">
        <CardList 
        :cardList="cardList"/>
   </div>

@@ -1,160 +1,233 @@
 <template>
-  <div>
-    <div v-show="showSimulatedReturnData">
-  <div class="q-pa-md">
-    <q-stepper
-      v-model="step"
-      vertical
-      color="primary"
-      animated
-    >
-      <q-step
-        :name="1"
-        title="Personal Data"
-        icon="settings"
-        :done="step > 1"
-      >
-        <personalData-app></personalData-app>
 
-        <q-stepper-navigation>
-          <q-btn @click="updatestep(1)" color="primary" label="Next" />
-        </q-stepper-navigation>
-      </q-step>
+ <q-layout>
+   <q-page-container>
+     <q-page class="flex flex-center bg-primary text-accent">
+       <q-card
+          class="personal-data-form"
+          v-bind:style="
+          $q.platform.is.mobile ? { width: '90%', height: '95%' } : { width: '90%' , height: '95%' }
+          "
+        >
 
-      <q-step
-        :name="2"
-        title="Contact Data"
-        icon="create_new_folder"
-        :done="step > 2"
-      >
-        <contactData-app></contactData-app>
+   <q-card-section>
+    <div class="row no-wrap items-center">
+      <div class="col text-h6 ellipsis">
+        Personal Data
+      </div>
+    </div>
+  </q-card-section>
 
-        <q-stepper-navigation>
-          <q-btn @click="updatestep(2)" color="primary" label="Next" />
-          <q-btn flat @click="backstep(1)" color="primary" label="Back" class="q-ml-sm" />
-        </q-stepper-navigation>
-      </q-step>
+   <q-card-section>
+      <q-form class="q-gutter-md">
+      <q-input outlined v-model="PersonalDataDTO.firstName" label="First Name *" lazy-rules />
+      <q-input outlined v-model="PersonalDataDTO.lastName" label="Last Name *" lazy-rules />
+      <q-input outlined v-model="PersonalDataDTO.username" label="Username *" lazy-rules />
+      <q-input 
+       :type="passwordType"
+        outlined v-model="PersonalDataDTO.password" label="Password *" lazy-rules>
+        	<template 
+                v-if="isVisible"
+                v-slot:append>
+                <q-icon name="visibility" 
+                class="bg-primary text-accent"
+                @click="togglePasswordVisibility" />
+              </template>
+              	<template 
+                v-else
+                v-slot:append>
+                <q-icon name="visibility_off" 
+                class="bg-primary text-accent"
+                 @click="togglePasswordVisibility" />
+              </template>
+      </q-input>
 
-      <q-step
-        :name="3"
-        title="Next of Kin Data"
-        icon="create_new_folder"
-        :done="step > 3"
-      >
-        <nextOfKinData-app></nextOfKinData-app>
+      <div class="row">
+        <div class="col-6 text-left">
+        </div>
+        <div class="col-6 text-right">
+          <q-btn
+            label="Register"
+            type="button"
+            size="sm"
+            no-caps
+            class="bg-accent text-primary"
+            @click="register"
+          />
+        </div>
+      </div>
+    </q-form>
+   </q-card-section>
+        
+  </q-card>
 
-        <q-stepper-navigation>
-          <q-btn @click="updatestep(3)" color="primary" label="Next" />
-          <q-btn flat @click="backstep(2)" color="primary" label="Back" class="q-ml-sm" />
-        </q-stepper-navigation>
-      </q-step>
+  <q-dialog v-model="isRegisterDialog">
+  <MessageBox
+  title="Register"
+  message="Do you want to register with empowerment network?"
+  okayEvent="savePersonalData"
+  cancelEvent="cancelRegistration"
+  @cancelRegistration="cancelRegistration($event)"
+  @savePersonalData="savePersonalData($event)"
+  >
+  </MessageBox>
+</q-dialog>
 
-      <q-step
-        :name="4"
-        title="Back Account Data"
-        icon="add_comment"
-      >
-        <bankAccountData-app></bankAccountData-app>
+<q-dialog v-model="isRegisterSuccessDialog">
+  <MessageBox
+  title="Success"
+  message="Your registration was successful!"
+  okayEvent="RegistrationSuccessOkay"
+  cancelEvent="RegistrationSuccessCancel"
+  @RegistrationSuccessCancel="RegistrationSuccessCancel($event)"
+  @RegistrationSuccessOkay="RegistrationSuccessOkay($event)"
+  >
+  </MessageBox>
+</q-dialog>
 
-        <q-stepper-navigation>
-          <q-btn color="primary" label="Finish" @click="updatestep(4)"/>
-          <q-btn flat @click="backstep(3)" color="primary" label="Back" class="q-ml-sm" />
-        </q-stepper-navigation>
-      </q-step>
-    </q-stepper>
-  </div>
-  </div>
-  <q-inner-loading :showing="visible">
-        <q-spinner-gears size="50px" color="primary" />
-      </q-inner-loading>
-  </div>
+<q-dialog v-model="isRegisterFailureDialog">
+  <MessageBox
+  title="Error"
+  :message="`${message}.`"
+  okayEvent="RegistrationFailureOkay"
+  cancelEvent="RegistrationFailureCancel"
+  @RegistrationFailureCancel="RegistrationFailureCancel($event)"
+  @RegistrationFailureOkay="RegistrationFailureOkay($event)"
+  >
+  </MessageBox>
+</q-dialog>
+
+     </q-page>
+   </q-page-container>
+ </q-layout>
+
+ 
 </template>
 
 <script>
-import personalData from 'pages/authentication/personalData.vue'
-import bioData from 'pages/authentication/bioData.vue'
-import contactData from 'pages/authentication/contactData.vue'
-import nextOfKinData from 'pages/authentication/nextOfKinData.vue'
-import bankAccountData from 'pages/authentication/bankAccountData.vue'
-
-export default {
-   computed: {
-        step() {
-            return this.$store.getters['clientStore/step'];
-        },
-        visible(){
-          return this.$store.getters['clientStore/visible'];
-        },
-        showSimulatedReturnData(){
-          return this.$store.getters['clientStore/showSimulatedReturnData'];
-        },
-        PersonalDataDTO(){
-          return this.$store.getters['clientStore/PersonalDataDTO'];
-        },
-        ContactDTO(){
-          return this.$store.getters['clientStore/ContactDTO'];
-        },
-        NextOfKinDTO(){
-          return this.$store.getters['clientStore/NextOfKinDTO'];
-        },
-        BankAccountDTO(){
-          return this.$store.getters['clientStore/BankAccountDTO'];
-        },
-        tab(){
-              return this.$store.getters['clientStore/tab'];
+    import MessageBox from "../../components/dialogs/MessageBox.vue"
+    export default {
+        computed: {
+        isAdmin(){
+          return this.$store.getters['clientStore/isAdmin'];
         }
       },
-    components: {
-            'personalData-app': personalData,
-            'bioData-app': bioData,
-            'contactData-app': contactData,
-            'nextOfKinData-app': nextOfKinData,
-            'bankAccountData-app': bankAccountData
-        },
-  data () {
-    return {
-
-    }
-  },
-  methods: {
-    backstep (previousstepvalue){
-      this.$store.commit('clientStore/backstep', previousstepvalue)
-
+    components:{
+      MessageBox
     },
-    updatestep(previousstepvalue){
-      var context = this;
+    data () {
+    return {
+      passwordType: "password",
+      isVisible: false,
+      PersonalDataDTO: {
+            title:"",
+            firstName:"",
+            middleName:"",
+            lastName:"",
+            gender:"",
+            userName:"",
+            password:"",
+            userType: "Member",
+	          designation: "None",
+          },
+          isRegisterDialog: false,
+          isRegisterSuccessDialog: false,
+          isRegisterFailureDialog: false,
+          message: "",
+          }
+        },
+        props: {
+            theme_color: {
+            type: String,
+            default: '#10731f', 
+            }
+        },
+        methods: {
+          togglePasswordVisibility(){
+            var context = this;
+            if(context.isVisible) {
+              context.isVisible=false
+              context.passwordType = "password";
+            }else {
+              context.isVisible= true;
+              context.passwordType = "text";
+            }
+          },
+            register(){
+              var context = this;
+              context.isRegisterDialog = true;
+            },
+            cancel(){
+              var context = this;
+              context.isRegisterDialog = false;
+              if(context.isAdmin == true){
+                this.$router.push('/registeredContributors');
+                this.$store.commit('clientStore/isAdminUpdate', false) 
+              }else{
+                this.$router.push('/user-home');
+              }
+            },
+            async savePersonalData(){
+              var context = this;
+               var response = await this.$store.dispatch('clientStore/CreatePersonalDataDTO', 
+               context.PersonalDataDTO)
 
-      if(previousstepvalue == 1){
-        if (context.PersonalDataDTO.firstName === "") {
-          alert("Enter First Name");
-          return;
+              const { 
+              data : {
+                data: result,
+                message,
+                success,
+                    }
+              } = response
+            
+            context.isRegisterDialog = false;
+            context.message = message;
+              if(success){
+                this.$store.commit('clientStore/CreatePersonalDataDTO', result)
+                this.$store.commit('clientStore/commitTab', "login")
+                context.isRegisterSuccessDialog = true;
+              }else{
+                context.isRegisterFailureDialog = true;
+              }
+            },
+            cancelRegistration(){
+              var context = this;
+              context.isRegisterDialog = false;
+            },
+            RegistrationSuccessOkay(){
+              var context = this;
+              context.isRegisterSuccessDialog = false;
+              if(context.isAdmin == true){
+                this.$router.push('/registeredContributors');
+                this.$store.commit('clientStore/isAdminUpdate', false) 
+              }else{
+                this.$router.push('/user-home');
+              }
+            },
+            RegistrationSuccessCancel(){
+              var context = this;
+              context.isRegisterSuccessDialog = false;
+              if(context.isAdmin == true){
+                this.$router.push('/registeredContributors');
+                this.$store.commit('clientStore/isAdminUpdate', false) 
+              }else{
+                this.$router.push('/user-home');
+              }
+            },
+            RegistrationFailureOkay(){
+              var context = this;
+              context.isRegisterFailureDialog = false;
+            },
+            RegistrationFailureCancel(){
+              var context = this;
+              context.isRegisterFailureDialog = false;
+            }
         }
-        if (context.PersonalDataDTO.lastName === "") {
-          alert("Enter Last Name");
-          return;
-        }
-        if (context.PersonalDataDTO.gender === "") {
-          alert("Enter Gender");
-          return;
-        }
-        if (context.PersonalDataDTO.username === "") {
-          alert("Enter UserName");
-          return;
-        }
-        if (context.PersonalDataDTO.password === "") {
-          alert("Enter Password");
-          return;
-        }
-
-        if (context.PersonalDataDTO.parentUserName === "") {
-          alert("Enter Parent UserName");
-          return;
-        }
-       
-      }
-
-      
     }
-  }
-}
 </script>
+
+<style>
+.personal-data-form {
+  position: absolute;
+}
+</style>

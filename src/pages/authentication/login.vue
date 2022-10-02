@@ -146,6 +146,7 @@
   import MessageBox from "../../components/dialogs/MessageBox.vue"
   import ForgotPassword from "./ForgotPassword.vue"
   import ResetPassword from "./ResetPassword.vue"
+  import { post } from "../../store/modules/services"
     export default {
        computed: {
         visible(){
@@ -196,9 +197,12 @@
           async login(){
             var context = this;
 
-            var response = await this.$store.dispatch('authenticationStore/Login', {
-             username: context.username,
-             password: context.password
+            var response = await post({
+             url: "user/login",
+             req: {
+               username: context.username,
+               password: context.password
+             },
             });
 
             const { 
@@ -208,6 +212,8 @@
                 success,
               }
               } = response
+
+              console.log("result: ", result);
             
             context.message = message;
             context.isLoginActionMessage = false;
@@ -235,6 +241,15 @@
             
             var context = this;
             context.isLoginSuccessMessage = false;
+
+            switch(context.user.userType.toLowerCase()){
+              case "member":
+                this.$router.push('/user');
+                break;
+              case "admin":
+                this.$router.push('/admin');
+                break;
+            }
             this.$store.commit('authenticationStore/Login',{
               token: context.token,
               user: context.user,

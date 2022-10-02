@@ -8,7 +8,7 @@
             v-for="(card) in cardList" :key="card.title"
             class="col-md-4 col-lg-4 col-sx-12 col-sm-12">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
-              @click="cardClickHandler(card.name)"
+              @click="cardClickHandler(card)"
               style="border: none;" class="my-card text-center box-shadow" square bordered>
                 <q-img
                   :src="card.image"
@@ -55,9 +55,8 @@
                 this['about_heading_' + index] = [];                
               }, 1000);              
             },
-            cardClickHandler(payload) {
-                var context = this;
-                 this.$emit(context.cardClickEvent, payload); 
+            cardClickHandler(card) {
+                 this.$emit(card.name, card); 
             }
         }
     }

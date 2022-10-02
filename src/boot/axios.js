@@ -3,7 +3,7 @@ import axios from 'axios'
     const $http  = axios.create({ 
         headers: {'Content-Type': 'application/json'},
           //baseURL: (process.env.NODE_ENV == 'production') ? 'https://ucaicsl.azurewebsites.net/api' : 'https://localhost:44306//api'
-          baseURL: 'http://localhost:52766/api/' 
+          baseURL: 'http://localhost:3023/' 
           //baseURL: 'http://gabrielachumba-001-site1.itempurl.com/api/'
       })
       export default ({ Vue }) => {

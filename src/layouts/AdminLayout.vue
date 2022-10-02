@@ -3,15 +3,6 @@
 
      <q-header class="q-py-sm bg-primary text-accent" :style="'border-bottom: 2px solid '+ theme_color">
         <q-toolbar>
-          <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          class="bg-primary text-accent"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
          <img src='/statics/lhdi.png' width=100 height=40>
         <q-space ></q-space>
       <q-tabs shrink>
@@ -90,29 +81,6 @@
         
       </q-toolbar>
     </q-header>
-
-    <q-drawer 
-      v-model="leftDrawerOpen"
-      :breakpoint="767"
-      :width="200"
-      bordered
-      content-class="bg-primary text-accent"
-    >
-      <q-list dark>
-
-         <q-item
-         v-for="nav in navs" 
-         :key="nav.label"
-        :to="nav.to"
-        clickable
-            class="bg-primary text-accent">
-          <q-item-section avatar>
-            <q-item-label>{{ nav.label }}</q-item-label>       
-          </q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-drawer>
 
     <q-page-container>
 

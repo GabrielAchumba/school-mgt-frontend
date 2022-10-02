@@ -22,12 +22,11 @@
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="login" class="bg-primary">
-            <login-app></login-app>
-
+            <login/>
           </q-tab-panel>
 
           <q-tab-panel name="register" class="bg-primary">
-            <personalData-app></personalData-app>
+            <register/>
           </q-tab-panel>
         </q-tab-panels>
 
@@ -39,30 +38,22 @@
 
 <script>
 import login from 'pages/authentication/login.vue'
-import personalData from 'pages/authentication/personalData.vue' 
+import register from 'pages/authentication/register.vue' 
 export default {
     computed: {
           tab(){
-              return this.$store.getters['clientStore/tab'];
+              return this.$store.getters['authenticationStore/tab'];
           }
     },
     components: {
-            'login-app': login,
-            'personalData-app': personalData
-        },
-  data () {
-    return {
-      
-    }
-  },
+            login,
+            register
+    },
   methods: {
     changeTab(tabname){
       console.log(tabname)
-      this.$store.commit('clientStore/commitTab', tabname)
+      this.$store.commit('authenticationStore/commitTab', tabname)
     }
-  },
-  created(){
-    //this.$store.commit('clientStore/commitTab')
   }
 }
 </script>

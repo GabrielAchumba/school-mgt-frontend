@@ -1,130 +1,82 @@
 <template>
-  <div>
-      <div class="bg-primary">
+  <div class="bg-primary">
 
-      <div class="row">
+      <div class="row text-center flex flex-center">
           <div class="col-12" style="height:10px">     
           </div>  
     </div>
 
-<div class="row text-center flex flex-center q-pb-lg">
+    <div class="row text-center flex flex-center">
+      <q-card class="col-12 q-pa-md q-ma-none"
+      :style="'width:' + cardWidth"> 
 
-<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
- <div class="q-pa-md" style="font-family: Lato;">
-  
-  <q-card class="q-pa-sm q-gutter-sm"
-  :style="'width:' + cardWidth"> 
-
-          <q-card-section class="bg-accent text-primary">
-            <div class="row">
-              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                <div class="text-subtitle2">Registered Contributors</div>
-              </div>
-            </div>
-          </q-card-section>
-
-           <q-card-section
-           :style="'width:' + cardWidth">
-             <q-table 
-             :style="'width:' + tableWidth"
-             title="Contributors" 
-             :data="personalDataList"
-             :columns="columns" 
-             row-key="name" 
-             binary-state-sort
-             :separator="separator"
-             >
-
-
-      <template v-slot:body="props">
-          <q-tr 
-          :props="props">
-            <q-td key="actions" :props="props">
-                <div class="row q-pa-md">
+              <q-card-section class="bg-accent text-primary">
+                <div class="row">
+                   <p class="text-subtitle2">{{ table_VM.title }}</p>
+                   <q-space/>
                     <q-btn 
-                    icon="update"
-                    class="bg-accent text-primary" 
-                    no-shadows
-                    @click="update(props.row)" 
-                    size=sm no-caps />
-
-                    <q-space />
-
-                    <q-btn 
-                    icon="delete"
-                    class="bg-accent text-primary" 
-                    no-shadows
-                    @click="delete(props.row)" 
-                    size=sm no-caps />
+                        label="Create"
+                        class="bg-accent text-primary" 
+                        no-shadows
+                        @click="createItem"
+                        size=md no-caps />
                 </div>
-            </q-td>
+              </q-card-section>
 
-            <q-td 
-            v-for="column in removekeys(columns)" :key="column.name"
-            :props="props">{{ props.row[column.name] }}</q-td>
-          </q-tr>
-        </template>
-    </q-table>
-
-    </q-card-section>
-
-</q-card>
-      
-  </div>
+              <q-card-section
+              :style="'width:' + cardWidth">
+                <q-table 
+                :style="'width:' + tableWidth"
+                :data="table_VM.rows"
+                :columns="table_VM.columns" 
+                row-key="name" 
+                binary-state-sort
+                :separator="table_VM.separator"
+                >
 
 
-</div>
+          <template v-slot:body="props">
+              <q-tr 
+              :props="props">
+                <q-td key="actions" :props="props">
+                    <div class="row q-pa-md">
+                        <q-icon 
+                        name="update"
+                        @click="updateItem(props.row)"
+                        size="20px"/>
 
-</div>
+                        <q-space />
 
-</div>
+                        <q-icon 
+                        name="delete" 
+                        @click="deleteItem(props.row)"
+                        size="20px" />
+                    </div>
+                </q-td>
 
-<q-dialog v-model="isFetchTableDialog">
-  <MessageBox
-  title="Error"
-  :message="`${message}.`"
-  okayEvent="okayEvent"
-  cancelEvent="cancelEvent"
-  @okayEvent="okayEvent($event)"
-  @cancelEvent="cancelEvent($event)"
-  >
-  </MessageBox>
-</q-dialog>
+                <q-td 
+                v-for="column in removekeys()" :key="column.name"
+                :props="props">{{ props.row[column.name] }}</q-td>
+              </q-tr>
+            </template>
+        </q-table>
+
+        </q-card-section>
+
+      </q-card>
+    </div>
 
   </div>
 </template>
 
 <script>
-    import MessageBox from "../dialogs/MessageBox.vue"
+    import { tableVM } from "./TableVM.js"
     export default {
-      components:{
-        MessageBox
-      },
         props: {
-            createCategoryUrl:{
-                type: String,
-                default: "",
+            table_VM:{
+                type: Object,
+                default: tableVM,
             },
-            personalDataList:{
-                type: Array,
-                default: [],
-            },
-            columns:{
-                type: Array,
-                default: [],
-            },
-            isFetchTableDialog:{
-                type: Boolean,
-                default: false,
-            },
-            message:{
-                type: String,
-                default: "",
-            },
-            separator: {
-            type: String,
-            default: "cell",
-          },
         },
         data(){
           return {
@@ -133,9 +85,10 @@
           }
         },
         methods: {
-            removekeys(columns){
+            removekeys(){
+              var context = this;
               var columnsNew = []
-              for(const column of columns){
+              for(const column of context.table_VM.columns){
                   if(column.name != "actions"){
                       columnsNew.push(column);
                   }
@@ -151,12 +104,17 @@
             var context = this;
             context.isFetchTableDialog = false
           },
-          createCategory(selectedPersonalData){
+          createItem(){
               var context = this;
-              this.$store.commit('categoryStore/isAdminUpdate', true)
-              this.$store.commit('categoryStore/SetSelectedPersonalData', selectedPersonalData)
-              console.log("context.createCategoryUrl: ", context.createCategoryUrl)
-              this.$router.push(`/${context.createCategoryUrl}`);
+              this.$emit(context.table_VM.createItem);
+          },
+          updateItem(selectedItem){
+            var context = this;
+            this.$emit(context.table_VM.updateItem, selectedItem);
+          },
+          deleteItem(){
+            var context = this
+            this.$emit(context.table_VM.deleteItem);
           },
           onResize(e) {
             const width = window.innerWidth;
@@ -177,9 +135,5 @@
       unmounted() {
         window.removeEventListener("resize", this.onResize);
       },
-      created(){
-        var context = this;
-        console.log("context.createCategoryUrl; ", context.createCategoryUrl)
-      }
     }
 </script>

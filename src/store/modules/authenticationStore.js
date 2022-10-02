@@ -1,5 +1,4 @@
 import { $http } from 'boot/axios';
-import { firebaseAuth, firebaseDb } from 'boot/firebase';
 
 const state = {
 
@@ -16,9 +15,13 @@ const state = {
     paystackkey: "",
     visible: false,
     showSimulatedReturnData: true,
+    tab: "login",
   }
 
   const getters = {
+    tab(state){
+      return state.tab;
+    },
     DoesNotHaveMoneyAccount(state){
       return state.DoesNotHaveMoneyAccount;
     },
@@ -64,6 +67,9 @@ const state = {
 }
 
 const mutations = {
+  changeTab(state, payload){
+    state.tab = payload;
+  },
   AddUserPhoto(state, payload){
     state.IdentityModel.base64String = payload.base64String
   },
@@ -77,12 +83,6 @@ const mutations = {
     state.Loginstatus= "Log out";
     state.IdentityModel = user;
     
-    if(state.IdentityModel.userType == "Admin"){
-      this.$router.push('/admin');
-    }
-    else{
-      this.$router.push('/user-home');
-    }
 
     state.visible = false
     state.showSimulatedReturnData = true
@@ -122,51 +122,17 @@ const actions = {
     const number =
         `+${payload.code}${payload.phone.startsWith("0") ? payload.phone.substring(1) : payload.phone}`;
 
-    firebaseAuth.verifyPhoneNumber(
+    /* firebaseAuth.verifyPhoneNumber(
       number,
       timeout,
       verificationCompleted,
       verificationFailed,
       codeSent,
       codeAutoRetrievalTimeout
-    );
+    ); */
   },
   veryifyPhoneNumberAndRegisterUser(){
 
-  },
-  Login(context, payload)
-  {
-
-    return new Promise((resolve, reject) => {
-      console.log("seen")
-       $http.post('users/login', payload)
-        .then(response => {
-
-          //context.commit('Login', response.data)             
-            resolve(response)
-            
-        })
-        .catch(error => {
-          if (error.response) {
-            // Request made and server responded
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            alert(error.response.data)
-            alert(error.response.status)
-            alert(error.response.headers)
-          } else if (error.request) {
-            // The request was made but no response was received
-            console.log(error.request);
-            alert(error.request)
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-            alert(error.message)
-          }
-          reject(error)
-        })
-    })
   },
   Logout(context)
   {

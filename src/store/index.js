@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-/* import authenticationStore from './modules/authenticationStore' */
+import authenticationStore from './modules/authenticationStore';
+import administratorStore from './modules/administratorStore';
+import staffStore from './modules/staffStore';
 
 
 Vue.use(Vuex)
@@ -18,7 +20,9 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-     /*  authenticationStore, */
+      authenticationStore,
+      administratorStore,
+      staffStore,
     },
 
     // enable strict mode (adds overhead!)

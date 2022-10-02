@@ -36,7 +36,7 @@ const remove = async (payload) => {
   })
 }
 
-const post = () => {
+const post = (payload) => {
 
   var token = sessionStorage.getItem("token") 
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -54,14 +54,14 @@ const post = () => {
  })
 }
 
-const put = () => {
+const put = (payload) => {
 
   var token = sessionStorage.getItem("token") 
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
   return new Promise((resolve, reject) => {
       
-    $http.post(payload.url, payload.req)
+    $http.put(payload.url, payload.req)
      .then(response => {             
          resolve(response)
          
@@ -72,7 +72,7 @@ const put = () => {
  })
 }
 
-const uploadPhoto = async (context, payload) => {
+const uploadPhoto = async (payload) => {
 
     var token = sessionStorage.getItem("token") 
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -90,7 +90,7 @@ const uploadPhoto = async (context, payload) => {
           reject(error)
         })
     })
-  },
+}
 
 export {
   get,

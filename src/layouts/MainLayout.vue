@@ -123,33 +123,6 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer 
-      v-model="leftDrawerOpen"
-      :breakpoint="767"
-      :width="200"
-      bordered
-      content-class="bg-primary"
-    >
-      <q-list dark>
-        
-        <q-item
-        v-for="nav in navs"
-        :key="nav.label"
-        :to="nav.to"
-        class="bg-primary text-accent"
-        exact
-        clickable>
-        <q-item-section avatar>
-          <q-icon :name="nav.icon"/>
-        </q-item-section>
-        <q-item-section avatar>
-          <q-item-label>{{ nav.label }}</q-item-label>
-        </q-item-section>
-        </q-item>
-
-      </q-list>
-    </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -157,7 +130,6 @@
 </template>
 
 <script>
-import paymentresponse from 'pages/contribution/paymentresponse.vue';
 
 export default {
   //name: 'AdminLayout',

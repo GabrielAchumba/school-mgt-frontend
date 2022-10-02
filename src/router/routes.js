@@ -8,7 +8,12 @@ const routes = [
         path: '/', 
         component: () => import('pages/authentication/landing.vue') 
         
-      }
+      },
+      { 
+        path: '/login_register', 
+        component: () => import('pages/authentication/loginregister.vue') 
+        
+      },
     ]
   },
   {
@@ -20,14 +25,29 @@ const routes = [
         component: () => import('pages/administrators/landing.vue') 
         
       },
+      { 
+        path: '/staff-landing', 
+        component: () => import('pages/administrators/staff/landing.vue') 
+        
+      },
+      { 
+        path: '/create-staff', 
+        component: () => import('pages/administrators/staff/create.vue') 
+        
+      },
+      { 
+        path: '/update-staff', 
+        component: () => import('pages/administrators/staff/update.vue') 
+        
+      }
     ]
   },
   {
-    path: '/users',
+    path: '/user',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { 
-        path: '/users', 
+        path: '/user', 
         component: () => import('pages/users/landing.vue') 
         
       },
