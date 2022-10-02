@@ -45,6 +45,7 @@ export default {
                     {label: "Cancel", name: "Cancel"},
                     {label: "Create", name: "Create"},
                 ],
+                qDates: [],
             },
             dialogs:[
                 { title: "Create Staff", isVisible: false, message: "Do you want to create a staff",

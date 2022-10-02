@@ -4,6 +4,12 @@ import Vuex from 'vuex'
 import authenticationStore from './modules/authenticationStore';
 import administratorStore from './modules/administratorStore';
 import staffStore from './modules/staffStore';
+import classRoomStore from './modules/classRoomStore';
+import studentStore from './modules/studentStore';
+import subjectStore from './modules/subjectStore';
+import assessmentStore from './modules/assessmentStore';
+import lessonStore from './modules/lessonStore';
+import resultStore from './modules/resultStore';
 
 
 Vue.use(Vuex)
@@ -23,6 +29,12 @@ export default function (/* { ssrContext } */) {
       authenticationStore,
       administratorStore,
       staffStore,
+      classRoomStore,
+      studentStore,
+      subjectStore,
+      assessmentStore,
+      lessonStore,
+      resultStore,
     },
 
     // enable strict mode (adds overhead!)

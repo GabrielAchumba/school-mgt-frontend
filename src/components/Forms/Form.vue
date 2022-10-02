@@ -45,6 +45,26 @@
         :type="qInput.type" 
         lazy-rules />
 
+        <div
+          v-for="qDate in formData.qDates" 
+          :key="qDate.label">
+          <p>{{ qDate.label }}</p>
+          <q-input 
+          filled 
+          v-model="qDate.name" mask="date" :rules="['date']">
+          <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                <q-date v-model="qDate.name">
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="accent" flat />
+                  </div>
+                </q-date>
+              </q-popup-proxy>
+            </q-icon>
+          </template>
+        </q-input>
+        </div>
        
         <div class="row">
           <q-space />

@@ -3,6 +3,13 @@
 
      <q-header class="q-py-sm bg-primary text-accent" :style="'border-bottom: 2px solid '+ theme_color">
         <q-toolbar>
+          <q-btn
+            v-go-back.single
+            v-once
+            class="text-accent bg-primary q-pa-sm"
+            icon="arrow_back"
+            flat
+          />
          <img src='/statics/lhdi.png' width=100 height=40>
         <q-space ></q-space>
       <q-tabs shrink>

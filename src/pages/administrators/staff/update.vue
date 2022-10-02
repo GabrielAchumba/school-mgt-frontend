@@ -46,6 +46,7 @@ export default {
                     {label: "Cancel", name: "Cancel"},
                     {label: "Update", name: "Update"},
                 ],
+                qDates: [],
             },
             dialogs:[
                 { title: "Update Staff", isVisible: false, message: "Do you want to update a staff",
