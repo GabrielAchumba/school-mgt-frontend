@@ -2,9 +2,9 @@
   <div>
     <Table
     :table_VM="tableVM"
-    @createStaff="createStaff($event)"
-    @updateStaff="updateStaff($event)"
-    @deleteStaff="deleteStaff($event)"/>
+    @createUser="createUser($event)"
+    @updateUser="updateUser($event)"
+    @deleteUser="deleteUser($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -27,7 +27,7 @@
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { remove } from "../../../store/modules/services";
-  import { loadStaffs } from "./utils";
+  import { loadUsers } from "./utils";
     export default {
       components:{
         Table,
@@ -36,24 +36,25 @@
         data () {
     return {
             tableVM: {
-                selectedStaff: {},
-                title: "Employees",
+                selectedUser: {},
+                title: "Users",
                 columns: [
-                    { name: "type", label: "Type of Staff", field: "", align: "left" },
                     { name: "actions", label: "Actions", field: "", align: "left" },
+                    { name: "firstName", label: "First Name", field: "", align: "left" },
+                    { name: "lastName", label: "Last Name", field: "", align: "left" },
                 ],
                 rows: [],
                 separator: "cell",
-                createItem: "createStaff",
-                updateItem: "updateStaff",
-                deleteItem: "deleteStaff",
-                createItemUrl: "/create-staff",
-                updateItemUrl: "/update-staff",
+                createItem: "createUser",
+                updateItem: "updateUser",
+                deleteItem: "deleteUser",
+                createItemUrl: "/create-user",
+                updateItemUrl: "/update-user",
                 },
                 dialogs:[
-                { title: "Delete Staff", isVisible: false, message: "Do you want to delete a staff",
+                { title: "Delete User", isVisible: false, message: "Do you want to delete a user",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Staff deleted successfully!",
+                { title: "Success", isVisible: false, message: "User deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -69,20 +70,20 @@
             var context = this;
             context.isFetchTableDialog = false
           },
-         createStaff(){
+         createUser(){
              var context = this;
              console.log(context.tableVM.createItemUrl)
               this.$router.push(context.tableVM.createItemUrl);
           },
-          updateStaff(selectedStaff){
+          updateUser(selectedUser){
              var context = this;
-             this.$store.commit('staffStore/SetSelectedStaff', selectedStaff)
+             this.$store.commit('userStore/SetSelectedUser', selectedUser)
             this.$router.push(context.tableVM.updateItemUrl);
           },
-          deleteStaff(selectedStaff){
+          deleteUser(selectedUser){
              var context = this;
-             context.selectedStaff = selectedStaff;
-             console.log(context.selectedStaff)
+             context.selectedUser = selectedUser;
+             console.log(context.selectedUser)
              context.dialogs[0].isVisible = true;
           },
           cancelDialog(payload){
@@ -99,7 +100,7 @@
         async delete(){
             var context = this;
             
-            var url = `staff/${context.selectedStaff.id}`;
+            var url = `user/${context.selectedUser.id}`;
             const payload = {
                 url,
             }
@@ -129,11 +130,11 @@
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete Staff":
+                        case "Delete User":
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadStafff()
+                            await context._loadUserf()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -141,11 +142,11 @@
                 }
             }
         },
-        async _loadStafff(){
+        async _loadUserf(){
             var context = this;
-        const { result, message } = await loadStaffs();
-        this.$store.commit('staffStore/SetStaffs', result)
-        context.tableVM.rows = result;
+            const { result, message } = await loadUsers();
+            this.$store.commit('userStore/SetUsers', result)
+            context.tableVM.rows = result;
 
             if(result.length === 0){
                 context.isFetchTableDialog = true;
@@ -156,7 +157,7 @@
         },
         async created() {
             var context = this;
-            await context._loadStafff()
+            await context._loadUserf()
       }
     }
 </script>

@@ -36,7 +36,7 @@ export default {
     data(){
         return {
             form: {
-                title: "Create Student",
+                title: "Create User",
                 qSelects: [],
                 qInputs: [
                     { label: "First Name", name: "", type: "text"},
@@ -51,9 +51,9 @@ export default {
                 ],
             },
             dialogs:[
-                { title: "Create Student", isVisible: false, message: "Do you want to create a Student",
+                { title: "Create User", isVisible: false, message: "Do you want to create a user",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Student created successfully!",
+                { title: "Success", isVisible: false, message: "User created successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -66,14 +66,14 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Student"){
+                if(dialog.title == "Create User"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/student-landing')
+            this.$router.push('/user-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -89,7 +89,7 @@ export default {
         async save(){
             var context = this;
             
-            var url = `student/create`;
+            var url = `user/create`;
             const arr = context.form.qDates[0].name.split("/") 
             const payload = {
                 url,
@@ -127,11 +127,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Student":
+                        case "Create User":
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/student-landing");
+                            this.$router.push("/user-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

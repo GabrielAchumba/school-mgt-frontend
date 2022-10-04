@@ -2,7 +2,7 @@
     <div class="q-pa-md">
         <Form
         :formData="form"
-        @Create="Create($event)"
+        @Update="Update($event)"
         @Cancel="Cancel($event)"/>
 
         <q-dialog 
@@ -26,7 +26,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { post } from "../../../store/modules/services";
+import { put } from "../../../store/modules/services";
 
 export default {
     components:{
@@ -35,8 +35,9 @@ export default {
     },
     data(){
         return {
+            selectedUser: {},
             form: {
-                title: "Create Student",
+                title: "Update User",
                 qSelects: [],
                 qInputs: [
                     { label: "First Name", name: "", type: "text"},
@@ -44,16 +45,16 @@ export default {
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
-                    {label: "Create", name: "Create"},
+                    {label: "Update", name: "Update"},
                 ],
                 qDates: [
-                     {label: "Date of Birth", name: "2019/02/01"},
+                    {label: "Date of Birth", name: "2019/02/01"},
                 ],
             },
             dialogs:[
-                { title: "Create Student", isVisible: false, message: "Do you want to create a Student",
+                { title: "Update User", isVisible: false, message: "Do you want to update a user",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Student created successfully!",
+                { title: "Success", isVisible: false, message: "User updated successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -61,19 +62,19 @@ export default {
         }
     },
     methods:{
-        Create(){
+        Update(){
             const context = this;
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Student"){
+                if(dialog.title == "Update User"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/student-landing')
+            this.$router.push('/user-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -89,7 +90,7 @@ export default {
         async save(){
             var context = this;
             
-            var url = `student/create`;
+            var url = `user/${context.selectedUser.id}`;
             const arr = context.form.qDates[0].name.split("/") 
             const payload = {
                 url,
@@ -103,7 +104,7 @@ export default {
             }
 
             console.log("payload: ", payload)
-            var response = await post(payload)
+            var response = await put(payload)
 
             const { 
                 data : {
@@ -127,11 +128,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Student":
+                        case "Update User":
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/student-landing");
+                            this.$router.push("/user-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -139,6 +140,15 @@ export default {
                 }
             }
         }
+    },
+    created(){
+        var context =  this;
+        context.selectedUser = this.$store.getters["userStore/selectedUser"];
+        context.form.qInputs[0].firstName = context.selectedUser.firstName;
+        context.form.qInputs[1].lastName = context.selectedUser.lastName;
+        var birthDay = context.selectedUser.birthDay > 9 ? toString(context.selectedUser.birthDay) : `0${context.selectedUser.birthDay}`;
+        var birthMonth = context.selectedUser.birthMonth > 9 ? toString(context.selectedUser.birthMonth) : `0${context.selectedUser.birthMonth}`;
+        context.form.qDates[0].name = `${context.selectedUser.birthMonth}/birthMonth/birthDay`;
     }
 }
 </script>

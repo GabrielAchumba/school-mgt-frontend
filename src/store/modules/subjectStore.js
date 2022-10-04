@@ -4,7 +4,7 @@ const state = {
 }
 
 const getters = {
-    Subjects(state){
+    subjects(state){
         return state.subjects;
     },
     selectedSubject(state){

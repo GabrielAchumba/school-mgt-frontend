@@ -98,6 +98,12 @@
 
 <script>
 
+import { loadClassRooms } from "../pages/administrators/classroom/utils";
+import { loadStaffs } from "../pages/administrators/staff/utils";
+import { loadStudents } from "../pages/administrators/student/utils";
+import { loadSubjects } from "../pages/administrators/subject/utils";
+import { loadUsersByCategory } from "../pages/administrators/user/utils";
+
 export default {
   name: 'AdminLayout',
   computed: {
@@ -161,9 +167,21 @@ export default {
       }
     },
   },
-  created(){
+  async created(){
     var context = this;
     if(context.IdentityModel.designation == "CEO") {
+
+      const classRooms = await loadClassRooms();
+      this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
+      const staffs = await loadStaffs();
+      this.$store.commit('staffStore/SetStaffs', staffs.result);
+      const students = await loadStudents();
+      this.$store.commit('studentStore/SetStudents', students.result);
+      const subjects = await loadSubjects();
+      this.$store.commit('subjectStore/SetSubjects', subjects.result);
+      const teachers = await loadUsersByCategory("Teacher");
+      this.$store.commit('userStore/SetTeachers', teachers.result);
+
       context.navs = context.adminNavBarList.map((row) => {
         return {
           ...row,

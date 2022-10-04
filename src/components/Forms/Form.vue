@@ -23,33 +23,46 @@
   </q-card-section>
 
    <q-card-section>
-      <q-form class="q-gutter-md">
-        <q-select class="q-pa-md"
+      <q-form class="q-pa-sm">
+        <div
+          class="q-pa-sm"
           v-for="qSelect in formData.qSelects" 
-          :key="qSelect.label"
-          color="accent" 
-          outlined label-color="accent"
-          v-model="qSelect.name"
-          :options ="qSelect.list"
-          @input="onItemValueChanged"
-          :label="qSelect.label"
-          >
-       </q-select>
+          :key="qSelect.label">
+          <span><p class="q-ma-none">{{ qSelect.label }}</p>
+          <q-select
+            class="q-ma-none"
+            color="accent" 
+            outlined label-color="accent"
+             option-disable="inactive"
+            v-model="qSelect.value"
+            :options="qSelect.list"
+            option-value="id"
+            :option-label="'type'"
+            name="type"
+            emit-value
+            map-options
+            >
+        </q-select></span>
+        </div>
 
-        <q-input class="q-pa-md"
-        v-for="qInput in formData.qInputs" 
-        :key="qInput.label"
-        outlined 
-        v-model="qInput.name" 
-        :label="qInput.label"
-        :type="qInput.type" 
-        lazy-rules />
+        <div class="q-pa-sm"
+          v-for="qInput in formData.qInputs" 
+          :key="qInput.label">
+          <span><p class="q-ma-none">{{ qInput.label }}</p>
+          <q-input class="q-ma-none"
+          outlined 
+          v-model="qInput.name" 
+          :type="qInput.type" 
+          lazy-rules /></span>
+        </div>
 
         <div
+          class="q-pa-md"
           v-for="qDate in formData.qDates" 
           :key="qDate.label">
-          <p>{{ qDate.label }}</p>
+          <span><p class="q-ma-none">{{ qDate.label }}</p>
           <q-input 
+          class="q-ma-none"
           filled 
           v-model="qDate.name" mask="date" :rules="['date']">
           <template v-slot:append>
@@ -63,17 +76,17 @@
               </q-popup-proxy>
             </q-icon>
           </template>
-        </q-input>
+        </q-input></span>
         </div>
        
-        <div class="row">
+        <div class="row q-pa-sm">
           <q-space />
           <q-btn class="q-ma-md bg-accent text-primary"
             v-for="qBtn in formData.qBtns" 
             :key="qBtn.label"
             :label="qBtn.label"
             type="button"
-            size="sm"
+            size="md"
             no-caps
             @click="ClickAction(qBtn.name)"
           />

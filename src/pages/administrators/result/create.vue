@@ -37,9 +37,15 @@ export default {
         return {
             form: {
                 title: "Create Result",
-                qSelects: [],
+                qSelects: [
+                    { label: "Class Room", value: "", type: "text", list: [] },
+                    { label: "Subject", value: "", type: "text", list: [] },
+                    { label: "Student", value: "", type: "text", list: [] },
+                    { label: "Teacher", value: "", type: "text", list: [] },
+                ],
                 qInputs: [
-                    { label: "Type of Result", name: "", type: "text"}
+                    { label: "Score", name: "", type: "text"},
+                    { label: "Maximum Score", name: "", type: "text"}
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
@@ -70,7 +76,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/result-landing')
+            this.$router.push('/results')
         },
         cancelDialog(payload){
             const context = this;
@@ -90,7 +96,12 @@ export default {
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
+                    score: Number(context.form.qInputs[0].name),
+                    scoreMax: Number(context.form.qInputs[1].name),
+                    classRoomId: context.form.qSelects[0].value,
+                    subjectId: context.form.qSelects[1].value,
+                    studentId: context.form.qSelects[2].value,
+                    teacherId: context.form.qSelects[3].value,
                 }
             }
 
@@ -123,7 +134,7 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/result-landing");
+                            this.$router.push("/results");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -131,6 +142,23 @@ export default {
                 }
             }
         }
+    },
+    created(){
+        var context = this;
+        context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"];
+        context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
+        context.form.qSelects[2].list = this.$store.getters["studentStore/students"].map((row) => {
+            return {
+                ...row,
+                type: `${row.firstName} ${row.lastName}`
+            }
+        })
+        context.form.qSelects[3].list = this.$store.getters["userStore/teachers"].map((row) => {
+            return {
+                ...row,
+                type: `${row.firstName} ${row.lastName}`
+            }
+        }) 
     }
 }
 </script>

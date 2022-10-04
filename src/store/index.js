@@ -10,6 +10,7 @@ import subjectStore from './modules/subjectStore';
 import assessmentStore from './modules/assessmentStore';
 import lessonStore from './modules/lessonStore';
 import resultStore from './modules/resultStore';
+import userStore from './modules/userStore';
 
 
 Vue.use(Vuex)
@@ -35,6 +36,7 @@ export default function (/* { ssrContext } */) {
       assessmentStore,
       lessonStore,
       resultStore,
+      userStore,
     },
 
     // enable strict mode (adds overhead!)

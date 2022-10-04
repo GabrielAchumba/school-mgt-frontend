@@ -26,6 +26,21 @@ const routes = [
         
       },
       { 
+        path: '/users-landing', 
+        component: () => import('pages/administrators/user/landing.vue') 
+        
+      },
+      { 
+        path: '/create-user', 
+        component: () => import('pages/administrators/user/create.vue') 
+        
+      },
+      { 
+        path: '/update-user', 
+        component: () => import('pages/administrators/user/update.vue') 
+        
+      },
+      { 
         path: '/staff-landing', 
         component: () => import('pages/administrators/staff/landing.vue') 
         
@@ -118,6 +133,11 @@ const routes = [
       { 
         path: '/result-landing', 
         component: () => import('pages/administrators/result/landing.vue') 
+        
+      },
+      { 
+        path: '/results', 
+        component: () => import('pages/administrators/result/results') 
         
       },
       { 

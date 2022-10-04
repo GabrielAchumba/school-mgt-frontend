@@ -26,7 +26,9 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/services"
+  import { get, remove } from "../../../store/modules/services";
+  import { loadClassRooms } from "./utils";
+
     export default {
       components:{
         Table,
@@ -132,7 +134,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadClassRoomf()
+                            await context._loadClassRooms()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -140,34 +142,23 @@
                 }
             }
         },
-        async loadClassRoomf(){
-            var context = this;
-        var url = "classroom";
-        var response = await get({
-          url
-        })
+        async _loadClassRooms(){
 
-        const { 
-                data : {
-                    data: result,
-                    message,
-                    success,
+                var context = this;
+                const { result, message } = await loadClassRooms()
+                this.$store.commit('classRoomStore/SetClassRooms', result)
+                context.tableVM.rows = result;
+
+                if(result.length === 0){
+                    context.isFetchTableDialog = true;
+                    context.message = message;
                 }
-            } = response
-
-            if(success){
-            context.tableVM.rows = result;
-            this.$store.commit('classRoomStore/SetClassRooms', result)
-            }else{
-                context.isFetchTableDialog = true;
-                context.message = message;
-            }
 
             }
         },
         async created() {
             var context = this;
-            await context.loadClassRoomf()
+            await context._loadClassRooms()
       }
     }
 </script>

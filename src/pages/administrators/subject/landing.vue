@@ -26,7 +26,8 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/services"
+  import { remove } from "../../../store/modules/services";
+  import { loadSubjects } from "./utils";
     export default {
       components:{
         Table,
@@ -132,7 +133,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadSubjectf()
+                            await context._loadSubjectf()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -140,25 +141,12 @@
                 }
             }
         },
-        async loadSubjectf(){
+        async _loadSubjectf(){
             var context = this;
-        var url = "subject";
-        var response = await get({
-          url
-        })
-
-        const { 
-                data : {
-                    data: result,
-                    message,
-                    success,
-                }
-            } = response
-
-            if(success){
+            const { result, message } = await loadSubjects();
+            this.$store.commit('subjectStore/SetSubjects', result);
             context.tableVM.rows = result;
-            this.$store.commit('subjectStore/SetSubjects', result)
-            }else{
+            if(result.length === 0){
                 context.isFetchTableDialog = true;
                 context.message = message;
             }
@@ -167,7 +155,7 @@
         },
         async created() {
             var context = this;
-            await context.loadSubjectf()
+            await context._loadSubjectf()
       }
     }
 </script>

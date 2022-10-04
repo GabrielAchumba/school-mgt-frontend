@@ -71,7 +71,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/result-landing')
+            this.$router.push('/results')
         },
         cancelDialog(payload){
             const context = this;
@@ -124,7 +124,7 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/result-landing");
+                            this.$router.push("/results");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

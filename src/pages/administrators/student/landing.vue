@@ -26,7 +26,8 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/services"
+  import { remove } from "../../../store/modules/services";
+  import { loadStudents } from "./utils";
     export default {
       components:{
         Table,
@@ -133,7 +134,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadStudentf()
+                            await context._loadStudentf()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -141,25 +142,13 @@
                 }
             }
         },
-        async loadStudentf(){
+        async _loadStudentf(){
             var context = this;
-        var url = "student";
-        var response = await get({
-          url
-        })
-
-        const { 
-                data : {
-                    data: result,
-                    message,
-                    success,
-                }
-            } = response
-
-            if(success){
-            context.tableVM.rows = result;
+            const { result, message } = await loadStudents();
             this.$store.commit('studentStore/SetStudents', result)
-            }else{
+            context.tableVM.rows = result;
+
+            if(result.length === 0){
                 context.isFetchTableDialog = true;
                 context.message = message;
             }
@@ -168,7 +157,7 @@
         },
         async created() {
             var context = this;
-            await context.loadStudentf()
+            await context._loadStudentf()
       }
     }
 </script>

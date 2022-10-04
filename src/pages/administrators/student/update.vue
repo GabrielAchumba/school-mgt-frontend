@@ -40,13 +40,16 @@ export default {
                 title: "Update Student",
                 qSelects: [],
                 qInputs: [
-                    { label: "Type of Student", name: "", type: "text"}
+                    { label: "First Name", name: "", type: "text"},
+                    { label: "Last Name", name: "", type: "text"},
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
                     {label: "Update", name: "Update"},
                 ],
-                qDates: [],
+                qDates: [
+                    {label: "Date of Birth", name: "2019/02/01"},
+                ],
             },
             dialogs:[
                 { title: "Update Student", isVisible: false, message: "Do you want to update a Student",
@@ -88,10 +91,15 @@ export default {
             var context = this;
             
             var url = `student/${context.selectedStudent.id}`;
+            const arr = context.form.qDates[0].name.split("/") 
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
+                    firstName: context.form.qInputs[0].name,
+                    lastName: context.form.qInputs[1].name,
+                    birthYear: Number(arr[0]),
+                    birthMonth: Number(arr[1]),
+                    birthDay: Number(arr[1]),
                 }
             }
 
@@ -136,7 +144,11 @@ export default {
     created(){
         var context =  this;
         context.selectedStudent = this.$store.getters["studentStore/selectedStudent"];
-        context.form.qInputs[0].name = context.selectedStudent.type;
+        context.form.qInputs[0].firstName = context.selectedStudent.firstName;
+        context.form.qInputs[1].lastName = context.selectedStudent.lastName;
+        var birthDay = context.selectedStudent.birthDay > 9 ? toString(context.selectedStudent.birthDay) : `0${context.selectedStudent.birthDay}`;
+        var birthMonth = context.selectedStudent.birthMonth > 9 ? toString(context.selectedStudent.birthMonth) : `0${context.selectedStudent.birthMonth}`;
+        context.form.qDates[0].name = `${context.selectedStudent.birthMonth}/birthMonth/birthDay`;
     }
 }
 </script>
