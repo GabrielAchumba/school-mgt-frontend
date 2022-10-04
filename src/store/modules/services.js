@@ -8,7 +8,7 @@ const get = async (payload) => {
   return new Promise((resolve, reject) => {
       
     $http.get(payload.url)
-     .then(response => {             
+     .then(response => {            
          resolve(response)
          
      })

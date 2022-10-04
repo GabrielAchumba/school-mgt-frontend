@@ -12,7 +12,7 @@
           class="bg-primary text-accent"
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
-        <img src='/statics/lhdi.png' width=100 height=40>
+        <img src='/statics/newway.jpg' width=100 height=40>
        <q-space ></q-space>
       <q-tabs v-model="selected_tab" shrink>
 

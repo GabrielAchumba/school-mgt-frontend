@@ -38,18 +38,22 @@ export default {
             selectedUser: {},
             form: {
                 title: "Update User",
-                qSelects: [],
+                qSelects: [
+                    { label: "Designation *", value: "", type: "text", list: [] },
+                ],
                 qInputs: [
-                    { label: "First Name", name: "", type: "text"},
-                    { label: "Last Name", name: "", type: "text"},
+                     { label: "First Name *", name: "", type: "text"},
+                    { label: "Last Name *", name: "", type: "text"},
+                    { label: "UserName *", name: "", type: "text"},
+                    { label: "Country Code *", name: "", type: "text"},
+                    { label: "PhoneNumber *", name: "", type: "text"},
+                    { label: "Email", name: "", type: "text"},
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
                     {label: "Update", name: "Update"},
                 ],
-                qDates: [
-                    {label: "Date of Birth", name: "2019/02/01"},
-                ],
+                qDates: [],
             },
             dialogs:[
                 { title: "Update User", isVisible: false, message: "Do you want to update a user",
@@ -91,15 +95,17 @@ export default {
             var context = this;
             
             var url = `user/${context.selectedUser.id}`;
-            const arr = context.form.qDates[0].name.split("/") 
             const payload = {
                 url,
                 req: {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
-                    birthYear: Number(arr[0]),
-                    birthMonth: Number(arr[1]),
-                    birthDay: Number(arr[1]),
+                    userName: context.form.qInputs[2].name,
+                    countryCode: context.form.qInputs[3].name,
+                    phoneNumber: context.form.qInputs[4].name,
+                    email: context.form.qInputs[5].name,
+                    designationId: context.form.qSelects[0].value,
+                    userType: "Member",
                 }
             }
 
@@ -144,11 +150,15 @@ export default {
     created(){
         var context =  this;
         context.selectedUser = this.$store.getters["userStore/selectedUser"];
-        context.form.qInputs[0].firstName = context.selectedUser.firstName;
-        context.form.qInputs[1].lastName = context.selectedUser.lastName;
-        var birthDay = context.selectedUser.birthDay > 9 ? toString(context.selectedUser.birthDay) : `0${context.selectedUser.birthDay}`;
-        var birthMonth = context.selectedUser.birthMonth > 9 ? toString(context.selectedUser.birthMonth) : `0${context.selectedUser.birthMonth}`;
-        context.form.qDates[0].name = `${context.selectedUser.birthMonth}/birthMonth/birthDay`;
+        console.log('context.selectedUser: ', context.selectedUser)
+        context.form.qInputs[0].name = context.selectedUser.firstName;
+        context.form.qInputs[1].name = context.selectedUser.lastName;
+        context.form.qInputs[2].name = context.selectedUser.userName;
+        context.form.qInputs[3].name = context.selectedUser.countryCode;
+        context.form.qInputs[4].name = context.selectedUser.phoneNumber;
+        context.form.qInputs[5].name = context.selectedUser.email;
+        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
+        context.form.qSelects[0].value = context.selectedUser.designation;
     }
 }
 </script>

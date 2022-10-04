@@ -26,7 +26,7 @@ const routes = [
         
       },
       { 
-        path: '/users-landing', 
+        path: '/user-landing', 
         component: () => import('pages/administrators/user/landing.vue') 
         
       },

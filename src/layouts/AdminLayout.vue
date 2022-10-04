@@ -10,7 +10,7 @@
             icon="arrow_back"
             flat
           />
-         <img src='/statics/lhdi.png' width=100 height=40>
+         <img src='/statics/newway.jpg' width=100 height=40>
         <q-space ></q-space>
       <q-tabs shrink>
 
@@ -84,6 +84,28 @@
                       </q-list>
               </q-menu>
         </q-btn>
+
+        <div>
+          <q-btn
+            :icon="rightMenuIcon"
+            flat
+            dense
+            class="text-accent bg-primary">
+            <q-menu fit>
+              <q-list dense class="text-accent text-caption bg-primary">
+                <q-item
+                v-for="(menuItem) in menuList" :key="menuItem.title" 
+                class="bg-primary text-accent"
+                clickable
+                  @click="scrollToElement(menuItem.to)">
+                      <q-item-section>
+                      {{ menuItem.title}}
+                      </q-item-section>
+                  </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
+        </div>
       </q-tabs> 
         
       </q-toolbar>
@@ -102,7 +124,6 @@ import { loadClassRooms } from "../pages/administrators/classroom/utils";
 import { loadStaffs } from "../pages/administrators/staff/utils";
 import { loadStudents } from "../pages/administrators/student/utils";
 import { loadSubjects } from "../pages/administrators/subject/utils";
-import { loadUsersByCategory } from "../pages/administrators/user/utils";
 
 export default {
   name: 'AdminLayout',
@@ -128,7 +149,73 @@ export default {
       leftDrawerOpen: true,
       showAccountDetails: false,
       rightMenuIcon: "menu",
-      navs: []
+      navs: [],
+      rightDrawerOpen: window.innerWidth < 700 ? true : false,
+        menuList: [
+            {
+                name: "showPage",
+                title: "Home", 
+                description: "Landing Page",
+                image: "/statics/images/staffs.jpg",
+                to: "/admin"
+              },
+              {
+                name: "showPage",
+                title: "Users", 
+                description: "The employees of the schools",
+                image: "/statics/images/staffs.jpg",
+                to: "/user-landing"
+              },
+              {
+                name: "showPage",
+                title: "Staff", 
+                description: "The types of employees of the schools",
+                image: "/statics/images/staffs.jpg",
+                to: "/staff-landing"
+              },
+              {
+                name: "showPage",
+                title: "Class Rooms", 
+                description: "The school's class rooms",
+                image: "/statics/images/classroom.jpg",
+                to: "/classroom-landing"
+              },
+              {
+                name: "showPage",
+                title: "Subjects", 
+                description: "Subjects that students learn in the school",
+                image: "/statics/images/subjects.jpg",
+                to: "/subject-landing"
+              },
+              {
+                name: "showPage",
+                title: "Student", 
+                description: "Students in the school",
+                image: "/statics/images/students.jpg",
+                to: "/student-landing"
+              },
+              {
+                name: "showPage",
+                title: "Assessment", 
+                description: "Student's assessment in the school",
+                image: "/statics/images/assessment.jpg",
+                to: "/assessment-landing"
+              },
+              {
+                name: "showPage",
+                title: "Student Results", 
+                description: "Student's results in the school",
+                image: "/statics/images/results.jpg",
+                to: "/result-landing"
+              },
+              {
+                name: "showPage",
+                title: "Lesson Notes", 
+                description: "Student's lesson notes in the school",
+                image: "/statics/images/lesson.jpg",
+                to: "/lesson-landing"
+              },
+        ],
     }
   },
   methods:{
@@ -153,23 +240,22 @@ export default {
     logoutUser(){
       this.$store.dispatch('authenticationStore/Logout')
     },
-    scrollToElement(identityvalue){
-      if(identityvalue == 'id_about_us'){
-        this.$router.push('/about');
-      }
+    scrollToElement(routename){
+      this.$router.push(`${routename}`);
 
-      if(identityvalue == 'id_services'){
-        this.$router.push('/streams');
-      }
-
-      if(identityvalue == 'id_team'){
-        this.$router.push('/team');
-      }
+    },
+    onResize(e) {
+      const width = window.innerWidth;
+      var content = this;
+      content.rightDrawerOpen = false
+      if(width < 700) content.rightDrawerOpen = true;
     },
   },
   async created(){
+    window.addEventListener("resize", this.onResize);
     var context = this;
-    if(context.IdentityModel.designation == "CEO") {
+    console.log("context.IdentityModel: ", context.IdentityModel)
+    if(context.IdentityModel.designationId == "CEO") {
 
       const classRooms = await loadClassRooms();
       this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
@@ -179,8 +265,6 @@ export default {
       this.$store.commit('studentStore/SetStudents', students.result);
       const subjects = await loadSubjects();
       this.$store.commit('subjectStore/SetSubjects', subjects.result);
-      const teachers = await loadUsersByCategory("Teacher");
-      this.$store.commit('userStore/SetTeachers', teachers.result);
 
       context.navs = context.adminNavBarList.map((row) => {
         return {
@@ -188,6 +272,9 @@ export default {
         }
       })
     }
-  }
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.onResize);
+  },
 }
 </script>

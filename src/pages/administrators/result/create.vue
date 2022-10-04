@@ -3,7 +3,8 @@
         <Form
         :formData="form"
         @Create="Create($event)"
-        @Cancel="Cancel($event)"/>
+        @Cancel="Cancel($event)"
+        @typeOfInstructor="typeOfInstructor($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -27,6 +28,7 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { post } from "../../../store/modules/services";
+import { loadUsersByCategory } from "../user/utils"
 
 export default {
     components:{
@@ -38,10 +40,11 @@ export default {
             form: {
                 title: "Create Result",
                 qSelects: [
-                    { label: "Class Room", value: "", type: "text", list: [] },
-                    { label: "Subject", value: "", type: "text", list: [] },
-                    { label: "Student", value: "", type: "text", list: [] },
-                    { label: "Teacher", value: "", type: "text", list: [] },
+                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
+                    { label: "Subject", value: "", type: "text", list: [], actionName: "subject" },
+                    { label: "Student", value: "", type: "text", list: [], actionName: "student" },
+                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor" },
+                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
                 ],
                 qInputs: [
                     { label: "Score", name: "", type: "text"},
@@ -101,7 +104,7 @@ export default {
                     classRoomId: context.form.qSelects[0].value,
                     subjectId: context.form.qSelects[1].value,
                     studentId: context.form.qSelects[2].value,
-                    teacherId: context.form.qSelects[3].value,
+                    teacherId: context.form.qSelects[4].value,
                 }
             }
 
@@ -141,6 +144,17 @@ export default {
                     break;
                 }
             }
+        },
+        async typeOfInstructor(payload){
+            var context = this;
+            const teachers = await loadUsersByCategory(payload.value);
+            this.$store.commit('userStore/SetTeachers', teachers.result);
+            context.form.qSelects[4].list = teachers.result.map((row) => {
+            return {
+                ...row,
+                type: `${row.firstName} ${row.lastName}`
+            }
+        }) 
         }
     },
     created(){
@@ -153,12 +167,7 @@ export default {
                 type: `${row.firstName} ${row.lastName}`
             }
         })
-        context.form.qSelects[3].list = this.$store.getters["userStore/teachers"].map((row) => {
-            return {
-                ...row,
-                type: `${row.firstName} ${row.lastName}`
-            }
-        }) 
+        context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"];
     }
 }
 </script>

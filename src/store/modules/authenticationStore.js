@@ -8,7 +8,7 @@ const state = {
     LoginDialog: false,
     Loginstatus: "Log in",
     Departments: [],
-    theme_color: '#00498D',
+    theme_color: '#056608',
     contributor: {},
     administrator: {},
     DoesNotHaveMoneyAccount: true,

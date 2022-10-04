@@ -41,6 +41,7 @@
             name="type"
             emit-value
             map-options
+            @input="onQSelectItemValueChanged(qSelect)"
             >
         </q-select></span>
         </div>
@@ -115,6 +116,9 @@
             },
         },
         methods: {
+          onQSelectItemValueChanged(qSelect){
+            this.$emit(qSelect.actionName, qSelect);
+          },
           ClickAction(actionName){
               this.$emit(actionName);
           }

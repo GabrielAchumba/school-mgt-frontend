@@ -3,7 +3,7 @@
 
      <q-header class="q-py-sm bg-primary text-accent"  :style="'border-bottom: 2px solid '+ theme_color">
         <q-toolbar>
-        <img src='/statics/lhdi.png' width=100 height=40>
+        <img src='/statics/newway.jpg' width=100 height=40>
          <q-space />
       <q-tabs v-model="selected_tab" shrink>
 

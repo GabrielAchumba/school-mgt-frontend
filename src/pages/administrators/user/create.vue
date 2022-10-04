@@ -37,18 +37,23 @@ export default {
         return {
             form: {
                 title: "Create User",
-                qSelects: [],
+                qSelects: [
+                     { label: "Designation *", value: "", type: "text", list: [] },
+                ],
                 qInputs: [
-                    { label: "First Name", name: "", type: "text"},
-                    { label: "Last Name", name: "", type: "text"},
+                    { label: "First Name *", name: "", type: "text"},
+                    { label: "Last Name *", name: "", type: "text"},
+                    { label: "User Name *", name: "", type: "text"},
+                    { label: "Password *", name: "", type: "text"},
+                    { label: "Country Code *", name: "", type: "text"},
+                    { label: "PhoneNumber *", name: "", type: "text"},
+                    { label: "Email", name: "", type: "text"},
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
                     {label: "Create", name: "Create"},
                 ],
-                qDates: [
-                     {label: "Date of Birth", name: "2019/02/01"},
-                ],
+                qDates: [],
             },
             dialogs:[
                 { title: "Create User", isVisible: false, message: "Do you want to create a user",
@@ -90,15 +95,18 @@ export default {
             var context = this;
             
             var url = `user/create`;
-            const arr = context.form.qDates[0].name.split("/") 
             const payload = {
                 url,
                 req: {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
-                    birthYear: Number(arr[0]),
-                    birthMonth: Number(arr[1]),
-                    birthDay: Number(arr[1]),
+                    userName: context.form.qInputs[2].name,
+                    password: context.form.qInputs[3].name,
+                    countryCode: context.form.qInputs[4].name,
+                    phoneNumber: context.form.qInputs[5].name,
+                    email: context.form.qInputs[6].name,
+                    designationId: context.form.qSelects[0].value,
+                    userType: "Member",
                 }
             }
 
@@ -139,6 +147,10 @@ export default {
                 }
             }
         }
+    },
+    created(){
+        var context = this;
+        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
     }
 }
 </script>

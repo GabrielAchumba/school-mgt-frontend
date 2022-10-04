@@ -213,14 +213,17 @@
               }
               } = response
 
-              console.log("result: ", result);
             
             context.message = message;
             context.isLoginActionMessage = false;
             if(success){
-              context.isLoginSuccessMessage = true;
               context.token = result.token;
               context.user = result.user;
+              this.$store.commit('authenticationStore/Login',{
+                token: context.token,
+                user: context.user,
+              })
+              context.isLoginSuccessMessage = true;
             }else{
               context.isLoginFailureMessage = true;
             }
@@ -242,6 +245,7 @@
             var context = this;
             context.isLoginSuccessMessage = false;
 
+           
             switch(context.user.userType.toLowerCase()){
               case "member":
                 this.$router.push('/user');
@@ -250,10 +254,6 @@
                 this.$router.push('/admin');
                 break;
             }
-            this.$store.commit('authenticationStore/Login',{
-              token: context.token,
-              user: context.user,
-            })
           },
           logInSuccessCancel(){
             var context = this;

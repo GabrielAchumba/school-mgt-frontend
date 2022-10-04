@@ -23,7 +23,7 @@
                  <q-separator />
 
                  <q-card-actions align="right">
-                    <q-btn flat label="Cancel" class="bg-secondary text-accent"
+                    <q-btn flat label="Cancel" class="bg-secondary text-primary"
                     size="sm"
                     no-caps
                     @click="cancelMessageBox" />

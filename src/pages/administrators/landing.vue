@@ -20,8 +20,15 @@
             cardList: [
               {
                 name: "showPage",
-                title: "Staff", 
+                title: "Users", 
                 description: "The employees of the schools",
+                image: "/statics/images/staffs.jpg",
+                to: "/user-landing"
+              },
+              {
+                name: "showPage",
+                title: "Staff", 
+                description: "The types of employees of the schools",
                 image: "/statics/images/staffs.jpg",
                 to: "/staff-landing"
               },

@@ -42,6 +42,7 @@
                     { name: "actions", label: "Actions", field: "", align: "left" },
                     { name: "firstName", label: "First Name", field: "", align: "left" },
                     { name: "lastName", label: "Last Name", field: "", align: "left" },
+                    { name: "designation", label: "Designation", field: "", align: "left" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -77,6 +78,7 @@
           },
           updateUser(selectedUser){
              var context = this;
+             console.log("selectedUser: ", selectedUser)
              this.$store.commit('userStore/SetSelectedUser', selectedUser)
             this.$router.push(context.tableVM.updateItemUrl);
           },
