@@ -108,17 +108,17 @@ export default {
                 }
             }
 
-            console.log("payload: ", payload)
             var response = await post(payload)
 
             const { 
                 data : {
+                    data: result,
                     message,
                     success,
                 }
             } = response
             if(success){
-                
+                console.log("result: ", result)
             }
         },
         async typeOfInstructor(payload){

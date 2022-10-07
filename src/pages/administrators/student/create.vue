@@ -49,6 +49,13 @@ export default {
                 qDates: [
                      {label: "Date of Birth", name: "2019/02/01"},
                 ],
+                GroupedCheckBox: { 
+                    isGroupedCheckBox: false, 
+                    isExpanded: false, 
+                    list:[], 
+                    group: [],
+                    label: "Subjects",
+                },
             },
             dialogs:[
                 { title: "Create Student", isVisible: false, message: "Do you want to create a Student",

@@ -72,7 +72,7 @@
                 <q-td key="actions" :props="props">
                     <div class="row q-pa-md text-center">
                         <q-icon 
-                        name="update"
+                        name="edit"
                         @click="updateItem(props.row)"
                         size="20px"/>
                        <!--  <q-icon 

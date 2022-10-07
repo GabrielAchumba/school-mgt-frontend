@@ -50,6 +50,13 @@ export default {
                 qDates: [
                     {label: "Date of Birth", name: "2019/02/01"},
                 ],
+                GroupedCheckBox: { 
+                    isGroupedCheckBox: false, 
+                    isExpanded: false, 
+                    list:[], 
+                    group: [],
+                    label: "Subjects",
+                },
             },
             dialogs:[
                 { title: "Update Student", isVisible: false, message: "Do you want to update a Student",
@@ -148,7 +155,7 @@ export default {
         context.form.qInputs[1].lastName = context.selectedStudent.lastName;
         var birthDay = context.selectedStudent.birthDay > 9 ? toString(context.selectedStudent.birthDay) : `0${context.selectedStudent.birthDay}`;
         var birthMonth = context.selectedStudent.birthMonth > 9 ? toString(context.selectedStudent.birthMonth) : `0${context.selectedStudent.birthMonth}`;
-        context.form.qDates[0].name = `${context.selectedStudent.birthMonth}/birthMonth/birthDay`;
+        context.form.qDates[0].name = `${context.selectedStudent.birthYear}/${birthMonth}/${birthDay}`;
     }
 }
 </script>

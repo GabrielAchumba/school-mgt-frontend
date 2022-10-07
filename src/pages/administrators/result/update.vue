@@ -58,7 +58,16 @@ export default {
                     {label: "Delete", name: "deleteResult"},
                     {label: "Update", name: "Update"},
                 ],
-                qDates: [],
+                qDates: [
+                    {label: "Updated At", name: "2019/02/01"},
+                ],
+                GroupedCheckBox: { 
+                    isGroupedCheckBox: false, 
+                    isExpanded: false, 
+                    list:[], 
+                    group: [],
+                    label: "Subjects",
+                },
             },
             dialogs:[
                 { title: "Update Result", isVisible: false, message: "Do you want to update a Result",
@@ -121,6 +130,7 @@ export default {
                     designationId: context.form.qSelects[3].value,
                     teacherId: context.form.qSelects[4].value,
                     assessmentId: context.form.qSelects[5].value,
+                    updatedAt: context.form.qDates[0].name,
                 }
             }
 
@@ -231,6 +241,12 @@ export default {
             context.form.qSelects[3].value = context.selectedResult.designationId;
             context.form.qSelects[4].value = context.selectedResult.teacherId;
             context.form.qSelects[5].value = context.selectedResult.assessmentId;
+
+            const dateObj = new Date(context.selectedResult.createdAt);
+            var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
+            var date = ('0' + dateObj.getDate()).slice(-2);
+            var year = dateObj.getFullYear();
+            context.form.qDates[0].name = year + '/' + month + '/' + date;
         }
     },
     async created(){

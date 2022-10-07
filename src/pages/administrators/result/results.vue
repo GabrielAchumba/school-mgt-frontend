@@ -44,6 +44,7 @@
                     { name: "score", label: "Score", field: "", align: "left" },
                     { name: "scoreMax", label: "Maximum Score", field: "", align: "left" },
                     { name: "subjectFullName", label: "Subject", field: "", align: "left" },
+                    { name: "createdDate", label: "Date of Creation", field: "", align: "left" },
                     { name: "teacherFullName", label: "Teacher", field: "", align: "left" },
                     { name: "classRoomFullName", label: "Class", field: "", align: "left" },
                 ],
@@ -122,7 +123,12 @@
             } = response
 
             if(success){
-            context.tableVM.rows = result;
+            context.tableVM.rows = result.map((row) => {
+                return {
+                    ...row,
+                    createdDate: (new Date(row.createdAt)).toDateString()
+                }
+            })
             context.tableVM.cardList = result.map((row, i) => {
                 return {
                     id: i+1,
@@ -132,7 +138,7 @@
                     description: `${row.studentFullName} score in ${row.subjectFullName} is
                                 ${row.score}/${row.scoreMax}. The class room is ${row.classRoomFullName}
                                 and the instructor's name is ${row.teacherFullName}`,
-                    createdDate: `${row.createdDay}/${row.createdMonth}/${row.createdYear}`,
+                    createdDate: (new Date(row.createdAt)).toDateString(),
                     qBtns: [
                             {label: "View", name: "View"},
                         ],

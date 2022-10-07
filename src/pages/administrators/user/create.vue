@@ -54,6 +54,13 @@ export default {
                     {label: "Create", name: "Create"},
                 ],
                 qDates: [],
+                GroupedCheckBox: { 
+                    isGroupedCheckBox: false, 
+                    isExpanded: false, 
+                    list:[], 
+                    group: [],
+                    label: "Subjects",
+                },
             },
             dialogs:[
                 { title: "Create User", isVisible: false, message: "Do you want to create a user",

@@ -55,7 +55,16 @@ export default {
                     {label: "Cancel", name: "Cancel"},
                     {label: "Create", name: "Create"},
                 ],
-                qDates: [],
+                qDates: [
+                     {label: "Created At", name: "2019/02/01"},
+                ],
+                GroupedCheckBox: { 
+                    isGroupedCheckBox: false, 
+                    isExpanded: false, 
+                    list:[], 
+                    group: [],
+                    label: "Subjects",
+                },
             },
             dialogs:[
                 { title: "Create Result", isVisible: false, message: "Do you want to create a Result",
@@ -108,6 +117,7 @@ export default {
                     designationId: context.form.qSelects[3].value,
                     teacherId: context.form.qSelects[4].value,
                     assessmentId: context.form.qSelects[5].value,
+                    createdAt: context.form.qDates[0].name,
                 }
             }
 

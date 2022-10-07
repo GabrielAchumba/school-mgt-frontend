@@ -48,6 +48,13 @@ export default {
                     {label: "Update", name: "Update"},
                 ],
                 qDates: [],
+                GroupedCheckBox: { 
+                    isGroupedCheckBox: false, 
+                    isExpanded: false, 
+                    list:[], 
+                    group: [],
+                    label: "Subjects",
+                },
             },
             dialogs:[
                 { title: "Update Assessment", isVisible: false, message: "Do you want to update an Assessment",
