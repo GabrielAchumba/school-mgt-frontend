@@ -3,13 +3,13 @@
 
      <q-header class="q-py-sm bg-primary text-accent" :style="'border-bottom: 2px solid '+ theme_color">
         <q-toolbar>
-          <q-btn
+          <!-- <q-btn
             v-go-back.single
             v-once
             class="text-accent bg-primary q-pa-sm"
             icon="arrow_back"
             flat
-          />
+          /> -->
          <img src='/statics/newway.jpg' width=100 height=40>
         <q-space ></q-space>
       <q-tabs shrink>
@@ -87,6 +87,7 @@
 
         <div>
           <q-btn
+            v-if="this.$router.history.current.fullPath ==! '/admin'"
             :icon="rightMenuIcon"
             flat
             dense
@@ -219,6 +220,13 @@ export default {
     }
   },
   methods:{
+    showSelectedRouters(){
+      console.log("this.$router: ", this.$router)
+      if(this.$router.history.current.fullPath ==! "/admin"){
+        return true;
+      }
+      return false;
+    },
     getIsUserPhoto(){
       var context = this;
       if(context.IdentityModel.base64String != "" &&
@@ -246,15 +254,18 @@ export default {
     },
     onResize(e) {
       const width = window.innerWidth;
-      var content = this;
-      content.rightDrawerOpen = false
-      if(width < 700) content.rightDrawerOpen = true;
+      var context = this;
+      context.rightDrawerOpen = false
+      if(width < 700) context.rightDrawerOpen = true;
+      this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
     },
   },
   async created(){
     window.addEventListener("resize", this.onResize);
     var context = this;
-    console.log("context.IdentityModel: ", context.IdentityModel)
+    
+    if(window.innerWidth < 700) context.rightDrawerOpen = true;
+    this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
     if(context.IdentityModel.designationId == "CEO") {
 
       const classRooms = await loadClassRooms();

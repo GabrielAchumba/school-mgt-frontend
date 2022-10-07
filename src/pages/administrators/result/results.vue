@@ -2,6 +2,7 @@
   <div>
     <Table
     :table_VM="tableVM"
+    :isResponsive="isResponsive"
     @createResult="createResult($event)"
     @updateResult="updateResult($event)"
     @deleteResult="deleteResult($event)"/>
@@ -34,11 +35,12 @@
       },
         data () {
     return {
+            isResponsive: true,
             tableVM: {
                 selectedResult: {},
                 title: "Results",
                 columns: [
-                    { name: "actions", label: "Actions", field: "", align: "left" },
+                    { name: "actions", label: "Action", field: "", align: "left" },
                     { name: "studentFullName", label: "Full Name", field: "", align: "left" },
                     { name: "score", label: "Score", field: "", align: "left" },
                     { name: "scoreMax", label: "Maximum Score", field: "", align: "left" },
@@ -54,14 +56,8 @@
                 createItemUrl: "/create-result",
                 updateItemUrl: "/update-result",
                 },
-                dialogs:[
-                { title: "Delete Result", isVisible: false, message: "Do you want to delete a Result",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Result deleted successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            dialogs:[],
+            cardList: [],
             }
         },
         methods: {
@@ -83,12 +79,6 @@
              this.$store.commit('ResultStore/SetSelectedResult', selectedResult)
             this.$router.push(context.tableVM.updateItemUrl);
           },
-          deleteResult(selectedResult){
-             var context = this;
-             context.selectedResult = selectedResult;
-             console.log(context.selectedResult)
-             context.dialogs[0].isVisible = true;
-          },
           cancelDialog(payload){
             const context = this;
             var i = -1;
@@ -100,31 +90,6 @@
                 }
             }
         },
-        async delete(){
-            var context = this;
-            
-            var url = `result/${context.selectedResult.id}`;
-            const payload = {
-                url,
-            }
-
-            console.log("payload: ", payload)
-            var response = await remove(payload)
-
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
-                context.dialogs[1].isVisible = true;
-            }else{
-                context.dialogs[2].message = message;
-                context.dialogs[2].isVisible = true;
-            }
-
-        },
         async okDialog(payload){
             console.log("payload: ", payload)
             const context = this;
@@ -133,9 +98,6 @@
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete Result":
-                            await context.delete();
-                            break;
                         case "Success":
                             await context.loadResultf()
                             break;
@@ -162,7 +124,23 @@
 
             if(success){
             context.tableVM.rows = result;
+            context.tableVM.cardList = result.map((row, i) => {
+                return {
+                    id: i+1,
+                    name: "showPage",
+                    title: row.studentFullName, 
+                    description: `${row.studentFullName} score in ${row.subjectFullName} is
+                                ${row.score}/${row.scoreMax}. The class room is ${row.classRoomFullName}
+                                and the instructor's name is ${row.teacherFullName}`,
+                    createdDate: `${row.createdDay}/${row.createdMonth}/${row.createdYear}`,
+                    qBtns: [
+                            {label: "View", name: "View"},
+                        ],
+                    }
+            })
+            console.log("cardList: ", context.tableVM.cardList)
             this.$store.commit('resultStore/SetResults', result)
+            this.$store.commit('componentsStore/setCardItems', context.tableVM.cardList)
             }else{
                 context.isFetchTableDialog = true;
                 context.message = message;

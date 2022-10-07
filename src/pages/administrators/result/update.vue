@@ -55,10 +55,20 @@ export default {
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Result", isVisible: false, message: "Do you want to delete a Result",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Success", isVisible: false, message: "Result deleted successfully!",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Failure", isVisible: false, message: "",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
             ]
         }
     },
     methods:{
+        deleteResult(){
+             var context = this
+             context.dialogs[3].isVisible = true;
+        },
         Update(){
             const context = this;
             var i = -1;
@@ -112,6 +122,32 @@ export default {
             }
 
         },
+
+        async delete(){
+            var context = this;
+            
+            var url = `result/${context.selectedResult.id}`;
+            const payload = {
+                url,
+            }
+
+            console.log("payload: ", payload)
+            var response = await remove(payload)
+
+            const { 
+                data : {
+                    message,
+                    success,
+                }
+            } = response
+            if(success){
+                context.dialogs[4].isVisible = true;
+            }else{
+                context.dialogs[5].message = message;
+                context.dialogs[5].isVisible = true;
+            }
+
+        },
         async okDialog(payload){
             console.log("payload: ", payload)
             const context = this;
@@ -120,6 +156,9 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
+                         case "Delete Result":
+                            await context.delete();
+                            break;
                         case "Update Result":
                             await context.save();
                             break;

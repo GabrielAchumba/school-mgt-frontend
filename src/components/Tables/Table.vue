@@ -7,9 +7,7 @@
     </div>
 
     <div class="row text-center flex flex-center full-Width">
-      <q-card class="col-12 q-pa-md q-ma-none"
-      :style="'width:' + cardWidth"> 
-
+      <q-card class="col-12 q-pa-md q-ma-none"> 
               <q-card-section class="bg-accent text-primary">
                 <div class="row">
                   <div class="col text-center">
@@ -19,10 +17,17 @@
                 </div>
               </q-card-section>
 
-              <q-card-section
-              :style="'width:' + cardWidth">
+              <q-card-section>
+              <div 
+                v-if="setIsResponsive()"
+                class="bg-primary q-pa-sm">
+                  <CardList 
+                  :cardList="cardItems"
+                  @updateItem="updateItem($event)"/>
+              </div>
+
                 <q-table 
-                :style="'width:' + tableWidth"
+                v-else
                 :data="table_VM.rows"
                 :columns="table_VM.columns" 
                 row-key="name" 
@@ -64,18 +69,15 @@
               <q-tr 
               :props="props">
                 <q-td key="actions" :props="props">
-                    <div class="row q-pa-md">
+                    <div class="row q-pa-md text-center">
                         <q-icon 
                         name="update"
                         @click="updateItem(props.row)"
                         size="20px"/>
-
-                        <q-space />
-
-                        <q-icon 
+                       <!--  <q-icon 
                         name="delete" 
                         @click="deleteItem(props.row)"
-                        size="20px" />
+                        size="20px" /> -->
                     </div>
                 </q-td>
 
@@ -84,9 +86,9 @@
                 :props="props">{{ props.row[column.name] }}</q-td>
               </q-tr>
             </template>
-        </q-table>
+                </q-table>
 
-        </q-card-section>
+              </q-card-section>
 
       </q-card>
     </div>
@@ -95,9 +97,25 @@
 </template>
 
 <script>
-    import { tableVM } from "./TableVM.js"
+    import { tableVM } from "./TableVM.js";
+    import CardList from "../Cards/CardList2.vue"
     export default {
+        computed:{
+          isMobile(){
+            return this.$store.getters["authenticationStore/isMobile"];
+          },
+          cardItems(){
+            return this.$store.getters["componentsStore/cardItems"];
+          }
+        },
+        components:{
+          CardList,
+        },
         props: {
+            isResponsive:{
+              type: Boolean,
+              default: false
+            },
             table_VM:{
                 type: Object,
                 default: tableVM,
@@ -113,6 +131,14 @@
           }
         },
         methods: {
+            setIsResponsive(){
+              var context = this;
+              if(context.isResponsive == false){
+                return context.isResponsive;
+              }else{
+                return context.isMobile;
+              }
+            },
             removekeys(){
               var context = this;
               var columnsNew = []
@@ -146,13 +172,13 @@
           },
           onResize(e) {
             const width = window.innerWidth;
-            var content = this;
+            var context = this;
             if(width < 700) {
-              content.tableWidth = `${width * 0.6}px`;
-              content.cardWidth = `${width * 0.7}px`;
+              context.tableWidth = `${width * 0.6}px`;
+              context.cardWidth = `${width * 0.7}px`;
             }else{
-              content.tableWidth = "100%"
-              content.cardWidth = "100%"
+              context.tableWidth = "100%"
+              context.cardWidth = "100%"
             }
           },
 

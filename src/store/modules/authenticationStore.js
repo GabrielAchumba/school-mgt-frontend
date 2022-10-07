@@ -16,6 +16,7 @@ const state = {
     visible: false,
     showSimulatedReturnData: true,
     tab: "login",
+    isMobile: false,
   }
 
   const getters = {
@@ -63,6 +64,9 @@ const state = {
   },
   Admin(state){
     return state.Admin;
+  },
+  isMobile(state){
+    return state.isMobile;
   }
 }
 
@@ -112,6 +116,9 @@ const mutations = {
           state.Departments.push(state.AuthDTO.departmentsObj[i].nameOfDepartment);
         }
     }
+  },
+  setIsMobile(state, payload){
+    state.isMobile = payload;
   }
 
 }

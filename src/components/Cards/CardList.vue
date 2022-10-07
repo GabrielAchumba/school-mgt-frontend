@@ -12,6 +12,7 @@
               style="border: none;" class="my-card text-center box-shadow" square bordered>
                 <q-img
                   :src="card.image"
+                  height="100px"
                 />
                 <q-card-section class="bg-primary">
                   <div class="about_heading_1 text-h6 text-accent q-mt-sm q-mb-xs">{{ card.title }}</div>

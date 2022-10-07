@@ -6,6 +6,7 @@ const tableVM = {
     createItem: "createItem",
     updateItem: "updateItem",
     deleteItem: "deleteItem",
+    cardList: [],
 }
 
 export { tableVM }
