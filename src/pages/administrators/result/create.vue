@@ -45,6 +45,7 @@ export default {
                     { label: "Student", value: "", type: "text", list: [], actionName: "student" },
                     { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor" },
                     { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
+                    { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor" },
                 ],
                 qInputs: [
                     { label: "Score", name: "", type: "text"},
@@ -104,7 +105,9 @@ export default {
                     classRoomId: context.form.qSelects[0].value,
                     subjectId: context.form.qSelects[1].value,
                     studentId: context.form.qSelects[2].value,
+                    designationId: context.form.qSelects[3].value,
                     teacherId: context.form.qSelects[4].value,
+                    assessmentId: context.form.qSelects[5].value,
                 }
             }
 
@@ -150,11 +153,11 @@ export default {
             const teachers = await loadUsersByCategory(payload.value);
             this.$store.commit('userStore/SetTeachers', teachers.result);
             context.form.qSelects[4].list = teachers.result.map((row) => {
-            return {
-                ...row,
-                type: `${row.firstName} ${row.lastName}`
-            }
-        }) 
+                return {
+                    ...row,
+                    type: `${row.firstName} ${row.lastName}`
+                }
+            }) 
         }
     },
     created(){
@@ -168,6 +171,7 @@ export default {
             }
         })
         context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"];
+        context.form.qSelects[5].list = this.$store.getters["assessmentStore/assessments"];
     }
 }
 </script>

@@ -27,10 +27,17 @@
               },
               {
                 name: "showPage",
-                title: "Results Analysis", 
-                description: "The statistics analysis of students results",
+                title: "Single Student Results Analysis", 
+                description: "The statistics analysis of a student results",
                 image: "/statics/images/analyse results.jpg",
-                to: "/results-analysis"
+                to: "/single-student-results-analysis"
+              },
+              {
+                name: "showPage",
+                title: "Multiple Student Results Analysis", 
+                description: "The statistics analysis of multiple students results",
+                image: "/statics/images/analyse results.jpg",
+                to: "/multiple-students-results-analysis"
               },
               
             ],

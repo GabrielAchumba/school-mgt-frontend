@@ -3,7 +3,9 @@
         <Form
         :formData="form"
         @Update="Update($event)"
-        @Cancel="Cancel($event)"/>
+        @Cancel="Cancel($event)"
+        @deleteResult="deleteResult($event)"
+        @typeOfInstructor="typeOfInstructor($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -26,7 +28,8 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { put } from "../../../store/modules/services";
+import { put, remove } from "../../../store/modules/services";
+import { loadUsersByCategory } from "../user/utils";
 
 export default {
     components:{
@@ -38,12 +41,21 @@ export default {
             selectedResult: {},
             form: {
                 title: "Update Result",
-                qSelects: [],
+                qSelects: [
+                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
+                    { label: "Subject", value: "", type: "text", list: [], actionName: "subject" },
+                    { label: "Student", value: "", type: "text", list: [], actionName: "student" },
+                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor" },
+                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
+                    { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor" },
+                ],
                 qInputs: [
-                    { label: "Type of Result", name: "", type: "text"}
+                    { label: "Score", name: "", type: "text"},
+                    { label: "Maximum Score", name: "", type: "text"}
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
+                    {label: "Delete", name: "deleteResult"},
                     {label: "Update", name: "Update"},
                 ],
                 qDates: [],
@@ -51,15 +63,15 @@ export default {
             dialogs:[
                 { title: "Update Result", isVisible: false, message: "Do you want to update a Result",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Result updated successfully!",
+                { title: "Update Success", isVisible: false, message: "Result updated successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
+                { title: "Update Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Delete Result", isVisible: false, message: "Do you want to delete a Result",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Result deleted successfully!",
+                { title: "Delete Success", isVisible: false, message: "Result deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
+                { title: "Delete Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
             ]
         }
@@ -101,7 +113,14 @@ export default {
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
+                    score: Number(context.form.qInputs[0].name),
+                    scoreMax: Number(context.form.qInputs[1].name),
+                    classRoomId: context.form.qSelects[0].value,
+                    subjectId: context.form.qSelects[1].value,
+                    studentId: context.form.qSelects[2].value,
+                    designationId: context.form.qSelects[3].value,
+                    teacherId: context.form.qSelects[4].value,
+                    assessmentId: context.form.qSelects[5].value,
                 }
             }
 
@@ -162,7 +181,10 @@ export default {
                         case "Update Result":
                             await context.save();
                             break;
-                        case "Success":
+                        case "Update Success":
+                            this.$router.push("/results");
+                            break;
+                        case "Delete Success":
                             this.$router.push("/results");
                             break;
                     }
@@ -170,12 +192,50 @@ export default {
                     break;
                 }
             }
+        },
+        async typeOfInstructor(payload){
+            var context = this;
+            const teachers = await loadUsersByCategory(payload.value);
+            this.$store.commit('userStore/SetTeachers', teachers.result);
+            context.form.qSelects[4].list = teachers.result.map((row) => {
+                return {
+                    ...row,
+                    type: `${row.firstName} ${row.lastName}`
+                }
+            }) 
+        },
+        async loadSelectedResult(){
+            var context =  this;
+            context.selectedResult = this.$store.getters["resultStore/selectedResult"];
+            console.log("context.selectedResult: ", context.selectedResult);
+            context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"];
+            context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
+            context.form.qSelects[2].list = this.$store.getters["studentStore/students"].map((row) => {
+                return {
+                    ...row,
+                    type: `${row.firstName} ${row.lastName}`
+                }
+            })
+            context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"];
+            await context.typeOfInstructor({
+                value: context.selectedResult.designationId,
+            })
+            context.form.qSelects[5].list = this.$store.getters["assessmentStore/assessments"];
+
+            context.form.qInputs[0].name = context.selectedResult.score;
+            context.form.qInputs[1].name = context.selectedResult.scoreMax;
+
+            context.form.qSelects[0].value = context.selectedResult.classRoomId;
+            context.form.qSelects[1].value = context.selectedResult.subjectId;
+            context.form.qSelects[2].value = context.selectedResult.studentId;
+            context.form.qSelects[3].value = context.selectedResult.designationId;
+            context.form.qSelects[4].value = context.selectedResult.teacherId;
+            context.form.qSelects[5].value = context.selectedResult.assessmentId;
         }
     },
-    created(){
+    async created(){
         var context =  this;
-        context.selectedResult = this.$store.getters["ResultStore/selectedResult"];
-        context.form.qInputs[0].name = context.selectedResult.type;
+        await context.loadSelectedResult();
     }
 }
 </script>

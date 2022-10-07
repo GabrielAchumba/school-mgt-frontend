@@ -4,8 +4,7 @@
     :table_VM="tableVM"
     :isResponsive="isResponsive"
     @createResult="createResult($event)"
-    @updateResult="updateResult($event)"
-    @deleteResult="deleteResult($event)"/>
+    @updateResult="updateResult($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -71,12 +70,12 @@
           },
          createResult(){
              var context = this;
-             console.log(context.tableVM.createItemUrl)
+             console.log(context.tableVM.createItemUrl) 
               this.$router.push(context.tableVM.createItemUrl);
           },
           updateResult(selectedResult){
              var context = this;
-             this.$store.commit('ResultStore/SetSelectedResult', selectedResult)
+             this.$store.commit('resultStore/SetSelectedResult', selectedResult)
             this.$router.push(context.tableVM.updateItemUrl);
           },
           cancelDialog(payload){
@@ -127,6 +126,7 @@
             context.tableVM.cardList = result.map((row, i) => {
                 return {
                     id: i+1,
+                    ...row,
                     name: "showPage",
                     title: row.studentFullName, 
                     description: `${row.studentFullName} score in ${row.subjectFullName} is

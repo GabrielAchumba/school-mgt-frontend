@@ -10,9 +10,16 @@
       <q-card class="col-12 q-pa-md q-ma-none"> 
               <q-card-section class="bg-accent text-primary">
                 <div class="row">
-                  <div class="col text-center">
+                  <!-- <div class="col text-center"> -->
                     <p class="text-subtitle2">{{ table_VM.title }}</p>
-                  </div>
+                    <q-space></q-space>
+                    <q-btn 
+                    label="Create"
+                    class="bg-accent text-primary q-ma-sm" 
+                    no-shadows
+                    @click="createItem"
+                    size=md no-caps />
+                 <!--  </div> -->
                    
                 </div>
               </q-card-section>
@@ -45,12 +52,6 @@
                     <q-icon name="search" />
                   </template>
               </q-input>
-              <q-btn 
-              label="Create"
-              class="bg-accent text-primary q-ma-sm" 
-              no-shadows
-              @click="createItem"
-              size=md no-caps />
           </template>
           <template v-slot:header="props">
             <q-tr :props="props">

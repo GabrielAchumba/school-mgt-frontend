@@ -149,6 +149,11 @@ const routes = [
         path: '/update-result', 
         component: () => import('pages/administrators/result/update.vue') 
         
+      },
+      { 
+        path: '/single-student-results-analysis', 
+        component: () => import('pages/administrators/result/analysis/SummariedResults.vue') 
+        
       }
     ]
   },

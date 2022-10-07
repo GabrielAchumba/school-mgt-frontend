@@ -50,7 +50,7 @@
                 updateItemUrl: "/update-assessment",
                 },
                 dialogs:[
-                { title: "Delete Assessment", isVisible: false, message: "Do you want to delete a Assessment",
+                { title: "Delete Assessment", isVisible: false, message: "Do you want to delete an Assessment",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Success", isVisible: false, message: "Assessment deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -75,7 +75,7 @@
           },
           updateAssessment(selectedAssessment){
              var context = this;
-             this.$store.commit('AssessmentStore/SetSelectedAssessment', selectedAssessment)
+             this.$store.commit('assessmentStore/SetSelectedAssessment', selectedAssessment)
             this.$router.push(context.tableVM.updateItemUrl);
           },
           deleteAssessment(selectedAssessment){
@@ -157,7 +157,7 @@
 
             if(success){
             context.tableVM.rows = result;
-            this.$store.commit('AssessmentStore/SetAssessments', result)
+            this.$store.commit('assessmentStore/SetAssessments', result)
             }else{
                 context.isFetchTableDialog = true;
                 context.message = message;

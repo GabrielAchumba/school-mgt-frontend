@@ -26,7 +26,7 @@
   	      </q-avatar>
           <q-avatar
             v-else
-            class="bg-primary text-accent">
+            class="bg-accent text-primary">
   	        {{ IdentityModel.firstName.charAt(0) }}
   	      </q-avatar>
           <q-menu
@@ -49,7 +49,7 @@
                                   </q-avatar>
                                   <q-avatar 
                                   v-else
-                                  class="bg-primary text-accent">
+                                  class="bg-accent text-primary">
                                     {{ IdentityModel.firstName.charAt(0) }}
                                   </q-avatar>
                               </div>
@@ -87,7 +87,7 @@
 
         <div>
           <q-btn
-            v-if="this.$router.history.current.fullPath ==! '/admin'"
+            v-if="this.$router.history.current.fullPath != '/admin'"
             :icon="rightMenuIcon"
             flat
             dense
@@ -125,6 +125,7 @@ import { loadClassRooms } from "../pages/administrators/classroom/utils";
 import { loadStaffs } from "../pages/administrators/staff/utils";
 import { loadStudents } from "../pages/administrators/student/utils";
 import { loadSubjects } from "../pages/administrators/subject/utils";
+import { loadAssessments } from "../pages/administrators/assessment/utils";
 
 export default {
   name: 'AdminLayout',
@@ -222,7 +223,7 @@ export default {
   methods:{
     showSelectedRouters(){
       console.log("this.$router: ", this.$router)
-      if(this.$router.history.current.fullPath ==! "/admin"){
+      if(this.$router.history.current.fullPath != "/admin"){
         return true;
       }
       return false;
@@ -276,6 +277,9 @@ export default {
       this.$store.commit('studentStore/SetStudents', students.result);
       const subjects = await loadSubjects();
       this.$store.commit('subjectStore/SetSubjects', subjects.result);
+      const assessments = await loadAssessments();
+      this.$store.commit('assessmentStore/SetAssessments', assessments.result);
+
 
       context.navs = context.adminNavBarList.map((row) => {
         return {

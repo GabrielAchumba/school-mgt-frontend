@@ -24,6 +24,21 @@
 
    <q-card-section>
       <q-form class="q-pa-sm">
+
+        <q-expansion-item
+          v-if="formData.GroupedCheckBox.isGroupedCheckBox"
+            class="col-12 q-pa-sm bg-primary text-accent"
+            v-model="formData.GroupedCheckBox.isExpanded"
+            :label="formData.GroupedCheckBox.label"
+            dense
+            dense-toggle
+            expand-separator>
+            <q-option-group
+              :options="formData.GroupedCheckBox.list"
+              type="checkbox"
+              v-model="formData.GroupedCheckBox.group"
+            />
+          </q-expansion-item>
         <div
           class="q-pa-sm"
           v-for="qSelect in formData.qSelects" 
@@ -82,7 +97,7 @@
        
         <div class="row q-pa-sm">
           <q-space />
-          <q-btn class="q-ma-md bg-accent text-primary"
+          <q-btn class="q-ma-sm bg-accent text-primary"
             v-for="qBtn in formData.qBtns" 
             :key="qBtn.label"
             :label="qBtn.label"

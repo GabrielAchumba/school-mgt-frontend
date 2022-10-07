@@ -36,10 +36,11 @@ export default {
     data(){
         return {
             form: {
-                title: "Create Assessment",
+                title: "Create Type of Assessment",
                 qSelects: [],
                 qInputs: [
-                    { label: "Type of Assessment", name: "", type: "text"}
+                    { label: "Type of Assessment", name: "", type: "text"},
+                    { label: "Overall Score (%)", name: "", type: "text"},
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
@@ -48,7 +49,7 @@ export default {
                 qDates: [],
             },
             dialogs:[
-                { title: "Create Assessment", isVisible: false, message: "Do you want to create a Assessment",
+                { title: "Create Assessment", isVisible: false, message: "Do you want to create an Assessment",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Success", isVisible: false, message: "Assessment created successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -91,6 +92,7 @@ export default {
                 url,
                 req: {
                     type: context.form.qInputs[0].name,
+                    percentage: Number(context.form.qInputs[1].name),
                 }
             }
 

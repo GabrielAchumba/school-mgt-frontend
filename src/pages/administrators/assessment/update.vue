@@ -37,10 +37,11 @@ export default {
         return {
             selectedAssessment: {},
             form: {
-                title: "Update Assessment",
+                title: "Update Type of Assessment",
                 qSelects: [],
                 qInputs: [
-                    { label: "Type of Assessment", name: "", type: "text"}
+                    { label: "Type of Assessment", name: "", type: "text"},
+                    { label: "Overall Score (%)", name: "", type: "text"}
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
@@ -49,7 +50,7 @@ export default {
                 qDates: [],
             },
             dialogs:[
-                { title: "Update Assessment", isVisible: false, message: "Do you want to update a Assessment",
+                { title: "Update Assessment", isVisible: false, message: "Do you want to update an Assessment",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Success", isVisible: false, message: "Assessment updated successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -92,6 +93,7 @@ export default {
                 url,
                 req: {
                     type: context.form.qInputs[0].name,
+                    percentage: Number(context.form.qInputs[1].name),
                 }
             }
 
@@ -135,8 +137,9 @@ export default {
     },
     created(){
         var context =  this;
-        context.selectedAssessment = this.$store.getters["AssessmentStore/selectedAssessment"];
+        context.selectedAssessment = this.$store.getters["assessmentStore/selectedAssessment"];
         context.form.qInputs[0].name = context.selectedAssessment.type;
+        context.form.qInputs[1].name = context.selectedAssessment.percentage;
     }
 }
 </script>
