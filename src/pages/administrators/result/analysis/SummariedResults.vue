@@ -17,9 +17,12 @@
         </div>
 
         <div class="row q-pa-sm">
-            <Table
+            <div class="col-12">
+                <Table
+                v-if="!isExpanded"
             :table_VM="tableVM"
             :isResponsive="isResponsive"/>
+            </div>
         </div>
     </div>
 </template>
@@ -29,16 +32,19 @@
 import MessageBox from "../../../../components/dialogs/MessageBox";
 import Form from "../../../../components/Forms/Form.vue";
 import { post } from "../../../../store/modules/services";
-import { loadUsersByCategory } from "../../user/utils"
+import { loadUsersByCategory } from "../../user/utils";
+import { createResultSummaryReport } from "../utils";
+import Table from "../../../../components/Tables/Table.vue"
 
 export default {
     components:{
         MessageBox,
-        Form
+        Form,
+        Table
     },
     data(){
         return {
-            isResponsive: true,
+            isResponsive: false,
             isExpanded: false,
             form: { 
                 title: "Summarized Result",
@@ -67,23 +73,10 @@ export default {
             },
             tableVM: {
                 selectedResult: {},
-                title: "Results",
-                columns: [
-                    { name: "actions", label: "Action", field: "", align: "left" },
-                    { name: "studentFullName", label: "Full Name", field: "", align: "left" },
-                    { name: "score", label: "Score", field: "", align: "left" },
-                    { name: "scoreMax", label: "Maximum Score", field: "", align: "left" },
-                    { name: "subjectFullName", label: "Subject", field: "", align: "left" },
-                    { name: "teacherFullName", label: "Teacher", field: "", align: "left" },
-                    { name: "classRoomFullName", label: "Class", field: "", align: "left" },
-                ],
+                title: "Summary Report",
+                columns: [],
                 rows: [],
                 separator: "cell",
-                createItem: "createResult",
-                updateItem: "updateResult",
-                deleteItem: "deleteResult",
-                createItemUrl: "/create-result",
-                updateItemUrl: "/update-result",
                 },
         }
     },
@@ -118,7 +111,10 @@ export default {
                 }
             } = response
             if(success){
-                console.log("result: ", result)
+                const { columns, rows } = createResultSummaryReport(result);
+                context.isExpanded = false;
+                context.tableVM.columns = columns;
+                context.tableVM.rows = rows;
             }
         },
         async typeOfInstructor(payload){
