@@ -75,10 +75,8 @@ export default {
             form: { 
                 title: "Configure Result Report",
                 qSelects: [
-                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
-                    { label: "Student", value: "", type: "text", list: [], actionName: "student" },
                     { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor" },
-                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
+                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
                 ],
                 qInputs: [],
                 qBtns: [
@@ -91,10 +89,24 @@ export default {
                 GroupedCheckBoxes: [
                     { 
                         isGroupedCheckBox: true, 
-                        isExpanded: true, 
+                        isExpanded: false, 
                         list:[], 
                         group: [],
                         label: "Subjects",
+                    },
+                    { 
+                        isGroupedCheckBox: true, 
+                        isExpanded: false, 
+                        list:[], 
+                        group: [],
+                        label: "Students",
+                    },
+                    { 
+                        isGroupedCheckBox: true, 
+                        isExpanded: false, 
+                        list:[], 
+                        group: [],
+                        label: "Teachers",
                     },
                 ],
             },
@@ -109,11 +121,11 @@ export default {
                     {label: "Plot", name: "Plot"},
                 ],
                 qDates: [],
-                GroupedCheckBoxes: [],
+                GroupedCheckBox: [],
             },
             tableVM: {
                 selectedResult: {},
-                title: "Summary Report",
+                title: "Students' Results Position",
                 columns: [],
                 rows: [],
                 separator: "cell",
@@ -126,16 +138,16 @@ export default {
         async Compute(){
             var context = this;
             
-            var url = `result/summarizedresult`;
+            var url = `result/summarizedstudentspositions`;
             const payload = {
                 url,
                 req: {
                     startDate: context.form.qDates[0].name,
                     endDate: context.form.qDates[1].name,
                     subjectIds: context.form.GroupedCheckBoxes[0].group,
-                    teacherId: context.form.qSelects[3].value,
-                    studentId: context.form.qSelects[1].value,
-                    classroomId: context.form.qSelects[0].value,
+                    teacherId: context.form.GroupedCheckBoxes[2].group,
+                    studentId: context.form.GroupedCheckBoxes[1].group,
+                    classroomId: context.form.qSelects[1].value,
                 }
             }
 
@@ -185,45 +197,41 @@ export default {
             var context = this;
             const teachers = await loadUsersByCategory(payload.value);
             this.$store.commit('userStore/SetTeachers', teachers.result);
-            context.form.qSelects[3].list = teachers.result.map((row) => {
+            context.form.GroupedCheckBoxes[2].list = teachers.result.map((row) => {
                 return {
                     ...row,
-                    type: `${row.firstName} ${row.lastName}`
+                    label: `${row.firstName} ${row.lastName}`, 
+                    value: row.id,
                 }
             })
-            
-            if(context.form.qSelects[3].list.length > 0){
-                context.form.qSelects[3].value = context.form.qSelects[3].list[0].id;
-            }
         },
         async loadConfigData(){
             var context =  this;
-            context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"];
+
+            context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
             if(context.form.qSelects[0].list.length > 0){
-                context.form.qSelects[0].value = context.form.qSelects[0].list[0].id;
-            }
- 
-            context.form.qSelects[1].list = this.$store.getters["studentStore/students"].map((row) => {
-                return {
-                    ...row,
-                    type: `${row.firstName} ${row.lastName}`
-                }
-            })
-            if(context.form.qSelects[1].list.length > 0){
-                context.form.qSelects[1].value = context.form.qSelects[1].list[0].id;
+                await context.typeOfInstructor({
+                    value: context.form.qSelects[0].list[0].id,
+                })
             }
 
-            context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"];
-            if(context.form.qSelects[2].list.length > 0){
-                await context.typeOfInstructor({
-                    value: context.form.qSelects[2].list[0].id,
-                })
+            context.form.qSelects[1].list = this.$store.getters["classRoomStore/classRooms"];
+            if(context.form.qSelects[1].list.length > 0){
+                context.form.qSelects[1].value = context.form.qSelects[1].list[0].id;
             }
 
             context.form.GroupedCheckBoxes[0].list = this.$store.getters["subjectStore/subjects"].map((row) => {
                 return {
                     ...row,
                     label: row.type, 
+                    value: row.id,
+                }
+            })
+
+            context.form.GroupedCheckBoxes[1].list = this.$store.getters["studentStore/students"].map((row) => {
+                return {
+                    ...row,
+                    label: `${row.firstName} ${row.lastName}`, 
                     value: row.id,
                 }
             })
@@ -250,7 +258,7 @@ export default {
             })
 
             var y2Values = yValues.map((row) => {
-                return yListItem.scoreMax - row;
+                return yListItem.scoreMax
             })
 
 
@@ -309,6 +317,7 @@ export default {
     mounted(){
         var context = this;
         if(context.isTable === false){
+            console.log("seen")
             context.RefreshPlot();
         }
     },

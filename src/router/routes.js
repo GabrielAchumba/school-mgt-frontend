@@ -154,6 +154,11 @@ const routes = [
         path: '/single-student-results-analysis', 
         component: () => import('pages/administrators/result/analysis/SummariedResults.vue') 
         
+      },
+      { 
+        path: '/students-positions-analysis', 
+        component: () => import('pages/administrators/result/analysis/StudentsPositions.vue') 
+        
       }
     ]
   },

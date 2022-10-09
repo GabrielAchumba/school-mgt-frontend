@@ -81,7 +81,7 @@ const mutations = {
     selectedVariable(state, payload){
         state.selectedVariable = payload;
     },
-    seriesCollection(state, payload){
+    setSeriesCollection(state, payload){
         state.seriesCollection = {
             ...state.seriesCollection,
             ...payload,
@@ -89,12 +89,16 @@ const mutations = {
     },
     addSeries(state, payload){
         state.seriesCollection.push(payload);
+        console.log("state.seriesCollection: ", state.seriesCollection)
     },
-    layout(state, payload){
-        state.layout = {
-            ...state.layout,
-            ...payload,
-        };
+    clearSeries(state){
+      state.seriesCollection = []
+    },
+    setLayout(state, payload){
+        state.layout.title = payload.chartTitle;
+        state.layout.xaxis.title = payload.xAxisTitle;
+        state.layout.yaxis.title = payload.yAxisTitle;
+        console.log("state.layout: ", state.layout);
     },
     getSelectedVariable(state, payload) {
         state.selectedVariable = payload.selectedItem;

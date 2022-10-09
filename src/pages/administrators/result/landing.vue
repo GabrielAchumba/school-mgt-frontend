@@ -34,6 +34,13 @@
               },
               {
                 name: "showPage",
+                title: "Positions of Students", 
+                description: "The statistics analysis of position of students results",
+                image: "/statics/images/analyse results.jpg",
+                to: "/students-positions-analysis"
+              },
+              {
+                name: "showPage",
                 title: "Multiple Student Results Analysis", 
                 description: "The statistics analysis of multiple students results",
                 image: "/statics/images/analyse results.jpg",

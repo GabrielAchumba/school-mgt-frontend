@@ -2,12 +2,7 @@
 <q-layout>
    <q-page-container>
      <q-page class="flex flex-center bg-primary">
-       <q-card
-          class="personal-data-form"
-          v-bind:style="
-          $q.platform.is.mobile ? { width: '90%', height: '95%' } : { width: '90%' , height: '95%' }
-          "
-        >
+       <q-card>
 
    <q-card-section>
     <div class="row q-pa-sm bg-accent text-primary text-center flex flex-center">
@@ -25,20 +20,7 @@
    <q-card-section>
       <q-form class="q-pa-sm">
 
-        <q-expansion-item
-          v-if="formData.GroupedCheckBox.isGroupedCheckBox"
-            class="col-12 q-pa-sm bg-primary text-accent"
-            v-model="formData.GroupedCheckBox.isExpanded"
-            :label="formData.GroupedCheckBox.label"
-            dense
-            dense-toggle
-            expand-separator>
-            <q-option-group
-              :options="formData.GroupedCheckBox.list"
-              type="checkbox"
-              v-model="formData.GroupedCheckBox.group"
-            />
-          </q-expansion-item>
+
         <div
           class="q-pa-sm"
           v-for="qSelect in formData.qSelects" 
@@ -58,7 +40,32 @@
             map-options
             @input="onQSelectItemValueChanged(qSelect)"
             >
-        </q-select></span>
+          </q-select></span>
+        </div>
+
+        <div
+          class="q-pa-sm"
+          v-for="GroupedCheckBox in formData.GroupedCheckBoxes" 
+          :key="GroupedCheckBox.label">
+          <q-expansion-item
+            v-if="GroupedCheckBox.isGroupedCheckBox"
+              class="col-12 q-pa-sm bg-primary text-accent"
+              v-model="GroupedCheckBox.isExpanded"
+              :label="GroupedCheckBox.label"
+              dense
+              dense-toggle
+              expand-separator>
+              <q-scroll-area
+                :visible="visible"
+                style="height: 100px;"
+              >
+                <q-option-group
+                  :options="GroupedCheckBox.list"
+                  type="checkbox"
+                  v-model="GroupedCheckBox.group"
+                />
+              </q-scroll-area>
+          </q-expansion-item>
         </div>
 
         <div class="q-pa-sm"
@@ -129,6 +136,10 @@
               type: Object,
               default: form,
             },
+            visible: {
+              type: Boolean,
+              default: true,
+            }
         },
         methods: {
           onQSelectItemValueChanged(qSelect){

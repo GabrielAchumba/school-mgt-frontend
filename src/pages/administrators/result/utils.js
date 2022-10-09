@@ -10,16 +10,22 @@ const getColumns = (result) =>  {
 
     const columns = [];
     const subjectKeys = Object.keys(result);
-    columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left" })
-    columns.push({ name: "totalScore", label: "Total Score", field: "", align: "left" })
+    columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left", scoreMax: 100 })
+    columns.push({ name: "totalScore", label: "TOTAL SCORE", field: "", align: "left", scoreMax: 100 })
 
     for(const subjectKey of subjectKeys){
         
         const assessmentKeys = Object.keys(result[subjectKey].assessments);
         for(const assessmentKey of assessmentKeys){
-            let column = columns.find(o => o.name === subjectKey);
+            const columnName = assessmentKey.split(' ').join('');
+            let column = columns.find(o => o.name === columnName);
             if(!column){
-                columns.push({ name: assessmentKey, label: assessmentKey.toUpperCase(), field: "", align: "left" })
+                columns.push({ 
+                    name: columnName, 
+                    label: assessmentKey.toUpperCase(), 
+                    field: "", 
+                    align: "left",
+                    scoreMax: result[subjectKey].assessments[assessmentKey].scoreMax })
             }
         }
     }
@@ -42,7 +48,7 @@ const getRows = (result, columns) => {
         row["totalScore"] = result[subjectKey].subjectScore;
         const assessmentKeys = Object.keys(result[subjectKey].assessments);
         for(const assessmentKey of assessmentKeys){
-            row[assessmentKey] = result[subjectKey].assessments[assessmentKey];
+            row[assessmentKey.split(' ').join('')] = result[subjectKey].assessments[assessmentKey].assessmentScore;
         }
         rows.push(row)
     }

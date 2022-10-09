@@ -8,7 +8,9 @@
 
     <div class="row text-center flex flex-center full-Width">
       <q-card class="col-12 q-pa-md q-ma-none"> 
-              <q-card-section class="bg-accent text-primary">
+              <q-card-section 
+              v-if="isHeader"
+              class="bg-accent text-primary">
                 <div class="row">
                   <!-- <div class="col text-center"> -->
                     <p class="text-subtitle2">{{ table_VM.title }}</p>
@@ -121,6 +123,10 @@
                 type: Object,
                 default: tableVM,
             },
+            isHeader:{
+              type:Boolean,
+              default: true
+            }
         },
         data(){
           return {
