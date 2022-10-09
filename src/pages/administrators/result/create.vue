@@ -58,13 +58,7 @@ export default {
                 qDates: [
                      {label: "Created At", name: "2019/02/01"},
                 ],
-                GroupedCheckBox: { 
-                    isGroupedCheckBox: false, 
-                    isExpanded: false, 
-                    list:[], 
-                    group: [],
-                    label: "Subjects",
-                },
+                GroupedCheckBoxes: [],
             },
             dialogs:[
                 { title: "Create Result", isVisible: false, message: "Do you want to create a Result",

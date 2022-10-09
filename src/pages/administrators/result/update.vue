@@ -61,13 +61,7 @@ export default {
                 qDates: [
                     {label: "Updated At", name: "2019/02/01"},
                 ],
-                GroupedCheckBox: { 
-                    isGroupedCheckBox: false, 
-                    isExpanded: false, 
-                    list:[], 
-                    group: [],
-                    label: "Subjects",
-                },
+                GroupedCheckBoxes: [],
             },
             dialogs:[
                 { title: "Update Result", isVisible: false, message: "Do you want to update a Result",

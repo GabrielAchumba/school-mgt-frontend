@@ -54,7 +54,7 @@ import MessageBox from "../../../../components/dialogs/MessageBox";
 import Form from "../../../../components/Forms/Form.vue";
 import { post } from "../../../../store/modules/services";
 import { loadUsersByCategory } from "../../user/utils";
-import { createResultSummaryReport } from "../utils";
+import { createStudentsPositionReport } from "../utils";
 import Table from "../../../../components/Tables/Table.vue";
 import Chart from "../../../../components/Charts/Chart.vue";
 import Plotly from 'plotly.js-dist'
@@ -145,8 +145,8 @@ export default {
                     startDate: context.form.qDates[0].name,
                     endDate: context.form.qDates[1].name,
                     subjectIds: context.form.GroupedCheckBoxes[0].group,
-                    teacherId: context.form.GroupedCheckBoxes[2].group,
-                    studentId: context.form.GroupedCheckBoxes[1].group,
+                    teacherIds: context.form.GroupedCheckBoxes[2].group,
+                    studentIds: context.form.GroupedCheckBoxes[1].group,
                     classroomId: context.form.qSelects[1].value,
                 }
             }
@@ -161,15 +161,16 @@ export default {
                 }
             } = response
             if(success){
-                const { columns, rows } = createResultSummaryReport(result);
+                console.log("result: ", result);
+                const { columns, rows } = createStudentsPositionReport(result);
                 context.isExpanded = true;
                 context.tableVM.columns = columns;
                 context.tableVM.rows = rows;
                 context.isTable = true;
-                context.configurePotData();
+                context.configurePlotData();
             }
         },
-        configurePotData(){
+        configurePlotData(){
             var context = this;
             context.chartForm.qSelects[0].list = context.tableVM.columns.map((column, i) => {
                 return {
@@ -257,26 +258,14 @@ export default {
                 return row[yListItem.name]
             })
 
-            var y2Values = yValues.map((row) => {
-                return yListItem.scoreMax
-            })
-
-
             context.layout = { 
                 title: `${xListItem.type} vs ${yListItem.type}`,
-                barmode: 'stack',
                 font: {
-                    //size: 18,
-                    //family: 'Raleway, sans-serif'
                     },
                     showlegend: true,
-                    /* xaxis: {
-                        tickangle: -45
-                    }, */
                     yaxis: {
                         title: `${yListItem.type}`,
                         zeroline: false,
-                        //gridwidth: 2
                     },
                     bargap: 0.05
                 };
@@ -290,19 +279,6 @@ export default {
             type: 'bar',
             marker: {
                     color: 'green',
-                    line: {
-                        width: 2.5
-                    }
-                }
-            })
-
-            context.seriesCollection.push({
-            x: xValues,
-            y: y2Values,
-            name: 'Maximum Score',
-            type: 'bar',
-            marker: {
-                    color: 'orange',
                     line: {
                         width: 2.5
                     }

@@ -47,13 +47,7 @@ export default {
                     {label: "Create", name: "Create"},
                 ],
                 qDates: [],
-                GroupedCheckBox: { 
-                    isGroupedCheckBox: false, 
-                    isExpanded: false, 
-                    list:[], 
-                    group: [],
-                    label: "Subjects",
-                },
+                GroupedCheckBoxes: [],
             },
             dialogs:[
                 { title: "Create Assessment", isVisible: false, message: "Do you want to create an Assessment",

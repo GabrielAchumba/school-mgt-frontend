@@ -154,10 +154,10 @@ export default {
                 context.tableVM.columns = columns;
                 context.tableVM.rows = rows;
                 context.isTable = true;
-                context.configurePotData();
+                context.configurePlotData();
             }
         },
-        configurePotData(){
+        configurePlotData(){
             var context = this;
             context.chartForm.qSelects[0].list = context.tableVM.columns.map((column, i) => {
                 return {
