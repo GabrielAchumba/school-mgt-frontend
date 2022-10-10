@@ -8,12 +8,10 @@
 
 <script>
   import CardList from "../../components/Cards/CardList.vue";
-  import MessageBox from "../../components/dialogs/MessageBox.vue";
 
     export default {
         components:{
           CardList,
-          MessageBox,
         },
         data () {
           return {
@@ -69,10 +67,10 @@
               },
               {
                 name: "showPage",
-                title: "Lesson Notes", 
-                description: "Student's lesson notes in the school",
+                title: "File Management", 
+                description: "Managing teachers lesson notes, past questions and answers, and other office files",
                 image: "/statics/images/lesson.jpg",
-                to: "/lesson-landing"
+                to: "/admin"
               },
             ],
           }

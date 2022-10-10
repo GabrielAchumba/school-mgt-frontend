@@ -38,7 +38,10 @@ export default {
             selectedStudent: {},
             form: {
                 title: "Update Student",
-                qSelects: [],
+                qSelects: [
+                    { label: "Type of SubscriptionType *", value: "", type: "text", 
+                     list: ["30 Days", "180 Days", "360 Days"], actionName: "subscriptionType" },
+                ],
                 qInputs: [
                     { label: "First Name", name: "", type: "text"},
                     { label: "Last Name", name: "", type: "text"},
@@ -101,6 +104,7 @@ export default {
                     birthYear: Number(arr[0]),
                     birthMonth: Number(arr[1]),
                     birthDay: Number(arr[1]),
+                    subscriptionType: context.form.qSelects[0].value,
                 }
             }
 

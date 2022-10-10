@@ -38,7 +38,10 @@ export default {
             form: {
                 title: "Create User",
                 qSelects: [
-                     { label: "Designation *", value: "", type: "text", list: [] },
+                     { label: "Designation *", value: "", type: "text", 
+                     list: [], actionName: "designation" },
+                     { label: "User Type *", value: "", type: "text", 
+                     list: ["Member", "Admin"], actionName: "userType" },
                 ],
                 qInputs: [
                     { label: "First Name *", name: "", type: "text"},
@@ -107,7 +110,7 @@ export default {
                     phoneNumber: context.form.qInputs[5].name,
                     email: context.form.qInputs[6].name,
                     designationId: context.form.qSelects[0].value,
-                    userType: "Member",
+                    userType: context.form.qSelects[1].value,
                 }
             }
 

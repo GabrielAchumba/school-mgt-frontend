@@ -131,6 +131,21 @@ const routes = [
         
       },
       { 
+        path: '/school-landing', 
+        component: () => import('pages/administrators/school/landing.vue') 
+        
+      },
+      { 
+        path: '/create-school', 
+        component: () => import('pages/administrators/school/create.vue') 
+        
+      },
+      { 
+        path: '/update-school', 
+        component: () => import('pages/administrators/school/update.vue') 
+        
+      },
+      { 
         path: '/result-landing', 
         component: () => import('pages/administrators/result/landing.vue') 
         
@@ -163,12 +178,23 @@ const routes = [
     ]
   },
   {
-    path: '/user',
+    path: '/instructor',
+    component: () => import('layouts/InstructorLayout.vue'),
+    children: [
+      { 
+        path: '/instructor', 
+        component: () => import('pages/instructors/landing.vue') 
+        
+      },
+    ]
+  },
+  {
+    path: '/student',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { 
-        path: '/user', 
-        component: () => import('pages/users/landing.vue') 
+        path: '/student', 
+        component: () => import('pages/students/landing.vue') 
         
       },
     ]

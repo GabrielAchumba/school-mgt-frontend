@@ -245,15 +245,19 @@
             var context = this;
             context.isLoginSuccessMessage = false;
 
-           
-            switch(context.user.userType.toLowerCase()){
+           if (context.user.designationId === "CEO"){
+             this.$router.push('/admin');
+           }else{
+              switch(context.user.designationId.toLowerCase()){
               case "member":
-                this.$router.push('/user');
+                this.$router.push('/instructor');
                 break;
-              case "admin":
-                this.$router.push('/admin');
+              case "student":
+                this.$router.push('/student');
                 break;
             }
+           }
+           
           },
           logInSuccessCancel(){
             var context = this;

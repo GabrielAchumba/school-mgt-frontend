@@ -139,9 +139,6 @@ export default {
         theme_color(){
           return this.$store.getters['authenticationStore/theme_color'];
         },
-        adminNavBarList(){
-          return this.$store.getters['administratorStore/adminNavBarList'];
-        }
       },
   components: {
 
@@ -267,7 +264,6 @@ export default {
     
     if(window.innerWidth < 700) context.rightDrawerOpen = true;
     this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
-    if(context.IdentityModel.designationId == "CEO") {
 
       const classRooms = await loadClassRooms();
       this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
@@ -279,14 +275,6 @@ export default {
       this.$store.commit('subjectStore/SetSubjects', subjects.result);
       const assessments = await loadAssessments();
       this.$store.commit('assessmentStore/SetAssessments', assessments.result);
-
-
-      context.navs = context.adminNavBarList.map((row) => {
-        return {
-          ...row,
-        }
-      })
-    }
   },
   destroyed() {
     window.removeEventListener("resize", this.onResize);

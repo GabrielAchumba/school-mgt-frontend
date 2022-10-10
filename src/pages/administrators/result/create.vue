@@ -43,7 +43,7 @@ export default {
                     { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
                     { label: "Subject", value: "", type: "text", list: [], actionName: "subject" },
                     { label: "Student", value: "", type: "text", list: [], actionName: "student" },
-                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor" },
+                    { label: "Type of Instructor", value: "", type: "text", list: [], c: "typeOfInstructor" },
                     { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
                     { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor" },
                 ],

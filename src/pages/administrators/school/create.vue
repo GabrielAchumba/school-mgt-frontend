@@ -2,7 +2,7 @@
     <div class="q-pa-md">
         <Form
         :formData="form"
-        @Update="Update($event)"
+        @Create="Create($event)"
         @Cancel="Cancel($event)"/>
 
         <q-dialog 
@@ -26,7 +26,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { put } from "../../../store/modules/services";
+import { post } from "../../../store/modules/services";
 
 export default {
     components:{
@@ -35,34 +35,24 @@ export default {
     },
     data(){
         return {
-            selectedUser: {},
             form: {
-                title: "Update User",
-                qSelects: [
-                    { label: "Designation *", value: "",
-                     type: "text", list: [], actionName: "designation" },
-                     { label: "User Type *", value: "", type: "text", 
-                     list: ["Member", "Admin"], actionName: "userType" },
-                ],
+                title: "Create School",
+                qSelects: [],
                 qInputs: [
-                     { label: "First Name *", name: "", type: "text"},
-                    { label: "Last Name *", name: "", type: "text"},
-                    { label: "UserName *", name: "", type: "text"},
-                    { label: "Country Code *", name: "", type: "text"},
-                    { label: "PhoneNumber *", name: "", type: "text"},
-                    { label: "Email", name: "", type: "text"},
+                    { label: "School Name", name: "", type: "text"},
+                    { label: "School Address", name: "", type: "text"},
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
-                    {label: "Update", name: "Update"},
+                    {label: "Create", name: "Create"},
                 ],
                 qDates: [],
                 GroupedCheckBoxes: [],
             },
             dialogs:[
-                { title: "Update User", isVisible: false, message: "Do you want to update a user",
+                { title: "Create School", isVisible: false, message: "Do you want to create a School",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "User updated successfully!",
+                { title: "Success", isVisible: false, message: "School created successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -70,19 +60,19 @@ export default {
         }
     },
     methods:{
-        Update(){
+        Create(){
             const context = this;
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Update User"){
+                if(dialog.title == "Create School"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/user-landing')
+            this.$router.push('/school-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -98,23 +88,17 @@ export default {
         async save(){
             var context = this;
             
-            var url = `user/${context.selectedUser.id}`;
+            var url = `school/create`;
             const payload = {
                 url,
                 req: {
-                    firstName: context.form.qInputs[0].name,
-                    lastName: context.form.qInputs[1].name,
-                    userName: context.form.qInputs[2].name,
-                    countryCode: context.form.qInputs[3].name,
-                    phoneNumber: context.form.qInputs[4].name,
-                    email: context.form.qInputs[5].name,
-                    designationId: context.form.qSelects[0].value,
-                    userType: context.form.qSelects[1].value,
+                    type: context.form.qInputs[0].name,
+                    percentage: Number(context.form.qInputs[1].name),
                 }
             }
 
             console.log("payload: ", payload)
-            var response = await put(payload)
+            var response = await post(payload)
 
             const { 
                 data : {
@@ -138,11 +122,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Update User":
+                        case "Create School":
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/user-landing");
+                            this.$router.push("/school-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -150,19 +134,6 @@ export default {
                 }
             }
         }
-    },
-    created(){
-        var context =  this;
-        context.selectedUser = this.$store.getters["userStore/selectedUser"];
-        console.log('context.selectedUser: ', context.selectedUser)
-        context.form.qInputs[0].name = context.selectedUser.firstName;
-        context.form.qInputs[1].name = context.selectedUser.lastName;
-        context.form.qInputs[2].name = context.selectedUser.userName;
-        context.form.qInputs[3].name = context.selectedUser.countryCode;
-        context.form.qInputs[4].name = context.selectedUser.phoneNumber;
-        context.form.qInputs[5].name = context.selectedUser.email;
-        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
-        context.form.qSelects[0].value = context.selectedUser.designation;
     }
 }
 </script>
