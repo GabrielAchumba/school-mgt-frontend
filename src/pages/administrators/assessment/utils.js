@@ -1,8 +1,8 @@
 import { get } from "../../../store/modules/services"
 
-export const loadAssessments = async () => {
+export const loadAssessments = async (schoolId) => {
 
-    var url = "assessment";
+    var url = `assessment/${schoolId}`;
     var response = await get({
     url
     })

@@ -174,15 +174,25 @@ const routes = [
         path: '/students-positions-analysis', 
         component: () => import('pages/administrators/result/analysis/StudentsPositions.vue') 
         
+      },
+      { 
+        path: '/subscription-landing', 
+        component: () => import('pages/administrators/subscription//landing.vue') 
+        
+      },
+      { 
+        path: '/select-students', 
+        component: () => import('pages/administrators/subscription//select-students.vue') 
+        
       }
     ]
   },
   {
-    path: '/instructor',
+    path: '/member',
     component: () => import('layouts/InstructorLayout.vue'),
     children: [
       { 
-        path: '/instructor', 
+        path: '/member', 
         component: () => import('pages/instructors/landing.vue') 
         
       },

@@ -1,8 +1,8 @@
 import { get } from "../../../store/modules/services";
 
-export const loadUsers = async () => {
+export const loadUsers = async (schoolId) => {
 
-    var url = "user";
+    var url = `user/${schoolId}`;
     var response = await get({
     url
     })
@@ -24,9 +24,9 @@ export const loadUsers = async () => {
 }
 
 
-export const loadUsersByCategory = async (category) => {
+export const loadUsersByCategory = async (category, schoolId) => {
 
-    var url = `user/category/${category}`;
+    var url = `user/category/${category}/${schoolId}`;
     var response = await get({
     url
     })

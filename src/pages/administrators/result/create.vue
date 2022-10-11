@@ -40,12 +40,12 @@ export default {
             form: {
                 title: "Create Result",
                 qSelects: [
-                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
-                    { label: "Subject", value: "", type: "text", list: [], actionName: "subject" },
-                    { label: "Student", value: "", type: "text", list: [], actionName: "student" },
-                    { label: "Type of Instructor", value: "", type: "text", list: [], c: "typeOfInstructor" },
-                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
-                    { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor" },
+                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
+                    { label: "Subject", value: "", type: "text", list: [], actionName: "subject", visible: true },
+                    { label: "Student", value: "", type: "text", list: [], actionName: "student", visible: true },
+                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
+                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
+                    { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor", visible: true },
                 ],
                 qInputs: [
                     { label: "Score", name: "", type: "text"},
@@ -98,6 +98,7 @@ export default {
         },
         async save(){
             var context = this;
+             var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `result/create`;
             const payload = {
@@ -112,6 +113,7 @@ export default {
                     teacherId: context.form.qSelects[4].value,
                     assessmentId: context.form.qSelects[5].value,
                     createdAt: context.form.qDates[0].name,
+                    schoolId: user.schoolId,
                 }
             }
 
@@ -154,7 +156,8 @@ export default {
         },
         async typeOfInstructor(payload){
             var context = this;
-            const teachers = await loadUsersByCategory(payload.value);
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            const teachers = await loadUsersByCategory(payload.value, user.schoolId);
             this.$store.commit('userStore/SetTeachers', teachers.result);
             context.form.qSelects[4].list = teachers.result.map((row) => {
                 return {

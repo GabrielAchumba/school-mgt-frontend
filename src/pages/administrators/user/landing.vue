@@ -136,7 +136,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadUserf()
+                            await context._loadUser()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -144,9 +144,10 @@
                 }
             }
         },
-        async _loadUserf(){
+        async _loadUser(){
             var context = this;
-            const { result, message } = await loadUsers();
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            const { result, message } = await loadUsers(user.schoolId);
             this.$store.commit('userStore/SetUsers', result)
             context.tableVM.rows = result;
 
@@ -159,7 +160,7 @@
         },
         async created() {
             var context = this;
-            await context._loadUserf()
+            await context._loadUser()
       }
     }
 </script>

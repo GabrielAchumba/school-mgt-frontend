@@ -3,7 +3,8 @@
         <Form
         :formData="form"
         @Update="Update($event)"
-        @Cancel="Cancel($event)"/>
+        @Cancel="Cancel($event)"
+        @userTypeAction="userTypeAction($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -39,15 +40,27 @@ export default {
             form: {
                 title: "Update User",
                 qSelects: [
-                    { label: "Designation *", value: "",
-                     type: "text", list: [], actionName: "designation" },
-                     { label: "User Type *", value: "", type: "text", 
-                     list: ["Member", "Admin"], actionName: "userType" },
+                    { label: "User Type *", value: "", type: "text", 
+                     list: [
+                         {
+                             value: 1,
+                             label: "Member",
+                             type: "Member",
+                         },
+                         {
+                             value: 2,
+                             label: "Admin",
+                             type: "Admin",
+                         }], actionName: "userTypeAction", visible: true },
+                     { label: "School Name *", value: "", type: "text", 
+                     list: [], actionName: "schoolNameAction", visible: true },
+                     { label: "Designation *", value: "", type: "text", 
+                     list: [], actionName: "designationAction", visible: true },
                 ],
                 qInputs: [
-                     { label: "First Name *", name: "", type: "text"},
+                    { label: "First Name *", name: "", type: "text"},
                     { label: "Last Name *", name: "", type: "text"},
-                    { label: "UserName *", name: "", type: "text"},
+                    { label: "User Name *", name: "", type: "text"},
                     { label: "Country Code *", name: "", type: "text"},
                     { label: "PhoneNumber *", name: "", type: "text"},
                     { label: "Email", name: "", type: "text"},
@@ -97,8 +110,14 @@ export default {
         },
         async save(){
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `user/${context.selectedUser.id}`;
+            var schoolId = context.form.qSelects[1].value;
+            if(user.userType == "Admin" && user.designationId !== "CEO"){
+                schoolId = user.schoolId;
+            }
+
             const payload = {
                 url,
                 req: {
@@ -108,8 +127,9 @@ export default {
                     countryCode: context.form.qInputs[3].name,
                     phoneNumber: context.form.qInputs[4].name,
                     email: context.form.qInputs[5].name,
-                    designationId: context.form.qSelects[0].value,
-                    userType: context.form.qSelects[1].value,
+                    designationId: context.form.qSelects[2].value,
+                    userType: context.form.qSelects[0].value.label,
+                    schoolId,
                 }
             }
 
@@ -149,20 +169,66 @@ export default {
                     break;
                 }
             }
+        },
+        userTypeAction(payload){
+            var context = this;
+            if(payload.value.value == 2){
+                context.form.qSelects[2].visible = false;
+            }else{
+                context.form.qSelects[2].visible = true;
+            }
         }
     },
     created(){
         var context =  this;
         context.selectedUser = this.$store.getters["userStore/selectedUser"];
-        console.log('context.selectedUser: ', context.selectedUser)
         context.form.qInputs[0].name = context.selectedUser.firstName;
         context.form.qInputs[1].name = context.selectedUser.lastName;
         context.form.qInputs[2].name = context.selectedUser.userName;
         context.form.qInputs[3].name = context.selectedUser.countryCode;
         context.form.qInputs[4].name = context.selectedUser.phoneNumber;
         context.form.qInputs[5].name = context.selectedUser.email;
-        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
-        context.form.qSelects[0].value = context.selectedUser.designation;
+
+        context.form.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
+           return {
+               ...row,
+               type: row.schoolName
+           }
+       })
+
+        var user = this.$store.getters["authenticationStore/IdentityModel"]
+       if(user.userType == "Admin" && user.designationId == "CEO"){
+           context.form.qSelects[1].value = context.selectedUser.schoolId;
+           context.form.qSelects[0].list = [
+                         {
+                             value: 1,
+                             label: "Member",
+                             type: "Member",
+                         },
+                         {
+                             value: 2,
+                             label: "Admin",
+                             type: "Admin",
+                         }]
+       }else{
+           
+           context.form.qSelects[1].visible = false;
+           context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type
+                }
+            }) 
+            context.form.qSelects[2].value = context.selectedUser.designationId;
+
+           context.form.qSelects[0].list = [
+            {
+                value: 1,
+                label: "Member",
+                type: "Member",
+            }]
+            context.form.qSelects[0].value = 1;
+       }
     }
 }
 </script>

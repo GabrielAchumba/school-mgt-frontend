@@ -40,7 +40,22 @@ export default {
                 title: "Update Student",
                 qSelects: [
                     { label: "Type of SubscriptionType *", value: "", type: "text", 
-                     list: ["30 Days", "180 Days", "360 Days"], actionName: "subscriptionType" },
+                     list: [{
+                         value: 1,
+                         type: "90 Days",
+                         label: "90 Days",
+                     }, 
+                     {
+                         value: 2,
+                         type: "180 Days",
+                         label: "180 Days",
+                     }, 
+                     {
+                         value: 3,
+                         type: "360 Days",
+                         label: "360 Days"
+                     }], actionName: "subscriptionType",
+                     visible: true },
                 ],
                 qInputs: [
                     { label: "First Name", name: "", type: "text"},
@@ -93,6 +108,7 @@ export default {
         },
         async save(){
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `student/${context.selectedStudent.id}`;
             const arr = context.form.qDates[0].name.split("/") 
@@ -104,7 +120,8 @@ export default {
                     birthYear: Number(arr[0]),
                     birthMonth: Number(arr[1]),
                     birthDay: Number(arr[1]),
-                    subscriptionType: context.form.qSelects[0].value,
+                    subscriptionType: context.form.qSelects[0].value.value,
+                    schoolId: user.schoolId,
                 }
             }
 

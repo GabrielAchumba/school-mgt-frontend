@@ -14,6 +14,7 @@ import userStore from './modules/userStore';
 import chartStore from './modules/chartStore';
 import componentsStore from './modules/componentsStore';
 import schoolStore from './modules/schoolStore';
+import subscriptionStore from './modules/subscriptionStore';
 
 
 Vue.use(Vuex)
@@ -43,6 +44,7 @@ export default function (/* { ssrContext } */) {
       chartStore,
       componentsStore,
       schoolStore,
+      subscriptionStore,
     },
 
     // enable strict mode (adds overhead!)

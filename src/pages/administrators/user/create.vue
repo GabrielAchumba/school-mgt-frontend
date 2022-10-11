@@ -3,7 +3,8 @@
         <Form
         :formData="form"
         @Create="Create($event)"
-        @Cancel="Cancel($event)"/>
+        @Cancel="Cancel($event)"
+        @userTypeAction="userTypeAction($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -38,10 +39,22 @@ export default {
             form: {
                 title: "Create User",
                 qSelects: [
-                     { label: "Designation *", value: "", type: "text", 
-                     list: [], actionName: "designation" },
                      { label: "User Type *", value: "", type: "text", 
-                     list: ["Member", "Admin"], actionName: "userType" },
+                     list: [
+                         {
+                             value: 1,
+                             label: "Member",
+                             type: "Member",
+                         },
+                         {
+                             value: 2,
+                             label: "Admin",
+                             type: "Admin",
+                         }], actionName: "userTypeAction", visible: true },
+                     { label: "School Name *", value: "", type: "text", 
+                     list: [], actionName: "schoolNameAction", visible: true },
+                     { label: "Designation *", value: "", type: "text", 
+                     list: [], actionName: "designationAction", visible: true },
                 ],
                 qInputs: [
                     { label: "First Name *", name: "", type: "text"},
@@ -97,8 +110,13 @@ export default {
         },
         async save(){
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `user/create`;
+            var schoolId = context.form.qSelects[1].value;
+            if(user.userType == "Admin" && user.designationId !== "CEO"){
+                schoolId = user.schoolId;
+            }
             const payload = {
                 url,
                 req: {
@@ -109,8 +127,9 @@ export default {
                     countryCode: context.form.qInputs[4].name,
                     phoneNumber: context.form.qInputs[5].name,
                     email: context.form.qInputs[6].name,
-                    designationId: context.form.qSelects[0].value,
-                    userType: context.form.qSelects[1].value,
+                    designationId: context.form.qSelects[2].value,
+                    userType: context.form.qSelects[0].value.label,
+                    schoolId,
                 }
             }
 
@@ -150,11 +169,53 @@ export default {
                     break;
                 }
             }
+        },
+        userTypeAction(payload){
+            var context = this;
+            if(payload.value.value == 2){
+                context.form.qSelects[2].visible = false;
+            }else{
+                context.form.qSelects[2].visible = true;
+            }
         }
     },
     created(){
         var context = this;
-        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
+       context.form.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
+           return {
+               ...row,
+               type: row.schoolName
+           }
+       })
+
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+       if(user.userType == "Admin" && user.designationId == "CEO"){
+           context.form.qSelects[0].list = [
+                         {
+                             value: 1,
+                             label: "Member",
+                             type: "Member",
+                         },
+                         {
+                             value: 2,
+                             label: "Admin",
+                             type: "Admin",
+                         }]
+       }else{
+           context.form.qSelects[1].visible = false;
+           context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type
+                }
+            }) 
+           context.form.qSelects[0].list = [
+                         {
+                             value: 1,
+                             label: "Member",
+                             type: "Member",
+                         }]
+       }
     }
 }
 </script>

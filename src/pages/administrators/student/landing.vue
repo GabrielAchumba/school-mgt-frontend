@@ -144,7 +144,8 @@
         },
         async _loadStudentf(){
             var context = this;
-            const { result, message } = await loadStudents();
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            const { result, message } = await loadStudents(user.schoolId);
             this.$store.commit('studentStore/SetStudents', result)
             context.tableVM.rows = result;
 

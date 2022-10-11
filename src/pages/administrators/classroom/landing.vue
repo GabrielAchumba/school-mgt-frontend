@@ -145,7 +145,8 @@
         async _loadClassRooms(){
 
                 var context = this;
-                const { result, message } = await loadClassRooms()
+                var user = this.$store.getters["authenticationStore/IdentityModel"]
+                const { result, message } = await loadClassRooms(user.schoolId)
                 this.$store.commit('classRoomStore/SetClassRooms', result)
                 context.tableVM.rows = result;
 

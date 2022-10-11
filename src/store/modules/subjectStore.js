@@ -1,6 +1,6 @@
 const state = {
     subjects: [],
-    selectedSubject: {}
+    selectedSubject: {},
 }
 
 const getters = {

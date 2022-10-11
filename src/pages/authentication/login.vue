@@ -248,9 +248,12 @@
            if (context.user.designationId === "CEO"){
              this.$router.push('/admin');
            }else{
-              switch(context.user.designationId.toLowerCase()){
+              switch(context.user.userType.toLowerCase()){
+                case "admin":
+                this.$router.push('/admin');
+                break;
               case "member":
-                this.$router.push('/instructor');
+                this.$router.push('/member');
                 break;
               case "student":
                 this.$router.push('/student');

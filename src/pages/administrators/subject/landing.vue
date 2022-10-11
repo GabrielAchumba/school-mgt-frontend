@@ -143,7 +143,8 @@
         },
         async _loadSubjectf(){
             var context = this;
-            const { result, message } = await loadSubjects();
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            const { result, message } = await loadSubjects(user.schoolId);
             this.$store.commit('subjectStore/SetSubjects', result);
             context.tableVM.rows = result;
             if(result.length === 0){

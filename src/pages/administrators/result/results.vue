@@ -44,6 +44,7 @@
                     { name: "score", label: "Score", field: "", align: "left" },
                     { name: "scoreMax", label: "Maximum Score", field: "", align: "left" },
                     { name: "subjectFullName", label: "Subject", field: "", align: "left" },
+                    { name: "assessmentFullName", label: "Assessment", field: "", align: "left" },
                     { name: "createdDate", label: "Date of Creation", field: "", align: "left" },
                     { name: "teacherFullName", label: "Teacher", field: "", align: "left" },
                     { name: "classRoomFullName", label: "Class", field: "", align: "left" },
@@ -99,7 +100,7 @@
                 if(dialog.title === payload){
                     switch(payload){
                         case "Success":
-                            await context.loadResultf()
+                            await context.loadResult()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -107,9 +108,10 @@
                 }
             }
         },
-        async loadResultf(){
+        async loadResult(){
             var context = this;
-        var url = "result";
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+        var url = `result/${user.schoolId}`;
         var response = await get({
           url
         })
@@ -156,7 +158,7 @@
         },
         async created() {
             var context = this;
-            await context.loadResultf()
+            await context.loadResult()
       }
     }
 </script>

@@ -88,10 +88,12 @@ export default {
             var context = this;
             
             var url = `classroom/create`;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             const payload = {
                 url,
                 req: {
                     type: context.form.qInputs[0].name,
+                    schoolId: user.schoolId,
                 }
             }
 

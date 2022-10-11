@@ -36,10 +36,11 @@
     return {
             tableVM: {
                 selectedSchool: {},
-                title: "Students",
+                title: "Schools",
                 columns: [
                     { name: "schoolName", label: "School", field: "", align: "left" },
-                    { name: "address", label: "Actions", field: "", align: "left" },
+                    { name: "address", label: "Address", field: "", align: "left" },
+                    { name: "actions", label: "Actions", field: "", align: "left" },
                 ],
                 rows: [],
                 separator: "cell",

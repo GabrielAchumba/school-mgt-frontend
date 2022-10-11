@@ -126,6 +126,7 @@ import { loadStaffs } from "../pages/administrators/staff/utils";
 import { loadStudents } from "../pages/administrators/student/utils";
 import { loadSubjects } from "../pages/administrators/subject/utils";
 import { loadAssessments } from "../pages/administrators/assessment/utils";
+import { loadSchools } from "../pages/administrators/school/utils";
 
 export default {
   name: 'AdminLayout',
@@ -157,6 +158,13 @@ export default {
                 description: "Landing Page",
                 image: "/statics/images/staffs.jpg",
                 to: "/admin"
+              },
+              {
+                name: "showPage",
+                title: "School", 
+                description: "Create and management schools",
+                image: "/statics/images/staffs.jpg",
+                to: "/school-landing"
               },
               {
                 name: "showPage",
@@ -265,16 +273,28 @@ export default {
     if(window.innerWidth < 700) context.rightDrawerOpen = true;
     this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
 
-      const classRooms = await loadClassRooms();
-      this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
-      const staffs = await loadStaffs();
-      this.$store.commit('staffStore/SetStaffs', staffs.result);
-      const students = await loadStudents();
-      this.$store.commit('studentStore/SetStudents', students.result);
-      const subjects = await loadSubjects();
-      this.$store.commit('subjectStore/SetSubjects', subjects.result);
-      const assessments = await loadAssessments();
-      this.$store.commit('assessmentStore/SetAssessments', assessments.result);
+      const schools = await loadSchools();
+      this.$store.commit('schoolStore/SetSchools', schools.result);
+
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+       if(user.userType == "Admin" && user.designationId !== "CEO"){
+          const classRooms = await loadClassRooms(user.schoolId);
+          this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
+          console.log("classRooms: ", classRooms.result)
+          const staffs = await loadStaffs(user.schoolId);
+          this.$store.commit('staffStore/SetStaffs', staffs.result);
+          console.log("staffs: ", staffs.result)
+          const students = await loadStudents(user.schoolId);
+          this.$store.commit('studentStore/SetStudents', students.result);
+          console.log("students: ", students.result)
+          const subjects = await loadSubjects(user.schoolId);
+          this.$store.commit('subjectStore/SetSubjects', subjects.result);
+          console.log("subjects: ", subjects.result)
+          const assessments = await loadAssessments(user.schoolId);
+          this.$store.commit('assessmentStore/SetAssessments', assessments.result);
+          console.log("assessments: ", assessments.result)
+       }
+
   },
   destroyed() {
     window.removeEventListener("resize", this.onResize);

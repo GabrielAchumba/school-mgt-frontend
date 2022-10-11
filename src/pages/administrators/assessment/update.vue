@@ -90,11 +90,13 @@ export default {
             var context = this;
             
             var url = `assessment/${context.selectedAssessment.id}`;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             const payload = {
                 url,
                 req: {
                     type: context.form.qInputs[0].name,
                     percentage: Number(context.form.qInputs[1].name),
+                    schoolId: user.schoolId,
                 }
             }
 

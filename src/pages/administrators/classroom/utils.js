@@ -1,8 +1,8 @@
 import { get } from "../../../store/modules/services"
 
-export const loadClassRooms = async () => {
+export const loadClassRooms = async (schoolId) => {
 
-    var url = "classroom";
+    var url = `classroom/${schoolId}`;
     var response = await get({
     url
     })

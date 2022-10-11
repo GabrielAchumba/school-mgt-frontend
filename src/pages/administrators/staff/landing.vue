@@ -143,7 +143,9 @@
         },
         async _loadStafff(){
             var context = this;
-        const { result, message } = await loadStaffs();
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+        const { result, message } = await loadStaffs(user.schoolId);
+        console.log("result: ", result)
         this.$store.commit('staffStore/SetStaffs', result)
         context.tableVM.rows = result;
 

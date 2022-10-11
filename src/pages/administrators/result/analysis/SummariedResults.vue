@@ -75,10 +75,10 @@ export default {
             form: { 
                 title: "Configure Result Report",
                 qSelects: [
-                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom" },
-                    { label: "Student", value: "", type: "text", list: [], actionName: "student" },
-                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor" },
-                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor" },
+                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
+                    { label: "Student", value: "", type: "text", list: [], actionName: "student", visible: true },
+                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
+                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
                 ],
                 qInputs: [],
                 qBtns: [
@@ -101,8 +101,10 @@ export default {
             chartForm: { 
                 title: "Configure Chart",
                 qSelects: [
-                    { label: "Horizontal Parameter", value: "", type: "text", list: [], actionName: "" },
-                    { label: "Vertical Parameter", value: "", type: "text", list: [], actionName: "" },
+                    { label: "Horizontal Parameter", value: "", 
+                    type: "text", list: [], actionName: "", visible: true },
+                    { label: "Vertical Parameter", value: "",
+                     type: "text", list: [], actionName: "", visible: true },
                 ],
                 qInputs: [],
                 qBtns: [
@@ -125,6 +127,7 @@ export default {
     methods:{
         async Compute(){
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `result/summarizedresult`;
             const payload = {
@@ -136,6 +139,7 @@ export default {
                     teacherId: context.form.qSelects[3].value,
                     studentId: context.form.qSelects[1].value,
                     classroomId: context.form.qSelects[0].value,
+                    schoolId: user.schoolId,
                 }
             }
 
@@ -183,7 +187,8 @@ export default {
         },
         async typeOfInstructor(payload){
             var context = this;
-            const teachers = await loadUsersByCategory(payload.value);
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            const teachers = await loadUsersByCategory(payload.value, user.schoolId);
             this.$store.commit('userStore/SetTeachers', teachers.result);
             context.form.qSelects[3].list = teachers.result.map((row) => {
                 return {
@@ -216,7 +221,7 @@ export default {
             context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"];
             if(context.form.qSelects[2].list.length > 0){
                 await context.typeOfInstructor({
-                    value: context.form.qSelects[2].list[0].id,
+                    value: context.form.qSelects[2].list[0].id
                 })
             }
 

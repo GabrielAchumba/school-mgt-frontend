@@ -92,8 +92,8 @@ export default {
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
-                    percentage: Number(context.form.qInputs[1].name),
+                    schoolName: context.form.qInputs[0].name,
+                    address: context.form.qInputs[1].name,
                 }
             }
 

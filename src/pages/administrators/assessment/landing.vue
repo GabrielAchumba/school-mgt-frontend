@@ -142,7 +142,8 @@
         },
         async loadAssessmentf(){
             var context = this;
-        var url = "assessment";
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+        var url = `assessment/${user.schoolId}`;
         var response = await get({
           url
         })

@@ -25,7 +25,8 @@
           class="q-pa-sm"
           v-for="qSelect in formData.qSelects" 
           :key="qSelect.label">
-          <span><p class="q-ma-none">{{ qSelect.label }}</p>
+          <span v-if="qSelect.visible">
+            <p class="q-ma-none">{{ qSelect.label }}</p>
           <q-select
             class="q-ma-none"
             color="accent" 

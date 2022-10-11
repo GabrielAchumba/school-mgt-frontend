@@ -25,6 +25,13 @@
               },
               {
                 name: "showPage",
+                title: "School", 
+                description: "Create and management schools",
+                image: "/statics/images/staffs.jpg",
+                to: "/school-landing"
+              },
+              {
+                name: "showPage",
                 title: "Staff", 
                 description: "The types of employees of the schools",
                 image: "/statics/images/staffs.jpg",
@@ -46,13 +53,6 @@
               },
               {
                 name: "showPage",
-                title: "Student", 
-                description: "Students in the school",
-                image: "/statics/images/students.jpg",
-                to: "/student-landing"
-              },
-              {
-                name: "showPage",
                 title: "Assessment", 
                 description: "Student's assessment in the school",
                 image: "/statics/images/assessment.jpg",
@@ -60,10 +60,24 @@
               },
               {
                 name: "showPage",
+                title: "Student", 
+                description: "Students in the school",
+                image: "/statics/images/students.jpg",
+                to: "/student-landing"
+              },
+              {
+                name: "showPage",
                 title: "Student Results", 
                 description: "Student's results in the school",
                 image: "/statics/images/results.jpg",
                 to: "/result-landing"
+              },
+              {
+                name: "showPage",
+                title: "Subscription", 
+                description: "The shool management subscription plans",
+                image: "/statics/images/lesson.jpg",
+                to: "/subscription-landing"
               },
               {
                 name: "showPage",
