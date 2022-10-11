@@ -177,12 +177,27 @@ const routes = [
       },
       { 
         path: '/subscription-landing', 
-        component: () => import('pages/administrators/subscription//landing.vue') 
+        component: () => import('pages/administrators/subscription/landing.vue') 
         
       },
       { 
         path: '/select-students', 
-        component: () => import('pages/administrators/subscription//select-students.vue') 
+        component: () => import('pages/administrators/subscription/select-students.vue') 
+        
+      },
+      { 
+        path: '/total-amount', 
+        component: () => import('pages/administrators/subscription/totalamount.vue') 
+        
+      },
+      { 
+        path: '/payment-response', 
+        component: () => import('pages/administrators/subscription/payment-response.vue') 
+        
+      },
+      { 
+        path: '/generated-tokens', 
+        component: () => import('pages/administrators/subscription/generated-tokens.vue') 
         
       }
     ]

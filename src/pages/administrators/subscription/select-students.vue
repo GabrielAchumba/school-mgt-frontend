@@ -60,28 +60,45 @@ export default {
                          value: 1,
                          type: "90 Days",
                          label: "90 Days",
+                         amount: 1000,
                      }, 
                      {
                          value: 2,
                          type: "180 Days",
                          label: "180 Days",
+                         amount: 1800,
                      }, 
                      {
                          value: 3,
                          type: "360 Days",
-                         label: "360 Days"
+                         label: "360 Days",
+                         amount: 2500,
                      }], actionName: "typeOfInstructor", 
             visible: true },
             qBtn: { label: "Make Payment", name: "makePayment"},
             GroupedCheckBox: {label: "", value: "", list: [], group: []},
+            totalAmount: 0,
+            totalAmountTitle: "",
+            totalAmountDescription: "",
         }
     },
     methods: {
+        updateTotalAmountViewProps(){
+            var context = this;
+            this.$store.commit("subscriptionStore/SetTotalAmount", context.totalAmount)
+            this.$store.commit("subscriptionStore/SetTotalAmountTitle", context.totalAmountTitle)
+            this.$store.commit("subscriptionStore/totalAmountDescription", context.totalAmountDescription)
+        },
         onQSelectItemValueChanged(_qSelect){
-            console.log("_qSelect: ", _qSelect);
+            var context = this;
+            this.$store.commit("subscriptionStore/SetSelectedSubscriptionPlan", _qSelect)
+            context.updateTotalAmountViewProps();
         },
         ClickAction(actionName){
+            var context = this;
             console.log("actionName: ", actionName);
+            context.updateTotalAmountViewProps();
+            this.$router.push('/total-amount')
         },
         async _loadSubjects(){
             var context = this;
@@ -99,15 +116,21 @@ export default {
             context.GroupedCheckBox.list.unshift({
                     value: 1,
                     label: "All Students",
-                })
+            })
 
-            console.log("context.GroupedCheckBox.list: ", context.GroupedCheckBox.list)
+            const selectedSubscriptionPlan = this.$store.getters["subscriptionStore/selectedSubscriptionPlan"]
+            context.GroupedCheckBox.value = selectedSubscriptionPlan.value
+
+            context.totalAmount = selectedSubscriptionPlan.amount * (context.GroupedCheckBox.list.length - 1);
+            totalAmountTitle = "Total Subscription Amount"
+            //totalAmountDescription
 
         }
     },
     async created(){
         var context = this;
         await context._loadSubjects();
+
     }
 }
 </script>

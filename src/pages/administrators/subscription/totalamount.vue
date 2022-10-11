@@ -12,13 +12,13 @@
           <q-card-section>
             <div class="row no-wrap items-center">
               <div class="col text-h6 ellipsis">
-                {{ title }}
+                {{ totalAmountTitle }}
               </div>
             </div>
           </q-card-section>
 
           <q-card-section>
-            {{ description }}
+            {{ totalAmountDescription }}
           </q-card-section>
 
           <div class="row q-pa-sm">
@@ -38,6 +38,12 @@
      computed:{
          totalAmount(){
              return this.$store.getters['subscriptionStore/totalAmount'];
+         },
+         totalAmountTitle(){
+             return this.$store.getters['subscriptionStore/totalAmountTitle'];
+         },
+         totalAmountDescription(){
+             return this.$store.getters['subscriptionStore/totalAmountDescription'];
          }
      },
      data(){

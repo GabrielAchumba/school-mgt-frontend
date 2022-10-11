@@ -23,27 +23,40 @@
                 title: "90 Days", 
                 description: "This plan is for 90 days",
                 image: "/statics/images/view results.jpg",
-                to: "/select-students"
+                to: "/select-students",
+                amount: 1000,
+                value: 1,
+                type: "90 Days",
+                label: "90 Days",
               },
               {
                 name: "showPage",
                 title: "180 Days", 
                 description: "This plan is for 180 days",
                 image: "/statics/images/view results.jpg",
-                to: "/select-students"
+                to: "/select-students",
+                amount: 1800,
+                value: 2,
+                type: "180 Days",
+                label: "180 Days",
               },
               {
                 name: "showPage",
                 title: "360 Days", 
                 description: "This plan is for 360 days",
                 image: "/statics/images/view results.jpg",
-                to: "/select-students"
+                to: "/select-students",
+                amount: 2500,
+                value: 3,
+                type: "360 Days",
+                label: "360 Days",
               },
             ],
           }
         },
         methods:{
             showPage(payload){
+                this.$store.commit("subscriptionStore/SetSelectedSubscriptionPlan", payload)
                 this.$router.push(payload.to)
             }
         }
