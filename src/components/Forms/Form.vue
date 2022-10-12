@@ -69,6 +69,19 @@
           </q-expansion-item>
         </div>
 
+
+        <div
+          class="q-pa-sm"
+          v-for="table in formData.tables" 
+          :key="table.id">
+          <EditableTable
+          :tableVM="table"
+          @handleAddEditableTable="handleAddEditableTable($event)"
+          @handleSubmitEditableTable="handleSubmitEditableTable($event)"
+          @handleEditEditableTable="handleEditEditableTable($event)"
+          @handleDeleteEditableTable="handleDeleteEditableTable($event)"/>
+        </div>
+
         <div class="q-pa-sm"
           v-for="qInput in formData.qInputs" 
           :key="qInput.label">
@@ -131,7 +144,11 @@
 
 <script>
     import form from "./FormVM.js";
+    import EditableTable from "../Tables/EditableTable.vue"
     export default {
+        components:{
+          EditableTable
+        },
         props: {
             formData: {
               type: Object,
@@ -148,7 +165,19 @@
           },
           ClickAction(actionName){
               this.$emit(actionName);
-          }
+          },
+          handleAddEditableTable(payload) {
+            this.$emit(payload.handleAddName, payload);
+          },
+          handleSubmitEditableTable(payload) {
+            this.$emit(payload.tableVM.handleSubmitName, payload);
+          },
+          handleEditEditableTable(payload) {
+            this.$emit(payload.tableVM.handleEditName, payload);
+          },
+          handleDeleteEditableTable(payload) {
+            this.$emit(payload.tableVM.handleDeleteName, payload);
+          },
         },
     }
 </script>

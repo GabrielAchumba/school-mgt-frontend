@@ -217,10 +217,24 @@ export default {
               },
               {
                 name: "showPage",
-                title: "Lesson Notes", 
-                description: "Student's lesson notes in the school",
+                title: "Subscription", 
+                description: "The shool management subscription plans",
                 image: "/statics/images/lesson.jpg",
-                to: "/lesson-landing"
+                to: "/subscription-landing"
+              },
+              {
+                name: "showPage",
+                title: "File Management", 
+                description: "Managing teachers lesson notes, past questions and answers, and other office files",
+                image: "/statics/images/lesson.jpg",
+                to: "/admin"
+              },
+              {
+                name: "showPage",
+                title: "Schools Payments", 
+                description: "All Payments made by schools you refered to Newway",
+                image: "/statics/images/staffs.jpg",
+                to: "/school-all-payment-landing"
               },
         ],
     }

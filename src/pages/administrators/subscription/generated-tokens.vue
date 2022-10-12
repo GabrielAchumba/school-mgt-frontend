@@ -1,54 +1,109 @@
 <template>
- <div>
-     <div class="col-12">
-         <q-card class="column full-height" style="width: 500px">
-             <q-card-section>
-            <div  v-if="IsPaymentSuccessful">
-            <p>
-                Payment was succesful. Thanks for using our platform
-            </p>
-                <br>
-                <p>Here is your payment pincode: {{ PaymentCode }}</p>
-            </div>
+ <div class="q-pa-sm">
 
-            <div  v-else>
-            <p>
-                Payment was not succesful. Please try again later. Thanks for using our platform
-            </p>
-            </div>
-          </q-card-section>
-          <q-card-actions align="right">
-               <q-btn 
-                @click="Done" color="primary" v-close-popup>
-                Done
-                </q-btn>
-          </q-card-actions>
-         </q-card>
-     </div>
+    <q-table 
+    :data="rows"
+    :columns="columns" 
+    row-key="name" 
+    binary-state-sort
+    separator="cell"
+    :filter="filter"
+    :loading="loading"
+    class="screenwide"
+    style="height: 60%"
+    >
+          <template v-slot:header="props">
+            <q-tr :props="props">
+              <q-th
+                v-for="col in props.cols"
+                :key="col.name"
+                :props="props"
+                class="bg-accent text-primary"
+              >
+                {{ col.label }}
+              </q-th>
+            </q-tr>
+          </template>
+
+          <template v-slot:body="props">
+              <q-tr 
+              :props="props">
+
+                <q-td 
+                v-for="column in columns" :key="column.name"
+                :props="props">{{ props.row[column.name] }}</q-td>
+              </q-tr>
+            </template>
+    </q-table>
+
+    <div class="text-right">
+        <q-btn class="q-ma-sm bg-accent text-primary"
+        label="Done"
+        type="button"
+        size="md"
+        no-caps
+        @click="Done"
+    />
+    </div>
+
  </div>
 </template>
 
 <script>
-
+import { post } from "../../../store/modules/services";
 export default {
-  computed: {
-    IsPaymentSuccessful(){
-      return this.$store.getters['dealersStore/dealers'];
-    },
-    PaymentCode(){
-      return this.$store.getters['ticketsStore/PaymentCode'];
-    }
-   },
-  data() {
-    return {
-      
-    };
+  data(){
+      return {
+        rows: [],
+        columns: [
+            { name: "studentFullName", label: "Student Full Name", field: "", align: "left" },
+            { name: "token", label: "Token", field: "", align: "left" },
+        ],
+        loading: false,
+        filter: '',
+      }
   },
   methods: {
+      async GenerateToken(){
+          console.log("GenerateToken called");
+
+            const paymentResponse = this.$store.getters['subscriptionStore/paymentResponse'];
+            var paydata = {
+                message: context.state.paymentResponse.message,
+                reference: context.state.paymentResponse.reference,
+                status: context.state.paymentResponse.status,
+                trans: context.state.paymentResponse.trans,
+                transactions: context.state.paymentResponse.transaction,
+                trxref: context.state.paymentResponse.trxref,
+                isPaid: this.$store.getters['subscriptionStore/isPaymentSuccessful'],
+                totalAmount: this.$store.getters['subscriptionStore/totalAmount'],
+            }  
+            
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            var url = `payment/${user.schoolId}`;
+            var response = await post({
+                url,
+                req:paydata
+                })
+
+            const { 
+                data : {
+                    data: result,
+                    success,
+                    message,
+                }
+            } = response
+
+
+            console.log("message: ", message);
+      },
       Done(){
-          this.$store.dispatch('ticketsStore/UpdateSelectedTickets');
-          this.$store.commit('ticketsStore/HidepaymentresponseDialog')
+          this.$router.push('/admin')
       }
+  },
+  async created(){
+      var context = this;
+      await context.GenerateToken();
   }
 };
 </script>

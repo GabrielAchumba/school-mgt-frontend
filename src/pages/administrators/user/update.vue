@@ -114,7 +114,10 @@ export default {
             
             var url = `user/${context.selectedUser.id}`;
             var schoolId = context.form.qSelects[1].value;
-            if(user.userType == "Admin" && user.designationId !== "CEO"){
+            if(Object.keys(user).length <= 0){
+                schoolId = "CEO";
+            }
+            else if(user.userType == "Admin" && user.designationId !== "CEO"){
                 schoolId = user.schoolId;
             }
 
@@ -196,8 +199,26 @@ export default {
            }
        })
 
-        var user = this.$store.getters["authenticationStore/IdentityModel"]
-       if(user.userType == "Admin" && user.designationId == "CEO"){
+      var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(Object.keys(user).length <= 0){
+           context.form.qSelects[0].list = [
+                {
+                    value: 1,
+                    label: "Member",
+                    type: "Member",
+                },
+                {
+                    value: 2,
+                    label: "School Admin",
+                    type: "Admin",
+                },
+                {
+                    value: 3,
+                    label: "Referal",
+                    type: "Referal",
+                }]
+       }
+       else if(user.userType == "Admin" && user.designationId == "CEO"){
            context.form.qSelects[1].value = context.selectedUser.schoolId;
            context.form.qSelects[0].list = [
                          {

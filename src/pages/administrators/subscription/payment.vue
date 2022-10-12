@@ -64,6 +64,8 @@ export default {
           console.log("Payment failed")
           this.$store.commit('subscriptionStore/SetIsPaymentSuccessful', false)
         }
+
+        this.$router.push('/payment-response')
       
       },
       close: function(){

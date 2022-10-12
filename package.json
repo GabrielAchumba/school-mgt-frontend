@@ -14,13 +14,15 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
+    "bootstrap-vue": "^2.22.0",
+    "bootstrap-vue-editable-table": "^0.1.7",
     "paystack": "^2.0.1",
     "plotly.js-dist": "^2.15.0",
     "quasar": "^1.0.0",
     "vue": "^2.6.12",
-    "vue-template-compiler": "^2.6.12",
     "vue-i18n": "^8.0.0",
-    "vue-paystack": "^2.0.3"
+    "vue-paystack": "^2.0.3",
+    "vue-template-compiler": "^2.6.12"
   },
   "devDependencies": {
     "@quasar/app": "^1.0.0",

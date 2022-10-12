@@ -22,8 +22,10 @@
           </q-card-section>
 
           <div class="row q-pa-sm">
-              <div class="col-12">
+              <div class="col-12 text-left">
                   <q-space></q-space>
+                  <payment
+                  :amount="totalAmount"/>
               </div>
           </div>
         </q-card>
@@ -34,6 +36,7 @@
 </template>
 
 <script>
+import payment from './payment.vue';
  export default {
      computed:{
          totalAmount(){
@@ -46,12 +49,14 @@
              return this.$store.getters['subscriptionStore/totalAmountDescription'];
          }
      },
+     components:{
+       payment
+     },
      data(){
-         return {
-             title: "Total Amount",
-         }
+       return {
+         paystackkey:"pk_test_807ad0729343100bb1cbfd200fecfff9eee2776d",
+       }
      }
-
  }
 </script>
 

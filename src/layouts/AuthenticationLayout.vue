@@ -49,7 +49,7 @@
 </template>
 
 <script>
-
+import { loadSchools } from "../pages/administrators/school/utils";
 export default {
   //name: 'AdminLayout',
   computed: {
@@ -117,8 +117,12 @@ export default {
 
     }
   },
-  created() {
+  async created() {
     window.addEventListener("resize", this.onResize);
+
+    const schools = await loadSchools();
+    this.$store.commit('schoolStore/SetSchools', schools.result);
+
   },
   destroyed() {
     window.removeEventListener("resize", this.onResize);

@@ -46,8 +46,7 @@ export default {
   },
   methods: {
       Done(){
-          this.$store.dispatch('ticketsStore/UpdateSelectedTickets');
-          this.$store.commit('ticketsStore/HidepaymentresponseDialog')
+          this.$router.push('/generated-tokens')
       }
   }
 };

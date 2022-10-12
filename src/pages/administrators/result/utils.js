@@ -117,3 +117,15 @@ const getRowsStudentsPositions = (result, columns) => {
 
     return rows;
 }
+
+export const createGrouppedSummaryResult = () => {
+
+}
+
+const getColumnsGrouppedSummaryResult = (result) => {
+
+}
+
+const getRowsGrouppedSummaryResult = (result, columns) => {
+    
+}

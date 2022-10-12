@@ -11,6 +11,7 @@
                 :options="GroupedCheckBox.list"
                 type="checkbox"
                 v-model="GroupedCheckBox.group"
+                @change="onGroupCheckBoxModelChanged"
             />
         </q-scroll-area>
         </q-card>
@@ -54,8 +55,9 @@ import { loadStudents } from '../student/utils';
 export default {
     data(){
         return {
+            nStudents: 0,
             visible: true,
-            qSelect: { label: "Type of Instructor", value: "", 
+            qSelect: { label: "", value: "", 
                     type: "", list: [{
                          value: 1,
                          type: "90 Days",
@@ -80,24 +82,44 @@ export default {
             totalAmount: 0,
             totalAmountTitle: "",
             totalAmountDescription: "",
+            selectedSubscriptionPlan: {},
         }
     },
     methods: {
+        onGroupCheckBoxModelChanged(val){
+            var context = this;
+            console.log("val: ", val)
+            console.log("GroupedCheckBox.group: ", context.GroupedCheckBox.group);
+            context.CalculateNumberOfStudents()
+            context.SetTotalAmountViewProps();
+
+            console.log("totalAmount: ", context.totalAmount);
+            console.log("totalAmountTitle: ", context.totalAmountTitle);
+            console.log("totalAmountDescription: ", context.totalAmountDescription);
+
+        },
         updateTotalAmountViewProps(){
             var context = this;
             this.$store.commit("subscriptionStore/SetTotalAmount", context.totalAmount)
             this.$store.commit("subscriptionStore/SetTotalAmountTitle", context.totalAmountTitle)
-            this.$store.commit("subscriptionStore/totalAmountDescription", context.totalAmountDescription)
+            this.$store.commit("subscriptionStore/SetTotalAmountDescription", context.totalAmountDescription)
         },
         onQSelectItemValueChanged(_qSelect){
             var context = this;
+            console.log("_qSelect: ", _qSelect)
             this.$store.commit("subscriptionStore/SetSelectedSubscriptionPlan", _qSelect)
-            context.updateTotalAmountViewProps();
+            context.CalculateNumberOfStudents()
+            context.SetTotalAmountViewProps();
+
+            console.log("totalAmount: ", context.totalAmount);
+            console.log("totalAmountTitle: ", context.totalAmountTitle);
+            console.log("totalAmountDescription: ", context.totalAmountDescription);
         },
         ClickAction(actionName){
             var context = this;
             console.log("actionName: ", actionName);
-            context.updateTotalAmountViewProps();
+            context.CalculateNumberOfStudents()
+            context.SetTotalAmountViewProps();
             this.$router.push('/total-amount')
         },
         async _loadSubjects(){
@@ -118,13 +140,35 @@ export default {
                     label: "All Students",
             })
 
-            const selectedSubscriptionPlan = this.$store.getters["subscriptionStore/selectedSubscriptionPlan"]
-            context.GroupedCheckBox.value = selectedSubscriptionPlan.value
+            context.selectedSubscriptionPlan = this.$store.getters["subscriptionStore/selectedSubscriptionPlan"]
+            context.qSelect.value = context.selectedSubscriptionPlan.label
 
-            context.totalAmount = selectedSubscriptionPlan.amount * (context.GroupedCheckBox.list.length - 1);
-            totalAmountTitle = "Total Subscription Amount"
-            //totalAmountDescription
+            context.CalculateNumberOfStudents()
+            context.SetTotalAmountViewProps()
 
+            console.log("totalAmount: ", context.totalAmount);
+            console.log("totalAmountTitle: ", context.totalAmountTitle);
+            console.log("totalAmountDescription: ", context.totalAmountDescription);
+            
+
+        },
+        SetTotalAmountViewProps(){
+            var context = this;
+            context.totalAmount = context.selectedSubscriptionPlan.amount * context.nStudents;
+            context.totalAmountTitle = `${context.selectedSubscriptionPlan.label} Subscription Plan Total Amount`
+            context.totalAmountDescription = `The total amount to be paid for ${context.nStudents} students is ₦${context.totalAmount}`
+            context.updateTotalAmountViewProps();
+        },
+        CalculateNumberOfStudents(){
+            var context = this;
+            for(const item of context.GroupedCheckBox.group){
+                if(item.value === 1){
+                    context.nStudents = context.GroupedCheckBox.list.length - 1;
+                    return;
+                }
+            }
+            
+            context.nStudents = context.GroupedCheckBox.group.length;
         }
     },
     async created(){

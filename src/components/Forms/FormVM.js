@@ -4,4 +4,5 @@ const form = {
     qInputs: [],
     qDates: [],
     GroupedCheckBoxes: [],
+    tables: [],
 }

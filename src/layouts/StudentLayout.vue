@@ -132,7 +132,6 @@
 <script>
 
 export default {
-  //name: 'AdminLayout',
   computed: {
         IdentityModel() {
             return this.$store.getters['authenticationStore/IdentityModel'];

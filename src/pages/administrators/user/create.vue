@@ -63,7 +63,7 @@ export default {
                     { label: "Password *", name: "", type: "text"},
                     { label: "Country Code *", name: "", type: "text"},
                     { label: "PhoneNumber *", name: "", type: "text"},
-                    { label: "Email", name: "", type: "text"},
+                    /* { label: "Email", name: "", type: "text"}, */
                 ],
                 qBtns: [
                     {label: "Cancel", name: "Cancel"},
@@ -114,7 +114,10 @@ export default {
             
             var url = `user/create`;
             var schoolId = context.form.qSelects[1].value;
-            if(user.userType == "Admin" && user.designationId !== "CEO"){
+            if(Object.keys(user).length <= 0){
+                schoolId = "CEO";
+            }
+            else if(user.userType == "Admin" && user.designationId !== "CEO"){
                 schoolId = user.schoolId;
             }
             const payload = {
@@ -180,7 +183,7 @@ export default {
         }
     },
     created(){
-        var context = this;
+       var context = this;
        context.form.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
            return {
                ...row,
@@ -189,18 +192,36 @@ export default {
        })
 
        var user = this.$store.getters["authenticationStore/IdentityModel"]
-       if(user.userType == "Admin" && user.designationId == "CEO"){
+       if(Object.keys(user).length <= 0){
            context.form.qSelects[0].list = [
-                         {
-                             value: 1,
-                             label: "Member",
-                             type: "Member",
-                         },
-                         {
-                             value: 2,
-                             label: "Admin",
-                             type: "Admin",
-                         }]
+                {
+                    value: 1,
+                    label: "Member",
+                    type: "Member",
+                },
+                {
+                    value: 2,
+                    label: "School Admin",
+                    type: "Admin",
+                },
+                {
+                    value: 3,
+                    label: "Referal",
+                    type: "Referal",
+                }]
+       }
+       else if(user.userType == "Admin" && user.designationId == "CEO"){
+           context.form.qSelects[0].list = [
+                {
+                    value: 1,
+                    label: "Member",
+                    type: "Member",
+                },
+                {
+                    value: 2,
+                    label: "Admin",
+                    type: "Admin",
+                }]
        }else{
            context.form.qSelects[1].visible = false;
            context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {

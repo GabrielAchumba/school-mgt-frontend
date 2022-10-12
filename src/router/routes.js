@@ -176,6 +176,16 @@ const routes = [
         
       },
       { 
+        path: '/summarized-students-result', 
+        component: () => import('pages/administrators/result/analysis/ComputeStudentsSummaryResults.vue') 
+        
+      },
+      { 
+        path: '/summarized-students-result-by-date', 
+        component: () => import('pages/administrators/result/analysis/ComputeStudentsResultsByDateRange.vue') 
+        
+      },
+      { 
         path: '/subscription-landing', 
         component: () => import('pages/administrators/subscription/landing.vue') 
         
@@ -215,7 +225,7 @@ const routes = [
   },
   {
     path: '/student',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/layouts/StudentLayout.vue'),
     children: [
       { 
         path: '/student', 
