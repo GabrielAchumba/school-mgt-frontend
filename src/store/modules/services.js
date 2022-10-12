@@ -4,6 +4,7 @@ const get = async (payload) => {
 
   var token = sessionStorage.getItem("token") 
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -22,6 +23,7 @@ const remove = async (payload) => {
 
   var token = sessionStorage.getItem("token") 
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -40,6 +42,7 @@ const post = (payload) => {
 
   var token = sessionStorage.getItem("token") 
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -58,6 +61,7 @@ const put = (payload) => {
 
   var token = sessionStorage.getItem("token") 
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       

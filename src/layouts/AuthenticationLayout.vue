@@ -68,7 +68,7 @@ export default {
       menuList: [
         { name: "home", tabIndex: "home", label: "Home" },
         { name: "login_register", tabIndex: "login_register", label: "Login/Register"},
-        { name: "about_us", tabIndex: "about_us", label: "About Us" },
+        { name: "schools", tabIndex: "schools", label: "School" },
       ]
     }
   },
@@ -88,6 +88,7 @@ export default {
       }else{
         context.showMobilePhoneMenu = false;
         context.rightMenuIcon = "menu"
+        https://arcane-inlet-68126.herokuapp.com/
       } */
     },
     getTabHeaderStyle(tabIndex){

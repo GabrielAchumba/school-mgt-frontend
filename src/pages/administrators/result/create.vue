@@ -171,6 +171,8 @@ export default {
         var context = this;
         context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"];
         context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
+        //console.log("subjects: ", subjects.result)
+        console.log("context.form.qSelects[1].list : ", context.form.qSelects[1].list)
         context.form.qSelects[2].list = this.$store.getters["studentStore/students"].map((row) => {
             return {
                 ...row,

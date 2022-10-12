@@ -1,9 +1,10 @@
 import axios from 'axios'
 //const axiosInstance = axios.create({ 
+  const processEnvNOEENV = "production";
     const $http  = axios.create({ 
         headers: {'Content-Type': 'application/json'},
-          //baseURL: (process.env.NODE_ENV == 'production') ? 'https://ucaicsl.azurewebsites.net/api' : 'https://localhost:44306//api'
-          baseURL: 'http://localhost:3023/' 
+          baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:3023/'
+          //baseURL: 'http://localhost:3023/' 
           //baseURL: 'http://gabrielachumba-001-site1.itempurl.com/api/'
       })
       export default ({ Vue }) => {

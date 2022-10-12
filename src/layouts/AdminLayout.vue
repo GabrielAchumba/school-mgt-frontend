@@ -159,13 +159,13 @@ export default {
                 image: "/statics/images/staffs.jpg",
                 to: "/admin"
               },
-              {
+             /*  {
                 name: "showPage",
                 title: "School", 
                 description: "Create and management schools",
                 image: "/statics/images/staffs.jpg",
                 to: "/school-landing"
-              },
+              }, */
               {
                 name: "showPage",
                 title: "Users", 

@@ -1,8 +1,6 @@
 <template>
-<q-layout>
-   <q-page-container>
-     <q-page class="flex flex-center bg-primary">
-       <q-card>
+       <div class="flex flex-center row">
+       <q-card class="col-12 q-pa-sm">
 
    <q-card-section>
     <div class="row q-pa-sm bg-accent text-primary text-center flex flex-center">
@@ -132,9 +130,7 @@
   </q-card-section>
 
        </q-card>
-     </q-page>
-   </q-page-container>
-</q-layout>
+      </div>
 
 
   

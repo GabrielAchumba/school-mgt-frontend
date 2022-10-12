@@ -267,7 +267,7 @@ export default {
             context.form.tables[0].handleEditName = "handleEditGrouppedScoresTable";
             context.form.tables[0].handleDeleteName = "handleDeleteGrouppedScoresTable";
             context.form.tables[0].rowUpdate = {};
-            context.tables[0].fields = [
+            context.form.tables[0].fields = [
                 { key: "delete", label: "" },
                 {
                     key: "from",
