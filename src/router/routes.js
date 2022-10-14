@@ -14,6 +14,16 @@ const routes = [
         component: () => import('pages/authentication/loginregister.vue') 
         
       },
+      { 
+        path: '/school-landing', 
+        component: () => import('pages/administrators/school/landing.vue') 
+        
+      },
+      { 
+        path: '/create-school', 
+        component: () => import('pages/administrators/school/create.vue') 
+        
+      },
     ]
   },
   {
@@ -131,16 +141,6 @@ const routes = [
         
       },
       { 
-        path: '/school-landing', 
-        component: () => import('pages/administrators/school/landing.vue') 
-        
-      },
-      { 
-        path: '/create-school', 
-        component: () => import('pages/administrators/school/create.vue') 
-        
-      },
-      { 
         path: '/update-school', 
         component: () => import('pages/administrators/school/update.vue') 
         
@@ -230,6 +230,27 @@ const routes = [
       { 
         path: '/student', 
         component: () => import('pages/students/landing.vue') 
+        
+      },
+    ]
+  },
+  {
+    path: '/referal',
+    component: () => import('src/layouts/ReferalLayout.vue'),
+    children: [
+      { 
+        path: '/referal', 
+        component: () => import('pages/referals/landing.vue') 
+        
+      },
+      { 
+        path: '/referal-schools', 
+        component: () => import('pages/referals/referal-schools.vue') 
+        
+      },
+      { 
+        path: '/update-referal', 
+        component: () => import('pages/referals/update-referal.vue') 
         
       },
     ]

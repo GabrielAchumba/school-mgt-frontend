@@ -161,10 +161,17 @@ export default {
               },
               {
                 name: "showPage",
-                title: "Schools Payments", 
-                description: "Current Payments made by schools you refered to Newway",
+                title: "Profile", 
+                description: "Update your profile",
                 image: "/statics/images/staffs.jpg",
-                to: "/school-current-payment-landing"
+                to: "/update-referal"
+              },
+              {
+                name: "showPage",
+                title: "Schools", 
+                description: "The schools that came to us by you",
+                image: "/statics/images/staffs.jpg",
+                to: "/referal-schools"
               },
         ],
     }

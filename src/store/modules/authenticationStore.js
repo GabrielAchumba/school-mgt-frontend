@@ -82,7 +82,14 @@ const mutations = {
   },
   Login(state, payload){
    const { token, user } = payload;
-    sessionStorage.setItem("token", token); 
+
+    const inMin = 24 * 60;
+    let expiredAt = new Date(new Date().getTime() + (60000 * inMin));
+    let obj = {
+      value: token,
+      expiredAt: expiredAt.toISOString()
+    }
+    sessionStorage.setItem('seassionObj', JSON.stringify(obj));
 
     state.Loginstatus= "Log out";
     state.IdentityModel = user;

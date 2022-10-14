@@ -27,6 +27,7 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { put } from "../../../store/modules/services";
+import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
     components:{
@@ -36,27 +37,8 @@ export default {
     data(){
         return {
             selectedSubject: {},
-            form: {
-                title: "Update Subject",
-                qSelects: [],
-                qInputs: [
-                    { label: "Type of Subject", name: "", type: "text"}
-                ],
-                qBtns: [
-                    {label: "Cancel", name: "Cancel"},
-                    {label: "Update", name: "Update"},
-                ],
-                qDates: [],
-                GroupedCheckBoxes: [],
-            },
-            dialogs:[
-                { title: "Update Subject", isVisible: false, message: "Do you want to update a Subject",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Subject updated successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            form: form,
+            dialogs: dialogs,
         }
     },
     methods:{

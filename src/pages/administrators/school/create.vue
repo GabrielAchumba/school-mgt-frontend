@@ -27,6 +27,8 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { post } from "../../../store/modules/services";
+import { loadReferals } from "../user/utils";
+import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
     components:{
@@ -35,28 +37,8 @@ export default {
     },
     data(){
         return {
-            form: {
-                title: "Create School",
-                qSelects: [],
-                qInputs: [
-                    { label: "School Name", name: "", type: "text"},
-                    { label: "School Address", name: "", type: "text"},
-                ],
-                qBtns: [
-                    {label: "Cancel", name: "Cancel"},
-                    {label: "Create", name: "Create"},
-                ],
-                qDates: [],
-                GroupedCheckBoxes: [],
-            },
-            dialogs:[
-                { title: "Create School", isVisible: false, message: "Do you want to create a School",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "School created successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            form: form,
+            dialogs:dialogs,
         }
     },
     methods:{
@@ -94,6 +76,7 @@ export default {
                 req: {
                     schoolName: context.form.qInputs[0].name,
                     address: context.form.qInputs[1].name,
+                    referedBy: context.form.qSelects[0].value,
                 }
             }
 
@@ -133,6 +116,28 @@ export default {
                     break;
                 }
             }
+        }
+    },
+    async created(){
+        var context = this;
+        const { result } = await loadReferals()
+        console.log("referals: ", result)
+        context.form.qSelects[0].list = result.map((row) => {
+            return {
+                ...row,
+                value: row.id,
+                type: `${row.firstName} ${row.lastName} (${row.userName})`
+            }
+        })
+
+        if(context.form.qSelects[0].list.length > 0){
+            const row = result[0];
+            context.form.qSelects[0].list.unshift({
+                ...row,
+                id: "CEO",
+                value: "CEO",
+                type: `Nobody`
+            })
         }
     }
 }

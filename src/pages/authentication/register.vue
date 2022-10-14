@@ -1,233 +1,150 @@
 <template>
+    <div class="q-pa-md">
+        <Form
+        :formData="form"
+        @Create="Create($event)"
+        @Cancel="Cancel($event)"
+        @userTypeAction="userTypeAction($event)"/>
 
- <q-layout>
-   <q-page-container>
-     <q-page class="flex flex-center bg-primary text-accent">
-       <q-card
-          class="personal-data-form"
-          v-bind:style="
-          $q.platform.is.mobile ? { width: '90%', height: '95%' } : { width: '90%' , height: '95%' }
-          "
-        >
-
-   <q-card-section>
-    <div class="row no-wrap items-center">
-      <div class="col text-h6 ellipsis">
-        Personal Data
-      </div>
+        <q-dialog 
+            v-for="dialog in dialogs" 
+            :key="dialog.title"
+            v-model="dialog.isVisible">
+            <MessageBox
+            :title="dialog.title"
+            :message="dialog.message"
+            :okayEvent="dialog.okayEvent"
+            :cancelEvent="dialog.cancelEvent"
+            @cancelDialog="cancelDialog($event)"
+            @okDialog="okDialog($event)"
+            >
+            </MessageBox>
+        </q-dialog>
     </div>
-  </q-card-section>
-
-   <q-card-section>
-      <q-form class="q-gutter-md">
-      <q-input outlined v-model="PersonalDataDTO.firstName" label="First Name *" lazy-rules />
-      <q-input outlined v-model="PersonalDataDTO.lastName" label="Last Name *" lazy-rules />
-      <q-input outlined v-model="PersonalDataDTO.username" label="Username *" lazy-rules />
-      <q-input 
-       :type="passwordType"
-        outlined v-model="PersonalDataDTO.password" label="Password *" lazy-rules>
-        	<template 
-                v-if="isVisible"
-                v-slot:append>
-                <q-icon name="visibility" 
-                class="bg-primary text-accent"
-                @click="togglePasswordVisibility" />
-              </template>
-              	<template 
-                v-else
-                v-slot:append>
-                <q-icon name="visibility_off" 
-                class="bg-primary text-accent"
-                 @click="togglePasswordVisibility" />
-              </template>
-      </q-input>
-
-      <div class="row">
-        <div class="col-6 text-left">
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Register"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="register"
-          />
-        </div>
-      </div>
-    </q-form>
-   </q-card-section>
-        
-  </q-card>
-
-  <q-dialog v-model="isRegisterDialog">
-  <MessageBox
-  title="Register"
-  message="Do you want to register with empowerment network?"
-  okayEvent="savePersonalData"
-  cancelEvent="cancelRegistration"
-  @cancelRegistration="cancelRegistration($event)"
-  @savePersonalData="savePersonalData($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isRegisterSuccessDialog">
-  <MessageBox
-  title="Success"
-  message="Your registration was successful!"
-  okayEvent="RegistrationSuccessOkay"
-  cancelEvent="RegistrationSuccessCancel"
-  @RegistrationSuccessCancel="RegistrationSuccessCancel($event)"
-  @RegistrationSuccessOkay="RegistrationSuccessOkay($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isRegisterFailureDialog">
-  <MessageBox
-  title="Error"
-  :message="`${message}.`"
-  okayEvent="RegistrationFailureOkay"
-  cancelEvent="RegistrationFailureCancel"
-  @RegistrationFailureCancel="RegistrationFailureCancel($event)"
-  @RegistrationFailureOkay="RegistrationFailureOkay($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-     </q-page>
-   </q-page-container>
- </q-layout>
-
- 
 </template>
 
 <script>
-    import MessageBox from "../../components/dialogs/MessageBox.vue"
-    export default {
-        computed: {
-        isAdmin(){
-          return this.$store.getters['clientStore/isAdmin'];
-        }
-      },
+
+import MessageBox from "../../components/dialogs/MessageBox.vue";
+import Form from "../../components/Forms/Form.vue";
+import { post } from "../../store/modules/services";
+import { form, dialogs } from "./view_models/register-view-model";
+
+export default {
     components:{
-      MessageBox
+        MessageBox,
+        Form
     },
-    data () {
-    return {
-      passwordType: "password",
-      isVisible: false,
-      PersonalDataDTO: {
-            title:"",
-            firstName:"",
-            middleName:"",
-            lastName:"",
-            gender:"",
-            userName:"",
-            password:"",
-            userType: "Member",
-	          designation: "None",
-          },
-          isRegisterDialog: false,
-          isRegisterSuccessDialog: false,
-          isRegisterFailureDialog: false,
-          message: "",
-          }
-        },
-        props: {
-            theme_color: {
-            type: String,
-            default: '#10731f', 
-            }
-        },
-        methods: {
-          togglePasswordVisibility(){
-            var context = this;
-            if(context.isVisible) {
-              context.isVisible=false
-              context.passwordType = "password";
-            }else {
-              context.isVisible= true;
-              context.passwordType = "text";
-            }
-          },
-            register(){
-              var context = this;
-              context.isRegisterDialog = true;
-            },
-            cancel(){
-              var context = this;
-              context.isRegisterDialog = false;
-              if(context.isAdmin == true){
-                this.$router.push('/registeredContributors');
-                this.$store.commit('clientStore/isAdminUpdate', false) 
-              }else{
-                this.$router.push('/user-home');
-              }
-            },
-            async savePersonalData(){
-              var context = this;
-               var response = await this.$store.dispatch('clientStore/CreatePersonalDataDTO', 
-               context.PersonalDataDTO)
-
-              const { 
-              data : {
-                data: result,
-                message,
-                success,
-                    }
-              } = response
-            
-            context.isRegisterDialog = false;
-            context.message = message;
-              if(success){
-                this.$store.commit('clientStore/CreatePersonalDataDTO', result)
-                this.$store.commit('clientStore/commitTab', "login")
-                context.isRegisterSuccessDialog = true;
-              }else{
-                context.isRegisterFailureDialog = true;
-              }
-            },
-            cancelRegistration(){
-              var context = this;
-              context.isRegisterDialog = false;
-            },
-            RegistrationSuccessOkay(){
-              var context = this;
-              context.isRegisterSuccessDialog = false;
-              if(context.isAdmin == true){
-                this.$router.push('/registeredContributors');
-                this.$store.commit('clientStore/isAdminUpdate', false) 
-              }else{
-                this.$router.push('/user-home');
-              }
-            },
-            RegistrationSuccessCancel(){
-              var context = this;
-              context.isRegisterSuccessDialog = false;
-              if(context.isAdmin == true){
-                this.$router.push('/registeredContributors');
-                this.$store.commit('clientStore/isAdminUpdate', false) 
-              }else{
-                this.$router.push('/user-home');
-              }
-            },
-            RegistrationFailureOkay(){
-              var context = this;
-              context.isRegisterFailureDialog = false;
-            },
-            RegistrationFailureCancel(){
-              var context = this;
-              context.isRegisterFailureDialog = false;
-            }
+    data(){
+        return {
+            form: form,
+            dialogs:dialogs
         }
-    }
-</script>
+    },
+    methods:{
+        Create(){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Create User"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
+        },
+        Cancel(){
+            this.$router.push('/')
+        },
+        cancelDialog(payload){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title === payload){
+                    context.dialogs[i].isVisible = false;
+                    break;
+                }
+            }
+        },
+        async save(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            
+            var url = `user/create-admin`;
+            var schoolId = context.form.qSelects[1].value;
+            if(context.form.qSelects[0].value.type === "Referal"){
+              schoolId = "CEO";
+            }
+            const payload = {
+                url,
+                req: {
+                    firstName: context.form.qInputs[0].name,
+                    lastName: context.form.qInputs[1].name,
+                    userName: context.form.qInputs[2].name,
+                    password: context.form.qInputs[3].name,
+                    phoneNumber: context.form.qInputs[4].name,
+                    userType: context.form.qSelects[0].value.type,
+                    countryCode: context.form.qSelects[2].value.code,
+                    schoolId,
+                }
+            }
 
-<style>
-.personal-data-form {
-  position: absolute;
+            console.log("payload: ", payload)
+            var response = await post(payload)
+
+            const { 
+                data : {
+                    message,
+                    success,
+                }
+            } = response
+            if(success){
+                context.dialogs[1].isVisible = true;
+            }else{
+                context.dialogs[2].message = message;
+                context.dialogs[2].isVisible = true;
+            }
+
+        },
+        async okDialog(payload){
+            console.log("payload: ", payload)
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title === payload){
+                    switch(payload){
+                        case "Create User":
+                            await context.save();
+                            break;
+                        case "Success":
+                            this.$router.push("/");
+                            break;
+                    }
+                    context.dialogs[i].isVisible = false;
+                    break;
+                }
+            }
+        },
+      userTypeAction(payload){
+            var context = this;
+            console.log("payload: ", payload)
+            if(payload.value.value === 1){
+                context.form.qSelects[1].visible = false;
+            }else{
+                context.form.qSelects[1].visible = true;
+            }
+      }
+    },
+    created(){
+       var context = this;
+       context.form.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
+           return {
+               ...row,
+               type: row.schoolName
+           }
+       })
+    }
 }
-</style>
+</script>

@@ -2,9 +2,8 @@ import { $http } from 'boot/axios'
 
 const get = async (payload) => {
 
-  var token = sessionStorage.getItem("token") 
+  var token = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -21,9 +20,8 @@ const get = async (payload) => {
 
 const remove = async (payload) => {
 
-  var token = sessionStorage.getItem("token") 
+  var token = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -40,9 +38,8 @@ const remove = async (payload) => {
 
 const post = (payload) => {
 
-  var token = sessionStorage.getItem("token") 
+  var token = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -59,9 +56,8 @@ const post = (payload) => {
 
 const put = (payload) => {
 
-  var token = sessionStorage.getItem("token") 
+  var token = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-  console.log("token: ", token);
 
   return new Promise((resolve, reject) => {
       
@@ -78,7 +74,7 @@ const put = (payload) => {
 
 const uploadPhoto = async (payload) => {
 
-    var token = sessionStorage.getItem("token") 
+    var token = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -94,6 +90,21 @@ const uploadPhoto = async (payload) => {
           reject(error)
         })
     })
+}
+
+const validateSession = () => {
+  const key = "seassionObj";
+  let seassionVal = sessionStorage.getItem(key);
+  if (seassionVal !== null) {
+    let sessionObj = JSON.parse(seassionVal);
+    let expiredAt = new Date(sessionObj.expiredAt);
+    if (expiredAt > new Date()) { // Validate expiry date.
+      return sessionObj.value;
+    } else {
+      sessionStorage.removeItem(key);
+    }
+  }
+    return null;
 }
 
 export {

@@ -58,6 +58,7 @@ import { createStudentsPositionReport } from "../utils";
 import Table from "../../../../components/Tables/Table.vue";
 import Chart from "../../../../components/Charts/Chart.vue";
 import Plotly from 'plotly.js-dist'
+import { form, chartForm, tableVM } from "./view_models/StudentsPositions-view-models";
 
 export default {
     components:{
@@ -72,68 +73,9 @@ export default {
             isResponsive: false,
             isExpanded: true,
             isTable: true,
-            form: { 
-                title: "Configure Result Report",
-                qSelects: [
-                    { label: "Type of Instructor", value: "", 
-                    type: "text", list: [], actionName: "typeOfInstructor", visible: true },
-                    { label: "Class Room", value: "", 
-                    type: "text", list: [], actionName: "classRoom", visible: true },
-                ],
-                qInputs: [],
-                qBtns: [
-                    {label: "Compute", name: "Compute"},
-                ],
-                qDates: [
-                     {label: "Start Date", name: "2019/02/01"},
-                     {label: "End Date", name: "2019/02/01"},
-                ],
-                GroupedCheckBoxes: [
-                    { 
-                        isGroupedCheckBox: true, 
-                        isExpanded: false, 
-                        list:[], 
-                        group: [],
-                        label: "Subjects",
-                    },
-                    { 
-                        isGroupedCheckBox: true, 
-                        isExpanded: false, 
-                        list:[], 
-                        group: [],
-                        label: "Students",
-                    },
-                    { 
-                        isGroupedCheckBox: true, 
-                        isExpanded: false, 
-                        list:[], 
-                        group: [],
-                        label: "Teachers",
-                    },
-                ],
-            },
-            chartForm: { 
-                title: "Configure Chart",
-                qSelects: [
-                    { label: "Horizontal Parameter", value: "", 
-                    type: "text", list: [], actionName: "", visible: true },
-                    { label: "Vertical Parameter", value: "", 
-                    type: "text", list: [], actionName: "", visible: true },
-                ],
-                qInputs: [],
-                qBtns: [
-                    {label: "Plot", name: "Plot"},
-                ],
-                qDates: [],
-                GroupedCheckBox: [],
-            },
-            tableVM: {
-                selectedResult: {},
-                title: "Students' Results Position",
-                columns: [],
-                rows: [],
-                separator: "cell",
-            },
+            form: form,
+            chartForm: chartForm,
+            tableVM: tableVM,
             layout: {},
             seriesCollection: []
         }

@@ -27,6 +27,7 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { post } from "../../../store/modules/services";
+import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
     components:{
@@ -35,28 +36,8 @@ export default {
     },
     data(){
         return {
-            form: {
-                title: "Create Type of Assessment",
-                qSelects: [],
-                qInputs: [
-                    { label: "Type of Assessment", name: "", type: "text"},
-                    { label: "Overall Score (%)", name: "", type: "text"},
-                ],
-                qBtns: [
-                    {label: "Cancel", name: "Cancel"},
-                    {label: "Create", name: "Create"},
-                ],
-                qDates: [],
-                GroupedCheckBoxes: [],
-            },
-            dialogs:[
-                { title: "Create Assessment", isVisible: false, message: "Do you want to create an Assessment",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Assessment created successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            form: form,
+            dialogs: dialogs,
         }
     },
     methods:{

@@ -28,6 +28,7 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { put } from "../../../store/modules/services";
+import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
     components:{
@@ -37,49 +38,8 @@ export default {
     data(){
         return {
             selectedUser: {},
-            form: {
-                title: "Update User",
-                qSelects: [
-                    { label: "User Type *", value: "", type: "text", 
-                     list: [
-                         {
-                             value: 1,
-                             label: "Member",
-                             type: "Member",
-                         },
-                         {
-                             value: 2,
-                             label: "Admin",
-                             type: "Admin",
-                         }], actionName: "userTypeAction", visible: true },
-                     { label: "School Name *", value: "", type: "text", 
-                     list: [], actionName: "schoolNameAction", visible: true },
-                     { label: "Designation *", value: "", type: "text", 
-                     list: [], actionName: "designationAction", visible: true },
-                ],
-                qInputs: [
-                    { label: "First Name *", name: "", type: "text"},
-                    { label: "Last Name *", name: "", type: "text"},
-                    { label: "User Name *", name: "", type: "text"},
-                    { label: "Country Code *", name: "", type: "text"},
-                    { label: "PhoneNumber *", name: "", type: "text"},
-                    { label: "Email", name: "", type: "text"},
-                ],
-                qBtns: [
-                    {label: "Cancel", name: "Cancel"},
-                    {label: "Update", name: "Update"},
-                ],
-                qDates: [],
-                GroupedCheckBoxes: [],
-            },
-            dialogs:[
-                { title: "Update User", isVisible: false, message: "Do you want to update a user",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "User updated successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            form: form,
+            dialogs: dialogs,
         }
     },
     methods:{

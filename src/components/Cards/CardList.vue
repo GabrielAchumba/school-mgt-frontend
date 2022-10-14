@@ -1,12 +1,12 @@
 <template>
   <div class="bg-primary">
 
-        <div class="row text-center bg-primary flex flex-center">
+        <div class="row text-center bg-primary flex flex-center fit row wrap justify-center items-center content-center">
           <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-md flex flex-center">
             
             <div 
             v-for="(card) in cardList" :key="card.title"
-            class="col-md-4 col-lg-4 col-sx-12 col-sm-12">
+            class="col-md-4 col-lg-4 col-sx-12 col-sm-12 flex flex-center">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
               @click="cardClickHandler(card)"
               style="border: none;" class="my-card text-center box-shadow" square bordered>

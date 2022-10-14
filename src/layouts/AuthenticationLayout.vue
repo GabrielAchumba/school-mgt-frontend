@@ -66,9 +66,9 @@ export default {
       showMobilePhoneMenu: false,
       selected_tab: 'home',
       menuList: [
-        { name: "home", tabIndex: "home", label: "Home" },
+        { name: "/", tabIndex: "home", label: "Home" },
         { name: "login_register", tabIndex: "login_register", label: "Login/Register"},
-        { name: "schools", tabIndex: "schools", label: "School" },
+        { name: "school-landing", tabIndex: "schools", label: "School" },
       ]
     }
   },

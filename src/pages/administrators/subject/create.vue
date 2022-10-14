@@ -27,6 +27,7 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { post } from "../../../store/modules/services";
+import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
     components:{
@@ -35,27 +36,8 @@ export default {
     },
     data(){
         return {
-            form: {
-                title: "Create Subject",
-                qSelects: [],
-                qInputs: [
-                    { label: "Type of Subject", name: "", type: "text"}
-                ],
-                qBtns: [
-                    {label: "Cancel", name: "Cancel"},
-                    {label: "Create", name: "Create"},
-                ],
-                qDates: [],
-                GroupedCheckBoxes: [],
-            },
-            dialogs:[
-                { title: "Create Subject", isVisible: false, message: "Do you want to create a Subject",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Subject created successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            form: form,
+            dialogs:dialogs,
         }
     },
     methods:{

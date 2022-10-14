@@ -87,8 +87,15 @@
           <q-input class="q-ma-none"
           outlined 
           v-model="qInput.name" 
-          :type="qInput.type" 
-          lazy-rules /></span>
+          :type="qInput.type" >
+              <template 
+                v-if="qInput.Template.visible" 
+                v-slot:append>
+                <q-icon :name="qInput.Template.iconName" 
+                class="bg-primary text-accent"
+                @click="qInputTemplateAction(qInput.Template)" />
+              </template>
+          </q-input></span>
         </div>
 
         <div
@@ -161,6 +168,9 @@
           },
           ClickAction(actionName){
               this.$emit(actionName);
+          },
+          qInputTemplateAction(payload){
+            this.$emit("qInputTemplateAction", payload);
           },
           handleAddEditableTable(payload) {
             this.$emit(payload.handleAddName, payload);

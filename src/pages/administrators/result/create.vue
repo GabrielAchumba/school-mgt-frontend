@@ -29,6 +29,7 @@ import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { post } from "../../../store/modules/services";
 import { loadUsersByCategory } from "../user/utils"
+import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
     components:{
@@ -37,37 +38,8 @@ export default {
     },
     data(){
         return {
-            form: {
-                title: "Create Result",
-                qSelects: [
-                    { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
-                    { label: "Subject", value: "", type: "text", list: [], actionName: "subject", visible: true },
-                    { label: "Student", value: "", type: "text", list: [], actionName: "student", visible: true },
-                    { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
-                    { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
-                    { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor", visible: true },
-                ],
-                qInputs: [
-                    { label: "Score", name: "", type: "text"},
-                    { label: "Maximum Score", name: "", type: "text"}
-                ],
-                qBtns: [
-                    {label: "Cancel", name: "Cancel"},
-                    {label: "Create", name: "Create"},
-                ],
-                qDates: [
-                     {label: "Created At", name: "2019/02/01"},
-                ],
-                GroupedCheckBoxes: [],
-            },
-            dialogs:[
-                { title: "Create Result", isVisible: false, message: "Do you want to create a Result",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Result created successfully!",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Failure", isVisible: false, message: "",
-                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+            form: form,
+            dialogs: dialogs,
         }
     },
     methods:{

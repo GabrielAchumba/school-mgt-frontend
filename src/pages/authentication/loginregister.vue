@@ -13,9 +13,9 @@
           
         >
           <q-tab @click="changeTab('login')"
-          name="login" label="Login" />
+          name="login" label="Sign In" />
           <q-tab @click="changeTab('register')"
-          name="personalData" label="Register" />
+          name="register" label="Register" />
         </q-tabs>
 
         <!-- <q-separator /> -->
@@ -40,19 +40,19 @@
 import login from 'pages/authentication/login.vue'
 import register from 'pages/authentication/register.vue' 
 export default {
-    computed: {
-          tab(){
-              return this.$store.getters['authenticationStore/tab'];
-          }
-    },
-    components: {
-            login,
-            register
-    },
+  components: {
+          login,
+          register
+  },
+  data(){
+    return {
+      tab: "login",
+    }
+  },
   methods: {
     changeTab(tabname){
       console.log(tabname)
-      this.$store.commit('authenticationStore/commitTab', tabname)
+      this.$store.commit('authenticationStore/changeTab', tabname)
     }
   }
 }

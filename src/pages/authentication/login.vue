@@ -1,152 +1,55 @@
 <template>
-  <q-layout>
-    <q-page-container>
-      <q-page class="flex flex-center bg-primary text-accent">
-        <q-card
-           class="login-form"
-          v-bind:style="
-          $q.platform.is.mobile ? { width: '90%', height: '95%' } : { width: '90%' , height: '95%' }
-          "
-        >
+    <div class="q-pa-md">
+        <Form
+        v-if="isForgotPassword"
+        :formData="forgotPasswordForm"
+        @SendOTP="SendOTP($event)"
+        @CancelForgotPassword="CancelForgotPassword($event)"/>
 
-          <q-card-section>
-            <div class="row no-wrap items-center">
-              <div class="col text-h6 ellipsis">
-                {{ title }}
-              </div>
-            </div>
-          </q-card-section>
+        <Form
+        v-else-if="isVerifyOTP"
+        :formData="verifyOTPForm"
+        @VerifyOTP="VerifyOTP($event)"
+        @CancelVerifyOTP="CancelVerifyOTP($event)"/>
 
-          <q-card-section 
-          v-if="isForgotPasswordComponent">
-            <ForgotPassword 
-            forgotPasswordEvent="forgotPasswordEvent"
-            forgotPasswordEvent2="forgotPasswordEvent2"
-            @forgotPasswordEvent="forgotPasswordEvent($event)"
-            @forgotPasswordEvent2="forgotPasswordEvent2($event)"/>
-          </q-card-section>
+        <Form
+        v-else-if="isResetPassword"
+        :formData="resetPasswordForm"
+        @ResetPassword="ResetPassword($event)"
+        @CancelResetPassword="CancelResetPassword($event)"
+        @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
 
-           <q-card-section
-          v-else-if="isResetPassword">
-            <ResetPassword
-            ResetPasswordEvent="ResetPasswordEvent"
-            ResetPasswordEvent2="ResetPasswordEvent2"
-            @ResetPasswordEvent="ResetPasswordEvent($event)"
-            @ResetPasswordEvent2="ResetPasswordEvent2($event)"/>
-          </q-card-section>
+        <Form
+        v-else
+        :formData="loginForm"
+        @SignIn="SignIn($event)"
+        @ForgotPassword="ForgotPassword($event)"
+        @qInputTemplateAction="LoginQInputTemplateAction($event)"/>
 
-          <q-card-section v-else>
-            <q-form class="q-gutter-md">
-              <q-input outlined v-model="username" label="Username" lazy-rules />
-
-              <q-input
-                :type="passwordType"
-                outlined
-                v-model="password"
-                label="Password"
-                lazy-rules
-              >
-              	<template 
-                v-if="isVisible"
-                v-slot:append>
-                <q-icon name="visibility" 
-                class="bg-primary text-accent"
-                @click="togglePasswordVisibility" />
-              </template>
-              	<template 
-                v-else
-                v-slot:append>
-                <q-icon name="visibility_off" 
-                class="bg-primary text-accent"
-                 @click="togglePasswordVisibility" />
-              </template>
-              </q-input>
-
-               <div class="row">
-                  <div class="col-3 text-left">
-                    <q-btn
-                      label="Forgot Password"
-                      type="button"
-                      size="sm"
-                      no-caps
-                      class="bg-accent text-primary"
-                      @click="forgotPasswordAction"
-                    />
-                  </div>
-                  <div class="col-6"></div>
-                  <div class="col-3 text-right">
-                    <q-btn
-                      label="Login"
-                      type="button"
-                      size="sm"
-                      no-caps
-                      class="bg-accent text-primary"
-                      @click="loginAction"
-                    />
-                  </div>
-              </div>
-            </q-form>
-          </q-card-section>
-        </q-card>
-      </q-page>
-    </q-page-container>
-
-<q-dialog v-model="isLoginActionMessage">
-  <MessageBox
-  title="Log In"
-  message="Do you want to log in?"
-  okayEvent="login"
-  cancelEvent="cancelLogin"
-  @cancelLogin="cancelLogin($event)"
-  @login="login($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isLoginSuccessMessage">
-  <MessageBox
-  title="Log Success"
-  message="You have successfully logged in!"
-  okayEvent="logInSuccessOkay"
-  cancelEvent="logInSuccessCancel"
-  @logInSuccessCancel="logInSuccessCancel($event)"
-  @logInSuccessOkay="logInSuccessOkay($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isLoginFailureMessage">
-  <MessageBox
-  title="Login Error"
-  :message="`${message}. Please check your login credentials.`"
-  okayEvent="logInFailureOkay"
-  cancelEvent="logInFailureCancel"
-  @logInFailureCancel="logInFailureCancel($event)"
-  @logInFailureOkay="logInFailureOkay($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isForgotPassword">
-  <MessageBox
-  title="Log In"
-  message="Did you forget your password?"
-  okayEvent="forgotPassword"
-  cancelEvent="cancelForgotPassword"
-  @forgotPassword="forgotPassword($event)"
-  @cancelForgotPassword="cancelForgotPassword($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-   </q-layout>
+        <q-dialog 
+            v-for="dialog in dialogs" 
+            :key="dialog.title"
+            v-model="dialog.isVisible">
+            <MessageBox
+            :title="dialog.title"
+            :message="dialog.message"
+            :okayEvent="dialog.okayEvent"
+            :cancelEvent="dialog.cancelEvent"
+            @cancelDialog="cancelDialog($event)"
+            @okDialog="okDialog($event)"
+            >
+            </MessageBox>
+        </q-dialog>
+    </div>
 </template>
 
 <script>
-  import MessageBox from "../../components/dialogs/MessageBox.vue"
-  import ForgotPassword from "./ForgotPassword.vue"
-  import ResetPassword from "./ResetPassword.vue"
-  import { post } from "../../store/modules/services"
+  import MessageBox from "../../components/dialogs/MessageBox.vue";
+  import Form from "../../components/Forms/Form.vue";
+  import { post } from "../../store/modules/services";
+  import { loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm, dialogs }
+  from "./view_models/login-view-model";
+
     export default {
        computed: {
         visible(){
@@ -158,50 +61,157 @@
       },
       components:{
         MessageBox,
-        ForgotPassword,
-        ResetPassword,
+        Form,
       },
         data () {
           return {
-            passwordType: "password",
-            isVisible: false,
-            username: "",
-            password: "",
-            isLoginActionMessage: false,
-            isLoginSuccessMessage: false,
-            isLoginFailureMessage: false,
-            message: '',
+            isForgotPassword: false,
+            isVerifyOTP: false,
+            isResetPassword: false,
+            loginForm: loginForm,
+            forgotPasswordForm: forgotPasswordForm,
+            verifyOTPForm: verifyOTPForm,
+            resetPasswordForm: resetPasswordForm,
+            dialogs: dialogs,
             token: "",
             user: {},
-            isForgotPassword: false,
-            isResetPassword: false,
-            isForgotPasswordComponent: false,
-            title: "Log In"
             }
         },
         methods: {
-          togglePasswordVisibility(){
+          LoginQInputTemplateAction(payload){
             var context = this;
-            if(context.isVisible) {
-              context.isVisible=false
-              context.passwordType = "password";
-            }else {
-              context.isVisible= true;
-              context.passwordType = "text";
+            const sn = payload.sn
+            if(context.loginForm.qInputs[sn].Template.iconName === "visibility_off"){
+              context.loginForm.qInputs[sn].Template.iconName = "visibility";
+              context.loginForm.qInputs[sn].type = "text";
+            }else{
+              context.loginForm.qInputs[sn].Template.iconName = "visibility_off";
+              context.loginForm.qInputs[sn].type = "password";
             }
           },
-          loginAction(){
+          ResetPasswordQInputTemplateAction(payload){
+            console.log(payload)
             var context = this;
-            context.isLoginActionMessage = true;
+            const sn = payload.sn
+            if(context.resetPasswordForm.qInputs[sn].Template.iconName === "visibility_off"){
+              context.resetPasswordForm.qInputs[sn].Template.iconName = "visibility";
+              context.resetPasswordForm.qInputs[sn].type = "text";
+            }else{
+              context.resetPasswordForm.qInputs[sn].Template.iconName = "visibility_off";
+              context.resetPasswordForm.qInputs[sn].type = "password";
+            }
           },
-          async login(){
+          CancelForgotPassword(){
+            var context = this;
+            context.isForgotPassword = false;
+            context.isResetPassword = false;
+            context.isVerifyOTP = false;
+          },
+          CancelVerifyOTP(){
+            var context = this;
+            context.isForgotPassword = true;
+            context.isResetPassword = false;
+            context.isVerifyOTP = false
+          },
+          CancelResetPassword(){
+            var context = this;
+            context.isForgotPassword = false;
+            context.isResetPassword = false;
+            context.isVerifyOTP = true
+          },
+          SendOTP(){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Send OTP"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
+          },
+          SignIn(){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Sign In"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
+        },
+        ForgotPassword(){
+            var context = this;
+            context.isForgotPassword = true;
+            context.isResetPassword = false;
+        },
+        generateSendAndSaveOTP(){
+          // if OTP generation is successfully then
+          var context = this;
+
+          context.dialogFailureOrScuess("Send OTP", false);
+          const success = true;
+          if(success){
+            context.dialogFailureOrScuess("Send OTP Success", true);
+          }else{
+            context.dialogFailureOrScuess("Verify OTP Failure", true)
+          }
+        },
+        VerifyOTP(){
+          // if verify OTP is successfully then
+          var context = this;
+
+          context.dialogFailureOrScuess("Verify OTP", false);
+          const success = true;
+          if(success){
+            context.dialogFailureOrScuess("Verify OTP Success", true);
+          }else{
+            context.dialogFailureOrScuess("Send OTP Failure", true)
+          }
+        },
+        ResetPassword(){
+          // if reset password is successfully then
+          var context = this;
+
+          context.dialogFailureOrScuess("Reset Password", false);
+          const success = true;
+          if(success){
+            context.dialogFailureOrScuess("Reset Password Success", true);
+          }else{
+            context.dialogFailureOrScuess("Reset Password Failure", true)
+          }
+        },
+        dialogFailureOrScuess(dialogTitle, isVisible){
+          const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == dialogTitle){
+                    context.dialogs[i].isVisible = isVisible;
+                    break;
+                }
+            }
+        },
+        cancelDialog(payload){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title === payload){
+                    context.dialogs[i].isVisible = false;
+                    break;
+                }
+            }
+        },
+        async login(){
             var context = this;
 
             var response = await post({
              url: "user/login",
              req: {
-               username: context.username,
-               password: context.password
+               username: context.loginForm.qInputs[0].name,
+               password: context.loginForm.qInputs[1].name
              },
             });
 
@@ -214,8 +224,7 @@
               } = response
 
             
-            context.message = message;
-            context.isLoginActionMessage = false;
+            context.dialogFailureOrScuess("Sign In", false);
             if(success){
               context.token = result.token;
               context.user = result.user;
@@ -223,34 +232,23 @@
                 token: context.token,
                 user: context.user,
               })
-              context.isLoginSuccessMessage = true;
+              context.dialogFailureOrScuess("Sign In Success", true);
             }else{
-              context.isLoginFailureMessage = true;
+              context.dialogFailureOrScuess( "Sign In Failure", true);
             }
-          },
-          cancelLogin(){
-            var context = this;
-            context.isLoginActionMessage = false;
-          },
-          logInFailureOkay(){
-            var context = this;
-            context.isLoginFailureMessage = false;
-          },
-          logInFailureCancel(){
-            var context = this;
-            context.isLoginFailureMessage = false;
-          },
-          logInSuccessOkay(){
+        },
+        logInSuccessOkay(){
             
             var context = this;
-            context.isLoginSuccessMessage = false;
-
            if (context.user.designationId === "CEO"){
              this.$router.push('/admin');
            }else{
               switch(context.user.userType.toLowerCase()){
                 case "admin":
                 this.$router.push('/admin');
+                break;
+                case "referal":
+                this.$router.push('/referal');
                 break;
               case "member":
                 this.$router.push('/member');
@@ -262,56 +260,45 @@
            }
            
           },
-          logInSuccessCancel(){
-            var context = this;
-            context.isLoginSuccessMessage = false;
-          },
-          forgotPasswordEvent(){
-            var context = this
-            context.isForgotPassword = false
-            context.isForgotPasswordComponent = false;
-            context.isResetPassword = true
-          },
-          forgotPasswordEvent2(){
-            var context = this
-            context.isForgotPassword = false
-            context.isForgotPasswordComponent = false;
-            context.isResetPassword = false
-            context.title = "Log In"
-          },
-          ResetPasswordEvent2(){
-            var context = this
-            context.isForgotPassword = false
-            context.isForgotPasswordComponent = false;
-            context.isResetPassword = false
-            context.title = "Log In"
-          },
-          ResetPasswordEvent(){
-            var context = this
-            context.isForgotPassword = false
-            context.isForgotPasswordComponent = false;
-            context.isResetPassword = false
-          },
-          forgotPasswordAction(){
-            var context = this;
-            context.isForgotPassword = true;
-            context.title = "Log In"
-          },
-          forgotPassword(){
-            var context = this;
-            context.isForgotPasswordComponent = true;
-            context.title = "Forgot Password"
-            context.isForgotPassword = false
-            context.isResetPassword = false
-          },
-          cancelForgotPassword(){
-            var context = this;
-            context.isForgotPasswordComponent = false;
-            context.isForgotPassword = false
-            context.isResetPassword = false
-            context.title = "Log In"
-          }
-
+        async okDialog(payload){
+            console.log("payload: ", payload)
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title === payload){
+                    switch(payload){
+                        case "Sign In":
+                            await context.login();
+                            break;
+                        case "Sign In Success":
+                            context.logInSuccessOkay();
+                            break;
+                        case "Send OTP":
+                            context.generateSendAndSaveOTP();
+                        case "Send OTP Success":
+                          context.isForgotPassword = false;
+                          context.isVerifyOTP = true
+                          context.isResetPassword = false;
+                          break;
+                        case "Verify OTP Success":
+                          context.isForgotPassword = false;
+                          context.isVerifyOTP = false
+                          context.isResetPassword = true;
+                          break;
+                        case "Reset Password":
+                            context.generateSendAndSaveOTP();
+                        case "Reset Password Success":
+                          context.isForgotPassword = false;
+                          context.isVerifyOTP = false
+                          context.isResetPassword = false;
+                          break;
+                    }
+                    context.dialogs[i].isVisible = false;
+                    break;
+                }
+            }
+        },
         }
     }
 </script>

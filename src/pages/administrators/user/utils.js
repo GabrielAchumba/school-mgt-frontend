@@ -46,3 +46,26 @@ export const loadUsersByCategory = async (category, schoolId) => {
         return { result: [], message }
     }
 }
+
+export const loadReferals = async () => {
+
+    var url = `user/referals`;
+    var response = await get({
+    url
+    })
+
+    const { 
+        data : {
+            data: result,
+            success,
+            message,
+        }
+    } = response
+
+
+    if(success){
+        return { result, message: "" }
+    }else{
+        return { result: [], message }
+    }
+}
