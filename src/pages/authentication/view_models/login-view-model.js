@@ -26,6 +26,17 @@ const loginForm = {
 
 const forgotPasswordForm = {
     title: "Forgot User Password",
+    qSelects: [
+            { label: "Country *", value: "", type: "text", 
+            list: [
+            {
+                    value: 0,
+                    label: "Nigeria",
+                    type: "Nigeria",
+                    code: "+234",
+                },
+            ], actionName: "countryAction", visible: true },
+    ],
     qInputs: [
         { label: "User Name *", name: "", type: "text", 
         Template: {
@@ -36,7 +47,7 @@ const forgotPasswordForm = {
         { label: "Phone Number *", name: "", type: "phoneNumber",
         Template: {
             sn: 1,
-            iconName: "",
+            iconName: "phone",
             visible: false,
         }},
         

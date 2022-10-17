@@ -5,22 +5,25 @@
         :formData="forgotPasswordForm"
         @SendOTP="SendOTP($event)"
         @CancelForgotPassword="CancelForgotPassword($event)"/>
+        <div 
+        v-show="isForgotPassword"
+        id="recaptcha-container"></div><br>
 
         <Form
-        v-else-if="isVerifyOTP"
+        v-if="isVerifyOTP"
         :formData="verifyOTPForm"
         @VerifyOTP="VerifyOTP($event)"
         @CancelVerifyOTP="CancelVerifyOTP($event)"/>
 
         <Form
-        v-else-if="isResetPassword"
+        v-if="isResetPassword"
         :formData="resetPasswordForm"
         @ResetPassword="ResetPassword($event)"
         @CancelResetPassword="CancelResetPassword($event)"
         @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
 
         <Form
-        v-else
+        v-if="isLoginForm"
         :formData="loginForm"
         @SignIn="SignIn($event)"
         @ForgotPassword="ForgotPassword($event)"
@@ -49,6 +52,24 @@
   import { post } from "../../store/modules/services";
   import { loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm, dialogs }
   from "./view_models/login-view-model";
+  import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
+import { initializeApp } from "firebase/app";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB9VzN87QcRpEbSegBYjZBTqigdJLkiBAc",
+  authDomain: "lemongatetech.firebaseapp.com",
+  databaseURL: "https://lemongatetech.firebaseio.com",
+  projectId: "lemongatetech",
+  storageBucket: "lemongatetech.appspot.com",
+  messagingSenderId: "391787476785",
+  appId: "1:391787476785:web:48fc551307c092ff8ae210"
+};
+
+const app = initializeApp(firebaseConfig)
+const auth = getAuth()
+
 
     export default {
        computed: {
@@ -68,6 +89,7 @@
             isForgotPassword: false,
             isVerifyOTP: false,
             isResetPassword: false,
+            isLoginForm: true,
             loginForm: loginForm,
             forgotPasswordForm: forgotPasswordForm,
             verifyOTPForm: verifyOTPForm,
@@ -103,18 +125,21 @@
           },
           CancelForgotPassword(){
             var context = this;
+            context.isLoginForm = true;
             context.isForgotPassword = false;
             context.isResetPassword = false;
             context.isVerifyOTP = false;
           },
           CancelVerifyOTP(){
             var context = this;
+            context.isLoginForm = false;
             context.isForgotPassword = true;
             context.isResetPassword = false;
             context.isVerifyOTP = false
           },
           CancelResetPassword(){
             var context = this;
+            context.isLoginForm = false;
             context.isForgotPassword = false;
             context.isResetPassword = false;
             context.isVerifyOTP = true
@@ -145,42 +170,48 @@
             var context = this;
             context.isForgotPassword = true;
             context.isResetPassword = false;
-        },
-        generateSendAndSaveOTP(){
-          // if OTP generation is successfully then
-          var context = this;
-
-          context.dialogFailureOrScuess("Send OTP", false);
-          const success = true;
-          if(success){
-            context.dialogFailureOrScuess("Send OTP Success", true);
-          }else{
-            context.dialogFailureOrScuess("Verify OTP Failure", true)
-          }
-        },
-        VerifyOTP(){
-          // if verify OTP is successfully then
-          var context = this;
-
-          context.dialogFailureOrScuess("Verify OTP", false);
-          const success = true;
-          if(success){
-            context.dialogFailureOrScuess("Verify OTP Success", true);
-          }else{
-            context.dialogFailureOrScuess("Send OTP Failure", true)
-          }
+            context.isLoginForm = false;
+            context.isVerifyOTP = false
         },
         ResetPassword(){
-          // if reset password is successfully then
-          var context = this;
 
-          context.dialogFailureOrScuess("Reset Password", false);
-          const success = true;
-          if(success){
-            context.dialogFailureOrScuess("Reset Password Success", true);
-          }else{
-            context.dialogFailureOrScuess("Reset Password Failure", true)
-          }
+          var context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Reset Password"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
+        },
+        async ChangePassword(){
+          var context = this;
+            
+            var url = `user/resetpassword`;
+            const payload = {
+                url,
+                req: {
+                    userName: context.forgotPasswordForm.qInputs[0].name,
+                    password: context.resetPasswordForm.qInputs[0].name,
+                    passwordConfirm: context.resetPasswordForm.qInputs[1].name,
+                }
+            }
+
+            console.log("payload: ", payload)
+            var response = await post(payload)
+
+            const { 
+                data : {
+                    success,
+                }
+            } = response
+
+            if(success){
+              context.dialogFailureOrScuess("Reset Password Success", true);
+            }else{
+              context.dialogFailureOrScuess("Reset Password Failure", true)
+            }
         },
         dialogFailureOrScuess(dialogTitle, isVisible){
           const context = this;
@@ -237,6 +268,44 @@
               context.dialogFailureOrScuess( "Sign In Failure", true);
             }
         },
+
+         async userIsExist(){
+           console.log("userIsExist called")
+            var context = this;
+            
+            var url = `user/user-is-exist2`;
+            const payload = {
+                url,
+                req: {
+                    userName: context.forgotPasswordForm.qInputs[0].name,
+                    phoneNumber: context.forgotPasswordForm.qInputs[1].name,
+                    countryCode: context.forgotPasswordForm.qSelects[0].value.code,
+                }
+            }
+
+            console.log("payload: ", payload)
+            var response = await post(payload)
+
+            const { 
+                data : {
+                    data: userExists,
+                    message,
+                    success,
+                }
+            } = response
+
+            if(!success){
+                alert("Failed")
+            }
+
+            console.log("context.userExists: ", userExists);
+            if(userExists){
+              context.SendVerificationCode();
+            }else{
+              alert("user does not exist")
+            }
+
+        },
         logInSuccessOkay(){
             
             var context = this;
@@ -275,23 +344,21 @@
                             context.logInSuccessOkay();
                             break;
                         case "Send OTP":
-                            context.generateSendAndSaveOTP();
-                        case "Send OTP Success":
-                          context.isForgotPassword = false;
-                          context.isVerifyOTP = true
-                          context.isResetPassword = false;
+                          await context.userIsExist();
                           break;
                         case "Verify OTP Success":
                           context.isForgotPassword = false;
                           context.isVerifyOTP = false
                           context.isResetPassword = true;
+                          context.isLoginForm = false;
                           break;
                         case "Reset Password":
-                            context.generateSendAndSaveOTP();
+                            context.ChangePassword();
                         case "Reset Password Success":
                           context.isForgotPassword = false;
                           context.isVerifyOTP = false
                           context.isResetPassword = false;
+                          context.isLoginForm = true;
                           break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -299,7 +366,104 @@
                 }
             }
         },
-        }
+        SendVerificationCode(){
+          var context = this;
+          const qInput = context.forgotPasswordForm.qInputs[1];
+          const qSelect = context.forgotPasswordForm.qSelects[0];
+          if(qInput.name.length < 10){
+                alert("Phone number can not be less than 10 digits")
+                return;
+            }
+
+            let phone = qInput.name;
+            if(qInput.name > 10){
+                const diff = qInput.name.length - 10;
+                phone = qInput.name.slice(diff);
+            }
+            
+            console.log("phone: ", phone);
+            console.log("Template: ", qInput.Template);
+            if(qInput.Template.iconName === "phone"){
+               console.log("code: ", qSelect.value.code);
+                context.sendOtp(phone,
+                qSelect.value.code);
+            }
+        },
+        sendOtp(phNo, countryCode){
+          console.log("sendOtp called")
+          var context = this;
+          let phoneNumber = countryCode + phNo;
+          console.log("phoneNumber: ", phoneNumber);
+          let appVerifier = context.appVerifier
+          console.log("appVerifier: ", appVerifier);
+           signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+            .then(function (confirmationResult) {
+              // SMS sent. Prompt user to type the code from the message, then sign the
+              // user in with confirmationResult.confirm(code).
+
+              //alert('SMS sent')
+              context.isForgotPassword = false;
+              context.isVerifyOTP = true
+              context.isResetPassword = false;
+              context.isLoginForm = false;
+              window.confirmationResult = confirmationResult;
+              console.log("seen")
+
+              //
+            }).catch(function (error) {
+            // Error; SMS not sent
+            // ...
+            alert('Error ! SMS not sent')
+          });
+        //}
+      },
+      async VerifyOTP(){
+        /* if(this.phNo.length != 10 || this.otp.length != 6){
+          alert('Invalid Phone Number/OTP Format !');
+        }else{ */
+          //
+          var context = this
+          let code = context.verifyOTPForm.qInputs[0].name;
+          console.log("verification code: ", code);
+          //
+          window.confirmationResult.confirm(code).then(function (result) {
+            // User signed in successfully.
+            var user = result.user;
+            console.log("user: ", user);
+            context.isForgotPassword = false;
+            context.isVerifyOTP = false;
+            context.isResetPassword = true;
+            context.isLoginForm = false;
+          }).catch(function (error) {
+              console.log("User couldn't sign in (bad verification code?)")
+          });
+        //}
+      },
+      initReCaptcha(){
+        setTimeout(()=>{
+          let context = this
+          window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+            size: 'normal',
+            callback: function(response) {
+                console.log("response: ", response);
+              // reCAPTCHA solved, allow signInWithPhoneNumber.
+                //context.sendOtp(); 
+              // ...
+            },
+            /* 'expired-callback': function() {
+              // Response expired. Ask user to solve reCAPTCHA again.
+              // ...
+            } */
+          }, auth);
+          //
+          context.appVerifier =  window.recaptchaVerifier
+        },1000)
+      }
+      },
+      created(){
+       var context = this;
+       context.initReCaptcha();
+    }
     }
 </script>
 

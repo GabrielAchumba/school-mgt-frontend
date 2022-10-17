@@ -12,10 +12,13 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@firebase/auth": "^0.20.10",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "bootstrap-vue": "^2.22.0",
     "bootstrap-vue-editable-table": "^0.1.7",
+    "firebase": "^9.12.1",
+    "firebase-admin": "^11.1.0",
     "paystack": "^2.0.1",
     "plotly.js-dist": "^2.15.0",
     "quasar": "^1.0.0",

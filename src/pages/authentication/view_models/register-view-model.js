@@ -1,5 +1,5 @@
 
-const form = {
+const registrationForm = {
     title: "Create User",
     qSelects: [
             { label: "User Type *", value: "", type: "text", 
@@ -16,15 +16,6 @@ const form = {
                 }], actionName: "userTypeAction", visible: true },
             { label: "School Name *", value: "", type: "text", 
             list: [], actionName: "schoolNameAction", visible: true },
-            { label: "Country *", value: "", type: "text", 
-            list: [
-            {
-                    value: 1,
-                    label: "Nigeria",
-                    type: "Nigeria",
-                    code: "+234",
-                },
-            ], actionName: "countryAction", visible: true },
     ],
     qInputs: [
         { label: "First Name *", name: "", type: "text", 
@@ -45,34 +36,90 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Password *", name: "", type: "text",
+        { label: "Password *", name: "", type: "password",
         Template: {
             sn: 3,
-            iconName: "",
-            visible: false,
-        }},
-        { label: "PhoneNumber *", name: "", type: "text",
-        Template: {
-            sn: 4,
-            iconName: "",
+            iconName: "visibility_off",
             visible: true,
         }},
     ],
     qBtns: [
-        {label: "Cancel", name: "Cancel"},
-        {label: "Create", name: "Create"},
+        {label: "Cancel", name: "CancelCreateUser"},
+        {label: "Next", name: "Next"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
 }
 
+const phoneNumberForm = {
+    title: "Send Code SMS",
+    qSelects: [
+            { label: "Country *", value: "", type: "text", 
+            list: [
+            {
+                    value: 0,
+                    label: "Nigeria",
+                    type: "Nigeria",
+                    code: "+234",
+                },
+            ], actionName: "countryAction", visible: true },
+    ],
+    qInputs: [
+        { label: "Phone Number *", name: "", type: "text",
+        Template: {
+            sn: 0,
+            iconName: "send",
+            visible: true,
+        }},
+    ],
+    qBtns: [
+        {label: "Cancel", name: "CancelSendCodeSMS"},
+    ],
+    qDates: [],
+    GroupedCheckBoxes: [],
+
+}
+
+const otpForm = {
+    title: "Verify Code",
+    qInputs: [
+        { label: "Enter SMS Code *", name: "", type: "text", 
+        Template: {
+            sn: 0,
+            iconName: "",
+            visible: false,
+        }},
+    ],
+    qBtns: [
+        {label: "Cancel", name: "CancelSubmit"},
+        {label: "Submit", name: "Submit"},
+    ],
+    qDates: [],
+    GroupedCheckBoxes: [],
+
+}
+
 const dialogs = [
     { title: "Create User", isVisible: false, message: "Do you want to create a user",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Success", isVisible: false, message: "User created successfully!",
+    { title: "Create User Success", isVisible: false, message: "User created successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Failure", isVisible: false, message: "",
+    { title: "Create User Failure", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+
+    { title: "Send Code", isVisible: false, message: "A verification code will be sent to this phone number",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Send Code Success", isVisible: false, message: "Verification code sent successfully. Please click OK and enter the code",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Send Code Failure", isVisible: false, message: "Invalid phone number",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+
+    { title: "Verify Code", isVisible: false, message: "Verify code and complete registration",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Verify Code Success", isVisible: false, message: "User registered successfully",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Verify Code Failure", isVisible: false, message: "Registration failed. Verify your credentials",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
 ]
 
-export { form, dialogs }
+export { registrationForm, phoneNumberForm, otpForm, dialogs }

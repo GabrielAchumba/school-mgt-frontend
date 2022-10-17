@@ -40,6 +40,11 @@
 import login from 'pages/authentication/login.vue'
 import register from 'pages/authentication/register.vue' 
 export default {
+  computed:{
+    /* tab(){
+      return this.$store.getters["authenticationStore/tab"];
+    } */
+  },
   components: {
           login,
           register
