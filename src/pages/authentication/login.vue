@@ -307,8 +307,8 @@ const auth = getAuth()
 
         },
         logInSuccessOkay(){
-            
             var context = this;
+            console.log(context.user)
            if (context.user.designationId === "CEO"){
              this.$router.push('/admin');
            }else{

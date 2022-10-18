@@ -4,7 +4,8 @@
     :table_VM="tableVM"
     :isResponsive="isResponsive"
     @createResult="createResult($event)"
-    @updateResult="updateResult($event)"/>
+    @updateResult="updateResult($event)"
+    @deleteResult="deleteResult($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -57,11 +58,23 @@
                 createItemUrl: "/create-result",
                 updateItemUrl: "/update-result",
                 },
-            dialogs:[],
+            dialogs:[
+                { title: "Delete Result", isVisible: false, message: "Do you want to delete result",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Success", isVisible: false, message: "Result deleted successfully!",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Failure", isVisible: false, message: "",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+            ],
             cardList: [],
             }
         },
         methods: {
+            deleteResult(selectedResult){
+             var context = this;
+             context.selectedResult = selectedResult;
+             context.dialogs[0].isVisible = true;
+            },
           okayEvent(){
             var context = this;
             context.isFetchTableDialog = false
@@ -102,11 +115,44 @@
                         case "Success":
                             await context.loadResult()
                             break;
+                        case "Delete Success":
+                            this.$router.push("/results");
+                            break;
+                        case "Delete Result":
+                            await context.delete();
+                            break;
                     }
                     context.dialogs[i].isVisible = false;
                     break;
                 }
             }
+        },
+        async delete(){
+            var context = this;
+            
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            var url = `result/${context.selectedResult.id}/${user.schoolId}`;
+            const payload = {
+                url,
+            }
+
+            console.log("payload: ", payload)
+            var response = await remove(payload)
+
+            const { 
+                data : {
+                    message,
+                    success,
+                }
+            } = response
+            context.dialogs[0].isVisible = true;
+            if(success){
+                context.dialogs[1].isVisible = true;
+            }else{
+                context.dialogs[2].message = message;
+                context.dialogs[2].isVisible = true;
+            }
+
         },
         async loadResult(){
             var context = this;

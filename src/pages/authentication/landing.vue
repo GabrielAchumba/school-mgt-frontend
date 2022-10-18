@@ -20,7 +20,7 @@
           transition-next="slide-left"
           height="639px"
         >
-          <q-carousel-slide class="q-pa-none" :name="1" img-src="/statics/images/ImageJune19.png">
+          <q-carousel-slide class="q-pa-none" :name="1" img-src="/statics/images/staffs.jpg">
 <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
             <div class="custom-caption">
               <div class="text-h2 main_line animation_2" style="font-size:40px;">WELCOME TO <span :style="'color:'+theme_color">TORPA</span></div><br><br><br>
@@ -31,7 +31,7 @@
             </div>
 </div>
           </q-carousel-slide>
-          <q-carousel-slide class="q-pa-none" :name="2" img-src="/statics/images/money2.png">
+          <q-carousel-slide class="q-pa-none" :name="2" img-src="/statics/images/subjects.jpg">
 <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
             <div class="custom-caption">
     	      <div class="text-h2 main_line animation_2" style="font-size:40px;"><span :style="'color:'+theme_color">TORPA</span> FOR EXCELLENCE</div><br><br><br>
@@ -39,7 +39,7 @@
             </div>
 </div>
           </q-carousel-slide>
-          <q-carousel-slide class="q-pa-none" :name="3" img-src="/statics/images/money3.png">
+          <q-carousel-slide class="q-pa-none" :name="3" img-src="/statics/images/students.jpg">
 <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
             <div class="custom-caption">
     	      <div class="text-h2 main_line animation_2" style="font-size:40px;">PATH TO EXCELLENCE <span :style="'color:'+theme_color">WITH TORPA</span></div><br><br><br>
@@ -47,7 +47,7 @@
             </div>
 </div>
           </q-carousel-slide>
-                    <q-carousel-slide class="q-pa-none" :name="4" img-src="/statics/images/ImageJune19.png">
+                    <q-carousel-slide class="q-pa-none" :name="4" img-src="/statics/images/assessment.jpg">
 <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
             <div class="custom-caption">
               <div class="text-h2 main_line animation_2" style="font-size:40px;">SKILLS AND SOCIAL <span :style="'color:'+theme_color">RESPONSIBILITY BY TORPA</span></div><br><br><br>
@@ -56,7 +56,7 @@
 </div>
           </q-carousel-slide>
 
-           <q-carousel-slide class="q-pa-none" :name="5" img-src="/statics/images/ImageJune19.png">
+           <q-carousel-slide class="q-pa-none" :name="5" img-src="/statics/images/results.jpg">
 <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
             <div class="custom-caption">
               <div class="text-h2 main_line animation_2" style="font-size:40px;">WE LOVE YOU <span :style="'color:'+theme_color">FROM ALL OF US IN TORPA</span></div><br><br><br>

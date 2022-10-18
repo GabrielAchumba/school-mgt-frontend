@@ -37,7 +37,7 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Country Code *", name: "", type: "text",
+        /* { label: "Country Code *", name: "", type: "text",
         Template: {
             sn: 3,
             iconName: "",
@@ -54,7 +54,7 @@ const form = {
             sn: 5,
             iconName: "",
             visible: false,
-        }},
+        }}, */
     ],
     qBtns: [
         {label: "Cancel", name: "Cancel"},

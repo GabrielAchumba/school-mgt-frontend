@@ -77,10 +77,10 @@
                         name="edit"
                         @click="updateItem(props.row)"
                         size="20px"/>
-                       <!--  <q-icon 
+                        <q-icon 
                         name="delete" 
                         @click="deleteItem(props.row)"
-                        size="20px" /> -->
+                        size="20px" />
                     </div>
                 </q-td>
 

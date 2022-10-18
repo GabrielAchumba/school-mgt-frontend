@@ -87,8 +87,8 @@ export default {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
                     userName: context.form.qInputs[2].name,
-                    countryCode: context.form.qInputs[3].name,
-                    phoneNumber: context.form.qInputs[4].name,
+                    /* countryCode: context.form.qInputs[3].name,
+                    phoneNumber: context.form.qInputs[4].name, */
                     //email: context.form.qInputs[5].name,
                     designationId: context.form.qSelects[2].value,
                     userType: context.form.qSelects[0].value.label,
@@ -192,7 +192,6 @@ export default {
                              type: "Admin",
                          }]
        }else{
-           
            context.form.qSelects[1].visible = false;
            context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
                 return {

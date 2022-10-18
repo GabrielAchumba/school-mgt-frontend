@@ -86,8 +86,8 @@ export default {
                     lastName: context.form.qInputs[1].name,
                     userName: context.form.qInputs[2].name,
                     password: context.form.qInputs[3].name,
-                    countryCode: context.form.qInputs[4].name,
-                    phoneNumber: context.form.qInputs[5].name,
+                    /* countryCode: context.form.qInputs[4].name,
+                    phoneNumber: context.form.qInputs[5].name, */
                     //email: context.form.qInputs[6].name,
                     designationId: context.form.qSelects[2].value,
                     userType: context.form.qSelects[0].value.label,

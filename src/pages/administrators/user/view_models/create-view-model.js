@@ -43,7 +43,7 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Country Code *", name: "", type: "text",
+        /* { label: "Country Code *", name: "", type: "text",
         Template: {
             sn: 4,
             iconName: "",
@@ -54,7 +54,7 @@ const form = {
             sn: 5,
             iconName: "",
             visible: false,
-        }},
+        }}, */
         /* { label: "Email", name: "", type: "text"}, */
     ],
     qBtns: [

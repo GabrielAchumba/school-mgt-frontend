@@ -102,7 +102,8 @@
         async delete(){
             var context = this;
             
-            var url = `user/${context.selectedUser.id}`;
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            var url = `user/${context.selectedUser.id}/${user.schoolId}`;
             const payload = {
                 url,
             }

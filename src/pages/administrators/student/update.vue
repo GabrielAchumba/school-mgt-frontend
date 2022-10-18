@@ -128,8 +128,8 @@ export default {
         var context =  this;
         context.selectedStudent = this.$store.getters["studentStore/selectedStudent"];
         console.log("selectedStudent: ", context.selectedStudent)
-        context.form.qInputs[0].firstName = context.selectedStudent.firstName;
-        context.form.qInputs[1].lastName = context.selectedStudent.lastName;
+        context.form.qInputs[0].name = context.selectedStudent.firstName;
+        context.form.qInputs[1].name = context.selectedStudent.lastName;
         context.form.qSelects[0].value =  context.selectedStudent.subscriptionType;
         var birthDay = context.selectedStudent.birthDay > 9 ? toString(context.selectedStudent.birthDay) : `0${context.selectedStudent.birthDay}`;
         var birthMonth = context.selectedStudent.birthMonth > 9 ? toString(context.selectedStudent.birthMonth) : `0${context.selectedStudent.birthMonth}`;

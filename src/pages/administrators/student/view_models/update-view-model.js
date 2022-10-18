@@ -20,8 +20,18 @@ const form = {
          visible: true },
     ],
     qInputs: [
-        { label: "First Name", name: "", type: "text"},
-        { label: "Last Name", name: "", type: "text"},
+        { label: "First Name", name: "", type: "text",
+        Template: {
+            sn: 0,
+            iconName: "",
+            visible: false,
+        }},
+        { label: "Last Name", name: "", type: "text",
+        Template: {
+            sn: 1,
+            iconName: "",
+            visible: false,
+        }},
     ],
     qBtns: [
         {label: "Cancel", name: "Cancel"},

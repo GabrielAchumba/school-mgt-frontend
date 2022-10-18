@@ -36,9 +36,10 @@
     return {
             tableVM: {
                 selectedAssessment: {},
-                title: "Students",
+                title: "Assessments",
                 columns: [
                     { name: "type", label: "Type of Assessment", field: "", align: "left" },
+                    { name: "percentage", label: "Percentage", field: "", align: "left" },
                     { name: "actions", label: "Actions", field: "", align: "left" },
                 ],
                 rows: [],
@@ -98,7 +99,8 @@
         async delete(){
             var context = this;
             
-            var url = `assessment/${context.selectedAssessment.id}`;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            var url = `assessment/${context.selectedAssessment.id}/${user.schoolId}`;
             const payload = {
                 url,
             }

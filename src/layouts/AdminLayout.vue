@@ -12,6 +12,7 @@
           /> -->
          <img src='/statics/newway.jpg' width=100 height=40>
         <q-space ></q-space>
+        <p class="q-pa-none"> {{ schoolName }} </p>
       <q-tabs shrink>
 
         <q-btn
@@ -146,6 +147,7 @@ export default {
   },
   data () {
     return {
+      schoolName: "",
       leftDrawerOpen: true,
       showAccountDetails: false,
       rightMenuIcon: "menu",
@@ -289,8 +291,18 @@ export default {
 
       const schools = await loadSchools();
       this.$store.commit('schoolStore/SetSchools', schools.result);
+      console.log(schools)
 
        var user = this.$store.getters["authenticationStore/IdentityModel"]
+       console.log(user)
+        for(const school of schools.result){
+          if(school.id === user.schoolId){
+            context.schoolName =  school.schoolName;
+            console.log("context.schoolName: ", context.schoolName)
+            break;
+          }
+        }
+
        if(user.userType == "Admin" && user.designationId !== "CEO"){
           const classRooms = await loadClassRooms(user.schoolId);
           this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
