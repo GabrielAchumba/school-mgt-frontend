@@ -130,12 +130,12 @@ export default {
             console.log("Template: ", context.phoneNumberForm.qInputs[sn].Template);
             if(context.phoneNumberForm.qInputs[sn].Template.iconName === "send"){
                console.log("code: ", context.phoneNumberForm.qSelects[0].value.code);
-                /* context.sendOtp(phone,
-                context.phoneNumberForm.qSelects[0].value.code); */
+                context.sendOtp(phone,
+                context.phoneNumberForm.qSelects[0].value.code);
                 // For offline mode - to be removed
-                context.registrationFormVisible = false;
+              /*   context.registrationFormVisible = false;
                 context.phoneNumberFormVisible = false;
-                context.otpFormVisible = true;
+                context.otpFormVisible = true; */
             }
         },
         async Next(){
@@ -279,9 +279,9 @@ export default {
                             await context.userIsExist();
                             break;
                         case "Verify Code":
-                            //await context.verifyOtp();
+                            await context.verifyOtp();
                             // offline mode -- to be removed
-                            await context.save();
+                            //await context.save();
                             break;
                         case "Verify Code Success":
                             context.registrationFormVisible = false;
@@ -317,9 +317,10 @@ export default {
           console.log("appVerifier: ", appVerifier);
           //
            signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-            .then(function (confirmationResult) {
+            .then((confirmationResult) => {
               // SMS sent. Prompt user to type the code from the message, then sign the
               // user in with confirmationResult.confirm(code).
+              console.log("confirmationResult: ", confirmationResult);
               context.registrationFormVisible = false;
               context.phoneNumberFormVisible = false;
               context.otpFormVisible = true;

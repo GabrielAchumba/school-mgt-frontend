@@ -2,9 +2,7 @@
   <div>
     <Table
     :table_VM="tableVM"
-    @createSchool="createSchool($event)"
-    @updateSchool="updateSchool($event)"
-    @deleteSchool="deleteSchool($event)"/>
+    @createSchool="createSchool($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 

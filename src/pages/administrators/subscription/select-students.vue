@@ -44,6 +44,7 @@
                     @click="ClickAction(qBtn.name)"
                 />
            </div>
+           <makepayment/>
     </div>
 </div>
 
@@ -51,8 +52,12 @@
 
 <script>
 import { loadStudents } from '../student/utils';
+import makepayment from "./make-payment.vue";
 
 export default {
+    components: {
+        makepayment,
+    },
     data(){
         return {
             nStudents: 0,
