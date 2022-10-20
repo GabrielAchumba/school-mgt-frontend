@@ -17,6 +17,7 @@ const state = {
     showSimulatedReturnData: true,
     tab: "login",
     isMobile: false,
+    createURL: "",
   }
 
   const getters = {
@@ -67,6 +68,9 @@ const state = {
   },
   isMobile(state){
     return state.isMobile;
+  },
+  createURL(state){
+    return state.createURL;
   }
 }
 
@@ -126,6 +130,9 @@ const mutations = {
   },
   setIsMobile(state, payload){
     state.isMobile = payload;
+  },
+  setCreateURL(state, payload){
+    state.createURL = payload;
   }
 
 }

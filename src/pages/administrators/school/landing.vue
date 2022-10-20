@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    class="bg-accent"
     :table_VM="tableVM"
     @createSchool="createSchool($event)"/>
 
@@ -36,9 +37,9 @@
                 selectedSchool: {},
                 title: "Schools",
                 columns: [
+                    { name: "actions", label: "Actions", field: "", align: "left" },
                     { name: "schoolName", label: "School", field: "", align: "left" },
                     { name: "address", label: "Address", field: "", align: "left" },
-                    { name: "actions", label: "Actions", field: "", align: "left" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -167,6 +168,7 @@
         async created() {
             var context = this;
             await context.loadSchools()
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
       }
     }
 </script>

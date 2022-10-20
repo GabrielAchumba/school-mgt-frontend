@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    class="bg-accent"
     :table_VM="tableVM"
     @createUser="createUser($event)"
     @updateUser="updateUser($event)"
@@ -42,6 +43,7 @@
                     { name: "actions", label: "Actions", field: "", align: "left" },
                     { name: "firstName", label: "First Name", field: "", align: "left" },
                     { name: "lastName", label: "Last Name", field: "", align: "left" },
+                    { name: "userType", label: "User Type", field: "", align: "left" },
                     { name: "designation", label: "Designation", field: "", align: "left" },
                 ],
                 rows: [],
@@ -151,6 +153,7 @@
             const { result, message } = await loadUsers(user.schoolId);
             this.$store.commit('userStore/SetUsers', result)
             context.tableVM.rows = result;
+            console.log("result: ", result)
 
             if(result.length === 0){
                 context.isFetchTableDialog = true;
@@ -162,6 +165,7 @@
         async created() {
             var context = this;
             await context._loadUser()
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
       }
     }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md bg-accent">
         <Form
         :formData="form"
         @Create="Create($event)"
@@ -120,6 +120,8 @@ export default {
     },
     async created(){
         var context = this;
+        context.form.clearQInputs();
+        context.form.clearQSelects();
         const { result } = await loadReferals()
         console.log("referals: ", result)
         context.form.qSelects[0].list = result.map((row) => {

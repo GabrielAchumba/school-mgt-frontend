@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    class="bg-accent"
     :table_VM="tableVM"
     :isResponsive="isResponsive"
     @createResult="createResult($event)"
@@ -205,6 +206,7 @@
         async created() {
             var context = this;
             await context.loadResult()
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
       }
     }
 </script>

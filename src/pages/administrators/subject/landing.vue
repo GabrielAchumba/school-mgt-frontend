@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    class="bg-accent"
     :table_VM="tableVM"
     @createSubject="createSubject($event)"
     @updateSubject="updateSubject($event)"
@@ -158,6 +159,7 @@
         async created() {
             var context = this;
             await context._loadSubjectf()
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
       }
     }
 </script>

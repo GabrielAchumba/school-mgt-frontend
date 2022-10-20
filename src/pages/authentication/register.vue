@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md bg-accent">
         <Form
         v-if="registrationFormVisible"
         :formData="registrationForm"
@@ -155,7 +155,7 @@ export default {
             }
         },
         CancelCreateUser(){
-            this.$store.commit('authenticationStore/changeTab', "login");
+            this.$router.push("/login_register")
         },
         CancelSendCodeSMS(){
             var context = this;
@@ -287,7 +287,7 @@ export default {
                             context.registrationFormVisible = false;
                             context.phoneNumberFormVisible = false;
                             context.otpFormVisible = false;
-                            this.$router.push('/')
+                            this.$router.push('/login_register')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -382,6 +382,11 @@ export default {
     },
     created(){
        var context = this;
+       context.registrationForm.clearQInputs();
+       context.registrationForm.clearQSelects();
+       context.phoneNumberForm.clearQInputs();
+       context.phoneNumberForm.clearQInputs();
+       context.otpForm.clearQInputs();
        context.registrationForm.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
            return {
                ...row,

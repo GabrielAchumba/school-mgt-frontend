@@ -1,33 +1,34 @@
 <template>
     <div class="q-pa-md">
-        <Form
-        v-if="isForgotPassword"
-        :formData="forgotPasswordForm"
-        @SendOTP="SendOTP($event)"
-        @CancelForgotPassword="CancelForgotPassword($event)"/>
-        <div 
-        v-show="isForgotPassword"
-        id="recaptcha-container"></div><br>
+          <Form
+          v-if="isForgotPassword"
+          :formData="forgotPasswordForm"
+          @SendOTP="SendOTP($event)"
+          @CancelForgotPassword="CancelForgotPassword($event)"/>
+          <div 
+          v-show="isForgotPassword"
+          id="recaptcha-container"></div><br>
 
-        <Form
-        v-if="isVerifyOTP"
-        :formData="verifyOTPForm"
-        @VerifyOTP="VerifyOTP($event)"
-        @CancelVerifyOTP="CancelVerifyOTP($event)"/>
+          <Form
+          v-if="isVerifyOTP"
+          :formData="verifyOTPForm"
+          @VerifyOTP="VerifyOTP($event)"
+          @CancelVerifyOTP="CancelVerifyOTP($event)"/>
 
-        <Form
-        v-if="isResetPassword"
-        :formData="resetPasswordForm"
-        @ResetPassword="ResetPassword($event)"
-        @CancelResetPassword="CancelResetPassword($event)"
-        @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
+          <Form
+          v-if="isResetPassword"
+          :formData="resetPasswordForm"
+          @ResetPassword="ResetPassword($event)"
+          @CancelResetPassword="CancelResetPassword($event)"
+          @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
 
-        <Form
-        v-if="isLoginForm"
-        :formData="loginForm"
-        @SignIn="SignIn($event)"
-        @ForgotPassword="ForgotPassword($event)"
-        @qInputTemplateAction="LoginQInputTemplateAction($event)"/>
+          <Form
+          v-if="isLoginForm"
+          :formData="loginForm"
+          @SignIn="SignIn($event)"
+          @ForgotPassword="ForgotPassword($event)"
+          @SignUp="SignUp($event)"
+          @qInputTemplateAction="LoginQInputTemplateAction($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -84,7 +85,7 @@ const auth = getAuth()
         MessageBox,
         Form,
       },
-        data () {
+      data () {
           return {
             isForgotPassword: false,
             isVerifyOTP: false,
@@ -100,6 +101,9 @@ const auth = getAuth()
             }
         },
         methods: {
+          SignUp(){
+            this.$router.push("/register");
+          },
           LoginQInputTemplateAction(payload){
             var context = this;
             const sn = payload.sn
@@ -462,6 +466,12 @@ const auth = getAuth()
       },
       created(){
        var context = this;
+       //loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm
+       context.loginForm.clearQInputs();
+       context.forgotPasswordForm.clearQInputs();
+       context.forgotPasswordForm.clearQSelects();
+       context.verifyOTPForm.clearQInputs();
+       context.resetPasswordForm.clearQInputs();
        context.initReCaptcha();
     }
     }

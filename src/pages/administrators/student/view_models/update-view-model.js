@@ -1,7 +1,7 @@
 const form = {
     title: "Update Student",
     qSelects: [
-        { label: "Type of SubscriptionType *", value: "", type: "text", 
+        { label: "Type of Subscription *", value: "", type: "text", 
          list: [{
              value: 1,
              type: "90 Days",

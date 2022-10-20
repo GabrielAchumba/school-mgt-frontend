@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md bg-accent">
         <Form
         :formData="form"
         @Update="Update($event)"
@@ -73,24 +73,16 @@ export default {
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `user/${context.selectedUser.id}`;
-            var schoolId = context.form.qSelects[1].value;
-            if(Object.keys(user).length <= 0){
-                schoolId = "CEO";
-            }
-            else if(user.userType == "Admin" && user.designationId !== "CEO"){
-                schoolId = user.schoolId;
-            }
+            var schoolId = context.selectedUser.schoolId;
 
+            const userType = context.form.qSelects[0].value.label;
             const payload = {
                 url,
                 req: {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
                     userName: context.form.qInputs[2].name,
-                    /* countryCode: context.form.qInputs[3].name,
-                    phoneNumber: context.form.qInputs[4].name, */
-                    //email: context.form.qInputs[5].name,
-                    designationId: context.form.qSelects[2].value,
+                    designationId: userType === "Parent/Gaurdian" ? "Parent" : context.form.qSelects[2].value,
                     userType: context.form.qSelects[0].value.label,
                     schoolId,
                 }
@@ -148,67 +140,29 @@ export default {
         context.form.qInputs[0].name = context.selectedUser.firstName;
         context.form.qInputs[1].name = context.selectedUser.lastName;
         context.form.qInputs[2].name = context.selectedUser.userName;
-        context.form.qInputs[3].name = context.selectedUser.countryCode;
-        context.form.qInputs[4].name = context.selectedUser.phoneNumber;
-        context.form.qInputs[5].name = context.selectedUser.email;
 
-        context.form.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
-           return {
-               ...row,
-               type: row.schoolName
-           }
-       })
+       
 
       var user = this.$store.getters["authenticationStore/IdentityModel"]
-      if(Object.keys(user).length <= 0){
-           context.form.qSelects[0].list = [
-                {
-                    value: 1,
-                    label: "Member",
-                    type: "Member",
-                },
-                {
-                    value: 2,
-                    label: "School Admin",
-                    type: "Admin",
-                },
-                {
-                    value: 3,
-                    label: "Referal",
-                    type: "Referal",
-                }]
-       }
-       else if(user.userType == "Admin" && user.designationId == "CEO"){
-           context.form.qSelects[1].value = context.selectedUser.schoolId;
-           context.form.qSelects[0].list = [
-                         {
-                             value: 1,
-                             label: "Member",
-                             type: "Member",
-                         },
-                         {
-                             value: 2,
-                             label: "Admin",
-                             type: "Admin",
-                         }]
-       }else{
-           context.form.qSelects[1].visible = false;
-           context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
-                return {
-                    ...row,
-                    type: row.type
-                }
-            }) 
-            context.form.qSelects[2].value = context.selectedUser.designationId;
+      context.form.qSelects[0].list = [
+        {
+            value: 1,
+            label: "Member",
+            type: "Member",
+        },
+        {
+            value: 2,
+            label: "Parent/Gaurdian",
+            type: "Parent",
+        }]
 
-           context.form.qSelects[0].list = [
-            {
-                value: 1,
-                label: "Member",
-                type: "Member",
-            }]
-            context.form.qSelects[0].value = 1;
-       }
+    context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
+        return {
+            ...row,
+            type: row.type
+        }
+    }) 
+
     }
 }
 </script>

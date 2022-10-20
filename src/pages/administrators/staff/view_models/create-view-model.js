@@ -15,6 +15,12 @@ const form = {
     ],
     qDates: [],
     GroupedCheckBoxes: [],
+    clearQInputs(){
+        var i = 0;
+        for (i = 0; i < this.qInputs.length; i++){
+            this.qInputs[i].name = "";
+        }
+    }
 }
 
 const dialogs = [

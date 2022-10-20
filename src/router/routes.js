@@ -15,6 +15,11 @@ const routes = [
         
       },
       { 
+        path: '/register', 
+        component: () => import('pages/authentication/register-user.vue') 
+        
+      },
+      { 
         path: '/school-landing', 
         component: () => import('pages/administrators/school/landing.vue') 
         

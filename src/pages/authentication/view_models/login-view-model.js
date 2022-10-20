@@ -19,9 +19,16 @@ const loginForm = {
     qBtns: [
         {label: "Forgot Password", name: "ForgotPassword"},
         {label: "Sign In", name: "SignIn"},
+        {label: "Sign Up", name: "SignUp"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
+    clearQInputs(){
+        var i = 0;
+        for (i = 0; i < this.qInputs.length; i++){
+            this.qInputs[i].name = "";
+        }
+    },
 }
 
 const forgotPasswordForm = {
@@ -58,6 +65,19 @@ const forgotPasswordForm = {
     ],
     qDates: [],
     GroupedCheckBoxes: [],
+    clearQInputs(){
+        var i = 0;
+        for (i = 0; i < this.qInputs.length; i++){
+            this.qInputs[i].name = "";
+        }
+    },
+    clearQSelects(){
+        var i = 0;
+        for (i = 0; i < this.qSelects.length; i++){
+            this.qSelects[i].value = "";
+            this.qSelects[i].visible = true;
+        }
+    },
 }
 
 const verifyOTPForm = {
@@ -77,6 +97,12 @@ const verifyOTPForm = {
     ],
     qDates: [],
     GroupedCheckBoxes: [],
+    clearQInputs(){
+        var i = 0;
+        for (i = 0; i < this.qInputs.length; i++){
+            this.qInputs[i].name = "";
+        }
+    },
 }
 
 const resetPasswordForm = {
@@ -102,6 +128,12 @@ const resetPasswordForm = {
     ],
     qDates: [],
     GroupedCheckBoxes: [],
+    clearQInputs(){
+        var i = 0;
+        for (i = 0; i < this.qInputs.length; i++){
+            this.qInputs[i].name = "";
+        }
+    },
 }
 
 const dialogs = [

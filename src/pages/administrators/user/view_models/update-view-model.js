@@ -14,7 +14,7 @@ const form = {
                  type: "Admin",
              }], actionName: "userTypeAction", visible: true },
          { label: "School Name *", value: "", type: "text", 
-         list: [], actionName: "schoolNameAction", visible: true },
+         list: [], actionName: "schoolNameAction", visible: false },
          { label: "Designation *", value: "", type: "text", 
          list: [], actionName: "designationAction", visible: true },
     ],

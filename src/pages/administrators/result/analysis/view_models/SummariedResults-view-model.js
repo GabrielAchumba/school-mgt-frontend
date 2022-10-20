@@ -1,18 +1,28 @@
 const form = { 
-    title: "Configure Result Report",
+    title: "Configure Result Analysis",
     qSelects: [
         { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
-        { label: "Student", value: "", type: "text", list: [], actionName: "student", visible: true },
+        { label: "Student", value: "", type: "text", list: [], actionName: "onStudentSelected", visible: true },
         { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
         { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
     ],
     qInputs: [],
     qBtns: [
+        {label: "Students", name: "showStudentsDialog"},
         {label: "Compute", name: "Compute"},
     ],
     qDates: [
          {label: "Start Date", name: "2019/02/01"},
          {label: "End Date", name: "2019/02/01"},
+    ],
+    GroupedCheckBoxes: [],
+}
+
+const subjectsForm = { 
+    title: "Subjects",
+    qInputs: [],
+    qBtns: [
+        {label: "Done", name: "closeStudentsDialog"},
     ],
     GroupedCheckBoxes: [
         { 
@@ -49,4 +59,13 @@ const tableVM = {
     separator: "cell",
 }
 
-export { form, chartForm, tableVM }
+const dialogs = [
+    { title: "Configure Result Analysis", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Subjects", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Configure Chart", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+]
+
+export { form, subjectsForm, chartForm, tableVM, dialogs }

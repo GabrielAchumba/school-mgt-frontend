@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    class="bg-accent"
     :table_VM="tableVM"
     @createAssessment="createAssessment($event)"
     @updateAssessment="updateAssessment($event)"
@@ -71,7 +72,6 @@
           },
          createAssessment(){
              var context = this;
-             console.log(context.tableVM.createItemUrl)
               this.$router.push(context.tableVM.createItemUrl);
           },
           updateAssessment(selectedAssessment){
@@ -171,6 +171,7 @@
         async created() {
             var context = this;
             await context.loadAssessmentf()
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
       }
     }
 </script>

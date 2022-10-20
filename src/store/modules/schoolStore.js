@@ -1,6 +1,7 @@
 const state = {
     schools: [],
-    selectedSchool: {}
+    selectedSchool: {},
+    userSchool: {},
 }
 
 const getters = {
@@ -9,6 +10,9 @@ const getters = {
     },
     selectedSchool(state){
         return state.selectedSchool;
+    },
+    userSchool(state){
+        return state.userSchool;
     }
 } 
 
@@ -18,6 +22,9 @@ const mutations = {
     },
     SetSelectedSchool(state, payload){
         state.selectedSchool = payload;
+    },
+    SetUserSchool(state, payload){
+        state.userSchool = payload;
     }
 }
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div class="q-pa-md bg-accent">
         <Form
         :formData="form"
         @Create="Create($event)"
@@ -122,6 +122,12 @@ export default {
                 }
             }
         }
+    },
+    created(){
+        var context = this;
+        context.form.clearQInputs();
+        context,form.clearQSelects();
+        context.form.clearQDates();
     }
 }
 </script>

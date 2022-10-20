@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary">
+  <div class="bg-accent">
        <CardList 
        :cardList="cardList"
        @showPage="showPage($event)"/>

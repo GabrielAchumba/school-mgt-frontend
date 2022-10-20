@@ -1,12 +1,6 @@
 <template>
-   <q-layout>
-    <q-page-container>
-      <q-page class="flex flex-center bg-primary">
-        <q-card
-          class="login-form bg-primary"
-          v-bind:style="{ width: '100%', height: '100%' }"
-        >
-          <q-card-section>
+   <div
+   class="full-height full-width text-primary">
     <q-carousel
           animated
           v-model="slide"
@@ -18,7 +12,7 @@
           control-color="white"
           transition-prev="slide-right"
           transition-next="slide-left"
-          height="639px"
+          class="full-height"
         >
           <q-carousel-slide class="q-pa-none" :name="1" img-src="/statics/images/staffs.jpg">
 <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
@@ -64,15 +58,12 @@
 </div>
           </q-carousel-slide>
         </q-carousel>
-          </q-card-section>
-        </q-card>
-      </q-page>
-    </q-page-container>
-   </q-layout>
+       </div>
 </template>
 
 <script>
 export default {
+  // v-bind:style="{ width: '100%', height: '100%' }"
   computed: {
         theme_color(){
           return this.$store.getters['authenticationStore/theme_color'];

@@ -16,13 +16,6 @@
         data () {
           return {
             cardList: [
-              {
-                name: "showPage",
-                title: "Users", 
-                description: "The employees of the schools",
-                image: "/statics/images/staffs.jpg",
-                to: "/user-landing"
-              },
             /*   {
                 name: "showPage",
                 title: "School", 
@@ -36,6 +29,13 @@
                 description: "The types of employees of the schools",
                 image: "/statics/images/staffs.jpg",
                 to: "/staff-landing"
+              },
+              {
+                name: "showPage",
+                title: "Users", 
+                description: "The employees of the schools",
+                image: "/statics/images/staffs.jpg",
+                to: "/user-landing"
               },
               {
                 name: "showPage",

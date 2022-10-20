@@ -1,60 +1,49 @@
 <template>
   <div class="bg-primary">
 
-      <div class="row text-center flex flex-center">
-          <div class="col-12" style="height:10px">     
-          </div>  
+   <!--  <div 
+    v-if="isHeader"
+    class="row bg-primary bg-accent text-primary q-pa-sm q-ma-sm">
+        <p class="text-subtitle2">{{ table_VM.title }}</p>
+        <q-space></q-space>
+        <Search/>
+         <q-space></q-space>
+        <q-btn 
+        label="Create"
+        class="bg-accent text-primary q-ma-sm" 
+        no-shadows
+        @click="createItem"
+        size=md no-caps />  
+    </div> -->
+
+    <div 
+      v-if="setIsResponsive()"
+      class="row bg-primary q-pa-sm">
+        <CardList 
+        :cardList="cardItems"
+        @updateItem="updateItem($event)"/>
     </div>
 
-    <div class="row text-center flex flex-center full-Width">
-      <q-card class="col-12 q-pa-md q-ma-none"> 
-              <q-card-section 
-              v-if="isHeader"
-              class="bg-accent text-primary">
-                <div class="row">
-                  <!-- <div class="col text-center"> -->
-                    <p class="text-subtitle2">{{ table_VM.title }}</p>
-                    <q-space></q-space>
-                    <q-btn 
-                    label="Create"
-                    class="bg-accent text-primary q-ma-sm" 
-                    no-shadows
-                    @click="createItem"
-                    size=md no-caps />
-                 <!--  </div> -->
-                   
-                </div>
-              </q-card-section>
+    <q-table 
+      v-else
+      :data="table_VM.rows"
+      :columns="table_VM.columns" 
+      row-key="name" 
+      binary-state-sort
+      :separator="table_VM.separator"
+      :filter="filter"
+      :loading="loading"
+      class="screenwide q-ma-sm"
+      >
 
-              <q-card-section>
-              <div 
-                v-if="setIsResponsive()"
-                class="bg-primary q-pa-sm">
-                  <CardList 
-                  :cardList="cardItems"
-                  @updateItem="updateItem($event)"/>
-              </div>
-
-                <q-table 
-                v-else
-                :data="table_VM.rows"
-                :columns="table_VM.columns" 
-                row-key="name" 
-                binary-state-sort
-                :separator="table_VM.separator"
-                :filter="filter"
-                :loading="loading"
-                class="screenwide"
-                >
-
-          <template v-slot:top>
+         <!--  <template v-slot:top>
               <q-space />
               <q-input outlined dense debounce="300" color="accent" v-model="filter">
                   <template v-slot:append>
                     <q-icon name="search" />
                   </template>
               </q-input>
-          </template>
+          </template> -->
           <template v-slot:header="props">
             <q-tr :props="props">
               <q-th
@@ -89,19 +78,15 @@
                 :props="props">{{ props.row[column.name] }}</q-td>
               </q-tr>
             </template>
-                </q-table>
-
-              </q-card-section>
-
-      </q-card>
-    </div>
+    </q-table>
 
   </div>
 </template>
 
 <script>
     import { tableVM } from "./TableVM.js";
-    import CardList from "../Cards/CardList2.vue"
+    import CardList from "../Cards/CardList2.vue";
+    import Search from "../Searches/Search.vue";
     export default {
         computed:{
           isMobile(){
@@ -113,6 +98,7 @@
         },
         components:{
           CardList,
+          Search,
         },
         props: {
             isResponsive:{
