@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md bg-accent">
+    <div class="q-pa-md">
         <Form
         v-if="registrationFormVisible"
         :formData="registrationForm"
@@ -254,7 +254,8 @@ export default {
             } = response
 
             if(!success){
-                alert("Failed")
+                alert(message)
+                return;
             }
 
             context.userExists = result;

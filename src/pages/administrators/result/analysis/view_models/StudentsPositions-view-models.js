@@ -1,5 +1,5 @@
 const form = { 
-    title: "Configure Result Report",
+    title: "Configure Result Analysis",
     qSelects: [
         { label: "Type of Instructor", value: "", 
         type: "text", list: [], actionName: "typeOfInstructor", visible: true },
@@ -8,30 +8,68 @@ const form = {
     ],
     qInputs: [],
     qBtns: [
-        {label: "Compute", name: "Compute"},
+        {label: "Instructors", name: "showTeachersDialog", icon: "escalator_warning"},
+        {label: "Students", name: "showStudentsDialog", icon: "groups"},
+        {label: "Subjects", name: "showSubjectsDialog", icon: "book"},
+        {label: "Compute", name: "Compute", icon: "calculate"},
     ],
     qDates: [
          {label: "Start Date", name: "2019/02/01"},
          {label: "End Date", name: "2019/02/01"},
     ],
+    GroupedCheckBoxes: [],
+}
+
+const subjectsForm = { 
+    title: "Subjects",
+    qSelects: [],
+    qInputs: [],
+    qBtns: [
+        {label: "Done", name: "closeSubjectsDialog", icon: "done"},
+    ],
+    qDates: [],
     GroupedCheckBoxes: [
         { 
             isGroupedCheckBox: true, 
-            isExpanded: false, 
+            isExpanded: true, 
             list:[], 
             group: [],
             label: "Subjects",
         },
+    ],
+}
+
+const studentsForm = { 
+    title: "Students",
+    qSelects: [],
+    qInputs: [],
+    qBtns: [
+        {label: "Done", name: "closeStudentsDialog", icon: "done"},
+    ],
+    qDates: [],
+    GroupedCheckBoxes: [
         { 
             isGroupedCheckBox: true, 
-            isExpanded: false, 
+            isExpanded: true, 
             list:[], 
             group: [],
             label: "Students",
         },
+    ],
+}
+
+const teachersForm = { 
+    title: "Instructors",
+    qSelects: [],
+    qInputs: [],
+    qBtns: [
+        {label: "Done", name: "closeTeachersDialog", icon: "done"},
+    ],
+    qDates: [],
+    GroupedCheckBoxes: [
         { 
             isGroupedCheckBox: true, 
-            isExpanded: false, 
+            isExpanded: true, 
             list:[], 
             group: [],
             label: "Teachers",
@@ -49,7 +87,7 @@ const chartForm = {
     ],
     qInputs: [],
     qBtns: [
-        {label: "Plot", name: "Plot"},
+        {label: "Plot", name: "Plot", icon: "done"},
     ],
     qDates: [],
     GroupedCheckBox: [],
@@ -63,4 +101,17 @@ const tableVM = {
     separator: "cell",
 }
 
-export { form, chartForm, tableVM }
+const dialogs = [
+    { title: "Configure Result Analysis", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Subjects", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Students", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Instructors", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Configure Chart", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+]
+
+export { form, subjectsForm, studentsForm, teachersForm, chartForm, tableVM, dialogs }

@@ -1,3 +1,4 @@
+import { countryCodes } from "./country-codes";
 
 const registrationForm = {
     title: "Create User",
@@ -44,8 +45,8 @@ const registrationForm = {
         }},
     ],
     qBtns: [
-        {label: "Cancel", name: "CancelCreateUser"},
-        {label: "Next", name: "Next"},
+        {label: "Cancel", name: "CancelCreateUser", icon: "close"},
+        {label: "Next", name: "Next", icon: "navigate_next"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -71,14 +72,7 @@ const phoneNumberForm = {
     title: "Send Code SMS",
     qSelects: [
             { label: "Country *", value: "", type: "text", 
-            list: [
-            {
-                    value: 0,
-                    label: "Nigeria",
-                    type: "Nigeria",
-                    code: "+234",
-                },
-            ], actionName: "countryAction", visible: true },
+            list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
         { label: "Phone Number *", name: "", type: "text",
@@ -89,7 +83,7 @@ const phoneNumberForm = {
         }},
     ],
     qBtns: [
-        {label: "Cancel", name: "CancelSendCodeSMS"},
+        {label: "Cancel", name: "CancelSendCodeSMS", icon: "close"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -120,8 +114,8 @@ const otpForm = {
         }},
     ],
     qBtns: [
-        {label: "Cancel", name: "CancelSubmit"},
-        {label: "Submit", name: "Submit"},
+        {label: "Cancel", name: "CancelSubmit", icon: "close"},
+        {label: "Submit", name: "Submit", icon: "save_alt"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

@@ -7,7 +7,7 @@
        @logoutUser="logoutUser($event)"/>
     </q-header>
 
-    <q-page-container style="height: 100vh; background-color: #056608;">
+    <q-page-container style="height: 100vh;">
 
       <router-view />
     </q-page-container>

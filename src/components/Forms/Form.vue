@@ -11,6 +11,17 @@
                 <q-card-section class="bg-primary text-accent">
                    <q-form class="q-pa-sm">
 
+                     <div
+                     class="q-pa-sm"
+                      v-for="qToggle in formData.qToggles" 
+                      :key="qToggle.label">
+                       <q-toggle
+                        v-if="qToggle.visible"
+                        :label="qToggle.label"
+                        v-model="qToggle.name"
+                      />
+                     </div>
+
                     <div
                       class="q-pa-sm"
                       v-for="qSelect in formData.qSelects" 
@@ -120,7 +131,15 @@
                  <q-card-actions align="right">
                    <div class="row q-pa-sm">
                       <q-space />
-                      <q-btn class="q-ma-sm bg-accent text-primary"
+                      <q-icon
+                        class="q-pa-md text-accent"
+                        v-for="qBtn in formData.qBtns" 
+                        :key="qBtn.label" 
+                        :name="qBtn.icon"
+                        @click="ClickAction(qBtn.name)"
+                        size="30px"/>
+
+                     <!--  <q-btn class="q-ma-sm bg-accent text-primary"
                         v-for="qBtn in formData.qBtns" 
                         :key="qBtn.label"
                         :label="qBtn.label"
@@ -128,7 +147,7 @@
                         size="md"
                         no-caps
                         @click="ClickAction(qBtn.name)"
-                      />
+                      /> -->
                   </div>
                 </q-card-actions>
 

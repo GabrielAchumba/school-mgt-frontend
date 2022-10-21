@@ -24,8 +24,8 @@ const form = {
         }}
     ],
     qBtns: [
-        {label: "Cancel", name: "Cancel"},
-        {label: "Create", name: "Create"},
+        {label: "Cancel", name: "Cancel", icon: "close"},
+        {label: "Create", name: "Create", icon: "add"},
     ],
     qDates: [
             {label: "Created At", name: "2019/02/01"},

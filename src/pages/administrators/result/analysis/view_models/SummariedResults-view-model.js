@@ -8,8 +8,8 @@ const form = {
     ],
     qInputs: [],
     qBtns: [
-        {label: "Students", name: "showStudentsDialog"},
-        {label: "Compute", name: "Compute"},
+        {label: "Students", name: "showStudentsDialog", icon: "groups"},
+        {label: "Compute", name: "Compute", icon: "calculate"},
     ],
     qDates: [
          {label: "Start Date", name: "2019/02/01"},
@@ -22,7 +22,7 @@ const subjectsForm = {
     title: "Subjects",
     qInputs: [],
     qBtns: [
-        {label: "Done", name: "closeStudentsDialog"},
+        {label: "Done", name: "closeStudentsDialog", icon: "done"},
     ],
     GroupedCheckBoxes: [
         { 
@@ -45,7 +45,7 @@ const chartForm = {
     ],
     qInputs: [],
     qBtns: [
-        {label: "Plot", name: "Plot"},
+        {label: "Plot", name: "Plot", icon: "done"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

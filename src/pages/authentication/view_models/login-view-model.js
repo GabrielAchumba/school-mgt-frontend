@@ -1,3 +1,4 @@
+import { countryCodes } from "./country-codes";
 
 const loginForm = {
     title: "Sign in User",
@@ -17,9 +18,9 @@ const loginForm = {
         
     ],
     qBtns: [
-        {label: "Forgot Password", name: "ForgotPassword"},
-        {label: "Sign In", name: "SignIn"},
-        {label: "Sign Up", name: "SignUp"},
+        {label: "Forgot Password", name: "ForgotPassword", icon: "lock_reset"},
+        {label: "Sign In", name: "SignIn", icon: "login"},
+        {label: "Sign Up", name: "SignUp", icon: "how_to_reg"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -35,14 +36,7 @@ const forgotPasswordForm = {
     title: "Forgot User Password",
     qSelects: [
             { label: "Country *", value: "", type: "text", 
-            list: [
-            {
-                    value: 0,
-                    label: "Nigeria",
-                    type: "Nigeria",
-                    code: "+234",
-                },
-            ], actionName: "countryAction", visible: true },
+            list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
         { label: "User Name *", name: "", type: "text", 
@@ -60,8 +54,8 @@ const forgotPasswordForm = {
         
     ],
     qBtns: [
-        {label: "Send OTP", name: "SendOTP"},
-        {label: "Cancel", name: "CancelForgotPassword"},
+        {label: "Send OTP", name: "SendOTP", icon: "send"},
+        {label: "Cancel", name: "CancelForgotPassword", icon: "close"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -92,8 +86,8 @@ const verifyOTPForm = {
         
     ],
     qBtns: [
-        {label: "Verify", name: "VerifyOTP"},
-        {label: "Cancel", name: "CancelVerifyOTP"},
+        {label: "Verify", name: "VerifyOTP", icon: "verify_user"},
+        {label: "Cancel", name: "CancelVerifyOTP", icon: "close"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -123,8 +117,8 @@ const resetPasswordForm = {
         
     ],
     qBtns: [
-        {label: "Reset Password", name: "ResetPassword"},
-        {label: "Cancel", name: "CancelResetPassword"},
+        {label: "Reset Password", name: "ResetPassword", icon: "lock_reset"},
+        {label: "Cancel", name: "CancelResetPassword", icon: "close"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

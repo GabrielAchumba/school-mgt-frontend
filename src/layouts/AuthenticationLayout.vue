@@ -1,11 +1,13 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-accent">
+  <q-layout view="hHh lpR fFf">
   
      <q-header 
-     class="q-pa-none bg-accent text-primary"  
-     style="border-bottom: 2px solid #FFFFFF"
-     height-hint="58">
+     class="q-pa-none bg-accent text-primary">
         <q-toolbar>
+          <q-btn 
+          v-if="this.$router.history.current.fullPath=='/school-landing'"
+          flat dense round icon="create" @click="create"/>
+          <q-space />
         <img src='/statics/newway.jpg' width=100 height=40>
          <q-space />
       <q-tabs v-model="selected_tab" shrink>
@@ -45,7 +47,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container style="height: 100vh; background-color: #056608;">
+    <q-page-container style="height: 100vh;">
       <router-view/>
     </q-page-container>
 
@@ -60,7 +62,7 @@ export default {
   computed: {
         theme_color(){
           return this.$store.getters['authenticationStore/theme_color'];
-        },
+        }
       },
   data () {
     return {
@@ -72,12 +74,16 @@ export default {
       selected_tab: 'home',
       menuList: [
         { name: "/", tabIndex: "home", label: "Home" },
-        { name: "login_register", tabIndex: "login_register", label: "Login/Register"},
-        { name: "school-landing", tabIndex: "schools", label: "School" },
+        { name: "login_register", tabIndex: "login_register", label: "Sign In"},
+        { name: "school-landing", tabIndex: "schools", label: "Schools" },
       ]
     }
   },
   methods:{
+    create(){
+            const routename = this.$store.getters["authenticationStore/createURL"];
+            this.$router.push(routename);
+    },
     onResize(e) {
       const width = window.innerWidth;
       var content = this;

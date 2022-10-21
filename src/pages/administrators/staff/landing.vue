@@ -1,7 +1,6 @@
 <template>
   <div>
     <Table
-    class="bg-accent"
     :table_VM="tableVM"
     @createStaff="createStaff($event)"
     @updateStaff="updateStaff($event)"

@@ -1,7 +1,6 @@
 <template>
   <div>
     <Table
-    class="bg-accent"
     :table_VM="tableVM"
     @createSchool="createSchool($event)"/>
 
@@ -169,6 +168,7 @@
             var context = this;
             await context.loadSchools()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
+            console.log(this.$router)
       }
     }
 </script>

@@ -5,27 +5,19 @@
                 <q-btn  
                     icon="edit"
                     flat
-                    class="text-capitalize">
-                     <q-menu fit>
-                            <Form
-                            style="width:400px;"
-                            :formData="form"
-                            @Compute="Compute($event)"
-                            @typeOfInstructor="typeOfInstructor($event)"/>
-                        </q-menu>
+                    class="text-capitalize"
+                    @click="ShowResultConfiDialog">
                 </q-btn>
+                <q-space></q-space>
+                <p class="q-pa-sm text-primary">{{ studentFullName }}</p>
                 <q-space></q-space>
                 <q-btn
                     v-if="isExpanded"  
                     flat
                     class="text-capitalize"
-                    icon="bar_chart">
-                     <q-menu fit>
-                         <Form
-                            :formData="chartForm"
-                            @Plot="Plot($event)"/>
-                     </q-menu>
-                        </q-btn>
+                    icon="bar_chart"
+                    @click="showChartConfigDialog">
+                </q-btn>
              </q-toolbar>
         </div>
 
@@ -40,9 +32,45 @@
             <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div>
         </div>
 
-       <!--  <div class="row" style="height:70vh;"> 
-            <div id="myDiv"  class="col-12 q-pa-sm"></div>
-        </div> -->
+       <q-dialog 
+            v-for="dialog in dialogs" 
+            :key="dialog.title"
+            v-model="dialog.isVisible">
+            <Form
+                v-if="isForm"
+                style="width:400px;"
+                :formData="form"
+                @Compute="Compute($event)"
+                @typeOfInstructor="typeOfInstructor($event)"
+                @onStudentSelected="onStudentSelected($event)"
+                @showTeachersDialog="showTeachersDialog($event)"
+                @showStudentsDialog="showStudentsDialog($event)"
+                @showSubjectsDialog="showSubjectsDialog($event)"/>
+
+            <Form
+                v-if="isTeachersForm"
+                style="width:400px;"
+                :formData="teachersForm"
+                @closeTeachersDialog="closeTeachersDialog($event)"/>
+
+            <Form
+                v-if="isStudentsForm"
+                style="width:400px;"
+                :formData="studentsForm"
+                @closeStudentsDialog="closeStudentsDialog($event)"/>
+
+            <Form
+                v-if="isSubjectsForm"
+                style="width:400px;"
+                :formData="subjectsForm"
+                @closeSubjectsDialog="closeSubjectsDialog($event)"/>
+
+            <Form
+                v-if="isChartForm"
+                :formData="chartForm"
+                @Plot="Plot($event)"/>
+        </q-dialog>
+
 
         
     </div>
@@ -58,7 +86,8 @@ import { createStudentsPositionReport } from "../utils";
 import Table from "../../../../components/Tables/Table.vue";
 import Chart from "../../../../components/Charts/Chart.vue";
 import Plotly from 'plotly.js-dist'
-import { form, chartForm, tableVM } from "./view_models/StudentsPositions-view-models";
+import { form, subjectsForm, studentsForm, teachersForm,
+ chartForm, tableVM, dialogs } from "./view_models/StudentsPositions-view-models";
 
 export default {
     components:{
@@ -69,6 +98,10 @@ export default {
     },
     data(){
         return {
+            isForm: true,
+            isSubjectsForm: false,
+            isStudentsForm: false,
+            isTeachersForm: false,
             isHeader: false,
             isResponsive: false,
             isExpanded: true,
@@ -77,10 +110,79 @@ export default {
             chartForm: chartForm,
             tableVM: tableVM,
             layout: {},
-            seriesCollection: []
+            seriesCollection: [],
+            dialogs: dialogs,
+            studentFullName: "",
+            subjectsForm: subjectsForm,
+            studentsForm: studentsForm,
+            teachersForm: teachersForm,
+            isChartForm: false,
         }
     },
     methods:{
+        showTeachersDialog(){
+            var context = this;
+            context.isForm = false;
+            context.isTeachersForm = true;
+            context.dialogFailureOrScuess("Instructors", true);
+            context.dialogFailureOrScuess("Configure Result Analysis", false);
+        },
+        showStudentsDialog(){
+            var context = this;
+            context.isForm = false;
+            context.isStudentsForm = true;
+            context.dialogFailureOrScuess("Students", true);
+            context.dialogFailureOrScuess("Configure Result Analysis", false);
+        },
+        showSubjectsDialog(){
+            var context = this;
+            context.isForm = false;
+            context.isSubjectsForm = true;
+            context.dialogFailureOrScuess("Subjects", true);
+            context.dialogFailureOrScuess("Configure Result Analysis", false);
+        },
+        showChartConfigDialog(){
+            var context = this;
+            context.isChartForm = true;
+            context.dialogFailureOrScuess("Configure Chart", true);
+        },
+        dialogFailureOrScuess(dialogTitle, isVisible){
+          const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == dialogTitle){
+                    context.dialogs[i].isVisible = isVisible;
+                    break;
+                }
+            }
+        },
+        closeTeachersDialog(){
+            var context = this;
+            context.isForm = true;
+            context.isTeachersForm = false;
+            context.dialogFailureOrScuess("Instructors", false);
+            context.dialogFailureOrScuess("Configure Result Analysis", true);
+        },
+        closeStudentsDialog(){
+            var context = this;
+            context.isForm = true;
+            context.isStudentsForm = false;
+            context.dialogFailureOrScuess("Students", false);
+            context.dialogFailureOrScuess("Configure Result Analysis", true);
+        },
+        closeSubjectsDialog(){
+            var context = this;
+            context.isForm = true;
+            context.isSubjectsForm = false;
+            context.dialogFailureOrScuess("Subjects", false);
+            context.dialogFailureOrScuess("Configure Result Analysis", true);
+        },
+        ShowResultConfiDialog(){
+            var context = this;
+            context.isForm = true;
+            context.dialogFailureOrScuess("Configure Result Analysis", true);
+        },
         async Compute(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
@@ -91,9 +193,9 @@ export default {
                 req: {
                     startDate: context.form.qDates[0].name,
                     endDate: context.form.qDates[1].name,
-                    subjectIds: context.form.GroupedCheckBoxes[0].group,
-                    teacherIds: context.form.GroupedCheckBoxes[2].group,
-                    studentIds: context.form.GroupedCheckBoxes[1].group,
+                    subjectIds: context.subjectsForm.GroupedCheckBoxes[0].group,
+                    teacherIds: context.teachersForm.GroupedCheckBoxes[0].group,
+                    studentIds: context.studentsForm.GroupedCheckBoxes[0].group,
                     classroomId: context.form.qSelects[1].value,
                     schoolId: user.schoolId,
                 }
@@ -117,6 +219,9 @@ export default {
                 context.isTable = true;
                 context.configurePlotData();
             }
+
+            context.isForm = false;
+            context.dialogFailureOrScuess("Configure Result Analysis", false)
         },
         configurePlotData(){
             var context = this;
@@ -147,7 +252,7 @@ export default {
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             const teachers = await loadUsersByCategory(payload.value, user.schoolId);
             this.$store.commit('userStore/SetTeachers', teachers.result);
-            context.form.GroupedCheckBoxes[2].list = teachers.result.map((row) => {
+            context.teachersForm.GroupedCheckBoxes[0].list = teachers.result.map((row) => {
                 return {
                     ...row,
                     label: `${row.firstName} ${row.lastName}`, 
@@ -166,11 +271,12 @@ export default {
             }
 
             context.form.qSelects[1].list = this.$store.getters["classRoomStore/classRooms"];
+            console.log("classRooms: ", context.form.qSelects[1].list)
             if(context.form.qSelects[1].list.length > 0){
                 context.form.qSelects[1].value = context.form.qSelects[1].list[0].id;
             }
 
-            context.form.GroupedCheckBoxes[0].list = this.$store.getters["subjectStore/subjects"].map((row) => {
+            context.subjectsForm.GroupedCheckBoxes[0].list = this.$store.getters["subjectStore/subjects"].map((row) => {
                 return {
                     ...row,
                     label: row.type, 
@@ -178,7 +284,7 @@ export default {
                 }
             })
 
-            context.form.GroupedCheckBoxes[1].list = this.$store.getters["studentStore/students"].map((row) => {
+            context.studentsForm.GroupedCheckBoxes[0].list = this.$store.getters["studentStore/students"].map((row) => {
                 return {
                     ...row,
                     label: `${row.firstName} ${row.lastName}`, 
@@ -191,6 +297,8 @@ export default {
             context.isTable = false;
             if(context.isTable === false){
                 context.RefreshPlot();
+                context.isChartForm = false;
+                context.dialogFailureOrScuess("Configure Chart", false)
             }
         },
         RefreshPlot(){
@@ -249,6 +357,7 @@ export default {
     async created(){
         var context = this;
         await context.loadConfigData();
+        await context.ShowResultConfiDialog();
         
     }
 }

@@ -1,6 +1,8 @@
 import axios from 'axios'
 //const axiosInstance = axios.create({ 
-  const processEnvNOEENV = "development";
+  const processEnvNOEENV = "production";
+
+  
     const $http  = axios.create({ 
       baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:3023/',
         headers: {'Content-Type': 'application/json'},

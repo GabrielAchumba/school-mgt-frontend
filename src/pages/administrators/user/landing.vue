@@ -1,7 +1,6 @@
 <template>
   <div>
     <Table
-    class="bg-accent"
     :table_VM="tableVM"
     @createUser="createUser($event)"
     @updateUser="updateUser($event)"

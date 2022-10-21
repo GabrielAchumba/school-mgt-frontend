@@ -1,12 +1,11 @@
 <template>
-  <div class="bg-accent">
+  <div>
 
-        <div class="row text-center bg-accent flex flex-center fit row wrap items-center content-center">
-          <div class="col-12 q-gutter-md justify-center flex flex-center">
-            
+        <div class="row bg-primary wrap">
+          <div class="col-12 q-mt-auto q-mb- flex flex-center"> 
             <div 
-            v-for="(card) in cardList" :key="card.title"
-            class="flex flex-center">
+            class="q-pa-sm"
+            v-for="(card) in cardList" :key="card.title">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
               @click="cardClickHandler(card)"
               style="border: none; width: 400px;" 

@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md bg-accent">
+    <div class="q-pa-md">
         <Form
         :formData="form"
         @Update="Update($event)"

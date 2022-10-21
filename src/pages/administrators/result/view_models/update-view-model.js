@@ -24,9 +24,9 @@ const form = {
         }}
     ],
     qBtns: [
-        {label: "Cancel", name: "Cancel"},
-        {label: "Delete", name: "deleteResult"},
-        {label: "Update", name: "Update"},
+        {label: "Cancel", name: "Cancel", icon: "close"},
+        {label: "Delete", name: "deleteResult", icon: "remove"},
+        {label: "Update", name: "Update", icon: "update"},
     ],
     qDates: [
         {label: "Updated At", name: "2019/02/01"},

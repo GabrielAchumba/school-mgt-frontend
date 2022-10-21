@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row" style="height: 95vh;">
     <div v-if="!isMobile"
           class="col-6">
           <TorpaLandingPage/>

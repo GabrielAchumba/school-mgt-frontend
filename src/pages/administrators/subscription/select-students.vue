@@ -53,6 +53,7 @@
 <script>
 import { loadStudents } from '../student/utils';
 import makepayment from "./make-payment.vue";
+import { selectStudentsForm } from "./view_models/select-students-view-model"
 
 export default {
     components: {
@@ -88,6 +89,7 @@ export default {
             totalAmountTitle: "",
             totalAmountDescription: "",
             selectedSubscriptionPlan: {},
+            selectStudentsForm: selectStudentsForm,
         }
     },
     methods: {
@@ -140,11 +142,6 @@ export default {
                 }
             })
 
-            context.GroupedCheckBox.list.unshift({
-                    value: 1,
-                    label: "All Students",
-            })
-
             context.selectedSubscriptionPlan = this.$store.getters["subscriptionStore/selectedSubscriptionPlan"]
             context.qSelect.value = context.selectedSubscriptionPlan.label
 
@@ -179,7 +176,7 @@ export default {
     async created(){
         var context = this;
         await context._loadSubjects();
-
+//https://meet.google.com/hrv-ikbt-uim
     }
 }
 </script>
