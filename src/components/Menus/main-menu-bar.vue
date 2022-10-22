@@ -4,9 +4,10 @@
         <q-btn flat dense round icon="create" @click="create"/>
 
         <q-space />
-        <p class="q-ma-sm"> {{ userSchool.schoolName.toUpperCase() }} </p>
+        <p class="q-ma-sm"> {{ userSchool.schoolName }} </p>
         <q-space />
         <q-btn dense flat round icon="search" @click="onSearch" />
+        <PDFWriter />
         <q-btn
             icon="menu"
             flat
@@ -108,7 +109,11 @@
 </template>
 
 <script>
+import PDFWriter from "./pdf-writer.vue";
 export default {
+    components:{
+      PDFWriter,
+    },
     computed:{
         userSchool(){
             return this.$store.getters['schoolStore/userSchool'];

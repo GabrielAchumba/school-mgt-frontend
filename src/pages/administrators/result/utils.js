@@ -10,8 +10,8 @@ const getColumns = (result) =>  {
 
     const columns = [];
     const subjectKeys = Object.keys(result);
-    columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left", scoreMax: 100 })
-    columns.push({ name: "totalScore", label: "TOTAL SCORE", field: "", align: "left", scoreMax: 100 })
+    columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left", scoreMax: 100, type: "text" })
+    columns.push({ name: "totalScore", label: "TOTAL SCORE", field: "", align: "left", scoreMax: 100, type: "number" })
 
     for(const subjectKey of subjectKeys){
         
@@ -25,7 +25,9 @@ const getColumns = (result) =>  {
                     label: assessmentKey.toUpperCase(), 
                     field: "", 
                     align: "left",
-                    scoreMax: result[subjectKey].assessments[assessmentKey].scoreMax })
+                    scoreMax: result[subjectKey].assessments[assessmentKey].scoreMax,
+                    type: "number" })
+                    
             }
         }
     }
@@ -70,9 +72,9 @@ const getColumnsStudentsPositions = (result) => {
     if(result.length <= 0) return columns
 
     columns.push({ name: "fullName", label: "FULL NAME", 
-    field: "", align: "left", scoreMax: result[0].overallScoreMax })
+    field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "text" })
     columns.push({ name: "overallScore", label: "OVERALL SCORE", 
-    field: "", align: "left", scoreMax: result[0].overallScoreMax })
+    field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "number" })
 
     for(const item of result){
 
@@ -86,11 +88,11 @@ const getColumnsStudentsPositions = (result) => {
                     label: subjectKey.toUpperCase(), 
                     field: "", 
                     align: "left",
-                    scoreMax: item.overallScoreMax })
+                    scoreMax: item.overallScoreMax,
+                    type: "number" })
             }
         }
     }
-
     return columns;
 }
 

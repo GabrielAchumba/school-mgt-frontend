@@ -22,6 +22,7 @@ const state = {
     globalSearchDialog: false,
     activeRows: [],
     newRows: [],
+    activeRoute: "",
   }
 
   const getters = {
@@ -87,6 +88,9 @@ const state = {
   },
   newRows(state){
     return state.newRows;
+  },
+  activeRoute(state){
+    return state.activeRoute;
   }
 }
 
@@ -162,8 +166,10 @@ const mutations = {
   },
   setNewRows(state, payload){
     state.newRows = payload;
+  },
+  setActiveRoute(state, payload){
+    state.activeRoute = payload;
   }
-
 }
 
 const actions = {

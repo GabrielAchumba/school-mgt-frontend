@@ -164,6 +164,7 @@
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setActiveRoute", "staff");
       }
     }
 </script>
