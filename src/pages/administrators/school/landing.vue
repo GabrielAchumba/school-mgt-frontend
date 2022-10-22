@@ -36,9 +36,9 @@
                 selectedSchool: {},
                 title: "Schools",
                 columns: [
-                    { name: "actions", label: "Actions", field: "", align: "left" },
-                    { name: "schoolName", label: "School", field: "", align: "left" },
-                    { name: "address", label: "Address", field: "", align: "left" },
+                    { name: "actions", label: "Actions", field: "", align: "left", type: "" },
+                    { name: "schoolName", label: "School", field: "", align: "left", type: "text" },
+                    { name: "address", label: "Address", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -167,8 +167,10 @@
         async created() {
             var context = this;
             await context.loadSchools()
-            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
-            console.log(this.$router)
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
+            this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
+            this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
       }
     }
 </script>

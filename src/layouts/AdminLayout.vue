@@ -11,6 +11,11 @@
 
       <router-view />
     </q-page-container>
+
+     <q-dialog v-model="globalSearchDialog">
+        <searchDialog/>
+    </q-dialog>
+
   </q-layout>
 </template>
 
@@ -23,6 +28,7 @@ import { loadSubjects } from "../pages/administrators/subject/utils";
 import { loadAssessments } from "../pages/administrators/assessment/utils";
 import { loadSchools } from "../pages/administrators/school/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
+import searchDialog from "../components/Searches/search-list.vue";
 
 export default {
   name: 'AdminLayout',
@@ -36,9 +42,13 @@ export default {
         theme_color(){
           return this.$store.getters['authenticationStore/theme_color'];
         },
+        globalSearchDialog() {
+            return this.$store.getters['authenticationStore/globalSearchDialog'];
+        },
       },
   components: {
     MainMenuBar,
+    searchDialog,
   },
   data () {
     return {

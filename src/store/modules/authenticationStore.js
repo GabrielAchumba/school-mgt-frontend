@@ -18,6 +18,10 @@ const state = {
     tab: "login",
     isMobile: false,
     createURL: "",
+    activeColumns: [],
+    globalSearchDialog: false,
+    activeRows: [],
+    newRows: [],
   }
 
   const getters = {
@@ -71,6 +75,18 @@ const state = {
   },
   createURL(state){
     return state.createURL;
+  },
+  activeColumns(state){
+    return state.activeColumns;
+  },
+  globalSearchDialog(state){
+    return state.globalSearchDialog;
+  },
+  activeRows(state){
+    return state.activeRows;
+  },
+  newRows(state){
+    return state.newRows;
   }
 }
 
@@ -133,6 +149,19 @@ const mutations = {
   },
   setCreateURL(state, payload){
     state.createURL = payload;
+  },
+  setActiveColumns(state, payload){
+    state.activeColumns = payload;
+  },
+  setGlobalSearchDialog(state, payload){
+    state.globalSearchDialog = payload;
+    console.log("state.globalSearchDialog: ", state.globalSearchDialog);
+  },
+  setActiveRows(state, payload){
+    state.activeRows = payload;
+  },
+  setNewRows(state, payload){
+    state.newRows = payload;
   }
 
 }

@@ -32,15 +32,15 @@
         Table,
         MessageBox
       },
-        data () {
+    data () {
     return {
             tableVM: {
                 selectedAssessment: {},
                 title: "Assessments",
                 columns: [
-                    { name: "type", label: "Type of Assessment", field: "", align: "left" },
-                    { name: "percentage", label: "Percentage", field: "", align: "left" },
-                    { name: "actions", label: "Actions", field: "", align: "left" },
+                    { name: "actions", label: "Actions", field: "", align: "left", type: "" },
+                    { name: "type", label: "Type of Assessment", field: "", align: "left", type: "text" },
+                    { name: "percentage", label: "Percentage", field: "", align: "left", type: "number" },    
                 ],
                 rows: [],
                 separator: "cell",
@@ -170,7 +170,10 @@
         async created() {
             var context = this;
             await context.loadAssessmentf()
-            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
+            this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
+            this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
       }
     }
 </script>

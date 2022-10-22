@@ -26,7 +26,7 @@
 
     <q-table 
       v-else
-      :data="table_VM.rows"
+      :data="rows"
       :columns="table_VM.columns" 
       row-key="name" 
       binary-state-sort
@@ -94,6 +94,9 @@
           },
           cardItems(){
             return this.$store.getters["componentsStore/cardItems"];
+          },
+          rows(){ 
+            return this.$store.getters["authenticationStore/newRows"];
           }
         },
         components:{

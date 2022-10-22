@@ -40,8 +40,8 @@
                 selectedClassRoom: {},
                 title: "Class Rooms",
                 columns: [
-                    { name: "type", label: "Type of Class Room", field: "", align: "left" },
-                    { name: "actions", label: "Actions", field: "", align: "left" },
+                    { name: "actions", label: "Actions", field: "", align: "left", type: "" },
+                    { name: "type", label: "Type of Class Room", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -161,7 +161,10 @@
         async created() {
             var context = this;
             await context._loadClassRooms()
-            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
+            this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
+            this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
       }
     }
 </script>

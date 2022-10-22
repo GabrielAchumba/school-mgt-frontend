@@ -4,7 +4,9 @@
         <q-btn flat dense round icon="create" @click="create"/>
 
         <q-space />
-        <q-btn dense flat round icon="search" />
+        <p class="q-ma-sm"> {{ userSchool.schoolName.toUpperCase() }} </p>
+        <q-space />
+        <q-btn dense flat round icon="search" @click="onSearch" />
         <q-btn
             icon="menu"
             flat
@@ -26,7 +28,8 @@
           </q-btn>
        <!--  <q-btn dense flat icon="close" @click="logOut"/> -->
          <q-btn
-          @click="toggleButton" 
+         :dense="dense"
+         flat
           avatar>
             <q-avatar
             v-if="getIsUserPhoto()" 
@@ -44,7 +47,7 @@
           <q-btn v-else
           class="bg-accent text-primary"
           :dense="dense"
-          flat>{{ IdentityModel.firstName.charAt(0) }}</q-btn>
+          flat>{{ IdentityModel.firstName }}</q-btn>
           <q-menu
             fit>
                       <q-list dense class="text-accent text-caption bg-primary">
@@ -100,7 +103,6 @@
                       </q-list>
             </q-menu>
         </q-btn>
-
         
     </q-bar>
 </template>
@@ -108,6 +110,9 @@
 <script>
 export default {
     computed:{
+        userSchool(){
+            return this.$store.getters['schoolStore/userSchool'];
+        },
         isAdmin(){
           return this.$router.history.current.fullPath !=='/admin';
         },
@@ -148,6 +153,10 @@ export default {
                 return false
             }
         },
+        onSearch(){
+            console.log("onSearch")
+            this.$store.commit("authenticationStore/setGlobalSearchDialog", true)
+        }
     }
 }
 </script>

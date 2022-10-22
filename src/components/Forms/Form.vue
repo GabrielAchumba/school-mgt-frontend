@@ -129,7 +129,9 @@
                  <q-separator />
 
                  <q-card-actions align="right">
-                   <div class="row q-pa-sm">
+                   <div 
+                   v-if="setIsResponsive"
+                   class="row q-pa-sm">
                       <q-space />
                       <q-icon
                         class="q-pa-md text-accent"
@@ -137,17 +139,26 @@
                         :key="qBtn.label" 
                         :name="qBtn.icon"
                         @click="ClickAction(qBtn.name)"
-                        size="30px"/>
-
-                     <!--  <q-btn class="q-ma-sm bg-accent text-primary"
+                        size="30px">
+                          <q-tooltip>
+                            {{ qBtn.label }}
+                          </q-tooltip>
+                        </q-icon>
+                  </div>
+                   <div 
+                   v-else
+                   class="row q-pa-sm">
+                      <q-space />
+                      <q-btn class="q-ma-sm bg-accent text-primary"
                         v-for="qBtn in formData.qBtns" 
                         :key="qBtn.label"
                         :label="qBtn.label"
                         type="button"
                         size="md"
+                        :icon="qBtn.icon"
                         no-caps
                         @click="ClickAction(qBtn.name)"
-                      /> -->
+                      />
                   </div>
                 </q-card-actions>
 
@@ -160,10 +171,21 @@
     import form from "./FormVM.js";
     import EditableTable from "../Tables/EditableTable.vue"
     export default {
+        computed:{
+          setIsResponsive(){
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
+          }
+        },
         components:{
           EditableTable
         },
         props: {
+            isResponsive:{
+              type: Boolean,
+              default: false
+            },
             formData: {
               type: Object,
               default: form,

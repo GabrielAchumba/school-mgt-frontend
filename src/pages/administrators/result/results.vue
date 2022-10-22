@@ -40,15 +40,15 @@
                 selectedResult: {},
                 title: "Results",
                 columns: [
-                    { name: "actions", label: "Action", field: "", align: "left" },
-                    { name: "studentFullName", label: "Full Name", field: "", align: "left" },
-                    { name: "score", label: "Score", field: "", align: "left" },
-                    { name: "scoreMax", label: "Maximum Score", field: "", align: "left" },
-                    { name: "subjectFullName", label: "Subject", field: "", align: "left" },
-                    { name: "assessmentFullName", label: "Assessment", field: "", align: "left" },
-                    { name: "createdDate", label: "Date of Creation", field: "", align: "left" },
-                    { name: "teacherFullName", label: "Teacher", field: "", align: "left" },
-                    { name: "classRoomFullName", label: "Class", field: "", align: "left" },
+                    { name: "actions", label: "Action", field: "", align: "left", type: "" },
+                    { name: "studentFullName", label: "Full Name", field: "", align: "left", type: "text" },
+                    { name: "score", label: "Score", field: "", align: "left", type: "number" },
+                    { name: "scoreMax", label: "Maximum Score", field: "", align: "left", type: "number" },
+                    { name: "subjectFullName", label: "Subject", field: "", align: "left", type: "text" },
+                    { name: "assessmentFullName", label: "Assessment", field: "", align: "left", type: "text" },
+                    { name: "createdDate", label: "Date of Creation", field: "", align: "left", type: "date" },
+                    { name: "teacherFullName", label: "Teacher", field: "", align: "left", type: "text" },
+                    { name: "classRoomFullName", label: "Class", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -205,7 +205,10 @@
         async created() {
             var context = this;
             await context.loadResult()
-            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl)
+            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
+            this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
+            this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
       }
     }
 </script>
