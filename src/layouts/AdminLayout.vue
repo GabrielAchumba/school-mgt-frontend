@@ -190,6 +190,7 @@ export default {
   async created(){
     window.addEventListener("resize", this.onResize);
     var context = this;
+    this.$store.commit("authenticationStore/setActiveRoute", "adminLanding");
     
     if(window.innerWidth < 700) context.rightDrawerOpen = true;
     this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);

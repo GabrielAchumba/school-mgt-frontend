@@ -1,6 +1,6 @@
 <template>
-    <div class="q-pa-sm">
-        <q-btn flat dense round icon="picture_as_pdf" aria-label="PDF" @click="generatePDF"/>
+    <div>
+        <q-btn flat dense round icon="print" aria-label="PDF" @click="generatePDF"/>
 
         <vue-html2pdf
         :show-layout="false"
@@ -36,12 +36,14 @@
 import VueHtml2pdf from "vue-html2pdf";
 import ContentToPrint from "./content-to-print.vue"
 import { printableRoutes } from "./printable-routes";
+//picture_as_pdf
 
 export default {
 computed:{
     getFileName(){
-        const activeRoute = this.$store.getters["authenticationStore/activeRoute"]
-        return printableRoutes[activeRoute].fileName;
+        const activeRoute = this.$store.getters["authenticationStore/activeRoute"];
+        console.log("fileName: ", printableRoutes[activeRoute].fileName);
+        return printableRoutes[activeRoute].fileName == undefined ? "file1" : printableRoutes[activeRoute].fileName;
     }
 },
 components:{

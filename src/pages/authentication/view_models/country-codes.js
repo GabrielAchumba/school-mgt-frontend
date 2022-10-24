@@ -262,6 +262,4 @@ const countryCodes = countryCodesJSON.map((row, i) => {
     }
 })
 
-console.log("countryCodes:  ", countryCodes);
-
 export { countryCodes }

@@ -28,6 +28,9 @@
             <SummariedResults 
              class="col-12"
             v-if="activeRoute=='/single-student-results-analysis'"/>
+            <Invoice 
+             class="col-12"
+            v-if="activeRoute=='/subscription-landing'"/>
         </div>
     </div>
 </template>
@@ -42,13 +45,14 @@ import SubjectLanding from "../../pages/administrators/subject/landing.vue";
 import UserLanding from "../../pages/administrators/user/landing.vue";
 import StudentsPositions from "../../pages/administrators/result/analysis/StudentsPositions.vue";
 import SummariedResults from "../../pages/administrators/result/analysis/SummariedResults.vue";
+import Invoice from "../../pages/administrators/subscription/invoice.vue";
 import { printableRoutes } from "./printable-routes";
 
 export default {
     computed:{
         activeRoute(){
             const activeRoute = this.$store.getters["authenticationStore/activeRoute"];
-            return  printableRoutes[activeRoute].route;
+            return  printableRoutes[activeRoute].route == undefined ? "/admin" : printableRoutes[activeRoute].route;
         }
     },
     components:{
@@ -61,6 +65,7 @@ export default {
         UserLanding,
         StudentsPositions,
         SummariedResults,
+        Invoice,
     }
 
 }

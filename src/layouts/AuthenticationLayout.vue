@@ -8,7 +8,15 @@
           v-if="this.$router.history.current.fullPath=='/school-landing'"
           flat dense round icon="create" @click="create"/>
           <q-space />
-        <img src='/statics/newway.jpg' width=100 height=40>
+       <!--  <img src='/statics/newway.jpg' width=100 height=40> -->
+
+        <q-btn flat dense round @click="create" avatar>
+          <q-avatar 
+            class="bg-primary text-accent"
+            size="md">
+            <img src='/statics/newway.jpg'>
+            </q-avatar>
+        </q-btn>
          <q-space />
       <q-tabs v-model="selected_tab" shrink>
 

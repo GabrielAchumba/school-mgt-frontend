@@ -2,12 +2,17 @@
     <q-bar class="q-pa-none row bg-accent" >
         <q-btn flat dense round icon="settings" aria-label="Settings" />
         <q-btn flat dense round icon="create" @click="create"/>
-
-        <q-space />
-        <p class="q-ma-sm"> {{ userSchool.schoolName }} </p>
+        <q-btn flat dense round @click="create" avatar>
+          <q-avatar 
+            class="bg-primary text-accent"
+            size="sm">
+            <img src='/statics/newway.jpg'>
+            </q-avatar>
+        </q-btn>
+        
         <q-space />
         <q-btn dense flat round icon="search" @click="onSearch" />
-        <PDFWriter />
+        <PDFWriter/>
         <q-btn
             icon="menu"
             flat
@@ -78,6 +83,7 @@
                                 <p class="bg-primary text-accent">
                                     {{ IdentityModel.firstName }} {{ IdentityModel.lastName }}
                                   </p>
+                                  <p class="q-ma-sm"> {{ userSchool.schoolName }} </p>
                               </div>
                               </div>
                             </div>
