@@ -24,6 +24,12 @@
 <script>
 import { qSelect } from "./view_models/exams-quiz-subscription";
 export default {
+      props:{
+        isUpdate: {
+            type: Boolean,
+            default: false,
+        }
+    },
     data(){
         return {
             qSelect: qSelect,
@@ -38,5 +44,9 @@ export default {
             })
         },
     },
+    created(){
+        var context = this;
+        console.log("isUpdate: ", context.isUpdate);
+    }
 }
 </script>

@@ -30,7 +30,10 @@
             v-if="activeRoute=='/single-student-results-analysis'"/>
             <Invoice 
              class="col-12"
-            v-if="activeRoute=='/subscription-landing'"/>
+            v-if="activeRoute=='/create-subscription'"/>
+            <Invoice 
+             class="col-12"
+            v-if="activeRoute=='/update-subscription'"/>
         </div>
     </div>
 </template>

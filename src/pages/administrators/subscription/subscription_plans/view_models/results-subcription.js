@@ -36,7 +36,7 @@ const dialog = { title: "Students", isVisible: false, message: "",
 
 const studentsForm = { 
     title: "Students",
-    qToggles: [{ label: "Select All", visible: true, name: false}],
+    qToggles: [{ label: "Select All", visible: true, name: true}],
     qSelects: [],
     qInputs: [],
     qBtns: [

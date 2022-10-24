@@ -10,6 +10,7 @@ const state = {
     fileManagementSubscription: {variable: "", value: "", amount: 0},
     appCustomizationSubscription: {variable: "", value: "", amount: 0},
     allSubscriptions: {variable: "", value: "", amount: 0},
+    onLineLearningSubscription: {variable: "", value: "", amount: 0},
     paymentStatus: {variable: "Payment Status", value: "NOT PAID"},
     paymentMessage: {variable: "Message", value: "Payment In Progress"},
     receiptNo: {variable: "Receipt Number", value: ""},
@@ -45,6 +46,9 @@ const getters = {
     },
     appCustomizationSubscription(state){
         return state.appCustomizationSubscription;
+    },
+    onLineLearningSubscription(state){
+        return state.onLineLearningSubscription;
     },
     allSubscriptions(state){
         return state.allSubscriptions;
@@ -90,6 +94,9 @@ const mutations = {
     },
     SetAppCustomizationSubscription(state, payload){
         state.appCustomizationSubscription = payload;
+    },
+    SetOnLineLearningSubscription(state, payload){
+        state.onLineLearningSubscription = payload;
     },
     SetAllSubscriptions(state, payload){
         state.allSubscriptions = payload;

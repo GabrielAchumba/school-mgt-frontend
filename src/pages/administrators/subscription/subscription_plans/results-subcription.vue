@@ -58,6 +58,12 @@ export default {
     components:{
         Form,
     },
+    props:{
+        isUpdate: {
+            type: Boolean,
+            default: false,
+        }
+    },
     data(){
         return {
             qSelect: qSelect,
@@ -76,6 +82,7 @@ export default {
         closeStudentsDialog(){
             var context =  this;
             context.dialog.isVisible = false;
+            context.onStudentsSelected();
         },
         onQSelectItemValueChanged(){
             var context =  this;
@@ -83,6 +90,11 @@ export default {
             let selectedItem = context.qSelect.list.find(o => o.value === context.qSelect.value.value);
             this.$emit("onResultScriptionValueChange", {
                 qSelect: selectedItem,
+            })
+        },
+        onStudentsSelected(){
+            var context = this;
+            this.$emit("onStudentsSelected", {
                 studentsForm: context.studentsForm,
             })
         },
@@ -95,6 +107,12 @@ export default {
                     value: row.id,
                 }
             })
+
+            context.studentsForm.GroupedCheckBoxes[0].group = this.$store.getters["studentStore/students"].map((row) => {
+                return row.id
+            })
+
+            context.onStudentsSelected();
         },
         onResize(e) {
             const width = window.innerWidth;
@@ -107,6 +125,7 @@ export default {
         var context = this;
         window.addEventListener("resize", this.onResize);
         context.initializeData();
+        console.log("isUpdate: ", context.isUpdate);
     },
     destroyed() {
         window.removeEventListener("resize", this.onResize);

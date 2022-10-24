@@ -1,7 +1,7 @@
 <template>
     <div class="q-pa-sm">
         <span>
-            <p class="q-ma-sm text-left">Customize App</p>
+            <p class="q-ma-sm text-left">Online Learning</p>
             <q-select
                 class="col-7 q-ma-none"
                 color="accent" 
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { qSelect } from "./view_models/customization-subscription";
+import { qSelect } from "./view_models/online-learning-subscription";
 export default {
     props:{
         isUpdate: {
@@ -39,7 +39,7 @@ export default {
         onQSelectItemValueChanged(){
             var context =  this;
             let selectedItem = context.qSelect.list.find(o => o.value === context.qSelect.value.value);
-            this.$emit("onCustomizationScriptionValueChange", {
+            this.$emit("onOnlineLearningScriptionValueChange", {
                 qSelect: selectedItem,
             })
         },

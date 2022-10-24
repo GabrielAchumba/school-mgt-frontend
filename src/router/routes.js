@@ -196,6 +196,16 @@ const routes = [
         
       },
       { 
+        path: '/create-subscription', 
+        component: () => import('pages/administrators/subscription/create-subscription.vue') 
+        
+      },
+      { 
+        path: '/update-subscription', 
+        component: () => import('pages/administrators/subscription/update-subscription.vue') 
+        
+      },
+      { 
         path: '/select-students', 
         component: () => import('pages/administrators/subscription/select-students.vue') 
         

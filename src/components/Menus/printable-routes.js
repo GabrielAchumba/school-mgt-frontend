@@ -9,7 +9,8 @@ const printableRoutes = {
     studentspositionsanalysis:{route: '/students-positions-analysis', fileName: "StudentsPositions"},
     singlestudentresultsanalysis:{route: '/single-student-results-analysis', fileName: "singleStudentResult"},
     adminLanding: {route: '/admin', fileName: "adminlanding"},
-    subscription: {route: '/subscription-landing', fileName: "invoice"},
+    createsubscription: {route: '/create-subscription', fileName: "invoice"},
+    updatesubscription: {route: '/update-subscription', fileName: "invoice"},
 }
 
 export { printableRoutes }

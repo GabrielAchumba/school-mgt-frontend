@@ -12,7 +12,7 @@
         <q-list>
              <q-item>
                 <q-item-section>{{ receiptNo.variable }}</q-item-section>
-                <q-item-section side>{{ receiptNo.value }}</q-item-section>
+                <q-item-section>{{ receiptNo.value }}</q-item-section>
             </q-item>
             <q-item>
                 <q-item-section>{{ resultSubscription.variable }}</q-item-section>
@@ -29,6 +29,10 @@
             <q-item>
                 <q-item-section>{{ appCustomizationSubscription.variable }}</q-item-section>
                 <q-item-section>{{ appCustomizationSubscription.value }}</q-item-section>
+            </q-item>
+            <q-item>
+                <q-item-section>{{ onLineLearningSubscription.variable }}</q-item-section>
+                <q-item-section>{{ onLineLearningSubscription.value }}</q-item-section>
             </q-item>
              <hr>
             <q-item>
@@ -72,6 +76,9 @@ export default {
         appCustomizationSubscription(){
             return this.$store.getters["subscriptionStore/appCustomizationSubscription"]
         },
+        onLineLearningSubscription(){
+            return this.$store.getters["subscriptionStore/onLineLearningSubscription"]
+        },
         allSubscriptions(){
             return this.$store.getters["subscriptionStore/allSubscriptions"]
         },
@@ -81,40 +88,6 @@ export default {
         paymentMessage(){
             return this.$store.getters["subscriptionStore/paymentMessage"]
         }
-    },
-    props:{
-        /* receiptNo: {
-            type: Object,
-            default: () => ({})
-        }, */
-       /*  resultSubscription: {
-            type: Object,
-            default: () => ({})
-        }, */
-        /* examsAndQuizSubscription: {
-            type: Object,
-            default: () => ({})
-        }, */
-        /* fileManagementSubscription: {
-            type: Object,
-            default: () => ({})
-        }, */
-       /*  appCustomizationSubscription: {
-            type: Object,
-            default: () => ({})
-        }, */
-        /* allSubscriptions:{
-            type: Object,
-            default: () => ({})
-        }, */
-        /* paymentStatus:{
-            type: Object,
-            default: () => ({})
-        }, */
-        /* paymentMessage:{
-            type: Object,
-            default: () => ({})
-        } */
     },
     data(){
         return {
