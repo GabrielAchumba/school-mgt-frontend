@@ -148,7 +148,10 @@
         },
         paymentMessage(){
             return this.$store.getters["subscriptionStore/paymentMessage"]
-        }
+        },
+        studentIds(){
+            return this.$store.getters["subscriptionStore/studentIds"]
+        },
       },
       components:{
         MessageBox
@@ -242,6 +245,7 @@
             paymentStatus: context.paymentStatus,
             paymentMessage: context.paymentMessage,
             receiptNo: context.receiptNo,
+            studentIds: context.studentIds,
             },
             url: "payment/create",
           }

@@ -14,6 +14,8 @@ const state = {
     paymentStatus: {variable: "Payment Status", value: "NOT PAID"},
     paymentMessage: {variable: "Message", value: "Payment In Progress"},
     receiptNo: {variable: "Receipt Number", value: ""},
+    selectedPendingPayment: {},
+    studentIds: [],
 }
 
 const getters = {
@@ -61,6 +63,12 @@ const getters = {
     },
     receiptNo(state){
         return state.receiptNo;
+    },
+    selectedPendingPayment(state){
+        return state.selectedPendingPayment;
+    },
+    studentIds(state){
+        return state.studentIds;
     }
 }
 
@@ -109,6 +117,12 @@ const mutations = {
     },
     SetReceiptNo(state, payload){
         state.receiptNo = payload;
+    },
+    SetSelectedPendingPayment(state, payload){
+        state.selectedPendingPayment = payload;
+    },
+    SetStudentIds(state, payload){
+        state.studentIds = payload;
     }
 
 }

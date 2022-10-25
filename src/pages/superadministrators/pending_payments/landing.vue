@@ -2,9 +2,9 @@
   <div>
     <Table
     :table_VM="tableVM"
-    @createStudent="createStudent($event)"
-    @updateStudent="updateStudent($event)"
-    @deleteStudent="deleteStudent($event)"/>
+    @createPendingPayment="createPendingPayment($event)"
+    @updatePendingPayment="updatePendingPayment($event)"
+    @deletePendingPayment="deletePendingPayment($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -26,8 +26,9 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { remove } from "../../../store/modules/services";
-  import { loadStudents } from "./utils";
+  import { get, remove } from "../../../store/modules/services";
+  import { loadPendingPayments } from "./utils";
+
     export default {
       components:{
         Table,
@@ -36,26 +37,24 @@
         data () {
     return {
             tableVM: {
-                selectedStudent: {},
-                title: "Students",
+                selectedPendingPayment: {},
+                title: "Pending Payments",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
-                    { name: "firstName", label: "First Name", field: "", align: "left", type: "text" },
-                    { name: "lastName", label: "Last Name", field: "", align: "left", type: "text" },
-                    { name: "token", label: "Token", field: "", align: "left", type: "text" },
+                    { name: "accountNamePaidFrom", label: "Account Name", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
-                createItem: "createStudent",
-                updateItem: "updateStudent",
-                deleteItem: "deleteStudent",
-                createItemUrl: "/create-student",
-                updateItemUrl: "/update-student",
+                createItem: "createPendingPayment",
+                updateItem: "updatePendingPayment",
+                deleteItem: "deletePendingPayment",
+                createItemUrl: "/create-pending-payment",
+                updateItemUrl: "/update-pending-payment",
                 },
                 dialogs:[
-                { title: "Delete Student", isVisible: false, message: "Do you want to delete a Student",
+                { title: "Delete PendingPayment", isVisible: false, message: "Do you want to delete a Class Room",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Student deleted successfully!",
+                { title: "Success", isVisible: false, message: "PendingPayment deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -71,21 +70,15 @@
             var context = this;
             context.isFetchTableDialog = false
           },
-         createStudent(){
-             var context = this;
-             console.log(context.tableVM.createItemUrl)
-              this.$router.push(context.tableVM.createItemUrl);
+         createPendingPayment(){
           },
-          updateStudent(selectedStudent){
+          updatePendingPayment(selectedPendingPayment){
              var context = this;
-             this.$store.commit('studentStore/SetSelectedStudent', selectedStudent)
+             this.$store.commit('subscriptionStore/SetSelectedPendingPayment', selectedPendingPayment)
             this.$router.push(context.tableVM.updateItemUrl);
           },
-          deleteStudent(selectedStudent){
-             var context = this;
-             context.selectedStudent = selectedStudent;
-             console.log(context.selectedStudent)
-             context.dialogs[0].isVisible = true;
+          deletePendingPayment(selectedPendingPayment){
+
           },
           cancelDialog(payload){
             const context = this;
@@ -101,8 +94,8 @@
         async delete(){
             var context = this;
             
-            var user = this.$store.getters["authenticationStore/IdentityModel"];
-            var url = `student/${context.selectedStudent.id}/${user.schoolId}`;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            var url = `PendingPayment/${context.selectedPendingPayment.id}/${user.schoolId}`;
             const payload = {
                 url,
             }
@@ -132,11 +125,11 @@
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete Student":
+                        case "Delete PendingPayment":
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadStudentf()
+                            await context._loadPendingPayments()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -144,37 +137,29 @@
                 }
             }
         },
-        async _loadStudentf(){
-            var context = this;
-            var user = this.$store.getters["authenticationStore/IdentityModel"]
-            const { result, message } = await loadStudents(user.schoolId);
-            this.$store.commit('studentStore/SetStudents', result)
-            context.tableVM.rows = result.map((row) => {
-                let token = row.token;
-                if(token === -2000){
-                    token = ""
-                }
-                return {
-                    ...row,
-                    token
-                }
-            })
+        async _loadPendingPayments(){
 
-            if(result.length === 0){
-                context.isFetchTableDialog = true;
-                context.message = message;
-            }
+                var context = this;
+                var user = this.$store.getters["authenticationStore/IdentityModel"]
+                const { result, message } = await loadPendingPayments(user.schoolId)
+                //this.$store.commit('subscriptionStore/SetPendingPayments', result)
+                context.tableVM.rows = result;
+
+                if(result.length === 0){
+                    context.isFetchTableDialog = true;
+                    context.message = message;
+                }
 
             }
         },
         async created() {
             var context = this;
-            await context._loadStudentf()
+            await context._loadPendingPayments()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
-            this.$store.commit("authenticationStore/setActiveRoute", "student");
+            this.$store.commit("authenticationStore/setActiveRoute", "PendingPayments");
       }
     }
 </script>

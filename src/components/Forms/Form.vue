@@ -84,6 +84,28 @@
                     </div>
 
                     <div class="q-pa-sm"
+                      v-for="qParagraph in formData.qParagraphs" 
+                      :key="qParagraph.label">
+                      <div class="row">
+                        <p class="col q-pa-md">{{ qParagraph.label }}:</p>
+                        <p class="col q-pa-md">{{ qParagraph.name }}</p>
+                      </div>
+                    </div>
+
+                    <div class="q-pa-sm"
+                      v-for="qImage in formData.qImages" 
+                      :key="qImage.label">
+                      <div class="row">
+                       <div class="col-12 q-pa-sm">
+                        <q-img 
+                            :src="qImage.imageUrl"
+                            spinner-color="accent"
+                            class="rounded-borders"/>
+                      </div>
+                      </div>
+                    </div>
+
+                    <div class="q-pa-sm"
                       v-for="qInput in formData.qInputs" 
                       :key="qInput.label">
                       <span><p class="q-ma-none">{{ qInput.label }}</p>

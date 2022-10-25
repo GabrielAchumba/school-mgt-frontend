@@ -32,6 +32,24 @@ const routes = [
     ]
   },
   {
+    path: '/super-admin',
+    component: () => import('layouts/SuperAdminLayout.vue'),
+    children: [
+      { 
+        path: '/super-admin', 
+        component: () => import('pages/superadministrators/landing.vue') 
+      },
+      { 
+        path: '/update-pending-payment', 
+        component: () => import('pages/superadministrators/pending_payments/update.vue') 
+      },
+      { 
+        path: '/pending-payment-landing', 
+        component: () => import('pages/superadministrators/pending_payments/landing.vue') 
+      },
+    ]
+  },
+  {
     path: '/admin',
     component: () => import('layouts/AdminLayout.vue'),
     children: [

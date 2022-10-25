@@ -8,22 +8,21 @@
 
 <script>
   import CardList from "../../components/Cards/CardList.vue";
-  
 
     export default {
-      computed:{
-        cardList(){
-          return this.$store.getters["administratorStore/mainMenuList"]
-        }
-      },
+        computed:{
+            cardList(){
+                return this.$store.getters["administratorStore/superAdminMainMenuList"];
+            }
+        },
         components:{
           CardList,
         },
         methods:{
             showPage(payload){
                 this.$router.push(payload.to)
-            },
-        },
+            }
+        }
     }
 </script>
 

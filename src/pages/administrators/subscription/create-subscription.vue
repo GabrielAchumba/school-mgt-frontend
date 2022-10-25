@@ -161,6 +161,7 @@ export default {
       receiptNo: {variable: "Receipt Number", value: ""},
       totalAmount: 0,
       numberOfStudents: 0,
+      studentIds: [],
     }
   },
   methods:{
@@ -177,6 +178,7 @@ export default {
     onStudentsSelected(payload){
       var context = this;
       context.numberOfStudents = Number(payload.studentsForm.GroupedCheckBoxes[0].group.length);
+      this.$store.commit("subscriptionStore/SetStudentIds", payload.studentsForm.GroupedCheckBoxes[0].group);
     },
     getPaymentResponse(result){
         var context = this;

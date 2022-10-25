@@ -28,6 +28,9 @@ const state = {
       fileName: "",
     },
     UploadProgress: "0%",
+    mainMenuList: [],
+    isResultsAnalysisSubscription: false,
+    superAdminMainMenuList: [],
   }
 
   const getters = {
@@ -51,7 +54,16 @@ const state = {
     },
     UploadProgress(state){
       return state.UploadProgress;
-    }
+    },
+    mainMenuList(state){
+      return state.mainMenuList;
+    },
+    isResultsAnalysisSubscription(state){
+      return state.isResultsAnalysisSubscription;
+    },
+    superAdminMainMenuList(state){
+      return state.superAdminMainMenuList;
+    },
 }
 
 const mutations = {
@@ -73,6 +85,15 @@ const mutations = {
   },
   GetUploadProgress(state, payload){
     state.UploadProgress = payload;
+  },
+  SetMainMenuList(state, payload){
+    state.mainMenuList = payload;
+  },
+  SetIsResultsAnalysisSubscription(state, payload){
+    state.isResultsAnalysisSubscription = payload;
+  },
+  SetSuperAdminMainMenuList(state, payload){
+    state.superAdminMainMenuList = payload;
   },
 }
 

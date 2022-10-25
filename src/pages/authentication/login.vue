@@ -314,7 +314,7 @@ const auth = getAuth()
             var context = this;
             console.log(context.user)
            if (context.user.designationId === "CEO"){
-             this.$router.push('/admin');
+             this.$router.push('/super-admin');
            }else{
               switch(context.user.userType.toLowerCase()){
                 case "admin":
