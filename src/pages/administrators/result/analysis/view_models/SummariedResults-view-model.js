@@ -8,7 +8,7 @@ const form = {
     ],
     qInputs: [],
     qBtns: [
-        {label: "Students", name: "showStudentsDialog", icon: "groups"},
+        {label: "Subjects", name: "showSubjectsDialog", icon: "groups"},
         {label: "Compute", name: "Compute", icon: "calculate"},
     ],
     qDates: [
@@ -22,7 +22,7 @@ const subjectsForm = {
     title: "Subjects",
     qInputs: [],
     qBtns: [
-        {label: "Done", name: "closeStudentsDialog", icon: "done"},
+        {label: "Done", name: "closeSubjectsDialog", icon: "done"},
     ],
     GroupedCheckBoxes: [
         { 

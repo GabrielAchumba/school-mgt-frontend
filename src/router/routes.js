@@ -242,7 +242,12 @@ const routes = [
         path: '/generated-tokens', 
         component: () => import('pages/administrators/subscription/generated-tokens.vue') 
         
-      }
+      },
+      { 
+        path: '/chart', 
+        component: () => import('components/Charts/Chart.vue') 
+        
+      },
     ]
   },
   {

@@ -1,9 +1,9 @@
 <template>
     <div class="q-pa-sm">
         <div class="row">
-             <q-toolbar class="col-12 bg-accent">
+             <q-bar class="col-12 bg-accent text-primary">
                 <q-btn  
-                    icon="edit"
+                    icon="table_view"
                     flat
                     class="text-capitalize"
                     @click="ShowResultConfiDialog">
@@ -11,27 +11,26 @@
                 <q-space></q-space>
                 <p class="q-pa-sm text-primary">{{ studentFullName }}</p>
                 <q-space></q-space>
-                <q-btn
-                    v-if="isExpanded"  
+                <q-btn 
                     flat
                     class="text-capitalize"
                     icon="bar_chart"
                     @click="showChartConfigDialog">
                         </q-btn>
-             </q-toolbar>
+             </q-bar>
         </div>
 
         <div class="row q-pa-sm">
-            <div v-if="isTable" class="col-12">
+            <div class="col-12">
                 <Table
                 :table_VM="tableVM"
                 :isResponsive="isResponsive"
                 :isHeader="isHeader"/>
             </div>
 
-            <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div>
+            <!-- <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div> -->
         </div>
-
+<!-- 
        <q-dialog 
             v-for="dialog in dialogs" 
             :key="dialog.title"
@@ -56,7 +55,36 @@
                 :formData="chartForm"
                 @Plot="Plot($event)"/>
         </q-dialog>
+ -->
 
+       <q-dialog 
+            v-model="dialogs[0].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="form"
+                @Compute="Compute($event)"
+                @typeOfInstructor="typeOfInstructor($event)"
+                @onStudentSelected="onStudentSelected($event)"
+                @showSubjectsDialog="showSubjectsDialog($event)"/>
+        </q-dialog>
+
+
+       <q-dialog 
+            v-model="dialogs[1].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="subjectsForm"
+                @closeSubjectsDialog="closeSubjectsDialog($event)"/>
+        </q-dialog>
+
+
+       <q-dialog 
+            v-model="dialogs[2].isVisible">
+            <Form
+                 style="width:400px;"
+                :formData="chartForm"
+                @Plot="Plot($event)"/>
+        </q-dialog>
         
     </div>
 </template>
@@ -82,12 +110,12 @@ export default {
     },
     data(){
         return {
-            isForm: true,
+            isForm: false,
             isSubjectsForm: false,
             isHeader: false,
             isResponsive: false,
             isExpanded: true,
-            isTable: true,
+            isTable: false,
             form: form,
             chartForm: chartForm,
             tableVM: tableVM,
@@ -100,16 +128,12 @@ export default {
         }
     },
     methods:{
-        showStudentsDialog(){
+        showSubjectsDialog(){
             var context = this;
-            context.isForm = false;
-            context.isSubjectsForm = true;
             context.dialogFailureOrScuess("Subjects", true);
-            context.dialogFailureOrScuess("Configure Result Analysis", false);
         },
         showChartConfigDialog(){
             var context = this;
-            context.isChartForm = true;
             context.dialogFailureOrScuess("Configure Chart", true);
         },
         dialogFailureOrScuess(dialogTitle, isVisible){
@@ -117,22 +141,18 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
+                context.dialogs[i].isVisible = false;
                 if(dialog.title == dialogTitle){
                     context.dialogs[i].isVisible = isVisible;
-                    break;
                 }
             }
         },
-        closeStudentsDialog(){
+        closeSubjectsDialog(){
             var context = this;
-            context.isForm = true;
-            context.isSubjectsForm = false;
-            context.dialogFailureOrScuess("Subjects", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         ShowResultConfiDialog(){
             var context = this;
-            context.isForm = true;
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         async Compute(){
@@ -164,18 +184,15 @@ export default {
             } = response
             if(success){
                 const { columns, rows } = createResultSummaryReport(result);
-                context.isExpanded = true;
                 context.tableVM.columns = columns;
                 context.tableVM.rows = rows;
                 this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
                 this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
-                this.$store.commit("authenticationStore/setActiveRoute", "singlestudentresultsanalysis");
                 context.isTable = true;
                 context.configurePlotData();
             }
 
-            context.isForm = false;
             context.dialogFailureOrScuess("Configure Result Analysis", false)
         },
         configurePlotData(){
@@ -208,7 +225,7 @@ export default {
             var i = 0;
             for(const student of payload.list){
                 if(payload.value === student.id){
-                    context.studentFullName = student.type.toUpperCase();
+                    context.studentFullName = student.type;
                     break;
                 }
             }
@@ -265,12 +282,8 @@ export default {
         },
         Plot(){
             var context = this;
-            context.isTable = false;
-            if(context.isTable === false){
-                context.RefreshPlot();
-                context.isChartForm = false;
-                context.dialogFailureOrScuess("Configure Chart", false)
-            }
+            context.RefreshPlot();
+            context.dialogFailureOrScuess("Configure Chart", false)
         },
         RefreshPlot(){
             var context = this;
@@ -338,21 +351,30 @@ export default {
                 }
             })
             
-            Plotly.newPlot('myDiv', context.seriesCollection, context.layout);
-
+            this.$store.commit("chartStore/setSeriesCollection", context.seriesCollection)
+            this.$store.commit("chartStore/setLayout", context.layout)
+            this.$store.commit("chartStore/setTitle", context.studentFullName)
+            //Plotly.newPlot('myDiv', context.seriesCollection, context.layout);
+            this.$router.push('/chart')
             context.isTable = false;
+            
         }
     },
-    mounted(){
+   /*  mounted(){
         var context = this;
         if(context.isTable === false){
             context.RefreshPlot();
+            context.isChartForm = false;
+            context.isSubjectsForm = false;
+            context.isForm = false;
+            context.dialogFailureOrScuess("Configure Chart", false)
         }
-    },
+    }, */
     async created(){
         var context = this;
         await context.loadConfigData();
-        await context.ShowResultConfiDialog();
+        this.$store.commit("authenticationStore/setActiveRoute", "singlestudentresultsanalysis");
+        //await context.ShowResultConfiDialog();
         
     }
 }

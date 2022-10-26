@@ -83,8 +83,9 @@ export default {
     data(){
         return {
             search_vm: search_vm,
-            textEqualities: ["=", "!="],
-            numbersIniqualities: [">", "<", "!=", "=", "<=", ">="],
+            textEqualities: ["Equal To", "Not Equal To"],
+            numbersIniqualities: ["Greater Than", "Less Than", "Not Equal To",
+             "Equal To", "Less Than Or Equal To", "Greater Than Or Equal To"],
         }
     },
     methods:{
@@ -106,6 +107,7 @@ export default {
                         type: row,
                     }
                 })
+                searchItem.qSelect.value = searchItem.qSelect.list[0];
 
                 searchItem.id = context.search_vm.search_list.length + 1;
                 searchItem.selectedVariable.label = selectedItem.label;
@@ -130,6 +132,8 @@ export default {
                     }
                 })
 
+                searchItem.qSelect.value = searchItem.qSelect.list[0];
+
                 searchItem.id = context.search_vm.search_list.length + 1;
                 searchItem.selectedVariable.label = selectedItem.label;
                 searchItem.selectedVariable.value = selectedItem.value;
@@ -152,12 +156,12 @@ export default {
             let rows = [];
             for(const activeRow of newRows){
                 switch(inequality){
-                    case "=":
+                    case "Equal To":
                         if(activeRow[variableName] === variableValue){
                             rows.push(activeRow);
                         }
                         break;
-                    case "!=":
+                    case "Not Equal To":
                         if(activeRow[variableName] !== variableValue){
                             rows.push(activeRow);
                         }
@@ -172,32 +176,32 @@ export default {
             let rows = [];
             for(const activeRow of newRows){
                 switch(inequality){
-                    case "=":
+                    case "Equal To":
                         if(activeRow[variableName] === variableValue){
                             rows.push(activeRow);
                         }
                         break;
-                    case "!=":
+                    case "Not Equal To":
                         if(activeRow[variableName] !== variableValue){
                             rows.push(activeRow);
                         }
                         break;
-                    case ">":
+                    case "Greater Than":
                         if(activeRow[variableName] > variableValue){
                             rows.push(activeRow);
                         }
                         break;
-                    case ">=":
+                    case "Greater Than Or Equal To":
                         if(activeRow[variableName] >= variableValue){
                             rows.push(activeRow);
                         }
                         break;
-                    case "<":
+                    case "Less Than":
                         if(activeRow[variableName] < variableValue){
                             rows.push(activeRow);
                         }
                         break;
-                    case "<=":
+                    case "Less Than Or Equal To":
                         if(activeRow[variableName] <= variableValue){
                             rows.push(activeRow);
                         }
@@ -212,14 +216,17 @@ export default {
             var context = this;
             let newRows = context.activeRows;
             for(const item of context.search_vm.search_list){
-                const qSelectListItem = item.qSelect.list.find(o => o.value === item.qSelect.value);
-                switch(item.dataType){
+                console.log("item.qSelect: ", item.qSelect)
+                const qSelectListItem = item.qSelect.list.find(o => o.value === item.qSelect.value.value);
+                switch(qSelectListItem.dataType){
                     case "text":
+                        console.log("qSelectListItem: ", qSelectListItem)
                         newRows = context.filterByText(newRows, qSelectListItem.label,
                          item.selectedVariable.value, item.qInput.name);
                         break;
                         
                     case "number":
+                        console.log("qSelectListItem: ", qSelectListItem)
                        newRows = context.filterByNumber(newRows, qSelectListItem.label,
                          item.selectedVariable.value, Number(item.qInput.name));
                         break;

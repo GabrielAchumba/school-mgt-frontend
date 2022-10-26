@@ -1,59 +1,9 @@
 const state = {
-    variables: [],
-    selectedVariable: {},
-    seriesCollection: [],
-    layout: {
-        showlegend: true,
-        title: "Gas Rate",
-        xaxis: {
-        title: "Date",
-        titlefont: {
-            family: "Arial, sans-serif",
-            size: 14,
-            color: "black"
-        },
-        showticklabels: true,
-        tickangle: "auto",
-        tickfont: {
-            family: "Old Standard TT, serif",
-            size: 14,
-            color: "black"
-        },
-        showgrid: true,
-        showline: true,
-        mirror: "ticks",
-        gridcolor: "#bdbdbd",
-        gridwidth: 2,
-        zerolinecolor: "#969696",
-        zerolinewidth: 4,
-        linecolor: "#636363",
-        linewidth: 4
-        },
-        yaxis: {
-        title: "Gas Rate (MMScf)",
-        titlefont: {
-            family: "Arial, sans-serif",
-            size: 14,
-            color: "black"
-        },
-        showticklabels: true,
-        tickangle: 45,
-        tickfont: {
-            family: "Old Standard TT, serif",
-            size: 14,
-            color: "black"
-        },
-        showgrid: true,
-        showline: true,
-        mirror: "ticks",
-        gridcolor: "#bdbdbd",
-        gridwidth: 2,
-        zerolinecolor: "#969696",
-        zerolinewidth: 4,
-        linecolor: "#636363",
-        linewidth: 4
-        }
-    },
+  variables: [],
+  selectedVariable: {},
+  seriesCollection: [],
+  layout: {},
+  title: "",
 }
 
 const getters = {
@@ -68,10 +18,16 @@ const getters = {
     },
     layout(state){
         return state.layout;
+    },
+    title(state){
+      return state.title;
     }
 }
 
 const mutations = {
+    setTitle(state, payload){
+      state.title = payload;
+    },
     setVariables(state, payload){
         state.variables = {
             ...state.variables,
@@ -82,10 +38,11 @@ const mutations = {
         state.selectedVariable = payload;
     },
     setSeriesCollection(state, payload){
-        state.seriesCollection = {
+        /* state.seriesCollection = {
             ...state.seriesCollection,
             ...payload,
-        };
+        }; */
+        state.seriesCollection = payload;
     },
     addSeries(state, payload){
         state.seriesCollection.push(payload);
@@ -95,9 +52,10 @@ const mutations = {
       state.seriesCollection = []
     },
     setLayout(state, payload){
-        state.layout.title = payload.chartTitle;
+        /* state.layout.title = payload.chartTitle;
         state.layout.xaxis.title = payload.xAxisTitle;
-        state.layout.yaxis.title = payload.yAxisTitle;
+        state.layout.yaxis.title = payload.yAxisTitle; */
+        state.layout = payload;
         console.log("state.layout: ", state.layout);
     },
     getSelectedVariable(state, payload) {

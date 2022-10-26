@@ -1,7 +1,7 @@
 <template>
     <div class="q-pa-sm">
         <div class="row">
-             <q-toolbar class="col-12 bg-accent">
+             <q-toolbar class="col-12 bg-accent text-primary">
                 <q-btn  
                     icon="edit"
                     flat
@@ -11,8 +11,7 @@
                 <q-space></q-space>
                 <p class="q-pa-sm text-primary">{{ studentFullName }}</p>
                 <q-space></q-space>
-                <q-btn
-                    v-if="isExpanded"  
+                <q-btn 
                     flat
                     class="text-capitalize"
                     icon="bar_chart"
@@ -22,16 +21,16 @@
         </div>
 
         <div class="row q-pa-sm">
-            <div v-if="isTable" class="col-12">
+            <div class="col-12">
                 <Table
                 :table_VM="tableVM"
                 :isResponsive="isResponsive"
                 :isHeader="isHeader"/>
             </div>
 
-            <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div>
+            <!-- <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div> -->
         </div>
-
+<!-- 
        <q-dialog 
             v-for="dialog in dialogs" 
             :key="dialog.title"
@@ -70,8 +69,57 @@
                 :formData="chartForm"
                 @Plot="Plot($event)"/>
         </q-dialog>
+ -->
+
+       <q-dialog 
+            v-model="dialogs[0].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="form"
+                @Compute="Compute($event)"
+                @typeOfInstructor="typeOfInstructor($event)"
+                @onStudentSelected="onStudentSelected($event)"
+                @showTeachersDialog="showTeachersDialog($event)"
+                @showStudentsDialog="showStudentsDialog($event)"
+                @showSubjectsDialog="showSubjectsDialog($event)"
+                @CancelFormDialog="CancelFormDialog($event)"/>
+        </q-dialog>
 
 
+
+       <q-dialog 
+            v-model="dialogs[1].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="teachersForm"
+                @closeTeachersDialog="closeTeachersDialog($event)"/>
+        </q-dialog>
+
+
+       <q-dialog 
+            v-model="dialogs[2].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="studentsForm"
+                @closeStudentsDialog="closeStudentsDialog($event)"/>
+        </q-dialog>
+
+
+       <q-dialog 
+            v-model="dialogs[3].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="subjectsForm"
+                @closeSubjectsDialog="closeSubjectsDialog($event)"/>
+        </q-dialog>
+
+        <q-dialog 
+            v-model="dialogs[4].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="chartForm"
+                @Plot="Plot($event)"/>
+        </q-dialog>
         
     </div>
 </template>
@@ -120,30 +168,24 @@ export default {
         }
     },
     methods:{
+        CancelFormDialog(){
+            var context = this;
+            context.dialogFailureOrScuess("Configure Result Analysis", false);
+        },
         showTeachersDialog(){
             var context = this;
-            context.isForm = false;
-            context.isTeachersForm = true;
             context.dialogFailureOrScuess("Instructors", true);
-            context.dialogFailureOrScuess("Configure Result Analysis", false);
         },
         showStudentsDialog(){
             var context = this;
-            context.isForm = false;
-            context.isStudentsForm = true;
             context.dialogFailureOrScuess("Students", true);
-            context.dialogFailureOrScuess("Configure Result Analysis", false);
         },
         showSubjectsDialog(){
             var context = this;
-            context.isForm = false;
-            context.isSubjectsForm = true;
             context.dialogFailureOrScuess("Subjects", true);
-            context.dialogFailureOrScuess("Configure Result Analysis", false);
         },
         showChartConfigDialog(){
             var context = this;
-            context.isChartForm = true;
             context.dialogFailureOrScuess("Configure Chart", true);
         },
         dialogFailureOrScuess(dialogTitle, isVisible){
@@ -151,36 +193,29 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
+                 context.dialogs[i].isVisible = false;
                 if(dialog.title == dialogTitle){
                     context.dialogs[i].isVisible = isVisible;
-                    break;
                 }
             }
         },
         closeTeachersDialog(){
             var context = this;
-            context.isForm = true;
-            context.isTeachersForm = false;
-            context.dialogFailureOrScuess("Instructors", false);
+            //context.dialogFailureOrScuess("Instructors", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         closeStudentsDialog(){
             var context = this;
-            context.isForm = true;
-            context.isStudentsForm = false;
-            context.dialogFailureOrScuess("Students", false);
+            //context.dialogFailureOrScuess("Students", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         closeSubjectsDialog(){
             var context = this;
-            context.isForm = true;
-            context.isSubjectsForm = false;
-            context.dialogFailureOrScuess("Subjects", false);
+            //context.dialogFailureOrScuess("Subjects", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         ShowResultConfiDialog(){
             var context = this;
-            context.isForm = true;
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         async Compute(){
@@ -211,7 +246,6 @@ export default {
                 }
             } = response
             if(success){
-                console.log("result: ", result);
                 const { columns, rows } = createStudentsPositionReport(result);
                 context.isExpanded = true;
                 context.tableVM.columns = columns;
@@ -219,12 +253,10 @@ export default {
                  this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
                 this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
-                this.$store.commit("authenticationStore/setActiveRoute", "studentspositionsanalysis");
                 context.isTable = true;
                 context.configurePlotData();
             }
 
-            context.isForm = false;
             context.dialogFailureOrScuess("Configure Result Analysis", false)
         },
         configurePlotData(){
@@ -298,12 +330,8 @@ export default {
         },
         Plot(){
             var context = this;
-            context.isTable = false;
-            if(context.isTable === false){
-                context.RefreshPlot();
-                context.isChartForm = false;
-                context.dialogFailureOrScuess("Configure Chart", false)
-            }
+            context.RefreshPlot();
+            context.dialogFailureOrScuess("Configure Chart", false)
         },
         RefreshPlot(){
             var context = this;
@@ -346,22 +374,27 @@ export default {
                 }
             })
             
-            Plotly.newPlot('myDiv', context.seriesCollection, context.layout);
+            this.$store.commit("chartStore/setSeriesCollection", context.seriesCollection)
+            this.$store.commit("chartStore/setLayout", context.layout)
+            //this.$store.commit("chartStore/setTitle", context.studentFullName)
+            //Plotly.newPlot('myDiv', context.seriesCollection, context.layout);
+            this.$router.push('/chart')
 
             context.isTable = false;
         }
     },
-    mounted(){
+   /*  mounted(){
         var context = this;
         if(context.isTable === false){
             console.log("seen")
             context.RefreshPlot();
         }
-    },
+    }, */
     async created(){
         var context = this;
         await context.loadConfigData();
         await context.ShowResultConfiDialog();
+        this.$store.commit("authenticationStore/setActiveRoute", "studentspositionsanalysis");
         
     }
 }

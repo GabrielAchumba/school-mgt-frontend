@@ -12,6 +12,7 @@ const form = {
         {label: "Students", name: "showStudentsDialog", icon: "groups"},
         {label: "Subjects", name: "showSubjectsDialog", icon: "book"},
         {label: "Compute", name: "Compute", icon: "calculate"},
+        {label: "Cancel", name: "CancelFormDialog", icon: "close"},
     ],
     qDates: [
          {label: "Start Date", name: "2019/02/01"},
@@ -104,11 +105,11 @@ const tableVM = {
 const dialogs = [
     { title: "Configure Result Analysis", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Subjects", isVisible: false, message: "",
+    { title: "Instructors", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Students", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Instructors", isVisible: false, message: "",
+    { title: "Subjects", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Configure Chart", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
