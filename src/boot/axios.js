@@ -1,6 +1,6 @@
 import axios from 'axios'
 //const axiosInstance = axios.create({ 
-  const processEnvNOEENV = "production";
+  const processEnvNOEENV = "development";
 
 
     const $http  = axios.create({ 
@@ -8,8 +8,19 @@ import axios from 'axios'
         headers: {'Content-Type': 'application/json'},
           baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:3023/'
       })
-      export default ({ Vue }) => {
+
+      /* export default ({ Vue }) => {
         Vue.prototype.$axios = axios
-      }
-      //export { axiosInstance }
-      export { $http  }
+      } */
+
+    const gcphttp  = axios.create({ 
+      baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:7000/',
+        headers: {'Content-Type': 'application/json'},
+          baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:7000/'
+      })
+
+    /* export default ({ Vue }) => {
+        Vue.prototype.$axios = axios
+    } */
+  
+    export { $http, gcphttp  }

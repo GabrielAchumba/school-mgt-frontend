@@ -92,7 +92,7 @@ export const menuList = [
         title: "File Management", 
         description: "Managing teachers lesson notes, past questions and answers, and other office files",
         image: "/statics/images/lesson.jpg",
-        to: "/admin"
+        to: "/filemanagement-landing"
     },
     {
         name: "showPage",

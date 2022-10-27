@@ -248,6 +248,21 @@ const routes = [
         component: () => import('components/Charts/Chart.vue') 
         
       },
+      { 
+        path: '/filemanagement-landing', 
+        component: () => import('pages/administrators/filemanagement/landing.vue') 
+        
+      },
+      { 
+        path: '/create-file', 
+        component: () => import('pages/administrators/filemanagement/create.vue') 
+        
+      },
+      { 
+        path: '/update-file', 
+        component: () => import('pages/administrators/filemanagement/update.vue') 
+        
+      },
     ]
   },
   {

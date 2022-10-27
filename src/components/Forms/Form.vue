@@ -110,6 +110,7 @@
                       :key="qInput.label">
                       <span><p class="q-ma-none">{{ qInput.label }}</p>
                       <q-input class="q-ma-none"
+                      @change="onFileSelected"
                       outlined 
                       v-model="qInput.name" 
                       :type="qInput.type" >
@@ -218,6 +219,13 @@
             }
         },
         methods: {
+          onFileSelected(event){
+                var files = event.target.files;
+                var selectedFile = files[0];
+                this.$emit("onFileSelected", {
+                  selectedFile,
+                })
+          },
           onQSelectItemValueChanged(qSelect){
             this.$emit(qSelect.actionName, qSelect);
           },
