@@ -3,7 +3,7 @@
 
         <div class="row text-center bg-primary flex flex-center">
 
-            <div class="col-12 q-pa-sm">
+         <!--    <div class="col-12">
                 <q-pagination
                       v-model="page"
                       :min="currentPage" 
@@ -19,10 +19,10 @@
                       input-class="text-primary"
                 >
                 </q-pagination>
-            </div>
+            </div> -->
             
             <div 
-            v-for="(card) in getData" :key="card.id"
+            v-for="(card) in cardList" :key="card.id"
             class="col-12 q-pa-sm">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
               @click="cardClickHandler(card)"
@@ -34,17 +34,17 @@
                     {{ card.title.charAt(0) }}
                 </q-avatar>
                 </q-btn>
-                <p class="q-pa-sm">{{ card.title }}</p>
+                <p class="q-pa-sm text-h4">{{ card.title }}</p>
                 <q-space></q-space>
                 <p class="q-pa-sm">{{ card.createdDate }}</p>
                 <q-card-section class="row bg-primary">
-                  <div class="text-h7 text-accent text-left">
+                  <div class="col-12 text-h7 text-accent text-left">
                     {{ card.description }}
                   </div>
                 </q-card-section>
                 <q-card-section class="row bg-primary">
                         <q-btn
-                        class="bg-accent text-primary"
+                        class="col bg-accent text-primary"
                         round
                         @click="viewItem(card)">
                             <q-icon

@@ -93,6 +93,16 @@
                     </div>
 
                     <div class="q-pa-sm"
+                      v-for="qLink in formData.qLinks" 
+                      :key="qLink.label">
+                      <div class="row">
+                        <a class="col-12 q-pa-sm" :href="qLink.href" :target="qLink.target">
+                          {{ qLink.label }}
+                          </a>
+                      </div>
+                    </div>
+
+                    <div class="q-pa-sm"
                       v-for="qImage in formData.qImages" 
                       :key="qImage.label">
                       <div class="row">
@@ -250,3 +260,20 @@
         },
     }
 </script>
+
+<style>
+a:link, a:visited {
+  background-color: white;
+  color: black;
+  border: 2px solid green;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: green;
+  color: white;
+}
+</style>

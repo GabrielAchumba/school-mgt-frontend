@@ -1,10 +1,8 @@
 <template>
   <div>
-    <Table
-    :table_VM="tableVM"
-    @createFileModel="createFileModel($event)"
-    @updateFileModel="updateFileModel($event)"
-    @deleteFileModel="deleteFileModel($event)"/>
+    <Cards
+    :cardList="cardList"
+    @updateItem="updateItem($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -24,21 +22,22 @@
 </template>
 
 <script>
-  import Table from "../../../components/Tables/Table.vue";
+  import Cards from "../../../components/Cards/CardList2.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/gcp-services";
   import { loadFileModels } from "./utils";
 
     export default {
       components:{
-        Table,
+        Cards,
         MessageBox
       },
         data () {
     return {
+            cardList: [],
             tableVM: {
                 selectedFileModel: {},
-                title: "Class Rooms",
+                title: "Files",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "type", label: "Type of Class Room", field: "", align: "left", type: "text" },
@@ -46,7 +45,7 @@
                 rows: [],
                 separator: "cell",
                 createItem: "createFileModel",
-                updateItem: "updateFileModel",
+                updateItem: "updateItem",
                 deleteItem: "deleteFileModel",
                 createItemUrl: "/create-file",
                 updateItemUrl: "/update-file",
@@ -75,7 +74,7 @@
              console.log(context.tableVM.createItemUrl)
               this.$router.push(context.tableVM.createItemUrl);
           },
-          updateFileModel(selectedFileModel){
+          updateItem(selectedFileModel){
              var context = this;
              this.$store.commit('FileModelStore/SetSelectedFileModel', selectedFileModel)
             this.$router.push(context.tableVM.updateItemUrl);
@@ -150,6 +149,28 @@
                 const { result, message } = await loadFileModels(user.schoolId)
                 this.$store.commit('FileModelStore/SetFileModels', result)
                 context.tableVM.rows = result;
+                context.cardList = result.map((row, i) => {
+                    let  description = row.description;
+                    if(description.length > 300){
+                        description = row.description.substr(1, 3000);
+                    }
+
+                return {
+                    id: i+1,
+                    ...row,
+                    name: "showPage",
+                    title: row.title, 
+                    description,
+                    createdDate: (new Date(row.createdAt)).toDateString(),
+                    qBtns: [
+                            {label: "View", name: "View"},
+                        ],
+                    }
+            })
+
+            console.log("context.cardList: ", context.cardList);
+            this.$store.commit('resultStore/SetResults', result)
+            this.$store.commit('componentsStore/setCardItems', context.cardList)
 
                 if(result.length === 0){
                     context.isFetchTableDialog = true;

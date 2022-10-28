@@ -56,7 +56,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/FileModel-landing')
+            this.$router.push('/filemanagement-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -165,7 +165,7 @@ export default {
                             await context.uploadAndSaveFileUr();
                             break;
                         case "Success":
-                            this.$router.push("/FileModel-landing");
+                            this.$router.push("/filemanagement-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

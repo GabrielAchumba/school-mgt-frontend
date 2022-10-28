@@ -2,23 +2,15 @@
 const form = {
     title: "Update File",
     qSelects: [],
-    qInputs: [
-        { label: "Title", name: "", type: "text",
-        Template: {
-            sn: 0,
-            iconName: "",
-            visible: false,
-        }},
-        { label: "Description", name: "", type: "textarea",
-        Template: {
-            sn: 1,
-            iconName: "",
-            visible: false,
-        }},
+    qParagraphs: [
+        { label: "Title", name: "", type: "text"},
+        { label: "Description", name: "", type: "textarea"},
+    ],
+    qLinks: [
+        {label: "View File", name: "ViewFile", href: "#", target: "_blank"}
     ],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},
-        {label: "Update", name: "Update", icon: "update"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

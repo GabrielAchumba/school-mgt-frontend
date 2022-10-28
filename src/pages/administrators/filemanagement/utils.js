@@ -7,19 +7,7 @@ export const loadFileModels = async (schoolId) => {
     url
     })
 
-    const { 
-        data : {
-            data: result,
-            success,
-            message,
-        }
-    } = response
 
-
-    if(success){
-        return { result, message: "" }
-    }else{
-        return { result: [], message }
-    }
+    return { result: response.data, message: "" }
 
 }

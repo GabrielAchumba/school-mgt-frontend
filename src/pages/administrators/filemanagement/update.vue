@@ -42,7 +42,7 @@ export default {
         }
     },
     methods:{
-        Update(){
+        Update2(){
             const context = this;
             var i = -1;
             for(const dialog of context.dialogs){
@@ -54,7 +54,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/FileModel-landing')
+            this.$router.push('/filemanagement-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -121,7 +121,9 @@ export default {
     created(){
         var context =  this;
         context.selectedFileModel = this.$store.getters["FileModelStore/selectedFileModel"];
-        context.form.qInputs[0].name = context.selectedFileModel.type;
+        context.form.qParagraphs[0].name = context.selectedFileModel.title;
+        context.form.qParagraphs[1].name = context.selectedFileModel.description;
+        context.form.qLinks[0].href = context.selectedFileModel.fileUrl;
     }
 }
 </script>
