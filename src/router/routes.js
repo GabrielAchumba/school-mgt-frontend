@@ -263,6 +263,21 @@ const routes = [
         component: () => import('pages/administrators/filemanagement/update.vue') 
         
       },
+      { 
+        path: '/logo-landing', 
+        component: () => import('pages/administrators/logo/landing.vue') 
+        
+      },
+      { 
+        path: '/create-logo', 
+        component: () => import('pages/administrators/logo/create.vue') 
+        
+      },
+      { 
+        path: '/update-logo', 
+        component: () => import('pages/administrators/logo/update.vue') 
+        
+      },
     ]
   },
   {

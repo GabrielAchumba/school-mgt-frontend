@@ -87,8 +87,8 @@
                       v-for="qParagraph in formData.qParagraphs" 
                       :key="qParagraph.label">
                       <div class="row">
-                        <p class="col q-pa-md">{{ qParagraph.label }}:</p>
-                        <p class="col q-pa-md">{{ qParagraph.name }}</p>
+                        <!-- <p class="col-12 q-pa-md">{{ qParagraph.label }}:</p> -->
+                        <p class="col-12 q-pa-sm">{{ qParagraph.name }}</p>
                       </div>
                     </div>
 
@@ -120,7 +120,6 @@
                       :key="qInput.label">
                       <span><p class="q-ma-none">{{ qInput.label }}</p>
                       <q-input class="q-ma-none"
-                      @change="onFileSelected"
                       outlined 
                       v-model="qInput.name" 
                       :type="qInput.type" >
@@ -131,6 +130,30 @@
                             class="bg-primary text-accent"
                             @click="qInputTemplateAction(qInput.Template)" />
                           </template>
+                      </q-input></span>
+                    </div>
+
+                    <div class="q-pa-sm"
+                      v-for="qFile in formData.qFiles" 
+                      :key="qFile.label">
+                      <span><p class="q-ma-none">{{ qFile.label }}</p>
+                      <q-input class="q-ma-none"
+                      @change="onFileSelected"
+                      outlined 
+                      v-model="qFile.name" 
+                      :type="qFile.type">
+                      </q-input></span>
+                    </div>
+
+                    <div class="q-pa-sm"
+                      v-for="qColor in formData.qColors" 
+                      :key="qColor.label">
+                      <span><p class="q-ma-none">{{ qColor.label }}</p>
+                      <q-input class="q-ma-none"
+                      @change="onColorSelected"
+                      outlined 
+                      v-model="qColor.name" 
+                      :type="qColor.type" >
                       </q-input></span>
                     </div>
 
@@ -230,11 +253,15 @@
         },
         methods: {
           onFileSelected(event){
-                var files = event.target.files;
-                var selectedFile = files[0];
-                this.$emit("onFileSelected", {
-                  selectedFile,
-                })
+            var files = event.target.files;
+              var selectedFile = files[0];
+              this.$emit("onFileSelected", {
+                selectedFile,
+              })
+                
+          },
+          onColorSelected(){
+
           },
           onQSelectItemValueChanged(qSelect){
             this.$emit(qSelect.actionName, qSelect);

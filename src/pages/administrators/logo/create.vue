@@ -27,7 +27,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { post, uploadFile } from "../../../store/modules/gcp-services";
+import { post, uploadLogo } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
@@ -39,8 +39,8 @@ export default {
         return {
             form: form,
             dialogs: dialogs,
-            fileUrl: "",
-            doesFileExists: false,
+            LogoUrl: "",
+            doesLogoExists: false,
         }
     },
     methods:{
@@ -49,14 +49,14 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create File"){
+                if(dialog.title == "Create Logo"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/filemanagement-landing')
+            this.$router.push('/logo-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -71,40 +71,38 @@ export default {
         },
         onFileSelected(payload){
             var context = this;
-            context.form.qFiles[0].selectedFile = payload.selectedFile;
+            context.form.qFiles[0].selectedLogo = payload.selectedFile;
             
             
         },
-        async uploadFile(){
+        async uploadLogo(){
             var context = this;
             const formData = new FormData();
             console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
-            formData.append('file', context.form.qFiles[0].selectedFile);
+            formData.append('Logo', context.form.qFiles[0].selectedFile);
             
-            var url = `filemanagement/upload`;
+            var url = `logo/upload`;
             const payload = {
                 url,
                 req: formData,
             }
 
             console.log("payload: ", payload)
-            //uploadFile
+            //uploadLogo
             var response = await post(payload)
             
-            context.fileUrl = response.data;
-            console.log("fileUrl: ", context.fileUrl)
+            context.LogoUrl = response.data;
+            console.log("LogoUrl: ", context.LogoUrl)
 
         },
-        async checkFileExistance(){
+        async checkLogoExistance(){
             var context = this;
             
-            var url = `filemanagement/checkfile`;
+            var url = `logo/checkfile`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
                 req: {
-                    title: context.form.qInputs[0].name,
-                    description: context.form.qInputs[1].name,
                     schoolId: user.schoolId,
                 }
             }
@@ -113,22 +111,23 @@ export default {
             var response = await post(payload)
             console.log("response: ", response)
             
-            context.doesFileExists = response.data;
-            console.log("doesFileExists: ", context.doesFileExists)
+            context.doesLogoExists = response.data;
+            console.log("doesLogoExists: ", context.doesLogoExists)
 
         },
          async save(){
             var context = this;
             
-            var url = `filemanagement/create`;
+            var url = `logo/create`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
                 req: {
-                    title: context.form.qInputs[0].name,
-                    description: context.form.qInputs[1].name,
+                    primaryColor: context.form.qColors[0].name,
+                    secondaryColor: context.form.qColors[1].name,
+                    tertiaryColor: context.form.qColors[2].name,
                     schoolId: user.schoolId,
-                    fileUrl: context.fileUrl,
+                    fileUrl: context.LogoUrl,
                     createdBy: user.id,
                 }
             }
@@ -140,17 +139,19 @@ export default {
             if(response.status === 201 || response.status == 200){
                 context.dialogs[1].isVisible = true;
             }else{
-                context.dialogs[2].message = "Error while saving the file";
+                context.dialogs[2].message = "Error while saving the Logo";
                 context.dialogs[2].isVisible = true;
             }
 
         },
-        async uploadAndSaveFileUr(){
+        async uploadAndSaveLogoUr(){
             var context = this;
-            await context.checkFileExistance();
-            if(context.doesFileExists === false){
-                await context.uploadFile();
+            await context.checkLogoExistance();
+            if(context.doesLogoExists === false){
+                await context.uploadLogo();
                 await context.save();
+            }else{
+                alert("Logo already exists")
             }
         },
         async okDialog(payload){
@@ -161,11 +162,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create File":
-                            await context.uploadAndSaveFileUr();
+                        case "Create Logo":
+                            await context.uploadAndSaveLogoUr();
                             break;
                         case "Success":
-                            this.$router.push("/filemanagement-landing");
+                            this.$router.push("/logo-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -176,8 +177,8 @@ export default {
     },
     created(){
         var context = this;
-        context.form.clearQInputs();
         context.form.clearQFiles();
+        context.form.clearQColors();
     }
 }
 </script>

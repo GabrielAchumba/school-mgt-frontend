@@ -1,6 +1,6 @@
 
 const form = {
-    title: "Update File",
+    title: "View File",
     qSelects: [],
     qParagraphs: [
         { label: "Title", name: "", type: "text"},
@@ -17,7 +17,7 @@ const form = {
 }
 
 const dialogs = [
-    { title: "Update File", isVisible: false, message: "Do you want to update a File",
+    { title: "View File", isVisible: false, message: "Do you want to update a File",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Success", isVisible: false, message: "File updated successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
