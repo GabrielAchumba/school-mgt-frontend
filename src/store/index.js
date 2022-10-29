@@ -17,6 +17,10 @@ import schoolStore from './modules/schoolStore';
 import subscriptionStore from './modules/subscriptionStore';
 import FileModelStore from './modules/FileModelStore';
 import LogoStore from './modules/LogoStore';
+import VisionStore from './modules/VisionStore';
+import MissionStore from './modules/MissionStore';
+import NewsStore from './modules/NewsStore';
+import CarouselStore from './modules/CarouselStore';
 
 
 Vue.use(Vuex)
@@ -49,6 +53,10 @@ export default function (/* { ssrContext } */) {
       subscriptionStore,
       FileModelStore,
       LogoStore,
+      VisionStore,
+      MissionStore,
+      NewsStore,
+      CarouselStore,
     },
 
     // enable strict mode (adds overhead!)

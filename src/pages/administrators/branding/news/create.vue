@@ -2,10 +2,10 @@
     <div class="q-pa-md">
         <Form
         :formData="form"
-        @Update="Update($event)"
+        @Create="Create($event)"
         @Cancel="Cancel($event)"
         @onFileSelected="onFileSelected($event)"/>
-
+        
         <q-dialog 
             v-for="dialog in dialogs" 
             :key="dialog.title"
@@ -25,9 +25,9 @@
 
 <script>
 
-import MessageBox from "../../../components/dialogs/MessageBox.vue";
-import Form from "../../../components/Forms/Form.vue";
-import { post, uploadLogo } from "../../../store/modules/gcp-services";
+import MessageBox from "../../../../components/dialogs/MessageBox.vue";
+import Form from "../../../../components/Forms/Form.vue";
+import { post, uploadNews } from "../../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
@@ -39,25 +39,24 @@ export default {
         return {
             form: form,
             dialogs: dialogs,
-            LogoUrl: "",
-            doesLogoExists: false,
-            selectedLogoModel: {},
+            NewsUrl: "",
+            doesNewsExists: false,
         }
     },
     methods:{
-        Update(){
+        Create(){
             const context = this;
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Update Logo"){
+                if(dialog.title == "Create News"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/logo-landing')
+            this.$router.push('/news-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -72,34 +71,35 @@ export default {
         },
         onFileSelected(payload){
             var context = this;
-            context.form.qFiles[0].selectedLogo = payload.selectedFile;
+            console.log("payload: ", payload)
+            context.form.qFiles[0].selectedFile = payload.selectedFile;
             
             
         },
-        async uploadLogo(){
+        async uploadNews(){
             var context = this;
             const formData = new FormData();
             console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
-            formData.append('Logo', context.form.qFiles[0].selectedFile);
+            formData.append('file', context.form.qFiles[0].selectedFile);
             
-            var url = `logo/upload`;
+            var url = `news/upload`;
             const payload = {
                 url,
                 req: formData,
             }
 
             console.log("payload: ", payload)
-            //uploadLogo
+            //uploadNews
             var response = await post(payload)
             
-            context.LogoUrl = response.data;
-            console.log("LogoUrl: ", context.LogoUrl)
+            context.NewsUrl = response.data;
+            console.log("NewsUrl: ", context.NewsUrl)
 
         },
-        async checkLogoExistance(){
+        async checkNewsExistance(){
             var context = this;
             
-            var url = `logo/checkfile`;
+            var url = `news/checkfile`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
@@ -112,47 +112,48 @@ export default {
             var response = await post(payload)
             console.log("response: ", response)
             
-            context.doesLogoExists = response.data;
-            console.log("doesLogoExists: ", context.doesLogoExists)
+            context.doesNewsExists = response.data;
+            console.log("doesNewsExists: ", context.doesNewsExists)
 
         },
          async save(){
             var context = this;
             
-            var url = `logo/create`;
+            var url = `News/create`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
                 req: {
-                    primaryColor: context.form.qColors[0].name,
-                    secondaryColor: context.form.qColors[1].name,
-                    tertiaryColor: context.form.qColors[2].name,
+                    title: context.form.qInputs[0].name,
+                    description: context.form.qInputs[1].name,
+                    imageTitle: context.form.qInputs[2].name,
+                    imageDescription: context.form.qInputs[3].name,
                     schoolId: user.schoolId,
-                    fileUrl: context.LogoUrl,
+                    fileUrl: context.NewsUrl,
                     createdBy: user.id,
                 }
             }
 
             console.log("payload: ", payload)
-            var response = await put(payload)
+            var response = await post(payload)
 
 
             if(response.status === 201 || response.status == 200){
                 context.dialogs[1].isVisible = true;
             }else{
-                context.dialogs[2].message = "Error while saving the Logo";
+                context.dialogs[2].message = "Error while saving news";
                 context.dialogs[2].isVisible = true;
             }
 
         },
-        async uploadAndSaveLogoUr(){
+        async uploadAndSaveNewsUr(){
             var context = this;
-            await context.checkLogoExistance();
-            if(context.doesLogoExists === true){
-                await context.uploadLogo();
+            await context.checkNewsExistance();
+            if(context.doesNewsExists === false){
+                await context.uploadNews();
                 await context.save();
             }else{
-                alert("Logo does not exists")
+                alert("News already exists")
             }
         },
         async okDialog(payload){
@@ -163,11 +164,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Logo":
-                            await context.uploadAndSaveLogoUr();
+                        case "Create News":
+                            await context.uploadAndSaveNewsUr();
                             break;
                         case "Success":
-                            this.$router.push("/logo-landing");
+                            this.$router.push("/news-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -177,11 +178,9 @@ export default {
         }
     },
     created(){
-        var context =  this;
-        context.selectedLogoModel = this.$store.getters["FileLogoStore/selectedLogoModel"];
-        context.form.qColors[0].name = context.selectedLogoModel.primaryColor;
-        context.form.qColors[1].name = context.selectedLogoModel.secondaryColor;
-        context.form.qColors[2].name = context.selectedLogoModel.tertiaryColor;
+        var context = this;
+        context.form.clearQFiles();
+        context.form.clearQInputs();
     }
 }
 </script>

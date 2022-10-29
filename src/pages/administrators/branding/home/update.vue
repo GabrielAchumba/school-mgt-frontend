@@ -2,7 +2,7 @@
     <div class="q-pa-md">
         <Form
         :formData="form"
-        @Create="Create($event)"
+        @Update="Update($event)"
         @Cancel="Cancel($event)"
         @onFileSelected="onFileSelected($event)"/>
 
@@ -25,10 +25,10 @@
 
 <script>
 
-import MessageBox from "../../../components/dialogs/MessageBox.vue";
-import Form from "../../../components/Forms/Form.vue";
-import { post, uploadLogo } from "../../../store/modules/gcp-services";
-import { form, dialogs } from "./view_models/create-view-model";
+import MessageBox from "../../../../components/dialogs/MessageBox.vue"
+import Form from "../../../../components/Forms/Form.vue";
+import { post, uploadCarousel } from "../../../../store/modules/gcp-services";
+import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
     components:{
@@ -39,24 +39,25 @@ export default {
         return {
             form: form,
             dialogs: dialogs,
-            LogoUrl: "",
-            doesLogoExists: false,
+            CarouselUrl: "",
+            doesCarouselExists: false,
+            selectedCarousel: {},
         }
     },
     methods:{
-        Create(){
+        Update(){
             const context = this;
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Logo"){
+                if(dialog.title == "Update Home Page"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/logo-landing')
+            this.$router.push('/carousel-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -71,38 +72,39 @@ export default {
         },
         onFileSelected(payload){
             var context = this;
-            context.form.qFiles[0].selectedLogo = payload.selectedFile;
+            context.form.qFiles[0].selectedFile = payload.selectedFile;
             
             
         },
-        async uploadLogo(){
+        async uploadCarousel(){
             var context = this;
             const formData = new FormData();
             console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
-            formData.append('Logo', context.form.qFiles[0].selectedFile);
+            formData.append('file', context.form.qFiles[0].selectedFile);
             
-            var url = `logo/upload`;
+            var url = `carousel/upload`;
             const payload = {
                 url,
                 req: formData,
             }
 
             console.log("payload: ", payload)
-            //uploadLogo
+            //uploadCarousel
             var response = await post(payload)
             
-            context.LogoUrl = response.data;
-            console.log("LogoUrl: ", context.LogoUrl)
+            context.CarouselUrl = response.data;
+            console.log("CarouselUrl: ", context.CarouselUrl)
 
         },
-        async checkLogoExistance(){
+        async checkCarouselExistance(){
             var context = this;
             
-            var url = `logo/checkfile`;
+            var url = `Carousel/checkfile`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
                 req: {
+                    title: context.form.qInputs[0].name,
                     schoolId: user.schoolId,
                 }
             }
@@ -111,47 +113,46 @@ export default {
             var response = await post(payload)
             console.log("response: ", response)
             
-            context.doesLogoExists = response.data;
-            console.log("doesLogoExists: ", context.doesLogoExists)
+            context.doesCarouselExists = response.data;
+            console.log("doesCarouselExists: ", context.doesCarouselExists)
 
         },
          async save(){
             var context = this;
             
-            var url = `logo/create`;
+            var url = `carousel/${context.selectedCarousel.id}`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
                 req: {
-                    primaryColor: context.form.qColors[0].name,
-                    secondaryColor: context.form.qColors[1].name,
-                    tertiaryColor: context.form.qColors[2].name,
+                    title: context.form.qInputs[0].name,
+                    description: context.form.qInputs[1].name,
                     schoolId: user.schoolId,
-                    fileUrl: context.LogoUrl,
+                    fileUrl: context.CarouselUrl,
                     createdBy: user.id,
                 }
             }
 
             console.log("payload: ", payload)
-            var response = await post(payload)
+            var response = await put(payload)
 
 
             if(response.status === 201 || response.status == 200){
                 context.dialogs[1].isVisible = true;
             }else{
-                context.dialogs[2].message = "Error while saving the Logo";
+                context.dialogs[2].message = "Error while saving home page";
                 context.dialogs[2].isVisible = true;
             }
 
         },
-        async uploadAndSaveLogoUr(){
+        async uploadAndSaveCarouselUr(){
             var context = this;
-            await context.checkLogoExistance();
-            if(context.doesLogoExists === false){
-                await context.uploadLogo();
+            await context.checkCarouselExistance();
+            if(context.doesCarouselExists === true){
+                await context.uploadCarousel();
                 await context.save();
             }else{
-                alert("Logo already exists")
+                alert("Home page does not exists")
             }
         },
         async okDialog(payload){
@@ -162,11 +163,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Logo":
-                            await context.uploadAndSaveLogoUr();
+                        case "Create Home Page":
+                            await context.uploadAndSaveCarouselUr();
                             break;
                         case "Success":
-                            this.$router.push("/logo-landing");
+                            this.$router.push("/carousel-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -176,9 +177,12 @@ export default {
         }
     },
     created(){
-        var context = this;
-        context.form.clearQFiles();
-        context.form.clearQColors();
+        var context =  this;
+        context.selectedCarousel = this.$store.getters["CarouselStore/selectedCarousel"];
+        context.CarouselUrl = context.selectedCarousel.fileUrl;
+        context.form.qImages[0].imageUrl = context.selectedCarousel.fileUrl;
+        context.form.qInputs[0].name = context.selectedCarousel.title;
+        context.form.qInputs[1].name = context.selectedCarousel.description;
     }
 }
 </script>

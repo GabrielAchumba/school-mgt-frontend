@@ -29,8 +29,11 @@ const state = {
     },
     UploadProgress: "0%",
     mainMenuList: [],
-    isResultsAnalysisSubscription: false,
+    isSubscription: {},
     superAdminMainMenuList: [],
+    primaryColor: "#FFFFFF",
+    secondaryColor: "#FF0000",
+    tertiaryColor: "#056608",
   }
 
   const getters = {
@@ -58,15 +61,33 @@ const state = {
     mainMenuList(state){
       return state.mainMenuList;
     },
-    isResultsAnalysisSubscription(state){
-      return state.isResultsAnalysisSubscription;
+    isSubscription(state){
+      return state.isSubscription;
     },
     superAdminMainMenuList(state){
       return state.superAdminMainMenuList;
     },
+    primaryColor(state){
+      return state.primaryColor;
+    },
+    secondaryColor(state){
+      return state.secondaryColor;
+    },
+    tertiaryColor(state){
+      return state.tertiaryColor;
+    },
 }
 
 const mutations = {
+  SetPrimaryColor(state, payload){
+    state.primaryColor = payload;
+  },
+  SetSecondaryColor(state, payload){
+    state.secondaryColor = payload;
+  },
+  SetTertiaryColor(state, payload){
+    state.tertiaryColor = payload;
+  },
   CreateAdministrator(state, payload){
     state.AdminDTO = payload;
   },
@@ -89,8 +110,8 @@ const mutations = {
   SetMainMenuList(state, payload){
     state.mainMenuList = payload;
   },
-  SetIsResultsAnalysisSubscription(state, payload){
-    state.isResultsAnalysisSubscription = payload;
+  SetIsSubscription(state, payload){
+    state.isSubscription = payload;
   },
   SetSuperAdminMainMenuList(state, payload){
     state.superAdminMainMenuList = payload;

@@ -1,8 +1,9 @@
 <template>
   <div>
-    <Cards
-    :cardList="cardList"
-    @updateItem="updateItem($event)"/>
+    <Table
+    :table_VM="tableVM"
+    @updateItem="updateItem($event)"
+    @deleteMission="deleteMission($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -22,38 +23,38 @@
 </template>
 
 <script>
-  import Cards from "../../../components/Cards/CardList2.vue";
-  import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/gcp-services";
-  import { loadFileModels } from "./utils";
+  import Table from "../../../../components/Tables/Table.vue";
+  import MessageBox from "../../../../components/dialogs/MessageBox.vue";
+  import { get, remove } from "../../../../store/modules/gcp-services";
+  import { loadMissions } from "./utils";
 
     export default {
       components:{
-        Cards,
+        Table,
         MessageBox
       },
         data () {
     return {
             cardList: [],
             tableVM: {
-                selectedFileModel: {},
-                title: "Files",
+                selectedMission: {},
+                title: "Missions",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
-                    { name: "type", label: "Type of Class Room", field: "", align: "left", type: "text" },
+                    { name: "title", label: "Title", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
-                createItem: "createFileModel",
+                createItem: "createMission",
                 updateItem: "updateItem",
-                deleteItem: "deleteFileModel",
-                createItemUrl: "/create-file",
-                updateItemUrl: "/update-file",
+                deleteItem: "deleteMission",
+                createItemUrl: "/create-mission",
+                updateItemUrl: "/update-mission",
                 },
                 dialogs:[
-                { title: "Delete FileModel", isVisible: false, message: "Do you want to delete a file",
+                { title: "Delete Mission", isVisible: false, message: "Do you want to delete a mission",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "File deleted successfully!",
+                { title: "Success", isVisible: false, message: "Mission deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -69,20 +70,20 @@
             var context = this;
             context.isFetchTableDialog = false
           },
-         createFileModel(){
+         createMission(){
              var context = this;
              console.log(context.tableVM.createItemUrl)
               this.$router.push(context.tableVM.createItemUrl);
           },
-          updateItem(selectedFileModel){
+          updateItem(selectedMission){
              var context = this;
-             this.$store.commit('FileModelStore/SetSelectedFileModel', selectedFileModel)
+             this.$store.commit('MissionStore/SetSelectedMission', selectedMission)
             this.$router.push(context.tableVM.updateItemUrl);
           },
-          deleteFileModel(selectedFileModel){
+          deleteMission(selectedMission){
              var context = this;
-             context.selectedFileModel = selectedFileModel;
-             console.log(context.selectedFileModel)
+             context.selectedMission = selectedMission;
+             console.log(context.selectedMission)
              context.dialogs[0].isVisible = true;
           },
           cancelDialog(payload){
@@ -100,7 +101,7 @@
             var context = this;
             
             var user = this.$store.getters["authenticationStore/IdentityModel"]
-            var url = `filemanagement/${context.selectedFileModel.id}/${user.schoolId}`;
+            var url = `mission/${context.selectedMissionModel.id}/${user.schoolId}`;
             const payload = {
                 url,
             }
@@ -130,11 +131,11 @@
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete FileModel":
+                        case "Delete Mission":
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadFileModels()
+                            await context._loadMissionModels()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -142,35 +143,15 @@
                 }
             }
         },
-        async _loadFileModels(){
+        async _loadMissions(){
 
                 var context = this;
                 var user = this.$store.getters["authenticationStore/IdentityModel"]
-                const { result, message } = await loadFileModels(user.schoolId)
-                this.$store.commit('FileModelStore/SetFileModels', result)
+                const { result, message } = await loadMissions(user.schoolId)
+                this.$store.commit('MissionStore/SetMissions', result)
                 context.tableVM.rows = result;
-                context.cardList = result.map((row, i) => {
-                    let  description = row.description;
-                    if(description.length > 300){
-                        description = row.description.substr(1, 3000);
-                    }
-
-                return {
-                    id: i+1,
-                    ...row,
-                    name: "showPage",
-                    title: row.title, 
-                    description,
-                    createdDate: (new Date(row.createdAt)).toDateString(),
-                    qBtns: [
-                            {label: "View", name: "View"},
-                        ],
-                    }
-            })
-
-            console.log("context.cardList: ", context.cardList);
+                
             this.$store.commit('resultStore/SetResults', result)
-            this.$store.commit('componentsStore/setCardItems', context.cardList)
 
                 if(result.length === 0){
                     context.isFetchTableDialog = true;
@@ -181,12 +162,12 @@
         },
         async created() {
             var context = this;
-            await context._loadFileModels()
+            await context._loadMissions()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
-            //this.$store.commit("authenticationStore/setActiveRoute", "fileModels");
+            //this.$store.commit("authenticationStore/setActiveRoute", "MissionModels");
       }
     }
 </script>

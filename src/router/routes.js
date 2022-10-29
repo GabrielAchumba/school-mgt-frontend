@@ -264,18 +264,83 @@ const routes = [
         
       },
       { 
+        path: '/branding-landing',
+        component: () => import('pages/administrators/branding/landing.vue') 
+        
+      },
+      { 
         path: '/logo-landing', 
-        component: () => import('pages/administrators/logo/landing.vue') 
+        component: () => import('pages/administrators/branding/logo/landing.vue') 
         
       },
       { 
         path: '/create-logo', 
-        component: () => import('pages/administrators/logo/create.vue') 
+        component: () => import('pages/administrators/branding/logo/create.vue') 
         
       },
       { 
         path: '/update-logo', 
-        component: () => import('pages/administrators/logo/update.vue') 
+        component: () => import('pages/administrators/branding/logo/update.vue') 
+        
+      },
+      { 
+        path: '/mission-landing', 
+        component: () => import('pages/administrators/branding/mission/landing.vue') 
+        
+      },
+      { 
+        path: '/create-mission', 
+        component: () => import('pages/administrators/branding/mission/create.vue') 
+        
+      },
+      { 
+        path: '/update-mission', 
+        component: () => import('pages/administrators/branding/mission/update.vue') 
+        
+      },
+      { 
+        path: '/vision-landing', 
+        component: () => import('pages/administrators/branding/vision/landing.vue') 
+        
+      },
+      { 
+        path: '/create-vision', 
+        component: () => import('pages/administrators/branding/vision/create.vue') 
+        
+      },
+      { 
+        path: '/update-vision', 
+        component: () => import('pages/administrators/branding/vision/update.vue') 
+        
+      },
+      { 
+        path: '/news-landing', 
+        component: () => import('pages/administrators/branding/news/landing.vue') 
+        
+      },
+      { 
+        path: '/create-news', 
+        component: () => import('pages/administrators/branding/news/create.vue') 
+        
+      },
+      { 
+        path: '/update-news', 
+        component: () => import('pages/administrators/branding/news/update.vue') 
+        
+      },
+      { 
+        path: '/home-landing', 
+        component: () => import('pages/administrators/branding/logo/landing.vue') 
+        
+      },
+      { 
+        path: '/create-home', 
+        component: () => import('pages/administrators/branding/home/create.vue') 
+        
+      },
+      { 
+        path: '/update-home', 
+        component: () => import('pages/administrators/branding/home/update.vue') 
         
       },
     ]

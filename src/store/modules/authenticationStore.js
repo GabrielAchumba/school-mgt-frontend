@@ -23,6 +23,20 @@ const state = {
     activeRows: [],
     newRows: [],
     activeRoute: "",
+    menuList: [],
+    torpa_menuList: [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "login_register", tabIndex: "login_register", label: "Sign In"},
+      { name: "school-landing", tabIndex: "schools", label: "Schools" },
+      { name: "news", tabIndex: "news", label: "News"},
+      { name: "about_us", tabIndex: "about_us", label: "About Us" },
+    ],
+    client_menuList: [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "news", tabIndex: "news", label: "News"},
+      { name: "about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "contact", tabIndex: "contact", label: "Contact" },
+    ]
   }
 
   const getters = {
@@ -91,10 +105,24 @@ const state = {
   },
   activeRoute(state){
     return state.activeRoute;
+  },
+  menuList(state){
+    return state.menuList;
   }
 }
 
 const mutations = {
+  setMenuList(state, payload){
+    if(payload === true){
+      state.menuList = state.torpa_menuList.map((row) => {
+        return { ...row }
+      })
+    }else{
+      state.menuList = state.client_menuList.map((row) => {
+        return { ...row }
+      })
+    }
+  },
   changeTab(state, payload){
     state.tab = payload;
   },

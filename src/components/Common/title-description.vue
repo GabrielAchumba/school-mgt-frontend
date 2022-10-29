@@ -1,15 +1,8 @@
 <template>
     <div class="row q-pa-sm">
-        <q-card class="col-lg-12 col-md-12 col-sm-6 col-xs-6 q-pa-sm">
+        <q-card class="col-lg-12 col-md-12">
           <div class="text-h3 flex fex-center">{{ title }}</div>
           <div class="text-h5 flex fex-center">{{ description }}</div>
-        </q-card>
-
-        <q-card class="col-lg-12 col-md-12 col-sm-6 col-xs-6 q-pa-sm">
-            <q-img 
-            :src="imageUrl"
-            spinner-color="accent"
-            class="rounded-borders"/>
         </q-card>
     </div>
 </template>
@@ -25,10 +18,6 @@ export default {
       type: String,
       default: "",
     },
-    imageUrl: {
-      type: String,
-      default: "",
-    }
   },
 }
 </script>

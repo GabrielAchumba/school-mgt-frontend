@@ -62,13 +62,24 @@
 </template>
 
 <script>
+import { colors } from 'quasar'
+const { getBrand, setBrand } = colors
 import { loadSchools } from "../pages/administrators/school/utils";
 export default {
   //name: 'AdminLayout',
   computed: {
         theme_color(){
           return this.$store.getters['authenticationStore/theme_color'];
-        }
+        },
+        primaryColor() {
+            return this.$store.getters['administratorStore/primaryColor'];
+        },
+        secondaryColor() {
+            return this.$store.getters['administratorStore/secondaryColor'];
+        },
+        tertiaryColor() {
+            return this.$store.getters['administratorStore/tertiaryColor'];
+        },
       },
   data () {
     return {
@@ -86,6 +97,12 @@ export default {
     }
   },
   methods:{
+    initializeLogo(){
+      var context = this;
+      setBrand('primary', context.primaryColor);
+      setBrand('accent', context.secondaryColor);
+      setBrand('secondary', context.tertiaryColor);
+    },
     create(){
             const routename = this.$store.getters["authenticationStore/createURL"];
             this.$router.push(routename);
@@ -136,6 +153,8 @@ export default {
     }
   },
   async created() {
+    var context = this;
+    context.initializeLogo();
     window.addEventListener("resize", this.onResize);
 
     const schools = await loadSchools();

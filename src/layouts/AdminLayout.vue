@@ -20,7 +20,8 @@
 </template>
 
 <script>
-
+import { colors } from 'quasar'
+const { getBrand, setBrand } = colors
 import { loadClassRooms } from "../pages/administrators/classroom/utils";
 import { loadStaffs } from "../pages/administrators/staff/utils";
 import { loadStudents } from "../pages/administrators/student/utils";
@@ -46,6 +47,15 @@ export default {
         globalSearchDialog() {
             return this.$store.getters['authenticationStore/globalSearchDialog'];
         },
+        primaryColor() {
+            return this.$store.getters['administratorStore/primaryColor'];
+        },
+        secondaryColor() {
+            return this.$store.getters['administratorStore/secondaryColor'];
+        },
+        tertiaryColor() {
+            return this.$store.getters['administratorStore/tertiaryColor'];
+        },
       },
   components: {
     MainMenuBar,
@@ -60,9 +70,18 @@ export default {
       navs: [],
       rightDrawerOpen: window.innerWidth < 700 ? true : false,
       menuList: menuList,
+      contextMenuList: [],
+      landingMenu: [],
+      checkSubscription: {},
     }
   },
   methods:{
+    initializeLogo(){
+      var context = this;
+      setBrand('primary', context.primaryColor);
+      setBrand('accent', context.secondaryColor);
+      setBrand('secondary', context.tertiaryColor);
+    },
     showSelectedRouters(){
       console.log("this.$router: ", this.$router)
       if(this.$router.history.current.fullPath != "/admin"){
@@ -102,50 +121,123 @@ export default {
       if(width < 700) context.rightDrawerOpen = true;
       this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
     },
-    async checkResultSubscritpion(){
+    verifyResultsAnalysisSubscription(){
+       var context = this;
+      if(context.checkSubscription.isResultsAnalysis == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "Student Results"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "Student Results"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyFileManagementSubscription(){
+       var context = this;
+      if(context.checkSubscription.isFileManagement == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "File Management"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "File Management"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyAdevertizementSubscription(){
+       var context = this;
+      if(context.checkSubscription.isAdvertizement == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "Advertisement"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "Advertisement"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    async checkSubscritpion(){
       var context = this;
       var user = this.$store.getters["authenticationStore/IdentityModel"]
-      const { result, success } = await checkResultsAnalysisSubscription(user.schoolId);
-      this.$store.commit("administratorStore/SetIsResultsAnalysisSubscription", result)
-      const landingMenu = context.menuList.map((row)=> {
+      const { result } = await checkResultsAnalysisSubscription(user.schoolId);
+      context.checkSubscription = {...result}
+      this.$store.commit("administratorStore/SetIsSubscription", result)
+
+      context.contextMenuList = context.menuList.map((row)=> {
           return {
             ...row
           }
         })
-      landingMenu.shift();
-
-      if(!success){
-        let index = -1;
-        let i = 0;
-        for(i = 0; i < landingMenu.length; i++){
-          if(landingMenu[i].title == "Student Results"){
-            index = i;
-            break;
+      context.landingMenu = context.menuList.map((row)=> {
+          return {
+            ...row
           }
-        }
-        if(index != -1){
-          landingMenu.splice(index, 1);
-        }
+        })
+      context.landingMenu.shift();
 
-        index = -1;
-        for(i = 0; i < context.menuList.length; i++){
-          if(context.menuList[i].title == "Student Results"){
-            index = i;
-            break;
-          }
-        }
-        if(index != -1){
-          context.menuList.splice(index, 1);
-        }
-      }
+      context.verifyResultsAnalysisSubscription();
+      context.verifyFileManagementSubscription();
+      context.verifyAdevertizementSubscription();
 
-      this.$store.commit("administratorStore/SetMainMenuList", landingMenu)
-    }
+      context.menuList = context.contextMenuList.map((row) => {
+        return {
+          ...row,
+        }
+      })
+      this.$store.commit("administratorStore/SetMainMenuList", context.landingMenu)
+    },
   },
   async created(){
     console.log("seen 2");
     window.addEventListener("resize", this.onResize);
     var context = this;
+    context.initializeLogo();
     this.$store.commit("authenticationStore/setActiveRoute", "adminLanding");
     
     if(window.innerWidth < 700) context.rightDrawerOpen = true;
@@ -174,7 +266,7 @@ export default {
           this.$store.commit('subjectStore/SetSubjects', subjects.result);
           const assessments = await loadAssessments(user.schoolId);
           this.$store.commit('assessmentStore/SetAssessments', assessments.result);
-          context.checkResultSubscritpion();
+          context.checkSubscritpion();
        }
 
   },

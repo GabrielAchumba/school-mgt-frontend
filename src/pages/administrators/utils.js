@@ -17,9 +17,18 @@ export const checkResultsAnalysisSubscription = async (schoolId) => {
 
 
     if(success){
-        return { result, message: "", success }
+        return { result, message: "" }
     }else{
-        return { result: false, message, success }
+        return { 
+            result: {
+                isResultsAnalysis: false,
+                isFileManagement: false,
+                isAdvertizement: false,
+                isExamsQuiz: false,
+                isOnlineLearning: false,
+            }, 
+            message
+         }
     }
 }
 
@@ -93,6 +102,20 @@ export const menuList = [
         description: "Managing teachers lesson notes, past questions and answers, and other office files",
         image: "/statics/images/lesson.jpg",
         to: "/filemanagement-landing"
+    },
+    {
+        name: "showPage",
+        title: "Socialize", 
+        description: "This feature enables you to chat and interact with friends from same or differnet school",
+        image: "/statics/images/lesson.jpg",
+        to: "/filemanagement-landing"
+    },
+    {
+        name: "showPage",
+        title: "Branding & Advertisement", 
+        description: "Subscribe to app customization and advertisement",
+        image: "/statics/images/lesson.jpg",
+        to: "/branding-landing"
     },
     {
         name: "showPage",
