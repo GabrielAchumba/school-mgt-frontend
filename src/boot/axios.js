@@ -1,6 +1,6 @@
 import axios from 'axios'
 //const axiosInstance = axios.create({ 
-  const processEnvNOEENV = "development";
+  const processEnvNOEENV = "production";
 
 
     const $http  = axios.create({ 
@@ -14,9 +14,9 @@ import axios from 'axios'
       } */
 
     const gcphttp  = axios.create({ 
-      baseURL: (processEnvNOEENV == 'production') ? 'https://school-mgt-backend-nestjs.herokuapp.com/' : 'http://localhost:5000/',
+      baseURL: (processEnvNOEENV == 'production') ? 'https://school-mgt-backend-nestjs.herokuapp.com/' : 'http://localhost:4000/',
         headers: {'Content-Type': 'application/json'},
-          baseURL: (processEnvNOEENV == 'production') ? 'https://school-mgt-backend-nestjs.herokuapp.com/' : 'http://localhost:5000/'
+          baseURL: (processEnvNOEENV == 'production') ? 'https://school-mgt-backend-nestjs.herokuapp.com/' : 'http://localhost:4000/'
       })
 
     /* export default ({ Vue }) => {

@@ -1,12 +1,17 @@
 <template>
     <div class="q-pa-none bg-red text-accent">
         <q-toolbar class="bg-primary text-accent">
-            <q-btn flat dense round avatar>
+            <!-- <q-btn flat dense round avatar>
             <q-avatar 
                 class="bg-primary text-accent"
                 size="md">
                 <img :src="selectedLogo.fileUrl">
                 </q-avatar>
+            </q-btn> -->
+
+            <q-btn flat dense>
+                <img :src="selectedLogo.fileUrl"
+                style="height:50px; width:100px;">
             </q-btn>
          <q-space />
 
