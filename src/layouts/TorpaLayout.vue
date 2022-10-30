@@ -50,17 +50,63 @@ export default {
                 
 
                 const torpaLogo = await loadLogos(schoolId);
+                if(torpaLogo.result.length === 0){
+                    torpaLogo.result.push({fileUrl: "/statics/newway.jpg", primaryColor: "#FFFFFF",
+                        secondaryColor: "#FF0000", tertiaryColor: "#056608", createdBy: "CEO"})
+                }
                 this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
                 context.initializeLogo(torpaLogo.result[0]);
+
                 const newses = await loadNewses(schoolId);
+                if(newses.result.length === 0){
+                    newses.result.push({
+                        title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
+                        description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?`,
+                        fileUrl: "/statics/images/results.jpg",
+                        imageTitle: "Lorem ipsum dolor sit",
+                        imageDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+                        createdBy: "CEO",
+                    })
+                }
                 this.$store.commit('NewsStore/SetNewses', newses.result);
 
                 const mission = await loadMissions(schoolId);
+                if(mission.result.length === 0){
+                    mission.result.push({
+                    title: "Our Mission",
+                    description: `To define the pace of business technology by the development of solutions that create synergies for maximum productivity`,
+                    fileUrl: "/statics/images/results.jpg",
+                    createdBy: "CEO"
+        })
+                }
                 this.$store.commit('MissionStore/SetSelectedMission', mission.result[0]);
+
                 const vision = await loadVisions(schoolId);
+                if(vision.result.length === 0){
+                    vision.result.push({
+                        title: "Our Vision",
+                        description: `To become a leader in fit-for-purpose and innovative technologies that deliver our clients’ business goals timely and efficiently`,
+                        fileUrl: "/statics/images/results.jpg",
+                        createdBy: "CEO",
+                    })
+                }
                 this.$store.commit('VisionStore/SetSelectedVision', vision.result[0]);
 
-                const contactCommon = await loadContacts(schoolId);
+                let contactCommon = await loadContacts(schoolId);
+                if(contactCommon.result.length === 0){
+                    contactCommon.result.push({
+                        title: "We’d Love To Help You",
+                        description: `Please feel free to get in touch with us. We'd love to hear your thoughts & answer any questions you may have!`,
+                        createdBy: "CEO",
+                        officialEmail: "nsglobe2022@gmail.com",
+                        officialPhoneNumber1: "07032488605",
+                        officialPhoneNumber2: "08062716049",
+                    })
+                }
                 const contact = { 
                     title: contactCommon.result[0].title,
                     description: contactCommon.result[0].description,
@@ -89,15 +135,45 @@ export default {
                 this.$store.commit('ContactStore/SetSelectedContact', contact);
 
                 const corevalue = await loadCoreValues(schoolId);
+                if(corevalue.result.length === 0){
+                    corevalue.result.push({
+                        title: "Our Core Value",
+                        description: `To define the pace of business technology by the development of solutions that create synergies for maximum productivity`,
+                        fileUrl: "/statics/images/results.jpg",
+                        createdBy: "CEO"
+                    })
+                }
                 this.$store.commit('CoreValueStore/SetSelectedCoreValue', corevalue.result[0]);
+                
                 const aboutusCommon = await loadAboutUses(schoolId);
+                if(aboutusCommon.result.length === 0){
+                    aboutusCommon.result.push({
+                        title: "Unlimited/limitless progression and possibilities with us",
+                        description: `Syncware Limited is made up of vastly experienced and creative minds; driven by its organized aspirations to improve the experience that software and information technologies provide for businesses in the energy and related industries around the globe. Syncware Limited is a company incorporated by energy, software and corporate professionals. Our key aim is to provide integrated and cutting-edge technologies that can make a difference.
+
+
+                        We are a company that believes in developing technologies that synchronizes our innovative ideas with real-time client-based requirements to produce IT solutions that put the client ahead of the pack. We first listen, originate, strategize and then creatively develop fit-for-purpose technologies that set the pace while offering our clients limitless possibilities to perform and sustain elevated productivity standards over time.
+                        
+                        
+                        Syncware Limited is a synergy of proven, tested and synthetic expression of creative thinking built into its operational processes, procedures and practices for software/IT solution development and deployment. Our uniqueness in terms of people culture and organization defines our competitive advantage in business.`,
+                        createdBy: "CEO"
+                    })
+                }
                 const aboutUs = {
                     ...aboutusCommon.result[0],
                     list: [{...mission.result[0]}, {...vision.result[0]}, {...corevalue.result[0]}],
                 }
-                
                 this.$store.commit('AboutUsStore/SetSelectedAboutUs', aboutUs);
+                
                 const carousels = await loadCarousels(schoolId);
+                if(carousels.result.length === 0){
+                    carousels.result.push({
+                        title: "WELCOME TO TORPA", 
+                        description: "... that puts the feature of your child in your hands", 
+                        fileUrl: "/statics/images/staffs.jpg",
+                        createdBy: "CEO",
+                    })
+                }
                 this.$store.commit('CarouselStore/SetCarousels', carousels.result);
                 this.$store.commit("authenticationStore/setMenuList", true)
 

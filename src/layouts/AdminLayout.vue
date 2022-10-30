@@ -235,7 +235,10 @@ export default {
     async branding(schoolId){
             var context = this;
             const torpaLogo = await loadLogos(schoolId);
-            console.log("torpaLogo: ", torpaLogo)
+            if(torpaLogo.result.length === 0){
+                    torpaLogo.result.push({fileUrl: "/statics/newway.jpg", primaryColor: "#FFFFFF",
+                        secondaryColor: "#FF0000", tertiaryColor: "#056608", createdBy: "CEO"})
+            }
             this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
             context.initializeLogo(torpaLogo.result[0]);
     },
