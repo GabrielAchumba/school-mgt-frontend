@@ -6,7 +6,7 @@
           <q-avatar 
             class="bg-primary text-accent"
             size="sm">
-            <img src='/statics/newway.jpg'>
+            <img :src="selectedLogo.fileUrl === undefined ? '/statics/newway.jpg' : selectedLogo.fileUrl">
             </q-avatar>
         </q-btn>
         
@@ -130,6 +130,9 @@ export default {
         IdentityModel() {
             return this.$store.getters['authenticationStore/IdentityModel'];
         },
+        selectedLogo(){
+            return this.$store.getters['LogoStore/selectedLogo'];
+        }
     },
     props:{
         menuList: {

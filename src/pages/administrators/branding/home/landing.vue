@@ -48,8 +48,8 @@
                 createItem: "createCarousel",
                 updateItem: "updateItem",
                 deleteItem: "deleteCarousel",
-                createItemUrl: "/create-carousel",
-                updateItemUrl: "/update-carousel",
+                createItemUrl: "/create-home",
+                updateItemUrl: "/update-home",
                 },
                 dialogs:[
                 { title: "Delete Home Page", isVisible: false, message: "Do you want to delete a home page",

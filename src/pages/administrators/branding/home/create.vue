@@ -56,7 +56,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/carousel-landing')
+            this.$router.push('/home-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -167,7 +167,7 @@ export default {
                             await context.uploadAndSaveCarouselUr();
                             break;
                         case "Success":
-                            this.$router.push("/carousel-landing");
+                            this.$router.push("/home-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

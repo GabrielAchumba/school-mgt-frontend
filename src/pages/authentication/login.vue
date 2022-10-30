@@ -318,7 +318,7 @@ const auth = getAuth()
            }else{
               switch(context.user.userType.toLowerCase()){
                 case "admin":
-                this.$router.push('/admin');
+                this.$router.push(`/admin`)
                 break;
                 case "referal":
                 this.$router.push('/referal');

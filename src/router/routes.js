@@ -350,7 +350,7 @@ const routes = [
       },
       { 
         path: '/home-landing', 
-        component: () => import('pages/administrators/branding/logo/landing.vue') 
+        component: () => import('pages/administrators/branding/home/landing.vue') 
         
       },
       { 

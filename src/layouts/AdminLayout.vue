@@ -9,7 +9,7 @@
 
     <q-page-container style="height: 100vh;">
 
-      <router-view />
+      <router-view/>
     </q-page-container>
 
      <q-dialog v-model="globalSearchDialog">
@@ -31,6 +31,7 @@ import { loadSchools } from "../pages/administrators/school/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
 import { checkResultsAnalysisSubscription, menuList } from "../pages/administrators/utils";
+import { loadLogos } from "../pages/administrators/branding/logo/utils";
 
 export default {
   name: 'AdminLayout',
@@ -76,12 +77,6 @@ export default {
     }
   },
   methods:{
-    initializeLogo(){
-      var context = this;
-      setBrand('primary', context.primaryColor);
-      setBrand('accent', context.tertiaryColor);
-      setBrand('secondary', context.secondaryColor);
-    },
     showSelectedRouters(){
       console.log("this.$router: ", this.$router)
       if(this.$router.history.current.fullPath != "/admin"){
@@ -232,6 +227,18 @@ export default {
       })
       this.$store.commit("administratorStore/SetMainMenuList", context.landingMenu)
     },
+    initializeLogo(logo){
+        setBrand('primary', logo.primaryColor);
+        setBrand('accent', logo.tertiaryColor);
+        setBrand('secondary', logo.secondaryColor);
+    },
+    async branding(schoolId){
+            var context = this;
+            const torpaLogo = await loadLogos(schoolId);
+            console.log("torpaLogo: ", torpaLogo)
+            this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
+            context.initializeLogo(torpaLogo.result[0]);
+    },
   },
   async created(){
     console.log("seen 2");
@@ -251,6 +258,7 @@ export default {
           if(school.id === user.schoolId){
             context.schoolName =  school.schoolName;
             this.$store.commit('schoolStore/SetUserSchool', school);
+            context.branding(user.schoolId);
             break;
           }
         }

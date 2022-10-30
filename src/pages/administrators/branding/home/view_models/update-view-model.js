@@ -1,5 +1,5 @@
 const form = {
-    title: "Update Logo",
+    title: "Update Home Page",
     qSelects: [],
     qInputs: [
         { label: "Title", name: "", type: "text",
