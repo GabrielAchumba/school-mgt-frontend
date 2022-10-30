@@ -15,7 +15,7 @@ const routes = [
         
       },
       { 
-        path: '/:schoolname/news', 
+        path: '/news', 
         component: () => import('pages/authentication/news.vue') 
         
       },
@@ -361,6 +361,51 @@ const routes = [
       { 
         path: '/update-home', 
         component: () => import('pages/administrators/branding/home/update.vue') 
+        
+      },
+      { 
+        path: '/core-value-landing', 
+        component: () => import('pages/administrators/branding/core-value/landing.vue') 
+        
+      },
+      { 
+        path: '/create-core-value', 
+        component: () => import('pages/administrators/branding/core-value/create.vue') 
+        
+      },
+      { 
+        path: '/update-core-value', 
+        component: () => import('pages/administrators/branding/core-value/update.vue') 
+        
+      },
+      { 
+        path: '/about-us-landing', 
+        component: () => import('pages/administrators/about-us/landing.vue') 
+        
+      },
+      { 
+        path: '/create-about-us', 
+        component: () => import('pages/administrators/about-us/create.vue') 
+        
+      },
+      { 
+        path: '/update-about-us', 
+        component: () => import('pages/administrators/about-us/update.vue') 
+        
+      },
+      { 
+        path: '/contact-landing', 
+        component: () => import('pages/administrators/contact/landing.vue') 
+        
+      },
+      { 
+        path: '/create-contact', 
+        component: () => import('pages/administrators/contact/create.vue') 
+        
+      },
+      { 
+        path: '/update-contact', 
+        component: () => import('pages/administrators/contact/update.vue') 
         
       },
     ]

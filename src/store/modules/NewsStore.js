@@ -14,7 +14,7 @@ const getters = {
 }
 
 const mutations = {
-    SetNewss(state, payload){
+    SetNewses(state, payload){
         state.newses = payload;
     },
     SetSelectedNews(state, payload){

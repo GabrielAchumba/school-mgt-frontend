@@ -56,7 +56,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/Vision-landing')
+            this.$router.push('/vision-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -166,7 +166,7 @@ export default {
                             await context.uploadAndSaveVisionUr();
                             break;
                         case "Success":
-                            this.$router.push("/Vision-landing");
+                            this.$router.push("/vision-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

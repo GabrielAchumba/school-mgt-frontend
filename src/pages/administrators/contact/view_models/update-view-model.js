@@ -15,9 +15,22 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Official Phone Numbers", name: "", type: "textarea",
+        { label: "Official Email Address", name: "", type: "text",
         Template: {
             sn: 2,
+            iconName: "",
+            visible: false,
+        }},
+        { label: "Official First Phone Number", name: "", type: "text",
+        Template: {
+            sn: 3,
+            iconName: "",
+            visible: false,
+        }},
+
+        { label: "Official Second Phone Number", name: "", type: "text",
+        Template: {
+            sn: 4,
             iconName: "",
             visible: false,
         }},

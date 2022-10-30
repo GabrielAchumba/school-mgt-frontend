@@ -153,7 +153,7 @@ export default {
                 await context.uploadNews();
                 await context.save();
             }else{
-                alert("News does not exists")
+                alert("News title does not exists")
             }
         },
         async okDialog(payload){

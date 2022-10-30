@@ -26,7 +26,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { post } from "../../../store/modules/services";
+import { post } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
@@ -53,7 +53,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/aboutus-landing')
+            this.$router.push('/about-us-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -77,22 +77,17 @@ export default {
                     title: context.form.qInputs[0].name,
                     description: context.form.qInputs[1].name,
                     schoolId: user.schoolId,
+                    createdBy: user.id,
                 }
             }
 
             console.log("payload: ", payload)
             var response = await post(payload)
 
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
+            if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
-                context.dialogs[2].message = message;
+                context.dialogs[2].message = "Failed to create about us";
                 context.dialogs[2].isVisible = true;
             }
 
@@ -109,7 +104,7 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/AboutUs-landing");
+                            this.$router.push("/about-us-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

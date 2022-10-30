@@ -10,7 +10,7 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Description", name: "", type: "text",
+        { label: "Description", name: "", type: "textarea",
         selectedFile: null,
         files: [],
         Template: {
@@ -55,6 +55,8 @@ const form = {
         var i = 0;
         for (i = 0; i < this.qFiles.length; i++){
             this.qFiles[i].name = "";
+            this.qFiles[i].selectedFile = null;
+
         }
     },
     clearQInputs(){

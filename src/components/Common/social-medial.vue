@@ -43,23 +43,21 @@ export default {
         selectedSchool(){
             console.log("selectedSchool: ", this.$store.getters["schoolStore/selectedSchool"])
             return this.$store.getters["schoolStore/selectedSchool"];
+        },
+        email(){
+            return this.$store.getters["ContactStore/officialEmail"];
+        },
+        phoneNumber(){
+            return this.$store.getters["ContactStore/officialPhoneNumber1"];
         }
     },
     components:{
         IconLabel
     },
     props:{
-        phoneNumber:{
-            type: String,
-            default: "+2347032488605"
-        },
         phoneIcon:{
             type: String,
             default: "phone"
-        },
-        email:{
-            type: String,
-            default: "newway@gmail.com"
         },
         emailIcon:{
             type: String,

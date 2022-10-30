@@ -105,6 +105,7 @@ export default {
                 url,
                 req: {
                     schoolId: user.schoolId,
+                    title: context.form.qInputs[0].name,
                 }
             }
 
@@ -119,7 +120,7 @@ export default {
          async save(){
             var context = this;
             
-            var url = `News/create`;
+            var url = `news/create`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
@@ -153,7 +154,7 @@ export default {
                 await context.uploadNews();
                 await context.save();
             }else{
-                alert("News already exists")
+                alert("News title already exists")
             }
         },
         async okDialog(payload){

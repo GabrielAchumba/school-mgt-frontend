@@ -135,7 +135,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadCoreValueModels()
+                            await context._loadCoreValues()
                             break;
                     }
                     context.dialogs[i].isVisible = false;

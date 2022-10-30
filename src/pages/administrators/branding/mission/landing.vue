@@ -135,7 +135,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadMissionModels()
+                            await context._loadMissions()
                             break;
                     }
                     context.dialogs[i].isVisible = false;

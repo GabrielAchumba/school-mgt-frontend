@@ -26,7 +26,7 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/services"
+  import { get, remove } from "../../../store/modules/gcp-services";
     export default {
       components:{
         Table,
@@ -132,7 +132,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadAboutUsf()
+                            await context.loadAboutUs()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -143,28 +143,19 @@
         async loadAboutUs(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
-        var url = `aboutus/${user.schoolId}`;
-        var response = await get({
-          url
-        })
+            var url = `aboutus/files/${user.schoolId}`;
+            var response = await get({
+            url
+            })
 
-        const { 
-                data : {
-                    data: result,
-                    message,
-                    success,
-                }
-            } = response
+            context.tableVM.rows = response.data;
+            this.$store.commit('AboutUsStore/SetAboutUses', response.data)
 
-            if(success){
-            context.tableVM.rows = result;
-            this.$store.commit('AboutUsStore/SetAboutUs', result)
-            }else{
-                context.isFetchTableDialog = true;
-                context.message = message;
-            }
+        
 
-            }
+        
+
+        }
         },
         async created() {
             var context = this;

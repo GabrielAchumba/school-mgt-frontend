@@ -31,7 +31,6 @@ const state = {
       { name: "/news", tabIndex: "news", label: "News"},
       { name: "/about_us", tabIndex: "about_us", label: "About Us" },
       { name: "/contact", tabIndex: "contact", label: "Contact" },
-      { name: "/chat-school", tabIndex: "chat", label: "Chat" },
     ],
     client_menuList: [
       { name: "/", tabIndex: "home", label: "Home" },

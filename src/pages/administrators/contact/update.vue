@@ -26,7 +26,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { put } from "../../../store/modules/services";
+import { put } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
@@ -77,7 +77,9 @@ export default {
                 req: {
                     title: context.form.qInputs[0].name,
                     description: context.form.qInputs[1].name,
-                    officialPhoneNumbers: context.form.qInputs[2].name,
+                    officialEmail: context.form.qInputs[2].name,
+                    officialPhoneNumber1: context.form.qInputs[3].name,
+                    officialPhoneNumber2: context.form.qInputs[4].name,
                     schoolId: user.schoolId,
                 }
             }
@@ -125,7 +127,9 @@ export default {
         context.selectedContact = this.$store.getters["ContactStore/selectedContact"];
         context.form.qInputs[0].name = context.selectedContact.title;
         context.form.qInputs[1].name = context.selectedContact.description;
-        context.form.qInputs[2].name = context.selectedContact.officialPhoneNumbers;
+         context.form.qInputs[2].name = context.selectedContact.officialEmail;
+        context.form.qInputs[3].name = context.selectedContact.officialPhoneNumber1;
+        context.form.qInputs[4].name = context.selectedContact.officialPhoneNumber2;
     }
 }
 </script>

@@ -1,6 +1,8 @@
 const state = {
     Contacts: [],
-    selectedContact: {}
+    selectedContact: {},
+    officialEmail: "",
+    officialPhoneNumber1: "",
 
 }
 
@@ -10,7 +12,13 @@ const getters = {
     },
     selectedContact(state){
         return state.selectedContact;
-    }
+    },
+    officialEmail(state){
+        return state.officialEmail;
+    },
+    officialPhoneNumber1(state){
+        return state.officialPhoneNumber1;
+    },
 }
 
 const mutations = {
@@ -19,6 +27,12 @@ const mutations = {
     },
     SetSelectedContact(state, payload){
         state.selectedContact = payload;
+    },
+    SetOfficialEmail(state, payload){
+        state.officialEmail = payload;
+    },
+    SetOfficialPhoneNumber1(state, payload){
+        state.officialPhoneNumber1 = payload;
     }
 }
 

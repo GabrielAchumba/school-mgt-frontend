@@ -26,7 +26,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { put } from "../../../store/modules/services";
+import { put } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
@@ -47,14 +47,14 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Update AboutUs"){
+                if(dialog.title == "Update About Us"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
             }
         },
         Cancel(){
-            this.$router.push('/AboutUs-landing')
+            this.$router.push('/about-us-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -70,27 +70,22 @@ export default {
         async save(){
             var context = this;
             
-            var url = `AboutUs/${context.selectedAboutUs.id}`;
+            var url = `aboutus/${context.selectedAboutUs.id}`;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
-                    percentage: Number(context.form.qInputs[1].name),
+                    title: context.form.qInputs[0].name,
+                    description: context.form.qInputs[1].name,
                     schoolId: user.schoolId,
+                    createdBy: user.id,
                 }
             }
 
             console.log("payload: ", payload)
             var response = await put(payload)
 
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
+            if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
                 context.dialogs[2].message = message;
@@ -106,11 +101,11 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Update AboutUs":
+                        case "Update About Us":
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/AboutUs-landing");
+                            this.$router.push("/about-us-landing");
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -122,8 +117,8 @@ export default {
     created(){
         var context =  this;
         context.selectedAboutUs = this.$store.getters["AboutUsStore/selectedAboutUs"];
-        context.form.qInputs[0].name = context.selectedAboutUs.type;
-        context.form.qInputs[1].name = context.selectedAboutUs.percentage;
+        context.form.qInputs[0].name = context.selectedAboutUs.title;
+        context.form.qInputs[1].name = context.selectedAboutUs.description;
     }
 }
 </script>

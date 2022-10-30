@@ -39,6 +39,27 @@
               },
               {
                 name: "showPage",
+                title: "Core Value", 
+                description: "These are the characteristics of your organization",
+                image: "/statics/images/staffs.jpg",
+                to: "/core-value-landing"
+              },
+              {
+                name: "showPage",
+                title: "About Us", 
+                description: "Describe in detail things about your organization",
+                image: "/statics/images/staffs.jpg",
+                to: "/about-us-landing"
+              },
+              {
+                name: "showPage",
+                title: "Contact", 
+                description: "The contact of your organization such as official line, address, etc.",
+                image: "/statics/images/staffs.jpg",
+                to: "/contact-landing"
+              },
+              {
+                name: "showPage",
                 title: "Landing Page", 
                 description: "Customize the images and texts of your landing page",
                 image: "/statics/images/staffs.jpg",

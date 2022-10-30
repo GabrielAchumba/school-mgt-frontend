@@ -57,7 +57,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/Vision-landing')
+            this.$router.push('/vision-landing')
         },
         cancelDialog(payload){
             const context = this;

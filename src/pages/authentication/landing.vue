@@ -1,38 +1,37 @@
 <template>
   <div>
    <Carousel/>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+       <q-btn fab :icon="iconName" color="primary" class="bg-accent">
+        <q-menu fit>
+          <ChatBox/>
+        </q-menu>
+      </q-btn>
+    </q-page-sticky>
   </div>
 </template>
 
 <script>
-import { colors } from 'quasar'
-const { getBrand, setBrand } = colors
 import Carousel from "../../components/Carousel/carousel.vue";
-import { loadLogos } from "../administrators/branding/logo/utils";
+import ChatBox from "../../components/Menus/chatbox.vue";
+
 export default {
   components:{
     Carousel,
+    ChatBox,
+  },
+  data(){
+    return {
+      iconName: "keyboard_arrow_up",
+    }
   },
   methods:{
-    initializeLogo(logo){
-      setBrand('primary', logo.primaryColor);
-      setBrand('accent', logo.tertiaryColor);
-      setBrand('secondary', logo.secondaryColor);
-    },
-    async branding(){
-        var context = this;
-        selectedSchool = this.$store.getters["componentsStore/tableRow"];
-        let torpaLogo = {};
-        if(selectedSchool.schoolName === undefined){
-          torpaLogo = await loadLogos("CEO");
-        }else{
-          torpaLogo = await loadLogos(selectedSchool.id);
-        }
-        
-        console.log("logo: ", torpaLogo.result[0]);
-        this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
-        context.initializeLogo(torpaLogo.result[0])
-    },
+    onChatBox(){
+      var context = this;
+      if(context.iconName == "keyboard_arrow_up") context.iconName = "close";
+      else context.iconName = "keyboard_arrow_up";
+      console.log("context.iconName: ", context.iconName)
+    }
   }
 }
 </script>

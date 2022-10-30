@@ -26,7 +26,7 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/services"
+  import { get, remove } from "../../../store/modules/gcp-services";
     export default {
       components:{
         Table,
@@ -132,7 +132,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadContactf()
+                            await context.loadContacts()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -140,25 +140,17 @@
                 }
             }
         },
-        async loadContact(){
+        async loadContacts(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
-        var url = `contact/${user.schoolId}`;
+        var url = `contact/files/${user.schoolId}`;
         var response = await get({
           url
         })
 
-        const { 
-                data : {
-                    data: result,
-                    message,
-                    success,
-                }
-            } = response
-
-            if(success){
-            context.tableVM.rows = result;
-            this.$store.commit('ContactStore/SetContacts', result)
+            if(response.data){
+            context.tableVM.rows = response.data;
+            this.$store.commit('ContactStore/SetContacts', response.data)
             }else{
                 context.isFetchTableDialog = true;
                 context.message = message;
@@ -168,7 +160,7 @@
         },
         async created() {
             var context = this;
-            await context.loadContact()
+            await context.loadContacts()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

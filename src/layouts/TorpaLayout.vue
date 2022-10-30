@@ -36,21 +36,58 @@ export default {
             setBrand('accent', logo.tertiaryColor);
             setBrand('secondary', logo.secondaryColor);
         },
-        async branding(schoolId){
+        async branding(school){
+                var schoolId = school.schoolId;
                 var context = this;
+                let countryCode = "+234";
+                let officialAddress = school.address;
+              
+                var user = this.$store.getters["authenticationStore/IdentityModel"]
+                if(user){
+                    console.log("user: ", user)
+                }
+
+                
+
                 const torpaLogo = await loadLogos(schoolId);
                 this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
                 context.initializeLogo(torpaLogo.result[0]);
                 const newses = await loadNewses(schoolId);
-                this.$store.commit('NewsStore/SetNewss', newses.result);
+                this.$store.commit('NewsStore/SetNewses', newses.result);
 
                 const mission = await loadMissions(schoolId);
                 this.$store.commit('MissionStore/SetSelectedMission', mission.result[0]);
                 const vision = await loadVisions(schoolId);
                 this.$store.commit('VisionStore/SetSelectedVision', vision.result[0]);
 
-                const contact = await loadContacts(schoolId);
-                this.$store.commit('ContactStore/SetSelectedContact', contact.result[0]);
+                const contactCommon = await loadContacts(schoolId);
+                const contact = { 
+                    title: contactCommon.result[0].title,
+                    description: contactCommon.result[0].description,
+                    list: [
+                    {
+                        title: "Visit us on",
+                        description: officialAddress,
+                        icon: "location_on",
+                    },
+                    {
+                        title: "Call us on",
+                        description: `(${countryCode})${contactCommon.result[0].officialPhoneNumber1},  
+                        (${countryCode})${contactCommon.result[0].officialPhoneNumber2}`,
+                        icon: "phone",
+                    },
+                    {
+                        title: "Mail us @",
+                        description: contactCommon.result[0].officialEmail,
+                        icon: "email",
+                    }
+                ]
+                }
+
+                this.$store.commit('ContactStore/SetOfficialEmail', contactCommon.result[0].officialEmail);
+                this.$store.commit('ContactStore/SetOfficialPhoneNumber1', `(${countryCode})${contactCommon.result[0].officialPhoneNumber1}`);
+                this.$store.commit('ContactStore/SetSelectedContact', contact);
+
                 const corevalue = await loadCoreValues(schoolId);
                 this.$store.commit('CoreValueStore/SetSelectedCoreValue', corevalue.result[0]);
                 const aboutusCommon = await loadAboutUses(schoolId);
@@ -69,18 +106,24 @@ export default {
             var context = this;
             this.$store.commit('componentsStore/setTableRow', payload);
             this.$store.commit('schoolStore/SetSelectedSchool', payload);
-            let schoolId = "CEO";
-            if(payload.schoolName != undefined){
-                schoolId = payload.id
+            let school = {
+                schoolId: "CEO",
+                address: "Plot 156 Tom Inko-Tariah Avenue, Rumuogba Estate, Port Harcourt, Rivers State, Nigeria",
             }
-            context.branding(schoolId);
+            if(payload.schoolName != undefined){
+                school.schoolId = payload.id;
+                school.address = payload.address;
+            }
+            context.branding(school);
             this.$router.push(`/`)
         }
     },
     async created(){
         var context = this;
-        let schoolId = "CEO";
-        await context.branding(schoolId);
+        await context.branding({
+            schoolId: "CEO",
+            address: "Plot 156 Tom Inko-Tariah Avenue, Rumuogba Estate, Port Harcourt, Rivers State, Nigeria",
+            });
     }
 }
 

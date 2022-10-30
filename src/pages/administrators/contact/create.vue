@@ -26,7 +26,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { post } from "../../../store/modules/services";
+import { post } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
@@ -53,7 +53,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/Contact-landing')
+            this.$router.push('/contact-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -74,8 +74,11 @@ export default {
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
-                    percentage: Number(context.form.qInputs[1].name),
+                    title: context.form.qInputs[0].name,
+                    description: context.form.qInputs[1].name,
+                    officialEmail: context.form.qInputs[2].name,
+                    officialPhoneNumber1: context.form.qInputs[3].name,
+                    officialPhoneNumber2: context.form.qInputs[4].name,
                     schoolId: user.schoolId,
                 }
             }
@@ -83,16 +86,10 @@ export default {
             console.log("payload: ", payload)
             var response = await post(payload)
 
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
+            if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
-                context.dialogs[2].message = message;
+                context.dialogs[2].message = "Failed to create contact";
                 context.dialogs[2].isVisible = true;
             }
 

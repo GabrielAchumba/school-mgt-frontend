@@ -38,7 +38,7 @@
             cardList: [],
             tableVM: {
                 selectedNews: {},
-                title: "Newss",
+                title: "News",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "title", label: "Title", field: "", align: "left", type: "text" },
@@ -147,7 +147,7 @@
 
                 var context = this;
                 var user = this.$store.getters["authenticationStore/IdentityModel"]
-                const { result, message } = await loadNewss(user.schoolId)
+                const { result, message } = await loadNewses(user.schoolId)
                 this.$store.commit('NewsStore/SetNewses', result)
                 context.tableVM.rows = result;
                 
