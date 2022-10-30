@@ -14,9 +14,9 @@ import axios from 'axios'
       } */
 
     const gcphttp  = axios.create({ 
-      baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:7000/',
+      baseURL: (processEnvNOEENV == 'production') ? 'https://school-mgt-backend-nestjs.herokuapp.com/' : 'http://localhost:5000/',
         headers: {'Content-Type': 'application/json'},
-          baseURL: (processEnvNOEENV == 'production') ? 'https://arcane-inlet-68126.herokuapp.com/' : 'http://localhost:7000/'
+          baseURL: (processEnvNOEENV == 'production') ? 'https://school-mgt-backend-nestjs.herokuapp.com/' : 'http://localhost:5000/'
       })
 
     /* export default ({ Vue }) => {

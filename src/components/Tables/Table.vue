@@ -73,6 +73,10 @@
                     </div>
                 </q-td>
 
+                <q-td key="route" :props="props">
+                    <a href="#" @click="linkClick(props.row)">{{ props.row['route']}}</a>
+                </q-td>
+
                 <q-td 
                 v-for="column in removekeys()" :key="column.name"
                 :props="props">{{ props.row[column.name] }}</q-td>
@@ -127,6 +131,9 @@
           }
         },
         methods: {
+            linkClick(row){
+              this.$emit("linkClick", row)
+            },
             setIsResponsive(){
               var context = this;
               if(context.isResponsive == false){
@@ -139,7 +146,7 @@
               var context = this;
               var columnsNew = []
               for(const column of context.table_VM.columns){
-                  if(column.name != "actions"){
+                  if(column.name != "actions" && column.name != "route"){
                       columnsNew.push(column);
                   }
               }

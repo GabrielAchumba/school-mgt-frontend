@@ -26,16 +26,18 @@ const state = {
     menuList: [],
     torpa_menuList: [
       { name: "/", tabIndex: "home", label: "Home" },
-      { name: "login_register", tabIndex: "login_register", label: "Sign In"},
-      { name: "school-landing", tabIndex: "schools", label: "Schools" },
-      { name: "news", tabIndex: "news", label: "News"},
-      { name: "about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "/login_register", tabIndex: "login_register", label: "Sign In"},
+      { name: "/school-landing", tabIndex: "schools", label: "Schools" },
+      { name: "/news", tabIndex: "news", label: "News"},
+      { name: "/about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "/contact", tabIndex: "contact", label: "Contact" },
+      { name: "/chat-school", tabIndex: "chat", label: "Chat" },
     ],
     client_menuList: [
       { name: "/", tabIndex: "home", label: "Home" },
-      { name: "news", tabIndex: "news", label: "News"},
-      { name: "about_us", tabIndex: "about_us", label: "About Us" },
-      { name: "contact", tabIndex: "contact", label: "Contact" },
+      { name: "/news", tabIndex: "news", label: "News"},
+      { name: "/about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "/contact", tabIndex: "contact", label: "Contact" },
     ]
   }
 
@@ -122,6 +124,7 @@ const mutations = {
         return { ...row }
       })
     }
+    console.log(state.menuList)
   },
   changeTab(state, payload){
     state.tab = payload;

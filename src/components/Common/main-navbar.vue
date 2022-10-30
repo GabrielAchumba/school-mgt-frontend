@@ -1,11 +1,11 @@
 <template>
-    <div class="q-pa-none bg-accent text-primary">
-        <q-toolbar class="bg-accent text-primary">
-            <q-btn flat dense round @click="create" avatar>
+    <div class="q-pa-none bg-red text-accent">
+        <q-toolbar class="bg-primary text-accent">
+            <q-btn flat dense round avatar>
             <q-avatar 
                 class="bg-primary text-accent"
                 size="md">
-                <img :src="logoImageUrl">
+                <img :src="selectedLogo.fileUrl">
                 </q-avatar>
             </q-btn>
          <q-space />
@@ -17,9 +17,9 @@
             :icon="rightMenuIcon"
             flat
             dense
-            class="text-primary bg-accent">
+            class="text-accent bg-primary">
             <q-menu fit>
-              <q-list dense class="text-accent text-caption bg-primary">
+              <q-list dense class="text-accent text-caption bg-primary" style="width:200px;">
                 <q-item
                 v-for="(menuItem) in menuList" :key="menuItem.name" 
                 class="bg-primary text-accent"
@@ -37,7 +37,7 @@
         <q-tab 
         v-else
          v-for="(menuItem) in menuList" :key="menuItem.name"
-        class="q-mr-sm q-py-xs text-primary" 
+        class="q-mr-sm q-py-xs text-accent" 
         @click="scrollToElement(menuItem.name);" 
         :label="menuItem.label" />
        </q-tabs>
@@ -53,20 +53,24 @@ export default {
         menuList() {
             return this.$store.getters['authenticationStore/menuList'];
         },
+        selectedLogo(){
+            return this.$store.getters['LogoStore/selectedLogo'];
+        }
     },
     components:{
         IconLabel
     },
-    props:{
+    /* props:{
         logoImageUrl:{
             type: String,
-            default: ""
+            default: "/statics/newway.jpg"
         },
-    },
+    }, */
     data(){
         return {
             rightDrawerOpen: window.innerWidth < 700 ? true : false,
             selected_tab: 'home',
+            rightMenuIcon: "menu",
         }
     },
     methods:{

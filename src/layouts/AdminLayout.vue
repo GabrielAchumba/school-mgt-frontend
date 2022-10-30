@@ -79,8 +79,8 @@ export default {
     initializeLogo(){
       var context = this;
       setBrand('primary', context.primaryColor);
-      setBrand('accent', context.secondaryColor);
-      setBrand('secondary', context.tertiaryColor);
+      setBrand('accent', context.tertiaryColor);
+      setBrand('secondary', context.secondaryColor);
     },
     showSelectedRouters(){
       console.log("this.$router: ", this.$router)
@@ -237,7 +237,7 @@ export default {
     console.log("seen 2");
     window.addEventListener("resize", this.onResize);
     var context = this;
-    context.initializeLogo();
+    //context.initializeLogo();
     this.$store.commit("authenticationStore/setActiveRoute", "adminLanding");
     
     if(window.innerWidth < 700) context.rightDrawerOpen = true;

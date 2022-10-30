@@ -1,6 +1,6 @@
 <template>
    <div
-   class="full-height full-width text-primary">
+   class="full-width text-primary">
     <q-carousel
           animated
           v-model="slide"
@@ -12,14 +12,14 @@
           control-color="white"
           transition-prev="slide-right"
           transition-next="slide-left"
-          class="full-height"
+          style="height:100vh;"
         >
           <q-carousel-slide 
           v-for="carousel in carousels" 
           :key="carousel.title" 
           class="q-pa-none" 
           :name="carousel.title" 
-          :img-src="carousel.fileurl">
+          :img-src="carousel.fileUrl">
             <div class="full-height full-width flex flex-center" style="background-color: rgba(0, 0, 0, 0.68) !important;">
             <div class="custom-caption">
               <div class="text-h2 main_line animation_2" style="font-size:40px;">{{ carousel.title }}</div><br><br><br>

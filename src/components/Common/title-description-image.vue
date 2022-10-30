@@ -1,15 +1,20 @@
 <template>
-    <div class="row q-pa-sm">
-        <q-card class="col-lg-12 col-md-12 col-sm-6 col-xs-6 q-pa-sm">
-          <div class="text-h3 flex fex-center">{{ title }}</div>
-          <div class="text-h5 flex fex-center">{{ description }}</div>
+    <div class="row q-pa-sm bg-primary">
+        <q-card class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm">
+          <div class="text-h5 text-accent flex flex-center q-pa-sm">{{ title }}</div>
+          <p class="q-pa-sm flex flex-center">{{ description }}</p>
         </q-card>
 
-        <q-card class="col-lg-12 col-md-12 col-sm-6 col-xs-6 q-pa-sm">
+        <q-card class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm">
             <q-img 
             :src="imageUrl"
             spinner-color="accent"
-            class="rounded-borders"/>
+            class="rounded-borders">
+              <div class="absolute-bottom">
+                <div class="text-h6">{{ imageTitle }}</div>
+                <div class="text-subtitle2">{{ imageDescription }}</div>
+              </div>
+            </q-img>
         </q-card>
     </div>
 </template>
@@ -26,6 +31,14 @@ export default {
       default: "",
     },
     imageUrl: {
+      type: String,
+      default: "",
+    },
+    imageTitle:{
+      type: String,
+      default: "",
+    },
+    imageDescription:{
       type: String,
       default: "",
     }

@@ -1,13 +1,11 @@
 <template>
-    <div class="row q-pa-sm bg-accent text-primary">
-        <div class="col-lg-12 col-md-12 col-sm-6 col-xs-6 q-pa-sm">
-          <q-icon
-          class="q-pa-md text-accent"
+    <div class="bg-accent text-primary">
+         <!--  <q-icon
+          class="q-pa-sm text-accent"
           :name="icon"
           size="sm">
-          </q-icon>
-          <p class="q-pa-sm">{{ caption }}</p>
-        </div>
+          </q-icon> -->
+          <p class="q-pa-sm q-ma-sm text-caption">{{ caption }}</p>
     </div>
 </template>
 

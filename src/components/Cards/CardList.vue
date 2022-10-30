@@ -1,6 +1,5 @@
 <template>
   <div>
-
         <div class="row bg-primary wrap">
           <div class="col-12 q-mt-auto q-mb- flex flex-center"> 
             <div 

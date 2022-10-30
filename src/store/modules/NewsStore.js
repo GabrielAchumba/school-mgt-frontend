@@ -1,12 +1,12 @@
 const state = {
-    Newses: [],
+    newses: [],
     selectedNews: {}
 
 }
 
 const getters = {
-    Newses(state){
-        return state.Newses;
+    newses(state){
+        return state.newses;
     },
     selectedNews(state){
         return state.selectedNews;
@@ -15,7 +15,7 @@ const getters = {
 
 const mutations = {
     SetNewss(state, payload){
-        state.Newses = payload;
+        state.newses = payload;
     },
     SetSelectedNews(state, payload){
         state.selectedNews = payload;

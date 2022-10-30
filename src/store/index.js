@@ -21,6 +21,9 @@ import VisionStore from './modules/VisionStore';
 import MissionStore from './modules/MissionStore';
 import NewsStore from './modules/NewsStore';
 import CarouselStore from './modules/CarouselStore';
+import AboutUsStore from './modules/AboutUsStore';
+import ContactStore from './modules/ContactStore';
+import CoreValueStore from './modules/CoreValueStore';
 
 
 Vue.use(Vuex)
@@ -57,6 +60,9 @@ export default function (/* { ssrContext } */) {
       MissionStore,
       NewsStore,
       CarouselStore,
+      AboutUsStore,
+      ContactStore,
+      CoreValueStore,
     },
 
     // enable strict mode (adds overhead!)

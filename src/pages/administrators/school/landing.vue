@@ -2,7 +2,8 @@
   <div>
     <Table
     :table_VM="tableVM"
-    @createSchool="createSchool($event)"/>
+    @createSchool="createSchool($event)"
+    @linkClick="linkClick($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -37,6 +38,7 @@
                 title: "Schools",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
+                    { name: "route", label: "School Website", field: "", align: "left", type: "text" },
                     { name: "schoolName", label: "School", field: "", align: "left", type: "text" },
                     { name: "address", label: "Address", field: "", align: "left", type: "text" },
                 ],
@@ -59,6 +61,9 @@
             }
         },
         methods: {
+            linkClick(selectedSchool){
+                this.$emit("linkClick", selectedSchool)
+            },
           okayEvent(){
             var context = this;
             context.isFetchTableDialog = false
@@ -155,7 +160,12 @@
             } = response
 
             if(success){
-            context.tableVM.rows = result;
+            context.tableVM.rows = result.map((row) => {
+                return {
+                    ...row,
+                    route: row.schoolName.replace(/\s+/g,"_")
+                }
+            });
             this.$store.commit('schoolStore/SetSchools', result)
             }else{
                 context.isFetchTableDialog = true;

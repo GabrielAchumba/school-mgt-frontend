@@ -1,69 +1,81 @@
 <template>
     <div class="q-pa-none bg-accent text-primary">
-        <q-toolbar class="bg-accent text-primary">
+        <q-bar class="bg-accent text-primary">
             <IconLabel
+            class="q-pa-sm"
             :icon="phoneIcon"
             :caption="phoneNumber"/>
 
             <IconLabel
+            class="q-pa-sm"
             :icon="emailIcon"
             :caption="email"/>
          <q-space />
+
+          <p class="q-pa-sm q-ma-sm text-caption">{{ selectedSchool.schoolName }}</p>
+
+          <q-space />
         
         <q-icon
-          class="q-pa-md text-accent"
+          class="q-pa-md"
           :name="facebookIcon"
           size="sm">
         </q-icon>
         <q-icon
-          class="q-pa-md text-accent"
+          class="q-pa-md"
           :name="twitterIcon"
           size="sm">
         </q-icon>
         <q-icon
-          class="q-pa-md text-accent"
+          class="q-pa-md"
           :name="linkedInIcon"
           size="sm">
         </q-icon>
         
-      </q-toolbar>
+      </q-bar>
     </div>
 </template>
 
 <script>
 import IconLabel from "./icon-label.vue";
 export default {
+    computed:{
+        selectedSchool(){
+            console.log("selectedSchool: ", this.$store.getters["schoolStore/selectedSchool"])
+            return this.$store.getters["schoolStore/selectedSchool"];
+        }
+    },
     components:{
         IconLabel
     },
     props:{
         phoneNumber:{
             type: String,
-            default: ""
+            default: "+2347032488605"
         },
         phoneIcon:{
             type: String,
-            default: ""
+            default: "phone"
         },
         email:{
             type: String,
-            default: ""
+            default: "newway@gmail.com"
         },
         emailIcon:{
             type: String,
-            default: ""
+            default: "email"
         },
         facebookIcon:{
             type: String,
-            default: ""
+            default: "facebook"
         },
         twitterIcon:{
             type: String,
-            default: ""
+            default: "twitter"
         },
         linkedInIcon:{
             type: String,
-            default: ""
+            default: "linkedin"
         }
     }
 

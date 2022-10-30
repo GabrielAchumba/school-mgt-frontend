@@ -2,11 +2,31 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/AuthenticationLayout.vue'),
+    component: () => import('layouts/TorpaLayout.vue'),
     children: [
       { 
         path: '/', 
         component: () => import('pages/authentication/landing.vue') 
+        
+      },
+      { 
+        path: '/home', 
+        component: () => import('pages/authentication/landing.vue') 
+        
+      },
+      { 
+        path: '/:schoolname/news', 
+        component: () => import('pages/authentication/news.vue') 
+        
+      },
+      { 
+        path: '/about_us', 
+        component: () => import('pages/authentication/aboutus.vue') 
+        
+      },
+      { 
+        path: '/contact', 
+        component: () => import('pages/authentication/contactus.vue') 
         
       },
       { 
