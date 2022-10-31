@@ -73,6 +73,20 @@ export default {
         onFileSelected(payload){
             var context = this;
             context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+            context.form.qFiles[0].showPreview = true;
+            context.form.qFiles[0].imagePreview = reader.result;
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+						reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else{
+                    alert("Wrong image format. Only supports .jpg, .jpeg, .png and .gif")
+                }
+            }
             
             
         },
@@ -179,7 +193,8 @@ export default {
         var context =  this;
         context.selectedCoreValue = this.$store.getters["CoreValueStore/selectedCoreValue"];
         context.CoreValueUrl = context.selectedCoreValue.fileUrl;
-        context.form.qImages[0].imageUrl = context.selectedCoreValue.fileUrl;
+        context.form.qFiles[0].showPreview = true;
+        context.form.qFiles[0].imagePreview = context.selectedCoreValue.fileUrl;
         context.form.qInputs[0].name = context.selectedCoreValue.title;
         context.form.qInputs[1].name = context.selectedCoreValue.description;
     }

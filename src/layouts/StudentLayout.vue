@@ -60,7 +60,7 @@
           <q-avatar
             v-else
             class="bg-accent text-primary">
-  	        {{ IdentityModel.firstName.charAt(0) }}
+  	        {{ IdentityModel.firstName }}
   	      </q-avatar>
           <q-menu
             fit>
@@ -83,7 +83,7 @@
                                   <q-avatar 
                                   v-else
                                   class="bg-primary text-accent">
-                                    {{ IdentityModel.firstName.charAt(0) }}
+                                    {{ IdentityModel.firstName }}
                                   </q-avatar>
                               </div>
                               <div 
@@ -134,7 +134,7 @@
 export default {
   computed: {
         IdentityModel() {
-            return this.$store.getters['authenticationStore/IdentityModel'];
+            return this.$store.getters['studentStore/selectedStudent'];
         },
         Loginstatus() {
           return this.$store.getters['authenticationStore/Loginstatus'];

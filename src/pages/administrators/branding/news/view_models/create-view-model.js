@@ -36,8 +36,12 @@ const form = {
         }}
     ],
     qFiles: [
-        { label: "News File", name: "", type: "file",
+        { label: "News File (Max Size: 7MB)", name: "", type: "file",
         selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
+        showVideoPreview: false,
+        fileType: "image",
         files: [],
         Template: {
             sn: 0,
@@ -56,7 +60,9 @@ const form = {
         for (i = 0; i < this.qFiles.length; i++){
             this.qFiles[i].name = "";
             this.qFiles[i].selectedFile = null;
-
+            this.qFiles[i].showPreview = false;
+            this.qFiles[i].showVideoPreview = false;
+            this.qFiles[i].imagePreview = '';
         }
     },
     clearQInputs(){

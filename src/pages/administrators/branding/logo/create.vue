@@ -71,8 +71,21 @@ export default {
         },
         onFileSelected(payload){
             var context = this;
-            console.log("payload: ", payload)
             context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+            context.form.qFiles[0].showPreview = true;
+            context.form.qFiles[0].imagePreview = reader.result;
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+						reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else{
+                    alert("Wrong image format. Only supports .jpg, .jpeg, .png and .gif")
+                }
+            }
             
             
         },

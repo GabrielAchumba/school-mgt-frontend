@@ -73,6 +73,38 @@ export default {
         onFileSelected(payload){
             var context = this;
             context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+            let fileType = "image";
+
+            reader.addEventListener("load", function () {
+
+                 context.form.qFiles[0].showPreview = false;
+                  context.form.qFiles[0].showVideoPreview = false;
+
+                if(fileType === "video"){
+                     context.form.qFiles[0].showVideoPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }else{
+                    context.form.qFiles[0].showPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }
+
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else if (/\.(ogg|mp4|webm)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "video";
+                    context.form.qFiles[0].fileType = fileType;
+                    reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else{
+                    alert("Wrong image format. Only supports .jpg, .jpeg, .png, .gif, .mp4, .ogg, or .webm")
+                }
+            }
             
             
         },
@@ -128,6 +160,7 @@ export default {
                     description: context.form.qInputs[1].name,
                     imageTitle: context.form.qInputs[2].name,
                     imageDescription: context.form.qInputs[3].name,
+                    fileType: context.form.qFiles[0].fileType,
                     schoolId: user.schoolId,
                     fileUrl: context.NewsUrl,
                     createdBy: user.id,
@@ -181,7 +214,9 @@ export default {
         var context =  this;
         context.selectedNews = this.$store.getters["NewsStore/selectedNews"];
         context.NewsUrl = context.selectedNews.fileUrl;
-        context.form.qImages[0].imageUrl = context.selectedNews.fileUrl;
+        context.form.qFiles[0].showPreview = true;
+        context.form.qFiles[0].imagePreview = context.selectedNews.fileUrl;
+        context.form.qFiles[0].fileType = context.selectedNews.fileType;
         context.form.qInputs[0].name = context.selectedNews.title;
         context.form.qInputs[1].name = context.selectedNews.description;
         context.form.qInputs[2].name = context.selectedNews.imageTitle;

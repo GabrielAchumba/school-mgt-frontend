@@ -9,7 +9,10 @@
             :description="news.description"
             :imageUrl="news.fileUrl"
             :imageTitle="news.imageTitle"
-            :imageDescription="news.imageDescription"/>
+            :imageDescription="news.imageDescription"
+            :isVideo="news.isVideo"
+            :isImage="news.isImage"
+            :isAudio="news.isAudio"/>
             <TitleDescription
             v-else
             :title="news.title"

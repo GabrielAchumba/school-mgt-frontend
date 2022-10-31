@@ -36,18 +36,12 @@ const form = {
         }}
     ],
     qFiles: [
-        { label: "News File", name: "", type: "file",
+        { label: "News File (Max Size: 7MB)", name: "", type: "file",
         selectedFile: null,
-        files: [],
-        Template: {
-            sn: 0,
-            iconName: "",
-            visible: false,
-        }}
-    ],
-    qImages: [
-        { label: "News", name: "", type: "file", imageUrl: "",
-        selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
+        showVideoPreview: false,
+        fileType: "image",
         files: [],
         Template: {
             sn: 0,

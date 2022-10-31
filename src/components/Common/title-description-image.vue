@@ -5,9 +5,12 @@
           <p class="q-pa-sm flex flex-center">{{ description }}</p>
         </q-card>
 
-        <q-card class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm">
+        <q-card 
+        v-if="isImage"
+        class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm img">
             <q-img 
             :src="imageUrl"
+            v-show="isImage"
             spinner-color="accent"
             class="rounded-borders">
               <div class="absolute-bottom">
@@ -15,6 +18,16 @@
                 <div class="text-subtitle2">{{ imageDescription }}</div>
               </div>
             </q-img>
+        </q-card>
+
+         <q-card 
+        v-if="isVideo"
+        class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm img">
+            <video 
+            id="video-preview" 
+            v-bind:src="imageUrl" 
+            controls 
+            v-show="isVideo"/>
         </q-card>
     </div>
 </template>
@@ -41,7 +54,31 @@ export default {
     imageDescription:{
       type: String,
       default: "",
+    },
+    isVideo:{
+      type: Boolean,
+      default: false,
+    },
+    isImage:{
+      type: Boolean,
+      default: true,
+    },
+    isAudio:{
+      type: Boolean,
+      default: false,
     }
   },
 }
 </script>
+
+<style scoped>
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+video{
+		max-width: 100%;
+    max-height: 100%;
+}
+</style>

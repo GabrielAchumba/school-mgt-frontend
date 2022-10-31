@@ -26,5 +26,11 @@ export default {
           login,
           TorpaLandingPage
   },
+  data(){
+    return {
+      previewImage: '/statics/newway.jpg',
+      //:style="{ 'background-image': `url(${previewImage})` }"
+    }
+  }
 }
 </script>

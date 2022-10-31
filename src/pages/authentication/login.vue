@@ -28,7 +28,14 @@
           @SignIn="SignIn($event)"
           @ForgotPassword="ForgotPassword($event)"
           @SignUp="SignUp($event)"
-          @qInputTemplateAction="LoginQInputTemplateAction($event)"/>
+          @qInputTemplateAction="LoginQInputTemplateAction($event)"
+          @onToggle="onToggleLoginForm($event)"/>
+
+           <Form
+          v-if="isLoginFormWithToken"
+          :formData="loginFormWithToken"
+          @SignInWithToken="SignInWithToken($event)"
+          @onToggle="onToggleLoginFormWithToken($event)"/>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -50,12 +57,13 @@
 <script>
   import MessageBox from "../../components/dialogs/MessageBox.vue";
   import Form from "../../components/Forms/Form.vue";
-  import { post } from "../../store/modules/services";
-  import { loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm, dialogs }
-  from "./view_models/login-view-model";
+  import { post, get } from "../../store/modules/services";
+  import { loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm, dialogs,
+  loginFormWithToken } from "./view_models/login-view-model";
   import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import { getAuth } from 'firebase/auth'
 import { initializeApp } from "firebase/app";
+import { loadSchools } from "../administrators/school/utils";
 
 
 const firebaseConfig = {
@@ -91,16 +99,46 @@ const auth = getAuth()
             isVerifyOTP: false,
             isResetPassword: false,
             isLoginForm: true,
+            isLoginFormWithToken: false,
             loginForm: loginForm,
             forgotPasswordForm: forgotPasswordForm,
             verifyOTPForm: verifyOTPForm,
             resetPasswordForm: resetPasswordForm,
+            loginFormWithToken: loginFormWithToken,
             dialogs: dialogs,
             token: "",
             user: {},
             }
         },
         methods: {
+          onToggleLoginForm(payload){
+            var context = this;
+            context.isForgotPassword = false;
+            context.isResetPassword = false;
+            context.isVerifyOTP = false;
+
+            if(payload === "Disagreed"){
+              context.isLoginForm = true;
+              context.isLoginFormWithToken = false;
+            }else{
+              context.isLoginForm = false;
+              context.isLoginFormWithToken = true;
+            }
+          },
+          onToggleLoginFormWithToken(payload){
+            var context = this;
+            context.isForgotPassword = false;
+            context.isResetPassword = false;
+            context.isVerifyOTP = false;
+
+            if(payload === "Disagreed"){
+              context.isLoginForm = false;
+              context.isLoginFormWithToken = true;
+            }else{
+              context.isLoginForm = true;
+              context.isLoginFormWithToken = false;
+            } 
+          },
           SignUp(){
             this.$router.push("/register");
           },
@@ -133,20 +171,23 @@ const auth = getAuth()
             context.isForgotPassword = false;
             context.isResetPassword = false;
             context.isVerifyOTP = false;
+            context.isLoginFormWithToken = false;
           },
           CancelVerifyOTP(){
             var context = this;
             context.isLoginForm = false;
             context.isForgotPassword = true;
             context.isResetPassword = false;
-            context.isVerifyOTP = false
+            context.isVerifyOTP = false;
+            context.isLoginFormWithToken = false;
           },
           CancelResetPassword(){
             var context = this;
             context.isLoginForm = false;
             context.isForgotPassword = false;
             context.isResetPassword = false;
-            context.isVerifyOTP = true
+            context.isVerifyOTP = true;
+            context.isLoginFormWithToken = false;
           },
           SendOTP(){
             const context = this;
@@ -158,8 +199,8 @@ const auth = getAuth()
                     break;
                 }
             }
-          },
-          SignIn(){
+        },
+        SignIn(){
             const context = this;
             var i = -1;
             for(const dialog of context.dialogs){
@@ -170,12 +211,24 @@ const auth = getAuth()
                 }
             }
         },
+        SignInWithToken(){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Sign In Student"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
+        },
         ForgotPassword(){
             var context = this;
             context.isForgotPassword = true;
             context.isResetPassword = false;
             context.isLoginForm = false;
-            context.isVerifyOTP = false
+            context.isVerifyOTP = false;
+            context.isLoginFormWithToken = false;
         },
         ResetPassword(){
 
@@ -272,8 +325,33 @@ const auth = getAuth()
               context.dialogFailureOrScuess( "Sign In Failure", true);
             }
         },
+        async loginWithToken(){
+            var context = this;
 
-         async userIsExist(){
+            const schoolId = context.loginFormWithToken.qSelects[0].value;
+            const token = context.loginFormWithToken.qInputs[0].name;
+            var response = await get({
+             url: `student/get/${token}/${schoolId}`,
+            });
+
+            const { 
+              data : {
+                data: result,
+                message,
+                success,
+              }
+              } = response
+
+            
+            context.dialogFailureOrScuess("Sign In Student", false);
+            if(success){
+              this.$store.commit('studentStore/SetSelectedStudent', result)
+              context.dialogFailureOrScuess("Sign In Student Success", true);
+            }else{
+              context.dialogFailureOrScuess( "Sign In Student Failure", true);
+            }
+        },
+        async userIsExist(){
            console.log("userIsExist called")
             var context = this;
             
@@ -312,7 +390,6 @@ const auth = getAuth()
         },
         logInSuccessOkay(){
             var context = this;
-            console.log(context.user)
            if (context.user.designationId === "CEO"){
              this.$router.push('/super-admin');
            }else{
@@ -325,9 +402,6 @@ const auth = getAuth()
                 break;
               case "member":
                 this.$router.push('/member');
-                break;
-              case "student":
-                this.$router.push('/student');
                 break;
             }
            }
@@ -355,6 +429,7 @@ const auth = getAuth()
                           context.isVerifyOTP = false
                           context.isResetPassword = true;
                           context.isLoginForm = false;
+                          context.isLoginFormWithToken = false;
                           break;
                         case "Reset Password":
                             context.ChangePassword();
@@ -363,6 +438,13 @@ const auth = getAuth()
                           context.isVerifyOTP = false
                           context.isResetPassword = false;
                           context.isLoginForm = true;
+                          context.isLoginFormWithToken = false;
+                          break;
+                        case "Sign In Student":
+                            await context.loginWithToken();
+                            break;
+                        case "Sign In Student Success":
+                          this.$router.push('/student');
                           break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -410,6 +492,7 @@ const auth = getAuth()
               context.isVerifyOTP = true
               context.isResetPassword = false;
               context.isLoginForm = false;
+              context.isLoginFormWithToken = false;
               window.confirmationResult = confirmationResult;
               console.log("seen")
 
@@ -438,6 +521,7 @@ const auth = getAuth()
             context.isVerifyOTP = false;
             context.isResetPassword = true;
             context.isLoginForm = false;
+            context.isLoginFormWithToken = false;
           }).catch(function (error) {
               console.log("User couldn't sign in (bad verification code?)")
           });
@@ -464,7 +548,7 @@ const auth = getAuth()
         },1000)
       }
       },
-      created(){
+      async created(){
        var context = this;
        //loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm
        context.loginForm.clearQInputs();
@@ -472,6 +556,15 @@ const auth = getAuth()
        context.forgotPasswordForm.clearQSelects();
        context.verifyOTPForm.clearQInputs();
        context.resetPasswordForm.clearQInputs();
+       context.loginFormWithToken.clearQInputs();
+       const schools = await loadSchools();
+       this.$store.commit('schoolStore/SetSchools', schools.result);
+       context.loginFormWithToken.qSelects[0].list = schools.result.map((row) => {
+           return {
+               ...row,
+               type: row.schoolName
+           }
+       })
        context.initReCaptcha();
     }
     }

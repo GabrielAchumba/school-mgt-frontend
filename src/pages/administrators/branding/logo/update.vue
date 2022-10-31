@@ -73,6 +73,20 @@ export default {
         onFileSelected(payload){
             var context = this;
             context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+            context.form.qFiles[0].showPreview = true;
+            context.form.qFiles[0].imagePreview = reader.result;
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+						reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else{
+                    alert("Wrong image format. Only supports .jpg, .jpeg, .png and .gif")
+                }
+            }
             
             
         },
@@ -180,7 +194,8 @@ export default {
         var context =  this;
         context.selectedLogo = this.$store.getters["LogoStore/selectedLogo"];
         context.LogoUrl = context.selectedLogo.fileUrl;
-        context.form.qImages[0].imageUrl = context.selectedLogo.fileUrl;
+        context.form.qFiles[0].showPreview = true;
+        context.form.qFiles[0].imagePreview = context.selectedLogo.fileUrl;
         context.form.qColors[0].name = context.selectedLogo.primaryColor;
         context.form.qColors[1].name = context.selectedLogo.secondaryColor;
         context.form.qColors[2].name = context.selectedLogo.tertiaryColor;

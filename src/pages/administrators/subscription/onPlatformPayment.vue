@@ -13,7 +13,7 @@
               <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
               </div>
                <div class="col-md-6 col-lg-6 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                 <p>On-Platform Payment</p>
+                 <p>On-Platform Payment Coming Soon!!!</p>
                </div>
                 
                 <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">

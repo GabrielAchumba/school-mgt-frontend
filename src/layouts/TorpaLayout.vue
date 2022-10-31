@@ -58,8 +58,9 @@ export default {
                 context.initializeLogo(torpaLogo.result[0]);
 
                 const newses = await loadNewses(schoolId);
+                let news = []
                 if(newses.result.length === 0){
-                    newses.result.push({
+                    news.result.push({
                         title: "Lorem ipsum dolor sit amet consectetur adipisicing elit",
                         description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?
@@ -68,11 +69,36 @@ export default {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus voluptate molestias atque libero laboriosam fugiat, nostrum eveniet ea deserunt. Itaque nesciunt consequatur earum rerum esse cumque accusamus cum consequuntur perferendis?`,
                         fileUrl: "/statics/images/results.jpg",
                         imageTitle: "Lorem ipsum dolor sit",
+                        fileType: "image",
                         imageDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Lorem ipsum dolor sit amet consectetur adipisicing elit.",
                         createdBy: "CEO",
+                        isVideo: false,
+                        isImage: true,
+                        isAudio: false,
+                    })
+                }else{
+                    news = newses.result.map((row) => {
+                        let isVideo = false;
+                        let isImage = false;
+                        let isAudio = false;
+                        
+                        if(row.fileType === "video"){
+                            isVideo = true;
+                        }else if(row.fileType === "audio"){
+                            isAudio = true;
+                        }else{
+                            isImage = true;
+                        }
+                        return {
+                            ...row,
+                            isVideo,
+                            isImage,
+                            isAudio
+                        }
                     })
                 }
-                this.$store.commit('NewsStore/SetNewses', newses.result);
+                
+                this.$store.commit('NewsStore/SetNewses', news);
 
                 const mission = await loadMissions(schoolId);
                 if(mission.result.length === 0){

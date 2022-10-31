@@ -10,6 +10,7 @@ const form = {
     qBtns: [
         {label: "Subjects", name: "showSubjectsDialog", icon: "groups"},
         {label: "Compute", name: "Compute", icon: "calculate"},
+        {label: "Cancel", name: "CancelFormDialog", icon: "close"},
     ],
     qDates: [
          {label: "Start Date", name: "2019/02/01"},

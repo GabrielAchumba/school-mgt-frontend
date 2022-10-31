@@ -19,6 +19,10 @@
                         v-if="qToggle.visible"
                         :label="qToggle.label"
                         v-model="qToggle.name"
+                        color="accent"
+                        false-value="Disagreed"
+                        true-value="Agreed"
+                        @input="onToggle"
                       />
                      </div>
 
@@ -106,7 +110,7 @@
                       v-for="qImage in formData.qImages" 
                       :key="qImage.label">
                       <div class="row">
-                       <div class="col-12 q-pa-sm">
+                       <div class="col-12 q-pa-sm img">
                         <q-img 
                             :src="qImage.imageUrl"
                             spinner-color="accent"
@@ -136,13 +140,32 @@
                     <div class="q-pa-sm"
                       v-for="qFile in formData.qFiles" 
                       :key="qFile.label">
-                      <span><p class="q-ma-none">{{ qFile.label }}</p>
-                      <q-input class="q-ma-none"
-                      @change="onFileSelected"
-                      outlined 
-                      v-model="qFile.name" 
-                      :type="qFile.type">
-                      </q-input></span>
+                      <span>
+                        <p class="q-ma-none">{{ qFile.label }}</p>
+                          <q-input class="q-ma-none"
+                          @change="onFileSelected"
+                          outlined 
+                          v-model="qFile.name" 
+                          :type="qFile.type">
+                          </q-input>
+                      </span>
+
+                      <div class="row">
+                        <div class="col-12 q-pa-sm img">
+                          <q-img 
+                              v-bind:src="qFile.imagePreview" 
+                              v-show="qFile.showPreview"
+                              spinner-color="accent"
+                              class="rounded-borders"/>
+                        </div>
+                        <div class="col-12 q-pa-sm">
+                          <video 
+                          id="video-preview" 
+                          v-bind:src="qFile.imagePreview" 
+                          controls 
+                          v-show="qFile.showVideoPreview"/>
+                        </div>
+                      </div>
                     </div>
 
                     <div class="q-pa-sm"
@@ -252,9 +275,15 @@
             }
         },
         methods: {
+          onToggle(event){
+            this.$emit("onToggle", event);
+          },
           onFileSelected(event){
+            //let video = document.getElementById('video-preview');
+
             var files = event.target.files;
-              var selectedFile = files[0];
+            var selectedFile = files[0];
+
               this.$emit("onFileSelected", {
                 selectedFile,
               })
@@ -302,5 +331,15 @@ a:link, a:visited {
 a:hover, a:active {
   background-color: green;
   color: white;
+}
+
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+video{
+		max-width: 100%;
+    max-height: 100%;
 }
 </style>

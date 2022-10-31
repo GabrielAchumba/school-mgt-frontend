@@ -4,6 +4,8 @@ const form = {
     qInputs: [
         { label: "Title", name: "", type: "text",
         selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
         files: [],
         Template: {
             sn: 0,
@@ -22,6 +24,8 @@ const form = {
     qFiles: [
         { label: "Background Image", name: "", type: "file",
         selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
         files: [],
         Template: {
             sn: 0,
@@ -29,7 +33,7 @@ const form = {
             visible: false,
         }}
     ],
-    qImages: [
+    /* qImages: [
         { label: "Current Background Image", name: "", type: "file", imageUrl: "",
         selectedFile: null,
         files: [],
@@ -38,7 +42,7 @@ const form = {
             iconName: "",
             visible: false,
         }}
-    ],
+    ], */
     qColors: [],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},

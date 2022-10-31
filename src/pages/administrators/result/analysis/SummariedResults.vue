@@ -65,7 +65,8 @@
                 @Compute="Compute($event)"
                 @typeOfInstructor="typeOfInstructor($event)"
                 @onStudentSelected="onStudentSelected($event)"
-                @showSubjectsDialog="showSubjectsDialog($event)"/>
+                @showSubjectsDialog="showSubjectsDialog($event)"
+                @CancelFormDialog="CancelFormDialog($event)"/>
         </q-dialog>
 
 
@@ -128,6 +129,10 @@ export default {
         }
     },
     methods:{
+        CancelFormDialog(){
+            var context = this;
+            context.dialogFailureOrScuess("Configure Result Analysis", false);
+        },
         showSubjectsDialog(){
             var context = this;
             context.dialogFailureOrScuess("Subjects", true);

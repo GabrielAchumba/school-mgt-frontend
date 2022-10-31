@@ -22,16 +22,8 @@ const form = {
     qFiles: [
         { label: "Background Image", name: "", type: "file",
         selectedFile: null,
-        files: [],
-        Template: {
-            sn: 0,
-            iconName: "",
-            visible: false,
-        }}
-    ],
-    qImages: [
-        { label: "Current Background Image", name: "", type: "file", imageUrl: "",
-        selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
         files: [],
         Template: {
             sn: 0,

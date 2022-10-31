@@ -1,5 +1,5 @@
 <template>
-<div class="q-pa-sm text-center flex flex-center">
+<div class="q-pa-sm text-center flex flex-center" style="height:80vh">
     
     <q-card class="row q-pa-sm"> 
       <q-card-section class="col-12 text-accent">
@@ -34,6 +34,17 @@
 
 
       <q-card-section class="col-12">
+
+        <div class="row q-pa-sm">
+            <div class="col-12 q-pa-sm img">
+              <q-img 
+                   v-bind:src="imagePreview" 
+                  v-show="showPreview"
+                  spinner-color="accent"
+                  class="rounded-borders"/>
+            </div>
+          </div>
+
         <div class="row">
 
           <div 
@@ -160,8 +171,10 @@
       return {
         categoryBankName: "Zenith Bank",
         categoryAccountName: "Newway Standard Global",
-        categoryAccountNumber: "10002003001",
+        categoryAccountNumber: "1016733467",
         SelectedFile: null,
+        showPreview: false,
+		    imagePreview: '',
         files: null,
         responseMessage: "",
         bankNamePaidFrom: "",
@@ -183,6 +196,22 @@
             var context = this;
             context.files = event.target.files;
             context.SelectedFile = event.target.files[0];
+
+            let reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+            context.showPreview = true;
+            context.imagePreview = reader.result;
+            console.log("context.showPreview: ", context.showPreview)
+            }.bind(context), false);
+
+            if(context.SelectedFile){
+                    if (/\.(jpe?g|png|gif)$/i.test(context.SelectedFile.name)) {
+                reader.readAsDataURL(context.SelectedFile);
+            }else{
+                        alert("Wrong image format. Only supports .jpg, .jpeg, .png and .gif")
+                    }
+            }
       },
       async okayUploadFile(){
         var context = this;
@@ -310,3 +339,25 @@
     }
   }
 </script>
+
+<style scoped>
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.portrait {
+    height: 80px;
+    width: 30px;
+}
+
+.landscape {
+    height: 30px;
+    width: 80px;
+}
+
+.square {
+    height: 75px;
+    width: 75px;
+}
+</style>

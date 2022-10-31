@@ -3,18 +3,10 @@ const form = {
     qSelects: [],
     qInputs: [],
     qFiles: [
-        { label: "Logo Path", name: "", type: "file",
+        { label: "Logo", name: "", type: "file",
         selectedFile: null,
-        files: [],
-        Template: {
-            sn: 0,
-            iconName: "",
-            visible: false,
-        }}
-    ],
-    qImages: [
-        { label: "Logo", name: "", type: "file", imageUrl: "",
-        selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
         files: [],
         Template: {
             sn: 0,
