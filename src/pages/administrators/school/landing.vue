@@ -4,6 +4,17 @@
     :table_VM="tableVM"
     @createSchool="createSchool($event)"
     @linkClick="linkClick($event)"/>
+    <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+        <div class="col-12 q-pa-sm absolute-center flex flex-center">
+            <q-spinner
+                color="accent"
+                size="3em"
+                :thickness="10"
+            />
+        </div>
+    </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -27,6 +38,11 @@
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/services"
     export default {
+      computed:{
+          showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        }
+      },
       components:{
         Table,
         MessageBox
@@ -147,9 +163,11 @@
         async loadSchools(){
             var context = this;
         var url = "school";
+        this.$store.commit("authenticationStore/setShowSpinner", true);
         var response = await get({
           url
         })
+        this.$store.commit("authenticationStore/setShowSpinner", false);
 
         const { 
                 data : {

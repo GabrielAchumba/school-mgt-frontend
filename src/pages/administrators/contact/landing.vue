@@ -5,6 +5,17 @@
     @createContact="createContact($event)"
     @updateContact="updateContact($event)"
     @deleteContact="deleteContact($event)"/>
+    <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+        <div class="col-12 q-pa-sm absolute-center flex flex-center">
+            <q-spinner
+                color="accent"
+                size="3em"
+                :thickness="10"
+            />
+        </div>
+    </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -28,6 +39,11 @@
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/gcp-services";
     export default {
+      computed:{
+          showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        }
+      },
       components:{
         Table,
         MessageBox
@@ -142,11 +158,13 @@
         },
         async loadContacts(){
             var context = this;
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var user = this.$store.getters["authenticationStore/IdentityModel"]
         var url = `contact/files/${user.schoolId}`;
         var response = await get({
           url
         })
+        this.$store.commit("authenticationStore/setShowSpinner", false);
 
             if(response.data){
             context.tableVM.rows = response.data;

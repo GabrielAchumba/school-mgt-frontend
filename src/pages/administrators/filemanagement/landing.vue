@@ -3,6 +3,17 @@
     <Cards
     :cardList="cardList"
     @updateItem="updateItem($event)"/>
+    <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+        <div class="col-12 q-pa-sm absolute-center flex flex-center">
+            <q-spinner
+                color="accent"
+                size="3em"
+                :thickness="10"
+            />
+        </div>
+    </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -28,6 +39,11 @@
   import { loadFileModels } from "./utils";
 
     export default {
+      computed:{
+          showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        }
+      },
       components:{
         Cards,
         MessageBox
@@ -146,7 +162,9 @@
 
                 var context = this;
                 var user = this.$store.getters["authenticationStore/IdentityModel"]
+                this.$store.commit("authenticationStore/setShowSpinner", true);
                 const { result, message } = await loadFileModels(user.schoolId)
+                this.$store.commit("authenticationStore/setShowSpinner", false);
                 this.$store.commit('FileModelStore/SetFileModels', result)
                 context.tableVM.rows = result;
                 context.cardList = result.map((row, i) => {

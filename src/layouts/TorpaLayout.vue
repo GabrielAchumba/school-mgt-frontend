@@ -7,7 +7,19 @@
 
      <q-page-container style="height: 100vh;">
       <router-view
+      v-if="!showSpinner"
       @linkClick="linkClick($event)"/>
+      <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    size="3em"
+                    :thickness="10"
+                />
+            </div>
+        </div>
     </q-page-container>
   </q-layout>
 </template>
@@ -29,6 +41,11 @@ export default {
     components:{
         SocialMedia,
         MainNavbar,
+    },
+    data(){
+        return {
+            showSpinner: true,
+        }
     },
     methods:{
         initializeLogo(logo){
@@ -222,10 +239,15 @@ export default {
     },
     async created(){
         var context = this;
+        context.showSpinner = true;
+        console.log("context.showSpinner: ", context.showSpinner);
         await context.branding({
             schoolId: "CEO",
             address: "Plot 156 Tom Inko-Tariah Avenue, Rumuogba Estate, Port Harcourt, Rivers State, Nigeria",
-            });
+        });
+
+        context.showSpinner = false;
+        console.log("context.showSpinner: ", context.showSpinner);
     }
 }
 

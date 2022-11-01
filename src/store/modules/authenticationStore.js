@@ -37,7 +37,8 @@ const state = {
       { name: "/news", tabIndex: "news", label: "News"},
       { name: "/about_us", tabIndex: "about_us", label: "About Us" },
       { name: "/contact", tabIndex: "contact", label: "Contact" },
-    ]
+    ],
+    showSpinner: false
   }
 
   const getters = {
@@ -109,10 +110,16 @@ const state = {
   },
   menuList(state){
     return state.menuList;
+  },
+  showSpinner(state){
+    return state.showSpinner;
   }
 }
 
 const mutations = {
+  setShowSpinner(state, payload){
+    state.showSpinner = payload;
+  },
   setMenuList(state, payload){
     if(payload === true){
       state.menuList = state.torpa_menuList.map((row) => {

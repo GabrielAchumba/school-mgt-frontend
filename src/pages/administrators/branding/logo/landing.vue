@@ -4,6 +4,18 @@
     :table_VM="tableVM"
     @updateItem="updateItem($event)"
     @deleteLogo="deleteLogo($event)"/>
+    <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+        <div class="col-12 q-pa-sm absolute-center flex flex-center">
+            <q-spinner
+                color="accent"
+                size="3em"
+                :thickness="10"
+            />
+        </div>
+    </div>
+
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -29,6 +41,11 @@
   import { loadLogos } from "./utils";
 
     export default {
+      computed:{
+          showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        }
+      },
       components:{
         Table,
         MessageBox
@@ -149,7 +166,9 @@
 
                 var context = this;
                 var user = this.$store.getters["authenticationStore/IdentityModel"]
+                this.$store.commit("authenticationStore/setShowSpinner", true);
                 const { result, message } = await loadLogos(user.schoolId)
+                this.$store.commit("authenticationStore/setShowSpinner", false);
                 this.$store.commit('LogoStore/SetLogos', result)
                 context.tableVM.rows = result;
                 

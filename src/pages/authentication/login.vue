@@ -1,5 +1,8 @@
 <template>
-    <div class="q-pa-md">
+  <div class="q-pa-md">
+    <div 
+     v-show="!showSpinner"
+     class="q-pa-md">
           <Form
           v-if="isForgotPassword"
           :formData="forgotPasswordForm"
@@ -52,6 +55,23 @@
             </MessageBox>
         </q-dialog>
     </div>
+
+     <!--  <q-inner-loading :showing="showSpinner">
+          <q-spinner-gears size="50px" color="accent" />
+      </q-inner-loading> -->
+
+     <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    size="3em"
+                    :thickness="10"
+                />
+            </div>
+        </div>
+  </div>
 </template>
 
 <script>
@@ -82,11 +102,8 @@ const auth = getAuth()
 
     export default {
        computed: {
-        visible(){
-          return this.$store.getters['authenticationStore/visible'];
-        },
-        showSimulatedReturnData(){
-          return this.$store.getters['authenticationStore/showSimulatedReturnData'];
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
         }
       },
       components:{
@@ -108,6 +125,7 @@ const auth = getAuth()
             dialogs: dialogs,
             token: "",
             user: {},
+            test: 1,
             }
         },
         methods: {
@@ -295,6 +313,7 @@ const auth = getAuth()
         async login(){
             var context = this;
 
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post({
              url: "user/login",
              req: {
@@ -302,6 +321,8 @@ const auth = getAuth()
                password: context.loginForm.qInputs[1].name
              },
             });
+            context.test = 100;
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
               data : {
@@ -316,6 +337,7 @@ const auth = getAuth()
             if(success){
               context.token = result.token;
               context.user = result.user;
+              console.log("context.user: ", context.user);
               this.$store.commit('authenticationStore/Login',{
                 token: context.token,
                 user: context.user,
@@ -390,6 +412,8 @@ const auth = getAuth()
         },
         logInSuccessOkay(){
             var context = this;
+            console.log("context.user: ", context.user);
+            console.log("context.test: ", context.test);
            if (context.user.designationId === "CEO"){
              this.$router.push('/super-admin');
            }else{

@@ -5,6 +5,17 @@
     @createStudent="createStudent($event)"
     @updateStudent="updateStudent($event)"
     @deleteStudent="deleteStudent($event)"/>
+    <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+        <div class="col-12 q-pa-sm absolute-center flex flex-center">
+            <q-spinner
+                color="accent"
+                size="3em"
+                :thickness="10"
+            />
+        </div>
+    </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -29,6 +40,11 @@
   import { remove } from "../../../store/modules/services";
   import { loadStudents } from "./utils";
     export default {
+        computed:{
+          showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        }
+      },
       components:{
         Table,
         MessageBox
@@ -147,7 +163,9 @@
         async _loadStudentf(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             const { result, message } = await loadStudents(user.schoolId);
+            this.$store.commit("authenticationStore/setShowSpinner", false);
             this.$store.commit('studentStore/SetStudents', result)
             context.tableVM.rows = result.map((row) => {
                 let token = row.token;
