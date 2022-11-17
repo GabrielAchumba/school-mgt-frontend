@@ -1,10 +1,22 @@
 <template>
     <div class="q-pa-md">
         <Form
+        v-if="!showSpinner"
         :formData="form"
         @Update="Update($event)"
         @Cancel="Cancel($event)"
         @onFileSelected="onFileSelected($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -31,6 +43,17 @@ import { post, uploadVision } from "../../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -160,13 +183,10 @@ export default {
         },
         async uploadAndSaveVisionUr(){
             var context = this;
-            await context.checkVisionExistance();
-            if(context.doesLogoExists === true){
-                await context.uploadVision();
-                await context.save();
-            }else{
-                alert("Vision does not exists")
-            }
+            this.$store.commit("authenticationStore/setShowSpinner", true);
+            await context.uploadVision();
+            await context.save();
+            this.$store.commit("authenticationStore/setShowSpinner", false);
         },
         async okDialog(payload){
             console.log("payload: ", payload)

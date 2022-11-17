@@ -67,6 +67,131 @@ const routes = [
         path: '/pending-payment-landing', 
         component: () => import('pages/superadministrators/pending_payments/landing.vue') 
       },
+      { 
+        path: '/super-admin-branding-landing',
+        component: () => import('pages/superadministrators/branding/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-logo-landing', 
+        component: () => import('pages/superadministrators/branding/logo/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-logo', 
+        component: () => import('pages/superadministrators/branding/logo/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-logo', 
+        component: () => import('pages/superadministrators/branding/logo/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-mission-landing', 
+        component: () => import('pages/superadministrators/branding/mission/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-mission', 
+        component: () => import('pages/superadministrators/branding/mission/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-mission', 
+        component: () => import('pages/superadministrators/branding/mission/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-vision-landing', 
+        component: () => import('pages/superadministrators/branding/vision/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-vision', 
+        component: () => import('pages/superadministrators/branding/vision/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-vision', 
+        component: () => import('pages/superadministrators/branding/vision/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-news-landing', 
+        component: () => import('pages/superadministrators/branding/news/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-news', 
+        component: () => import('pages/superadministrators/branding/news/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-news', 
+        component: () => import('pages/superadministrators/branding/news/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-home-landing', 
+        component: () => import('pages/superadministrators/branding/home/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-home', 
+        component: () => import('pages/superadministrators/branding/home/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-home', 
+        component: () => import('pages/superadministrators/branding/home/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-core-value-landing', 
+        component: () => import('pages/superadministrators/branding/core-value/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-core-value', 
+        component: () => import('pages/superadministrators/branding/core-value/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-core-value', 
+        component: () => import('pages/superadministrators/branding/core-value/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-about-us-landing', 
+        component: () => import('pages/superadministrators/about-us/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-about-us', 
+        component: () => import('pages/superadministrators/about-us/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-about-us', 
+        component: () => import('pages/superadministrators/about-us/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-contact-landing', 
+        component: () => import('pages/superadministrators/contact/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-contact', 
+        component: () => import('pages/superadministrators/contact/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-contact', 
+        component: () => import('pages/superadministrators/contact/update.vue') 
+        
+      }
     ]
   },
   {
@@ -94,6 +219,11 @@ const routes = [
         
       },
       { 
+        path: '/import-users', 
+        component: () => import('src/pages/administrators/user/import-users.vue') 
+        
+      },
+      { 
         path: '/staff-landing', 
         component: () => import('pages/administrators/staff/landing.vue') 
         
@@ -109,18 +239,28 @@ const routes = [
         
       },
       { 
+        path: '/import-staff', 
+        component: () => import('pages/administrators/staff/import-staff.vue') 
+        
+      },
+      { 
         path: '/classroom-landing', 
         component: () => import('pages/administrators/classroom/landing.vue') 
         
       },
       { 
-        path: '/create-classroom', 
+        path: '/create-class-room', 
         component: () => import('pages/administrators/classroom/create.vue') 
         
       },
       { 
-        path: '/update-classroom', 
+        path: '/update-class-room', 
         component: () => import('pages/administrators/classroom/update.vue') 
+        
+      },
+      { 
+        path: '/import-class-rooms', 
+        component: () => import('pages/administrators/classroom/import-class-rooms.vue') 
         
       },
       { 
@@ -139,6 +279,11 @@ const routes = [
         
       },
       { 
+        path: '/import-students', 
+        component: () => import('pages/administrators/student/import-students.vue') 
+        
+      },
+      { 
         path: '/subject-landing', 
         component: () => import('pages/administrators/subject/landing.vue') 
         
@@ -154,6 +299,11 @@ const routes = [
         
       },
       { 
+        path: '/import-subjects', 
+        component: () => import('src/pages/administrators/subject/import-subjects.vue') 
+        
+      },
+      { 
         path: '/assessment-landing', 
         component: () => import('pages/administrators/assessment/landing.vue') 
         
@@ -166,6 +316,11 @@ const routes = [
       { 
         path: '/update-assessment', 
         component: () => import('pages/administrators/assessment/update.vue') 
+        
+      },
+      { 
+        path: '/import-assessments', 
+        component: () => import('pages/administrators/assessment/import-assessments.vue') 
         
       },
       { 
@@ -206,6 +361,11 @@ const routes = [
       { 
         path: '/update-result', 
         component: () => import('pages/administrators/result/update.vue') 
+        
+      },
+      { 
+        path: '/import-results', 
+        component: () => import('pages/administrators/result/import-results.vue') 
         
       },
       { 
@@ -408,6 +568,81 @@ const routes = [
         component: () => import('pages/administrators/contact/update.vue') 
         
       },
+      { 
+        path: '/grade-landing', 
+        component: () => import('pages/administrators/grade/landing.vue') 
+        
+      },
+      { 
+        path: '/create-grade', 
+        component: () => import('pages/administrators/grade/create.vue') 
+        
+      },
+      { 
+        path: '/update-grade', 
+        component: () => import('pages/administrators/grade/update.vue') 
+        
+      },
+      { 
+        path: '/import-grades', 
+        component: () => import('pages/administrators/grade/import-grades.vue') 
+        
+      },
+      { 
+        path: '/level-landing', 
+        component: () => import('pages/administrators/level/landing.vue') 
+        
+      },
+      { 
+        path: '/create-level', 
+        component: () => import('pages/administrators/level/create.vue') 
+        
+      },
+      { 
+        path: '/update-level', 
+        component: () => import('pages/administrators/level/update.vue') 
+        
+      },
+      { 
+        path: '/import-levels', 
+        component: () => import('pages/administrators/level/import-levels.vue') 
+        
+      },
+      { 
+        path: '/session-landing', 
+        component: () => import('pages/administrators/session/landing.vue') 
+        
+      },
+      { 
+        path: '/create-session', 
+        component: () => import('pages/administrators/session/create.vue') 
+        
+      },
+      { 
+        path: '/update-session', 
+        component: () => import('pages/administrators/session/update.vue') 
+        
+      },
+      { 
+        path: '/import-sessions', 
+        component: () => import('pages/administrators/session/import-sessions.vue') 
+        
+      },
+      { 
+        path: '/exam-landing', 
+        component: () => import('pages/administrators/exam/landing.vue') 
+        
+      },
+      { 
+        path: '/create-exam', 
+        component: () => import('pages/administrators/exam/create.vue') 
+        
+      },
+      { 
+        path: '/update-exam', 
+        component: () => import('pages/administrators/exam/update.vue') 
+        
+      },
     ]
   },
   {
@@ -428,6 +663,51 @@ const routes = [
       { 
         path: '/student', 
         component: () => import('pages/students/landing.vue') 
+        
+      },
+      { 
+        path: '/student-filemanagement-landing', 
+        component: () => import('pages/administrators/filemanagement/student-landing.vue') 
+        
+      },
+      { 
+        path: '/student-view-file', 
+        component: () => import('pages/administrators/filemanagement/student-view.vue') 
+        
+      },
+      { 
+        path: '/student-result-landing', 
+        component: () => import('pages/administrators/result/student-landing') 
+        
+      },
+      { 
+        path: '/student-results', 
+        component: () => import('pages/administrators/result/student-results') 
+        
+      },
+      { 
+        path: '/student-single-student-results-analysis', 
+        component: () => import('pages/administrators/result/student-analysis/SummariedResults.vue') 
+        
+      },
+      { 
+        path: '/student-students-positions-analysis', 
+        component: () => import('pages/administrators/result/student-analysis/StudentsPositions.vue') 
+        
+      },
+      { 
+        path: '/student-summarized-students-result', 
+        component: () => import('pages/administrators/result/student-analysis/ComputeStudentsSummaryResults.vue') 
+        
+      },
+      { 
+        path: '/student-summarized-students-result-by-date', 
+        component: () => import('pages/administrators/result/student-analysis/ComputeStudentsResultsByDateRange.vue') 
+        
+      },
+      { 
+        path: '/student-chart', 
+        component: () => import('components/Charts/Chart.vue') 
         
       },
     ]

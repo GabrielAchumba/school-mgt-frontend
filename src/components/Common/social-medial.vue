@@ -33,6 +33,12 @@
         </q-icon>
         
       </q-bar>
+      <q-bar 
+      v-if="isSchoolRoute"
+      class="bg-accent text-primary">
+           <q-btn 
+            flat dense round icon="create" @click="create" class="text-primary bg-accent"/>
+      </q-bar>
     </div>
 </template>
 
@@ -40,6 +46,9 @@
 import IconLabel from "./icon-label.vue";
 export default {
     computed:{
+        isSchoolRoute(){
+            return this.$store.getters["authenticationStore/isSchoolRoute"];
+        },
         selectedSchool(){
             console.log("selectedSchool: ", this.$store.getters["schoolStore/selectedSchool"])
             return this.$store.getters["schoolStore/selectedSchool"];
@@ -75,6 +84,12 @@ export default {
             type: String,
             default: "linkedin"
         }
+    },
+    methods:{
+        create(){
+            const routename = this.$store.getters["authenticationStore/createURL"];
+            this.$router.push(routename);
+        },
     }
 
 }

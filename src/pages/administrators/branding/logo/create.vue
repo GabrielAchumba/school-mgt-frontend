@@ -1,10 +1,22 @@
 <template>
     <div class="q-pa-md">
         <Form
+        v-if="!showSpinner"
         :formData="form"
         @Create="Create($event)"
         @Cancel="Cancel($event)"
         @onFileSelected="onFileSelected($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
         
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -31,6 +43,17 @@ import { post, uploadLogo } from "../../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -160,6 +183,7 @@ export default {
         },
         async uploadAndSaveLogoUr(){
             var context = this;
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             await context.checkLogoExistance();
             if(context.doesLogoExists === false){
                 await context.uploadLogo();
@@ -167,6 +191,7 @@ export default {
             }else{
                 alert("Logo already exists")
             }
+            this.$store.commit("authenticationStore/setShowSpinner", false);
         },
         async okDialog(payload){
             console.log("payload: ", payload)

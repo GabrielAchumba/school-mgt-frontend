@@ -2,6 +2,7 @@
     <q-bar class="q-pa-none row bg-accent" >
         <q-btn flat dense round icon="settings" aria-label="Settings" />
         <q-btn flat dense round icon="create" @click="create"/>
+        <q-btn flat dense round icon="import_contacts" @click="dataImport"/>
         <q-btn flat dense round @click="create" avatar>
           <q-avatar 
             class="bg-primary text-accent"
@@ -31,7 +32,7 @@
                   </q-item>
               </q-list>
             </q-menu>
-          </q-btn>
+        </q-btn>
        <!--  <q-btn dense flat icon="close" @click="logOut"/> -->
          <q-btn
          :dense="dense"
@@ -156,6 +157,11 @@ export default {
         },
         create(){
             const routename = this.$store.getters["authenticationStore/createURL"];
+            console.log("routename: ", routename)
+            this.$router.push(routename);
+        },
+        dataImport(){
+          const routename = this.$store.getters["authenticationStore/importURL"];
             this.$router.push(routename);
         },
         getIsUserPhoto(){

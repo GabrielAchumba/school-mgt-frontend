@@ -20,13 +20,6 @@
             cardList: [
               {
                 name: "showPage",
-                title: "Result Management", 
-                description: "Create, update and delete results. Also view result report",
-                image: "/statics/images/view results.jpg",
-                to: "/results"
-              },
-              {
-                name: "showPage",
                 title: "Single Student Results Analysis", 
                 description: "The statistics analysis of a student results",
                 image: "/statics/images/analyse results.jpg",

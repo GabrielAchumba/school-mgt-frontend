@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    v-if="!showSpinner"
     :table_VM="tableVM"
     @createAssessment="createAssessment($event)"
     @updateAssessment="updateAssessment($event)"
@@ -11,8 +12,8 @@
         <div class="col-12 q-pa-sm absolute-center flex flex-center">
             <q-spinner
                 color="accent"
-                size="3em"
-                :thickness="10"
+                :size="spinnerSize"
+                :thickness="spinnerThickness"
             />
         </div>
     </div>
@@ -38,10 +39,17 @@
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/services"
+  import { loadSubjects } from "../subject/utils";
     export default {
      computed:{
           showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
@@ -65,6 +73,7 @@
                 deleteItem: "deleteAssessment",
                 createItemUrl: "/create-assessment",
                 updateItemUrl: "/update-assessment",
+                importURL: "/import-assessments"
                 },
                 dialogs:[
                 { title: "Delete Assessment", isVisible: false, message: "Do you want to delete an Assessment",
@@ -161,6 +170,7 @@
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
         var url = `assessment/${user.schoolId}`;
+
         this.$store.commit("authenticationStore/setShowSpinner", true);
         var response = await get({
           url
@@ -169,15 +179,15 @@
 
         const { 
                 data : {
-                    data: result,
+                    data: assessments,
                     message,
                     success,
                 }
             } = response
 
             if(success){
-            context.tableVM.rows = result;
-            this.$store.commit('assessmentStore/SetAssessments', result)
+            context.tableVM.rows = assessments;
+            this.$store.commit('assessmentStore/SetAssessments', context.tableVM.rows)
             }else{
                 context.isFetchTableDialog = true;
                 context.message = message;
@@ -193,6 +203,7 @@
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "assessments");
+            this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
       }
     }
 </script>

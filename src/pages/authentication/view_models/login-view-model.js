@@ -57,7 +57,8 @@ const forgotPasswordForm = {
         
     ],
     qBtns: [
-        {label: "Send OTP", name: "SendOTP", icon: "send"},
+        {label: "Send OTP", name: "SendOTP", icon: "send", disabled: false},
+        {label: "Reset", name: "resetRecaptcha", icon: "refresh"},
         {label: "Cancel", name: "CancelForgotPassword", icon: "close"},
     ],
     qDates: [],

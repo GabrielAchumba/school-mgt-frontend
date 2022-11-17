@@ -97,6 +97,7 @@ export default {
     },
     initializeLayoutData(){
         var context =  this;
+        console.log("menuList: ", context.menuList)
         var landingMainMenu = context.menuList.map((row) => {
             return {
                 ...row
@@ -104,6 +105,7 @@ export default {
         })
 
         landingMainMenu.shift();
+        console.log("landingMainMenu: ", landingMainMenu)
         this.$store.commit("administratorStore/SetSuperAdminMainMenuList", landingMainMenu);
     }
   },

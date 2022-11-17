@@ -9,7 +9,19 @@
 
     <q-page-container style="height: 100vh;">
 
-      <router-view/>
+      <router-view
+      v-if="!showSpinner"/>
+      <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    size="3em"
+                    :thickness="10"
+                />
+            </div>
+        </div>
     </q-page-container>
 
      <q-dialog v-model="globalSearchDialog">
@@ -74,6 +86,7 @@ export default {
       contextMenuList: [],
       landingMenu: [],
       checkSubscription: {},
+      showSpinner: false,
     }
   },
   methods:{
@@ -176,7 +189,7 @@ export default {
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Advertisement"){
+          if(context.landingMenu[i].title == "Branding & Advertisement"){
             index = i;
             break;
           }
@@ -187,7 +200,35 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Advertisement"){
+          if(context.contextMenuList[i].title == "Branding & Advertisement"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyExamQuizSubscription(){
+       var context = this;
+       context.checkSubscription.isExamQuiz = true; // to be removed
+      if(context.checkSubscription.isExamQuiz == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "Examination & Quiz"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "Examination & Quiz"){
             index = i;
             break;
           }
@@ -219,6 +260,7 @@ export default {
       context.verifyResultsAnalysisSubscription();
       context.verifyFileManagementSubscription();
       context.verifyAdevertizementSubscription();
+      context.verifyExamQuizSubscription();
 
       context.menuList = context.contextMenuList.map((row) => {
         return {
@@ -244,10 +286,11 @@ export default {
     },
   },
   async created(){
-    console.log("seen 2");
-    window.addEventListener("resize", this.onResize);
+    
     var context = this;
-    //context.initializeLogo();
+    context.showSpinner = true;
+    window.addEventListener("resize", this.onResize);
+  
     this.$store.commit("authenticationStore/setActiveRoute", "adminLanding");
     
     if(window.innerWidth < 700) context.rightDrawerOpen = true;
@@ -279,6 +322,8 @@ export default {
           this.$store.commit('assessmentStore/SetAssessments', assessments.result);
           context.checkSubscritpion();
        }
+
+       context.showSpinner = false;
 
   },
   destroyed() {

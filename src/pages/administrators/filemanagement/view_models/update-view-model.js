@@ -9,8 +9,12 @@ const form = {
     qLinks: [
         {label: "View File", name: "ViewFile", href: "#", target: "_blank"}
     ],
+    /* qImages: [
+        {label: "View File", name: "ViewFile", imageUrl: ""}
+    ], */
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},
+        {label: "view", name: "view", icon: "close"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

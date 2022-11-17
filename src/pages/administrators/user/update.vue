@@ -1,10 +1,21 @@
 <template>
     <div class="q-pa-md">
         <Form
+        v-if="!showSpinner"
         :formData="form"
         @Update="Update($event)"
-        @Cancel="Cancel($event)"
-        @userTypeAction="userTypeAction($event)"/>
+        @Cancel="Cancel($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -31,6 +42,17 @@ import { put } from "../../../store/modules/services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -75,21 +97,22 @@ export default {
             var url = `user/${context.selectedUser.id}`;
             var schoolId = context.selectedUser.schoolId;
 
-            const userType = context.form.qSelects[0].value.label;
             const payload = {
                 url,
                 req: {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
                     userName: context.form.qInputs[2].name,
-                    designationId: userType === "Parent/Gaurdian" ? "Parent" : context.form.qSelects[2].value,
-                    userType: context.form.qSelects[0].value.label,
+                    designationId: context.form.qSelects[0].value,
+                    userType: "Member",
                     schoolId,
                 }
             }
 
             console.log("payload: ", payload)
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await put(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
                 data : {
@@ -125,14 +148,6 @@ export default {
                 }
             }
         },
-        userTypeAction(payload){
-            var context = this;
-            if(payload.value.value == 2){
-                context.form.qSelects[2].visible = false;
-            }else{
-                context.form.qSelects[2].visible = true;
-            }
-        }
     },
     created(){
         var context =  this;
@@ -141,27 +156,12 @@ export default {
         context.form.qInputs[1].name = context.selectedUser.lastName;
         context.form.qInputs[2].name = context.selectedUser.userName;
 
-       
-
-      var user = this.$store.getters["authenticationStore/IdentityModel"]
-      context.form.qSelects[0].list = [
-        {
-            value: 1,
-            label: "Member",
-            type: "Member",
-        },
-        {
-            value: 2,
-            label: "Parent/Gaurdian",
-            type: "Parent",
-        }]
-
-    context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
-        return {
-            ...row,
-            type: row.type
-        }
-    }) 
+        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"].map((row) => {
+            return {
+                ...row,
+                type: row.type
+            }
+        }) 
 
     }
 }

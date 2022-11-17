@@ -1,9 +1,22 @@
 <template>
     <div class="q-pa-md">
         <Form
+        v-if="!showSpinner"
         :formData="form"
         @Update="Update($event)"
-        @Cancel="Cancel($event)"/>
+        @Cancel="Cancel($event)"
+        @userTypeAction="subjectAction($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -30,6 +43,17 @@ import { put } from "../../../store/modules/services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -78,11 +102,14 @@ export default {
                     type: context.form.qInputs[0].name,
                     percentage: Number(context.form.qInputs[1].name),
                     schoolId: user.schoolId,
+                    subjectId: context.form.qSelects[0].value,
                 }
             }
 
             console.log("payload: ", payload)
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await put(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
                 data : {
@@ -96,6 +123,9 @@ export default {
                 context.dialogs[2].message = message;
                 context.dialogs[2].isVisible = true;
             }
+
+        },
+        subjectAction(){
 
         },
         async okDialog(payload){
@@ -124,6 +154,8 @@ export default {
         context.selectedAssessment = this.$store.getters["assessmentStore/selectedAssessment"];
         context.form.qInputs[0].name = context.selectedAssessment.type;
         context.form.qInputs[1].name = context.selectedAssessment.percentage;
+        context.form.qSelects[0].list = this.$store.getters["subjectStore/subjects"];
+        context.form.qSelects[0].value = context.selectedAssessment.subjectId;
     }
 }
 </script>

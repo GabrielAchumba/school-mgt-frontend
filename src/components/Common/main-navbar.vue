@@ -83,6 +83,9 @@ export default {
             var context = this;
             context.selected_tab =  routename;
             this.$router.push(`${routename}`);
+            var isSchoolRoute = this.$router.history.current.fullPath=='/school-landing';
+            console.log("isSchoolRoute: ", isSchoolRoute);
+            this.$store.commit("authenticationStore/setIsSchoolRoute", isSchoolRoute)
         }
     }
 }

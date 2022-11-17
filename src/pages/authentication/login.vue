@@ -1,12 +1,13 @@
 <template>
   <div class="q-pa-md">
     <div 
-     v-show="!showSpinner"
+     v-if="!showSpinner"
      class="q-pa-md">
           <Form
           v-if="isForgotPassword"
           :formData="forgotPasswordForm"
           @SendOTP="SendOTP($event)"
+          @resetRecaptcha="resetRecaptcha($event)"
           @CancelForgotPassword="CancelForgotPassword($event)"/>
           <div 
           v-show="isForgotPassword"
@@ -56,9 +57,6 @@
         </q-dialog>
     </div>
 
-     <!--  <q-inner-loading :showing="showSpinner">
-          <q-spinner-gears size="50px" color="accent" />
-      </q-inner-loading> -->
 
      <div 
       v-show="showSpinner"
@@ -84,6 +82,7 @@
 import { getAuth } from 'firebase/auth'
 import { initializeApp } from "firebase/app";
 import { loadSchools } from "../administrators/school/utils";
+import { BIconFileEasel } from 'bootstrap-vue';
 
 
 const firebaseConfig = {
@@ -112,6 +111,7 @@ const auth = getAuth()
       },
       data () {
           return {
+            disableSendOTPButton: false,
             isForgotPassword: false,
             isVerifyOTP: false,
             isResetPassword: false,
@@ -273,8 +273,9 @@ const auth = getAuth()
                 }
             }
 
-            console.log("payload: ", payload)
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
                 data : {
@@ -352,9 +353,11 @@ const auth = getAuth()
 
             const schoolId = context.loginFormWithToken.qSelects[0].value;
             const token = context.loginFormWithToken.qInputs[0].name;
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await get({
-             url: `student/get/${token}/${schoolId}`,
+             url: `student/loginstudent/${token}/${schoolId}`,
             });
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
               data : {
@@ -367,7 +370,14 @@ const auth = getAuth()
             
             context.dialogFailureOrScuess("Sign In Student", false);
             if(success){
-              this.$store.commit('studentStore/SetSelectedStudent', result)
+              context.token = result.token;
+              context.user = result.user;
+              console.log("context.user: ", context.user);
+              this.$store.commit('studentStore/SetSelectedStudent', context.user)
+              this.$store.commit('authenticationStore/Login', {
+                token: context.token,
+                user: context.user,
+              })
               context.dialogFailureOrScuess("Sign In Student Success", true);
             }else{
               context.dialogFailureOrScuess( "Sign In Student Failure", true);
@@ -376,6 +386,7 @@ const auth = getAuth()
         async userIsExist(){
            console.log("userIsExist called")
             var context = this;
+            context.forgotPasswordForm.qBtns[0].disabled = true;
             
             var url = `user/user-is-exist2`;
             const payload = {
@@ -388,6 +399,7 @@ const auth = getAuth()
             }
 
             console.log("payload: ", payload)
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post(payload)
 
             const { 
@@ -408,6 +420,9 @@ const auth = getAuth()
             }else{
               alert("user does not exist")
             }
+
+            context.forgotPasswordForm.qBtns[0].disabled = false;
+            //this.$store.commit("authenticationStore/setShowSpinner", false);
 
         },
         logInSuccessOkay(){
@@ -500,35 +515,42 @@ const auth = getAuth()
             }
         },
         sendOtp(phNo, countryCode){
-          console.log("sendOtp called")
           var context = this;
           let phoneNumber = countryCode + phNo;
-          console.log("phoneNumber: ", phoneNumber);
-          let appVerifier = context.appVerifier
-          console.log("appVerifier: ", appVerifier);
+          let appVerifier = context.appVerifier;
+          console.log("phoneNumber: ", phoneNumber)
+          console.log("appVerifier: ", appVerifier)
            signInWithPhoneNumber(auth, phoneNumber, appVerifier)
             .then(function (confirmationResult) {
               // SMS sent. Prompt user to type the code from the message, then sign the
               // user in with confirmationResult.confirm(code).
 
               //alert('SMS sent')
+              //context.$store.commit("authenticationStore/setShowSpinner", false);
               context.isForgotPassword = false;
               context.isVerifyOTP = true
               context.isResetPassword = false;
               context.isLoginForm = false;
               context.isLoginFormWithToken = false;
               window.confirmationResult = confirmationResult;
-              console.log("seen")
+              
 
               //
             }).catch(function (error) {
+              console.log("error: ", error);
             // Error; SMS not sent
             // ...
+            //context.$store.commit("authenticationStore/setShowSpinner", false);
             alert('Error ! SMS not sent')
           });
         //}
       },
       async VerifyOTP(){
+         this.$store.commit("authenticationStore/setShowSpinner", true);
+        await VerifyCode();
+        this.$store.commit("authenticationStore/setShowSpinner", false);
+      },
+      async VerifyCode(){
         /* if(this.phNo.length != 10 || this.otp.length != 6){
           alert('Invalid Phone Number/OTP Format !');
         }else{ */
@@ -547,7 +569,7 @@ const auth = getAuth()
             context.isLoginForm = false;
             context.isLoginFormWithToken = false;
           }).catch(function (error) {
-              console.log("User couldn't sign in (bad verification code?)")
+              alert("User couldn't sign in (bad verification code?)")
           });
         //}
       },
@@ -569,12 +591,22 @@ const auth = getAuth()
           }, auth);
           //
           context.appVerifier =  window.recaptchaVerifier
+          console.log("appVerifier: ", context.appVerifier)
         },1000)
+
+        //window.recaptchaVerifier.clear()
+      },
+      resetRecaptcha(){
+        var context = this;
+         window.recaptchaVerifier.clear()
+         context.appVerifier =  window.recaptchaVerifier
+         console.log("appVerifier: ", context.appVerifier)
       }
       },
       async created(){
        var context = this;
        //loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm
+       this.$store.commit("authenticationStore/setShowSpinner", true);
        context.loginForm.clearQInputs();
        context.forgotPasswordForm.clearQInputs();
        context.forgotPasswordForm.clearQSelects();
@@ -590,6 +622,7 @@ const auth = getAuth()
            }
        })
        context.initReCaptcha();
+       this.$store.commit("authenticationStore/setShowSpinner", false);
     }
     }
 </script>

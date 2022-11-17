@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    v-if="!showSpinner"
     :table_VM="tableVM"
     @createUser="createUser($event)"
     @updateUser="updateUser($event)"
@@ -11,8 +12,8 @@
         <div class="col-12 q-pa-sm absolute-center flex flex-center">
             <q-spinner
                 color="accent"
-                size="3em"
-                :thickness="10"
+                :size="spinnerSize"
+                :thickness="spinnerThickness"
             />
         </div>
     </div>
@@ -43,6 +44,12 @@
       computed:{
           showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
@@ -68,6 +75,7 @@
                 deleteItem: "deleteUser",
                 createItemUrl: "/create-user",
                 updateItemUrl: "/update-user",
+                importURL: "/import-users",
                 },
                 dialogs:[
                 { title: "Delete User", isVisible: false, message: "Do you want to delete a user",
@@ -187,6 +195,8 @@
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "user");
+            this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
+
       }
     }
 </script>

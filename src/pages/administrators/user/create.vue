@@ -1,10 +1,22 @@
 <template>
     <div class="q-pa-md">
         <Form
+        v-if="!showSpinner"
         :formData="form"
         @Create="Create($event)"
         @Cancel="Cancel($event)"
         @userTypeAction="userTypeAction($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -31,6 +43,17 @@ import { post } from "../../../store/modules/services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -72,7 +95,7 @@ export default {
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             
             var url = `user/create`;
-            var schoolId = context.form.qSelects[1].value;
+            var schoolId = user.schoolId;
             if(Object.keys(user).length <= 0){
                 schoolId = "CEO";
             }
@@ -86,17 +109,16 @@ export default {
                     lastName: context.form.qInputs[1].name,
                     userName: context.form.qInputs[2].name,
                     password: context.form.qInputs[3].name,
-                    /* countryCode: context.form.qInputs[4].name,
-                    phoneNumber: context.form.qInputs[5].name, */
-                    //email: context.form.qInputs[6].name,
-                    designationId: context.form.qSelects[2].value,
-                    userType: context.form.qSelects[0].value.label,
+                    designationId: context.form.qSelects[0].value,
+                    userType: "Member",
                     schoolId,
                 }
             }
 
             console.log("payload: ", payload)
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
                 data : {
@@ -132,72 +154,18 @@ export default {
                 }
             }
         },
-        userTypeAction(payload){
-            var context = this;
-            if(payload.value.value == 2){
-                context.form.qSelects[2].visible = false;
-            }else{
-                context.form.qSelects[2].visible = true;
-            }
-        }
     },
     created(){
        var context = this;
        context.form.clearQInputs();
        context.form.clearQSelects();
-       context.form.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
-           return {
-               ...row,
-               type: row.schoolName
-           }
-       })
 
-       var user = this.$store.getters["authenticationStore/IdentityModel"]
-       if(Object.keys(user).length <= 0){
-           context.form.qSelects[0].list = [
-                {
-                    value: 1,
-                    label: "Member",
-                    type: "Member",
-                },
-                {
-                    value: 2,
-                    label: "School Admin",
-                    type: "Admin",
-                },
-                {
-                    value: 3,
-                    label: "Referal",
-                    type: "Referal",
-                }]
-       }
-       else if(user.userType == "Admin" && user.designationId == "CEO"){
-           context.form.qSelects[0].list = [
-                {
-                    value: 1,
-                    label: "Member",
-                    type: "Member",
-                },
-                {
-                    value: 2,
-                    label: "Admin",
-                    type: "Admin",
-                }]
-       }else{
-           context.form.qSelects[1].visible = false;
-           context.form.qSelects[2].list = this.$store.getters["staffStore/staffs"].map((row) => {
-                return {
-                    ...row,
-                    type: row.type
-                }
-            }) 
-           context.form.qSelects[0].list = [
-                         {
-                             value: 1,
-                             label: "Member",
-                             type: "Member",
-                         }]
-       }
+       context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"].map((row) => {
+            return {
+                ...row,
+                type: row.type
+            }
+        })  
     }
 }
 </script>

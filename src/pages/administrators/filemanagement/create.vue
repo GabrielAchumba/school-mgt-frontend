@@ -1,10 +1,22 @@
 <template>
     <div class="q-pa-md">
         <Form
+        v-if="!showSpinner"
         :formData="form"
         @Create="Create($event)"
         @Cancel="Cancel($event)"
         @onFileSelected="onFileSelected($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -31,6 +43,17 @@ import { post, uploadFile } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -72,6 +95,43 @@ export default {
         onFileSelected(payload){
             var context = this;
             context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+            let fileType = "image";
+
+            reader.addEventListener("load", function () {
+
+                 context.form.qFiles[0].showPreview = false;
+                  context.form.qFiles[0].showVideoPreview = false;
+
+                if(fileType === "video"){
+                     context.form.qFiles[0].showVideoPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }else{
+                    context.form.qFiles[0].showPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }
+
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else if (/\.(pdf|doc)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else if (/\.(ogg|mp4|webm)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "video";
+                    context.form.qFiles[0].fileType = fileType;
+                    reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else{
+                    alert("Wrong file format. Only supports .jpg, .jpeg, .png, .gif, .mp4, .ogg, .webm, .pdf or .doc")
+                }
+            }
             
             
         },
@@ -89,7 +149,9 @@ export default {
 
             console.log("payload: ", payload)
             //uploadFile
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
             
             context.fileUrl = response.data;
             console.log("fileUrl: ", context.fileUrl)

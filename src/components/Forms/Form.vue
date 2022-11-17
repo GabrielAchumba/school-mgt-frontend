@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row q-pa-none">
+        <div class="row q-pa-none flex flex-center">
              <q-card class="col-12">
                 <q-bar class="bg-accent text-primary">
                     <div class="text-h6 text-primary text-center">{{ formData.title }}</div>
@@ -100,9 +100,49 @@
                       v-for="qLink in formData.qLinks" 
                       :key="qLink.label">
                       <div class="row">
-                        <a class="col-12 q-pa-sm" :href="qLink.href" :target="qLink.target">
+                       
+                       <!-- <div class="col-12">
+                         <q-pdfviewer
+                          v-model="show"
+                          type="pdfjs"
+                          :src="pdfUrl(qLink.href)"
+                          content-class="absolute"
+                        />
+                       </div> -->
+
+                         <!--  <embed 
+                          class="col-12"
+                          style="height:60vh"
+                          id="pdfframe" :src="pdfUrl(qLink.href)"
+                          /> -->
+
+                          <embed 
+                          class="col-12"
+                          style="height:100vh"
+                          id="pdfframe" :src="pdfUrl(qLink.href)"
+                          />
+
+    <!-- 
+                        <iframe
+                          ref="myFrame"
+                          class="col-12 q-pa-sm"
+                          style="height:800px;"
+                          :src="pdfUrl(qLink.href)"/> -->
+                        <!-- <div id="pdf"
+                        class="col-12 q-pa-sm">
+                            <object 
+                            width="100%" 
+                            height="650" 
+                            type="application/pdf" 
+                            :data="pdfUrl(qLink.href)" 
+                            id="pdf_content" 
+                            style="pointer-events: none;">
+                                <p>Insert your error message here, if the PDF cannot be displayed.</p>
+                            </object>
+                        </div> -->
+                        <!-- <a class="col-12 q-pa-sm" :href="qLink.href" :target="qLink.target">
                           {{ qLink.label }}
-                          </a>
+                          </a> -->
                       </div>
                     </div>
 
@@ -151,13 +191,16 @@
                       </span>
 
                       <div class="row">
-                        <div class="col-12 q-pa-sm img">
-                          <q-img 
+                         <embed 
+                         class="q-pa-sm col-12"
+                           v-show="qFile.showPreview"
+                          :src="qFile.imagePreview"
+                          />
+                          <!-- <q-img 
                               v-bind:src="qFile.imagePreview" 
                               v-show="qFile.showPreview"
                               spinner-color="accent"
-                              class="rounded-borders"/>
-                        </div>
+                              class="rounded-borders"/> -->
                         <div class="col-12 q-pa-sm">
                           <video 
                           id="video-preview" 
@@ -167,6 +210,7 @@
                         </div>
                       </div>
                     </div>
+
 
                     <div class="q-pa-sm"
                       v-for="qColor in formData.qColors" 
@@ -217,7 +261,7 @@
                         v-for="qBtn in formData.qBtns" 
                         :key="qBtn.label" 
                         :name="qBtn.icon"
-                        @click="ClickAction(qBtn.name)"
+                        @click="ClickAction(qBtn.name, formData)"
                         size="30px">
                           <q-tooltip>
                             {{ qBtn.label }}
@@ -236,7 +280,7 @@
                         size="md"
                         :icon="qBtn.icon"
                         no-caps
-                        @click="ClickAction(qBtn.name)"
+                        @click="ClickAction(qBtn.name, formData)"
                       />
                   </div>
                 </q-card-actions>
@@ -247,8 +291,21 @@
 </template>
 
 <script>
+    /* import { fromPath } from "pdf2pic";
+
+    const options = {
+      density: 100,
+      saveFilename: "untitled",
+      savePath: "./images",
+      format: "png",
+      width: 600,
+      height: 600
+    }; */
+
     import form from "./FormVM.js";
-    import EditableTable from "../Tables/EditableTable.vue"
+    import EditableTable from "../Tables/EditableTable.vue";
+    import ContextMenu from "../Menus/context-menu.vue";
+    import ContextMenuItem from "../Menus/context-menu-item.vue";
     export default {
         computed:{
           setIsResponsive(){
@@ -258,7 +315,9 @@
           }
         },
         components:{
-          EditableTable
+          EditableTable,
+          ContextMenu,
+          ContextMenuItem
         },
         props: {
             isResponsive:{
@@ -274,19 +333,48 @@
               default: true,
             }
         },
+        data(){
+          return {
+            show: true
+          }
+        },
         methods: {
+          onEmbededContextMenu(e){
+            alert("cannot save");
+            return false; 
+           
+          },
+          pdfUrl(fileUrl){
+          
+            // return //`${fileUrl}#zoom=85&toolbar=0&navpanes=0`
+            /* const pageToConvertAsImage = 1;
+            const isBase64 = true;
+            const res = fromPath(filePath, options).convert(pageToConvertAsImage, isBase64);
+            console.log("res: ", res) */
+            
+
+            //`${fileUrl}#zoom=85&toolbar=0&navpanes=0`
+
+            return `${fileUrl}#zoom=85&toolbar=0&navpanes=0`
+          },
           onToggle(event){
             this.$emit("onToggle", event);
           },
           onFileSelected(event){
             //let video = document.getElementById('video-preview');
-
+            console.log("event: ", event)
             var files = event.target.files;
             var selectedFile = files[0];
+            console.log("selectedFile: ", selectedFile)
 
               this.$emit("onFileSelected", {
                 selectedFile,
               })
+
+              this.$emit("onFileSelected2", {
+                selectedFile,
+              })
+
                 
           },
           onColorSelected(){
@@ -295,8 +383,8 @@
           onQSelectItemValueChanged(qSelect){
             this.$emit(qSelect.actionName, qSelect);
           },
-          ClickAction(actionName){
-              this.$emit(actionName);
+          ClickAction(actionName, formData){
+              this.$emit(actionName, formData);
           },
           qInputTemplateAction(payload){
             this.$emit("qInputTemplateAction", payload);
@@ -313,11 +401,41 @@
           handleDeleteEditableTable(payload) {
             this.$emit(payload.tableVM.handleDeleteName, payload);
           },
+          disableRightclick(evt){
+            var context = this;
+            console.log("evt")
+            if(evt.button == 2){
+                return false;    
+            }
+          },
         },
+        created(){
+          var context = this;
+         //window.addEventListener("mousedown", this.disableRightclick);
+        }
     }
 </script>
 
 <style>
+        .embed-cover {
+          position: absolute;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+        
+          opacity: 0.25;
+        }
+
+        .wrapper {
+          position: relative;
+          /* overflow: hidden;
+          overscroll-behavior: contain; */
+        }
+
+  .pdf-container {
+    display: none;
+  }
 a:link, a:visited {
   background-color: white;
   color: black;

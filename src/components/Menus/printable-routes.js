@@ -11,6 +11,9 @@ const printableRoutes = {
     adminLanding: {route: '/admin', fileName: "adminlanding"},
     createsubscription: {route: '/create-subscription', fileName: "invoice"},
     updatesubscription: {route: '/update-subscription', fileName: "invoice"},
+    studentResults: {route: '/student-results', fileName: "student-results"},
+    studentpositionsanalysis:{route: '/student-students-positions-analysis', fileName: "StudentStudentsPositions"},
+    studentsinglestudentresultsanalysis:{route: '/student-single-student-results-analysis', fileName: "StudentSingleStudentResult"},
 }
 
 export { printableRoutes }

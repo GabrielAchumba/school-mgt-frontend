@@ -1,7 +1,7 @@
 <template>
   <div>
         <div class="row bg-primary wrap">
-          <div class="col-12 q-mt-auto q-mb- flex flex-center"> 
+          <div class="col-12 q-mt-auto q-mb-auto flex flex-center"> 
             <div 
             class="q-pa-sm"
             v-for="(card) in cardList" :key="card.title">

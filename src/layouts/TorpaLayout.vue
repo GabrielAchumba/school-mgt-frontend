@@ -248,6 +248,8 @@ export default {
 
         context.showSpinner = false;
         console.log("context.showSpinner: ", context.showSpinner);
+        // http://127.0.0.1/pgadmin4
+        // http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
     }
 }
 

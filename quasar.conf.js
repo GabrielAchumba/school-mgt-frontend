@@ -83,7 +83,7 @@ module.exports = function (/* ctx */) {
         'QForm',
         'QBtnDropdown',
         'QIcon',
-        'QTooltip'          
+        'QTooltip',        
       ],
       directives: [],
 

@@ -1,6 +1,8 @@
 <template>
     <div class="q-pa-sm">
-        <div class="row">
+        <div 
+        v-if="!showSpinner"
+        class="row">
              <q-bar class="col-12 bg-accent text-primary">
                 <q-btn  
                     icon="table_view"
@@ -20,7 +22,9 @@
              </q-bar>
         </div>
 
-        <div class="row q-pa-sm">
+        <div 
+        v-if="!showSpinner"
+        class="row q-pa-sm">
             <div class="col-12">
                 <Table
                 :table_VM="tableVM"
@@ -29,6 +33,18 @@
             </div>
 
             <!-- <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div> -->
+        </div>
+
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
         </div>
 <!-- 
        <q-dialog 
@@ -103,6 +119,17 @@ import Plotly from 'plotly.js-dist'
 import { form, subjectsForm, chartForm, tableVM, dialogs } from "./view_models/SummariedResults-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form,
@@ -178,6 +205,7 @@ export default {
                 }
             }
 
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post(payload)
 
             const { 
@@ -198,6 +226,7 @@ export default {
                 context.configurePlotData();
             }
 
+            this.$store.commit("authenticationStore/setShowSpinner", false);
             context.dialogFailureOrScuess("Configure Result Analysis", false)
         },
         configurePlotData(){

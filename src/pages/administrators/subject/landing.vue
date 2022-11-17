@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    v-if="!showSpinner"
     :table_VM="tableVM"
     @createSubject="createSubject($event)"
     @updateSubject="updateSubject($event)"
@@ -11,8 +12,8 @@
         <div class="col-12 q-pa-sm absolute-center flex flex-center">
             <q-spinner
                 color="accent"
-                size="3em"
-                :thickness="10"
+                :size="spinnerSize"
+                :thickness="spinnerThickness"
             />
         </div>
     </div>
@@ -43,6 +44,12 @@
       computed:{
           showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
@@ -65,6 +72,7 @@
                 deleteItem: "deleteSubject",
                 createItemUrl: "/create-subject",
                 updateItemUrl: "/update-subject",
+                importURL: "/import-subjects",
                 },
                 dialogs:[
                 { title: "Delete Subject", isVisible: false, message: "Do you want to delete a Subject",
@@ -181,6 +189,7 @@
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "subject");
+            this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
       }
     }
 </script>

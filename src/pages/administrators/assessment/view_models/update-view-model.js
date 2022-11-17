@@ -1,7 +1,10 @@
 
 const form = {
     title: "Update Type of Assessment",
-    qSelects: [],
+    qSelects: [
+         { label: "Subject *", value: "", type: "text", 
+         list: [], actionName: "subjectAction", visible: true },
+    ],
     qInputs: [
         { label: "Type of Assessment", name: "", type: "text",
         Template: {

@@ -1,135 +1,50 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-primary">
 
-     <q-header class="q-py-sm bg-primary text-accent" :style="'border-bottom: 2px solid '+ theme_color">
-        <q-toolbar>
-          <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          class="bg-primary text-accent"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
-        <img src='/statics/newway.jpg' width=100 height=40>
-       <q-space ></q-space>
-      <q-tabs v-model="selected_tab" shrink>
-
-        <div v-if="rightDrawerOpen">
-          <q-btn
-            @click="toggleMobilePhoneMenu"
-            :icon="rightMenuIcon"
-            flat
-            class="text-accent bg-primary">
-            <q-menu fit>
-              <q-list dense class="text-accent text-caption bg-primary">
-                <q-item
-                v-for="(menuItem) in menuList" :key="menuItem.name" 
-               class="bg-primary text-accent"
-                clickable
-                  @click="scrollToElement(menuItem.name)">
-                      <q-item-section>
-                      {{ menuItem.label}}
-                      </q-item-section>
-                  </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-        </div>
-
-        <q-tab
-         v-else
-         v-for="(menuItem) in menuList" :key="menuItem.name"
-        :style= getTabHeaderStyle(menuItem.tabIndex)
-        lass="q-mr-sm q-py-xs text-accent" 
-        @click="scrollToElement(menuItem.name);" 
-        :label="menuItem.label"  />
-
-          <q-btn
-          @click="toggleButton" 
-          flat
-          avatar>
-            <q-avatar
-            v-if="getIsUserPhoto()" 
-            class="bg-primary text-accent">
-  	        <q-img
-                  :src="IdentityModel.base64String"
-                />
-  	      </q-avatar>
-          <q-avatar
-            v-else
-            class="bg-accent text-primary">
-  	        {{ IdentityModel.firstName }}
-  	      </q-avatar>
-          <q-menu
-            fit>
-                      <q-list dense class="text-accent text-caption bg-primary">
-                        <q-item
-                            class="bg-primary text-accent">
-                            <q-item-section avatar>
-                            <div class="row text-center flex flex-center q-pb-lg">
-                              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                              <div 
-                              class="q-pa-md" style="font-family: Lato;" 
-                              avatar>
-                                <q-avatar 
-                                v-if="getIsUserPhoto()" 
-                                class="bg-primary text-accent">
-                                   <q-img
-                                      :src="IdentityModel.base64String"
-                                    />
-                                  </q-avatar>
-                                  <q-avatar 
-                                  v-else
-                                  class="bg-primary text-accent">
-                                    {{ IdentityModel.firstName }}
-                                  </q-avatar>
-                              </div>
-                              <div 
-                              class="q-pa-md" style="font-family: Lato;">
-                                <p class="bg-primary text-accent">
-                                    {{ IdentityModel.firstName }} {{ IdentityModel.lastName }}
-                                  </p>
-                              </div>
-                              </div>
-                            </div>
-                            </q-item-section>
-                        </q-item>
-
-                            <q-item
-                            class="bg-primary text-accent">
-                            <q-item-section avatar>
-                            <div class="row text-center flex flex-center q-pb-lg">
-                              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                                <q-btn 
-                                  class="q-mr-md bg-accent text-primary" 
-                                  size="12px" 
-                                  :style="'min-height:auto; padding:1px;'" 
-                                  dense icon="color_lens"
-                                  @click="logoutUser">
-                                      Logout
-                                    </q-btn>
-                              </div>
-                              </div>
-                            </q-item-section>
-                            </q-item>
-                      </q-list>
-              </q-menu>
-        </q-btn>
-
-      </q-tabs>
-        
-      </q-toolbar>
+     <q-header class="q-pa-none bg-primary">
+       <MainMenuBar
+       :menuList="menuList"
+       @logoutUser="logoutUser($event)"/>
     </q-header>
 
-    <q-page-container>
-      <router-view />
+    <q-page-container style="height: 100vh;">
+
+      <router-view
+      v-if="!showSpinner"/>
+      <div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    size="3em"
+                    :thickness="10"
+                />
+            </div>
+        </div>
     </q-page-container>
+
+     <q-dialog v-model="globalSearchDialog">
+        <searchDialog/>
+    </q-dialog>
+
   </q-layout>
 </template>
 
 <script>
+
+import { colors } from 'quasar'
+const { getBrand, setBrand } = colors
+import { loadClassRooms } from "../pages/administrators/classroom/utils";
+import { loadStaffs } from "../pages/administrators/staff/utils";
+import { loadStudents } from "../pages/administrators/student/utils";
+import { loadSubjects } from "../pages/administrators/subject/utils";
+import { loadAssessments } from "../pages/administrators/assessment/utils";
+import { loadSchools } from "../pages/administrators/school/utils";
+import MainMenuBar from "../components/Menus/main-menu-bar.vue";
+import searchDialog from "../components/Searches/search-list.vue";
+import { checkResultsAnalysisSubscription, menuListForStudents } from "../pages/administrators/utils";
+import { loadLogos } from "../pages/administrators/branding/logo/utils";
 
 export default {
   computed: {
@@ -142,83 +57,45 @@ export default {
         theme_color(){
           return this.$store.getters['authenticationStore/theme_color'];
         },
+        globalSearchDialog() {
+            return this.$store.getters['authenticationStore/globalSearchDialog'];
+        },
+        primaryColor() {
+            return this.$store.getters['administratorStore/primaryColor'];
+        },
+        secondaryColor() {
+            return this.$store.getters['administratorStore/secondaryColor'];
+        },
+        tertiaryColor() {
+            return this.$store.getters['administratorStore/tertiaryColor'];
+        },
       },
+  components: {
+    MainMenuBar,
+    searchDialog,
+  },
   data () {
     return {
+      schoolName: "",
       leftDrawerOpen: true,
       showAccountDetails: false,
       rightMenuIcon: "menu",
-      selected_tab: 'home',
-      navs: [
-              {
-                label:'Category NGN500.00',
-                icon: 'group',
-                to:'/user-createCategoryN500'
-              },
-              {
-                label:'Category NGN1000.00',
-                icon: 'group',
-                to:'/user-createCategoryN1000'
-              },
-              {
-                label:'Category NGN2000.00',
-                icon: 'group',
-                to:'/user-createCategoryN2000'
-              },
-              {
-                label:'Category NGN5000.00',
-                icon: 'group',
-                to:'/user-createCategoryN5000'
-              },
-              {
-                label:'Category NGN10000.00',
-                icon: 'group',
-                to:'/user-createCategoryN10000'
-              },
-              {
-                label:'Invest',
-                icon: 'group',
-                to:'/user-contribution'
-              },
-              {
-                label:'Dashboard',
-                icon: 'school',
-                to:'/user-dashboard'
-              },
-              {
-                label:'Advertise Business',
-                icon: 'school',
-                to:'/user-dashboard'
-              },
-              {
-                label:'FAQs',
-                icon: 'school',
-                to:'/faqs'
-              }
-      ],
+      navs: [],
       rightDrawerOpen: window.innerWidth < 700 ? true : false,
-      menuList: [
-        { name: "home", tabIndex: "home", label: "Home" },
-        { name: "about_us", tabIndex: "about_us", label: "About Us" },
-      ]
+      menuList: menuListForStudents,
+      contextMenuList: [],
+      landingMenu: [],
+      checkSubscription: {},
+      showSpinner: false,
     }
   },
   methods:{
-    getTabHeaderStyle(tabIndex){
-      var context =  this;
-      if(context.selected_tab == tabIndex){
-        return `[{backgroundColor: ${context.theme_color}}]`
+    showSelectedRouters(){
+      console.log("this.$router: ", this.$router)
+      if(this.$router.history.current.fullPath != "/admin"){
+        return true;
       }
-      return `[{}]`
-    },
-    toggleMobilePhoneMenu(){
-      var context = this;
-
-      if(context.showMobilePhoneMenu == false){
-        context.rightMenuIcon = "close";
-      }else{
-        context.rightMenuIcon = "menu"
-      }
+      return false;
     },
     getIsUserPhoto(){
       var context = this;
@@ -241,22 +118,187 @@ export default {
     logoutUser(){
       this.$store.dispatch('authenticationStore/Logout')
     },
-    scrollToElement(routeName){
-
-      this.$router.push(`${routeName}`);
+    scrollToElement(routename){
+      this.$router.push(`${routename}`);
 
     },
     onResize(e) {
       const width = window.innerWidth;
-      var content = this;
-      content.rightDrawerOpen = false
-      if(width < 700) content.rightDrawerOpen = true;
+      var context = this;
+      context.rightDrawerOpen = false
+      if(width < 700) context.rightDrawerOpen = true;
+      this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
+    },
+    verifyResultsAnalysisSubscription(){
+       var context = this;
+      if(context.checkSubscription.isResultsAnalysis == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "Student Results"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "Student Results"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyFileManagementSubscription(){
+       var context = this;
+      if(context.checkSubscription.isFileManagement == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "File Management"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "File Management"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyAdevertizementSubscription(){
+       var context = this;
+      if(context.checkSubscription.isAdvertizement == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == "Advertisement"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == "Advertisement"){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    async checkSubscritpion(){
+      var context = this;
+      var user = this.$store.getters["authenticationStore/IdentityModel"]
+      const { result } = await checkResultsAnalysisSubscription(user.schoolId);
+      context.checkSubscription = {...result}
+      this.$store.commit("administratorStore/SetIsSubscription", result)
+
+      context.contextMenuList = context.menuList.map((row)=> {
+          return {
+            ...row
+          }
+        })
+      context.landingMenu = context.menuList.map((row)=> {
+          return {
+            ...row
+          }
+        })
+      context.landingMenu.shift();
+
+      context.verifyResultsAnalysisSubscription();
+      context.verifyFileManagementSubscription();
+      context.verifyAdevertizementSubscription();
+
+      context.menuList = context.contextMenuList.map((row) => {
+        return {
+          ...row,
+        }
+      })
+      console.log("context.landingMenu: ", context.landingMenu)
+      this.$store.commit("administratorStore/SetMainMenuList", context.landingMenu)
+    },
+    initializeLogo(logo){
+        setBrand('primary', logo.primaryColor);
+        setBrand('accent', logo.tertiaryColor);
+        setBrand('secondary', logo.secondaryColor);
+    },
+    async branding(schoolId){
+            var context = this;
+            const torpaLogo = await loadLogos(schoolId);
+            if(torpaLogo.result.length === 0){
+                    torpaLogo.result.push({fileUrl: "/statics/newway.jpg", primaryColor: "#FFFFFF",
+                        secondaryColor: "#FF0000", tertiaryColor: "#056608", createdBy: "CEO"})
+            }
+            this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
+            context.initializeLogo(torpaLogo.result[0]);
     },
   },
-  mounted() {
+  async created(){
+    
+    var context = this;
+    context.showSpinner = true;
     window.addEventListener("resize", this.onResize);
+  
+    this.$store.commit("authenticationStore/setActiveRoute", "adminLanding");
+    
+    if(window.innerWidth < 700) context.rightDrawerOpen = true;
+    this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
+
+      const schools = await loadSchools();
+      this.$store.commit('schoolStore/SetSchools', schools.result);
+
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+        for(const school of schools.result){
+          if(school.id === user.schoolId){
+            context.schoolName =  school.schoolName;
+            this.$store.commit('schoolStore/SetUserSchool', school);
+            context.branding(user.schoolId);
+            break;
+          }
+        }
+
+       if(user.userType == "Student"){
+          const classRooms = await loadClassRooms(user.schoolId);
+          this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
+          const staffs = await loadStaffs(user.schoolId);
+          this.$store.commit('staffStore/SetStaffs', staffs.result);
+          const students = await loadStudents(user.schoolId);
+          this.$store.commit('studentStore/SetStudents', students.result);
+          const subjects = await loadSubjects(user.schoolId);
+          this.$store.commit('subjectStore/SetSubjects', subjects.result);
+          const assessments = await loadAssessments(user.schoolId);
+          this.$store.commit('assessmentStore/SetAssessments', assessments.result);
+          context.checkSubscritpion();
+       }
+
+       context.showSpinner = false;
+
   },
-  unmounted() {
+  destroyed() {
     window.removeEventListener("resize", this.onResize);
   },
 }

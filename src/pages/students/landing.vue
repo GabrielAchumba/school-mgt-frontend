@@ -10,35 +10,13 @@
   import CardList from "../../components/Cards/CardList.vue";
 
     export default {
+        computed:{
+          cardList(){
+            return this.$store.getters["administratorStore/mainMenuList"]
+          }
+        },
         components:{
           CardList,
-        },
-        data () {
-          return {
-            cardList: [
-             {
-                name: "showPage",
-                title: "User Profile", 
-                description: "Modify your profile data",
-                image: "/statics/images/subjects.jpg",
-                to: "/instructor"
-              },
-              {
-                name: "showPage",
-                title: "Student", 
-                description: "Students in the school",
-                image: "/statics/images/students.jpg",
-                to: "/student-landing"
-              },
-              {
-                name: "showPage",
-                title: "Student Results", 
-                description: "Student's results in the school",
-                image: "/statics/images/results.jpg",
-                to: "/result-landing"
-              },
-            ],
-          }
         },
         methods:{
             showPage(payload){

@@ -1,20 +1,6 @@
 const form = {
     title: "Update User",
     qSelects: [
-        { label: "User Type *", value: "", type: "text", 
-         list: [
-             {
-                 value: 1,
-                 label: "Member",
-                 type: "Member",
-             },
-             {
-                 value: 2,
-                 label: "Admin",
-                 type: "Admin",
-             }], actionName: "userTypeAction", visible: true },
-         { label: "School Name *", value: "", type: "text", 
-         list: [], actionName: "schoolNameAction", visible: false },
          { label: "Designation *", value: "", type: "text", 
          list: [], actionName: "designationAction", visible: true },
     ],

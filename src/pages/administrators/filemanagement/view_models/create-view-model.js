@@ -22,6 +22,10 @@ const form = {
     qFiles: [
         { label: "File Path", name: "", type: "file",
         selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
+        showVideoPreview: false,
+        fileType: "image",
         files: [],
         Template: {
             sn: 0,
@@ -45,6 +49,10 @@ const form = {
         var i = 0;
         for (i = 0; i < this.qFiles.length; i++){
             this.qFiles[i].name = "";
+            this.qFiles[i].selectedFile = null;
+            this.qFiles[i].showPreview = false;
+            this.qFiles[i].showVideoPreview = false;
+            this.qFiles[i].imagePreview = '';
         }
     },
 }

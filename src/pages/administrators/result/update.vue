@@ -6,6 +6,17 @@
         @Cancel="Cancel($event)"
         @deleteResult="deleteResult($event)"
         @typeOfInstructor="typeOfInstructor($event)"/>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+        </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -33,6 +44,17 @@ import { loadUsersByCategory } from "../user/utils";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         MessageBox,
         Form
@@ -96,7 +118,9 @@ export default {
             }
 
             console.log("payload: ", payload)
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await put(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
                 data : {

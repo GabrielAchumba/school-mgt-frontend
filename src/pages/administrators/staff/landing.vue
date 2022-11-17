@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    v-if="!showSpinner"
     :table_VM="tableVM"
     @createStaff="createStaff($event)"
     @updateStaff="updateStaff($event)"
@@ -11,8 +12,8 @@
         <div class="col-12 q-pa-sm absolute-center flex flex-center">
             <q-spinner
                 color="accent"
-                size="3em"
-                :thickness="10"
+                :size="spinnerSize"
+                :thickness="spinnerThickness"
             />
         </div>
     </div>
@@ -43,6 +44,12 @@
       computed:{
           showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
@@ -65,6 +72,7 @@
                 deleteItem: "deleteStaff",
                 createItemUrl: "/create-staff",
                 updateItemUrl: "/update-staff",
+                importURL: "/import-staff",
                 },
                 dialogs:[
                 { title: "Delete Staff", isVisible: false, message: "Do you want to delete a staff",
@@ -122,7 +130,9 @@
             }
 
             console.log("payload: ", payload)
+            this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await remove(payload)
+            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
                 data : {
@@ -150,7 +160,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadStafff()
+                            await context._loadStaff()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -158,7 +168,7 @@
                 }
             }
         },
-        async _loadStafff(){
+        async _loadStaff(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
@@ -177,12 +187,13 @@
         },
         async created() {
             var context = this;
-            await context._loadStafff()
+            await context._loadStaff()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "staff");
+            this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
       }
     }
 </script>

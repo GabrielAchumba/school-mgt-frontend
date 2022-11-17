@@ -24,6 +24,10 @@ import CarouselStore from './modules/CarouselStore';
 import AboutUsStore from './modules/AboutUsStore';
 import ContactStore from './modules/ContactStore';
 import CoreValueStore from './modules/CoreValueStore';
+import gradeStore from './modules/gradeStore';
+import levelStore from './modules/levelStore';
+import sessionStore from './modules/sessionStore';
+import examStore from './modules/examStore';
 
 
 Vue.use(Vuex)
@@ -63,6 +67,10 @@ export default function (/* { ssrContext } */) {
       AboutUsStore,
       ContactStore,
       CoreValueStore,
+      gradeStore,
+      levelStore,
+      sessionStore,
+      examStore,
     },
 
     // enable strict mode (adds overhead!)

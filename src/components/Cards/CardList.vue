@@ -1,14 +1,14 @@
 <template>
   <div>
-        <div class="row bg-primary wrap">
-          <div class="col-12 q-mt-auto q-mb- flex flex-center"> 
+        <div class="row bg-primary">
+          <div class="col-12 q-pa-sm flex flex-center"> 
             <div 
             class="q-pa-sm"
             v-for="(card) in cardList" :key="card.title">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
               @click="cardClickHandler(card)"
               style="border: none; width: 400px;" 
-              class="my-card text-center box-shadow" square bordered>
+              class="my-card text-center box-shadow" round bordered>
                 <q-img
                   :src="card.image"
                   height="100px"

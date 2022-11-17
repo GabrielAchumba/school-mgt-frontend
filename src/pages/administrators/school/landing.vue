@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    v-if="!showSpinner"
     :table_VM="tableVM"
     @createSchool="createSchool($event)"
     @linkClick="linkClick($event)"/>
@@ -10,8 +11,8 @@
         <div class="col-12 q-pa-sm absolute-center flex flex-center">
             <q-spinner
                 color="accent"
-                size="3em"
-                :thickness="10"
+                :size="spinnerSize"
+                :thickness="spinnerThickness"
             />
         </div>
     </div>
@@ -41,6 +42,12 @@
       computed:{
           showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{

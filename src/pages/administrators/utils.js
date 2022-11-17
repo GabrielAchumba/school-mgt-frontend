@@ -56,8 +56,15 @@ export const menuList = [
     },
     {
         name: "showPage",
+        title: "Level", 
+        description: "The school levels like primary 1, primary 2, etc",
+        image: "/statics/images/classroom.jpg",
+        to: "/level-landing"
+    },
+    {
+        name: "showPage",
         title: "Class Rooms", 
-        description: "The school's class rooms",
+        description: "The school class rooms like Class A, Class B, etc",
         image: "/statics/images/classroom.jpg",
         to: "/classroom-landing"
     },
@@ -67,6 +74,13 @@ export const menuList = [
         description: "Subjects that students learn in the school",
         image: "/statics/images/subjects.jpg",
         to: "/subject-landing"
+    },
+    {
+        name: "showPage",
+        title: "Grade", 
+        description: "Grade based on range of score for subjects",
+        image: "/statics/images/subjects.jpg",
+        to: "/grade-landing"
     },
     {
         name: "showPage",
@@ -84,8 +98,15 @@ export const menuList = [
     },
     {
         name: "showPage",
-        title: "Student Results", 
-        description: "Student's results in the school",
+        title: "Result Management", 
+        description: "Create, update and delete results. Also view result report",
+        image: "/statics/images/view results.jpg",
+        to: "/results"
+      },
+    {
+        name: "showPage",
+        title: "Results Analysis", 
+        description: "Compute and analyse results of studenst",
         image: "/statics/images/results.jpg",
         to: "/result-landing"
     },
@@ -119,9 +140,47 @@ export const menuList = [
     },
     {
         name: "showPage",
+        title: "Examination & Quiz", 
+        description: "Set online examinations",
+        image: "/statics/images/lesson.jpg",
+        to: "/exam-landing"
+    },
+    {
+        name: "showPage",
         title: "Schools Payments", 
         description: "All Payments made by schools you refered to Newway",
         image: "/statics/images/staffs.jpg",
         to: "/school-all-payment-landing"
+    },
+]
+
+export const menuListForStudents = [
+    {
+        name: "showPage",
+        title: "Home", 
+        description: "Landing Page",
+        image: "/statics/images/staffs.jpg",
+        to: "/student"
+    },
+    {
+        name: "showPage",
+        title: "Student Results", 
+        description: "Student's results in the school",
+        image: "/statics/images/results.jpg",
+        to: "/student-result-landing"
+    },
+    {
+        name: "showPage",
+        title: "File Management", 
+        description: "Managing teachers lesson notes, past questions and answers, and other office files",
+        image: "/statics/images/lesson.jpg",
+        to: "/student-filemanagement-landing"
+    },
+    {
+        name: "showPage",
+        title: "Socialize", 
+        description: "This feature enables you to chat and interact with friends from same or differnet school",
+        image: "/statics/images/lesson.jpg",
+        to: "/student-filemanagement-landing"
     },
 ]

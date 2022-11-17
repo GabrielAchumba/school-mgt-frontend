@@ -1,7 +1,7 @@
 <template>
     <div class="q-pa-sm">
         <span>
-            <p class="q-ma-sm text-left">Customize App</p>
+            <p class="q-ma-sm text-left">Branding & Advertisement</p>
             <q-select
                 class="col-7 q-ma-none"
                 color="accent" 

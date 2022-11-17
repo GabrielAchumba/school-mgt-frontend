@@ -18,6 +18,7 @@ const state = {
     tab: "login",
     isMobile: false,
     createURL: "",
+    importURL: "",
     activeColumns: [],
     globalSearchDialog: false,
     activeRows: [],
@@ -38,10 +39,33 @@ const state = {
       { name: "/about_us", tabIndex: "about_us", label: "About Us" },
       { name: "/contact", tabIndex: "contact", label: "Contact" },
     ],
-    showSpinner: false
+    showSpinner: false,
+    isSchoolRoute: false,
+    spinnerSize: "8em",
+    spinnerThickness: 10,
+    workSheetsNames: [],
+    workSheetsData: [],
   }
 
   const getters = {
+    workSheetsNames(state){
+      return state.workSheetsNames;
+    },
+    workSheetsData(state){
+      return state.workSheetsData;
+    },
+    dataImportMainForm(state){
+      return state.dataImportMainForm;
+    },
+    spinnerSize(state){
+      return state.spinnerSize;
+    },
+    spinnerThickness(state){
+      return state.spinnerThickness;
+    },
+    isSchoolRoute(state){
+      return state.isSchoolRoute;
+    },
     tab(state){
       return state.tab;
     },
@@ -113,10 +137,20 @@ const state = {
   },
   showSpinner(state){
     return state.showSpinner;
+  },
+  importURL(state){
+    return state.importURL;
   }
 }
 
 const mutations = {
+  setImportedData(state, payload){
+    state.workSheetsNames = payload.workSheetsNames;
+    state.workSheetsData = payload.workSheetsData;
+  },
+  setIsSchoolRoute(state, payload){
+    state.isSchoolRoute = payload;
+  },
   setShowSpinner(state, payload){
     state.showSpinner = payload;
   },
@@ -206,6 +240,9 @@ const mutations = {
   },
   setActiveRoute(state, payload){
     state.activeRoute = payload;
+  },
+  setImportURL(state, payload){
+    state.importURL = payload;
   }
 }
 

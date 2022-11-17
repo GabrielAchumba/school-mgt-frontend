@@ -1,7 +1,10 @@
 
 const form = {
     title: "Create Type of Assessment",
-    qSelects: [],
+    qSelects: [
+         { label: "Subject *", value: "", type: "text", 
+         list: [], actionName: "subjectAction", visible: true },
+    ],
     qInputs: [
         { label: "Type of Assessment", name: "", type: "text",
         Template: {
@@ -27,7 +30,15 @@ const form = {
         for (i = 0; i < this.qInputs.length; i++){
             this.qInputs[i].name = "";
         }
-    }
+    },
+    clearQSelects(){
+        var i = 0;
+        for (i = 0; i < this.qSelects.length; i++){
+            this.qSelects[i].value = "";
+            this.qSelects[i].list = [];
+            this.qSelects[i].visible = true;
+        }
+    },
 }
 
 const dialogs = [

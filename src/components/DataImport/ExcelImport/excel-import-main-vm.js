@@ -1,0 +1,21 @@
+const form = {
+    title: "Data Import",
+    qSelects: [
+         { label: "Select Worksheet *", value: "", type: "text", 
+         list: [], actionName: "referedByAction", visible: true },
+    ],
+    qBtns: [
+        {label: "Preview", name: "Preview", icon: "preview"},
+        {label: "Save", name: "Save", icon: "save"},
+    ],
+    clearQSelects(){
+        var i = 0;
+        for (i = 0; i < this.qSelects.length; i++){
+            this.qSelects[i].value = "";
+            this.qSelects[i].list = [];
+            this.qSelects[i].visible = true;
+        }
+    },
+}
+
+export { form }

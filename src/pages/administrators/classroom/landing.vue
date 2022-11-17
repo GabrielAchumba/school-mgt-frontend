@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table
+    v-if="!showSpinner"
     :table_VM="tableVM"
     @createClassRoom="createClassRoom($event)"
     @updateClassRoom="updateClassRoom($event)"
@@ -11,8 +12,8 @@
         <div class="col-12 q-pa-sm absolute-center flex flex-center">
             <q-spinner
                 color="accent"
-                size="3em"
-                :thickness="10"
+                :size="spinnerSize"
+                :thickness="spinnerThickness"
             />
         </div>
     </div>
@@ -44,6 +45,12 @@
       computed:{
           showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
@@ -64,8 +71,9 @@
                 createItem: "createClassRoom",
                 updateItem: "updateClassRoom",
                 deleteItem: "deleteClassRoom",
-                createItemUrl: "/create-classRoom",
-                updateItemUrl: "/update-classRoom",
+                createItemUrl: "/create-class-room",
+                updateItemUrl: "/update-class-room",
+                importURL: "/import-class-rooms",
                 },
                 dialogs:[
                 { title: "Delete ClassRoom", isVisible: false, message: "Do you want to delete a Class Room",
@@ -184,6 +192,7 @@
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "classrooms");
+            this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
       }
     }
 </script>
