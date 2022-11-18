@@ -60,10 +60,10 @@
     return {
             tableVM: {
                 selectedStaff: {},
-                title: "Employees",
+                title: "Types of Users",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
-                    { name: "type", label: "Type of Staff", field: "", align: "left", type: "text" },
+                    { name: "type", label: "Type of User", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -75,9 +75,9 @@
                 importURL: "/import-staff",
                 },
                 dialogs:[
-                { title: "Delete Staff", isVisible: false, message: "Do you want to delete a staff",
+                { title: "Delete Type of User", isVisible: false, message: "Do you want to delete a type of user",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Staff deleted successfully!",
+                { title: "Success", isVisible: false, message: "Type of user deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
@@ -156,7 +156,7 @@
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete Staff":
+                        case "Delete Type of User":
                             await context.delete();
                             break;
                         case "Success":

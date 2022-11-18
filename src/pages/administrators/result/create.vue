@@ -107,6 +107,7 @@ export default {
                     designationId: context.form.qSelects[3].value,
                     teacherId: context.form.qSelects[4].value,
                     assessmentId: context.form.qSelects[5].value,
+                    levelId: context.form.qSelects[6].value,
                     createdAt: context.form.qDates[0].name,
                     schoolId: user.schoolId,
                 }
@@ -159,7 +160,9 @@ export default {
             context.form.qSelects[4].list = teachers.result.map((row) => {
                 return {
                     ...row,
-                    type: `${row.firstName} ${row.lastName}`
+                    type: `${row.firstName} ${row.lastName}`,
+                    value: row.id,
+                    label: row.type,
                 }
             }) 
         }
@@ -169,18 +172,55 @@ export default {
         context.form.clearQInputs();
         context.form.clearQSelects();
         context.form.clearQDates();
-        context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"];
-        context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
-        //console.log("subjects: ", subjects.result)
-        console.log("context.form.qSelects[1].list : ", context.form.qSelects[1].list)
+        context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        
         context.form.qSelects[2].list = this.$store.getters["studentStore/students"].map((row) => {
             return {
                 ...row,
-                type: `${row.firstName} ${row.lastName}`
+                type: `${row.firstName} ${row.lastName}`,
+                value: row.id,
+                label: `${row.firstName} ${row.lastName}`,
             }
         })
-        context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"];
-        context.form.qSelects[5].list = this.$store.getters["assessmentStore/assessments"];
+        context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[5].list = this.$store.getters["assessmentStore/assessments"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[6].list = this.$store.getters["levelStore/levels"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
     }
 }
 </script>

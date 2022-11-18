@@ -72,6 +72,7 @@
                     { name: "createdDate", label: "Date of Creation", field: "", align: "left", type: "date" },
                     { name: "teacherFullName", label: "Teacher", field: "", align: "left", type: "text" },
                     { name: "classRoomFullName", label: "Class", field: "", align: "left", type: "text" },
+                    { name: "levelFullName", label: "Level", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -210,7 +211,8 @@
                     name: "showPage",
                     title: row.studentFullName, 
                     description: `${row.studentFullName} score in ${row.subjectFullName} is
-                                ${row.score}/${row.scoreMax}. The class room is ${row.classRoomFullName}
+                                ${row.score}/${row.scoreMax}. The class room is ${row.classRoomFullName},
+                                the level is ${row.levelFullName}
                                 and the instructor's name is ${row.teacherFullName}`,
                     createdDate: (new Date(row.createdAt)).toDateString(),
                     qBtns: [

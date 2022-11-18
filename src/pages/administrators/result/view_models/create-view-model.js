@@ -8,6 +8,7 @@ const form = {
         { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
         { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
         { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor", visible: true },
+        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
     ],
     qInputs: [
         { label: "Score", name: "", type: "text",

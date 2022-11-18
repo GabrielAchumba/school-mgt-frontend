@@ -69,7 +69,7 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Staff"){
+                if(dialog.title == "Create Type of User"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
@@ -129,7 +129,7 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Staff":
+                        case "Create Type of User":
                             await context.save();
                             break;
                         case "Success":

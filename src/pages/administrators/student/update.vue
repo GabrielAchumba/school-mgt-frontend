@@ -94,17 +94,17 @@ export default {
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             
-            var url = `student/${context.selectedStudent.id}`;
-            const arr = context.form.qDates[0].name.split("/") 
+            var url = `user/${context.selectedStudent.id}`;
             const payload = {
                 url,
                 req: {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
-                    birthYear: Number(arr[0]),
-                    birthMonth: Number(arr[1]),
-                    birthDay: Number(arr[1]),
-                    subscriptionType: context.form.qSelects[0].value.value,
+                    userName: context.form.qInputs[2].name,
+                    designationId: context.form.qSelects[0].value,
+                    levelId: context.form.qSelects[1].value,
+                    classRoomId: context.form.qSelects[2].value,
+                    userType: "Student",
                     schoolId: user.schoolId,
                 }
             }
@@ -155,10 +155,38 @@ export default {
         console.log("selectedStudent: ", context.selectedStudent)
         context.form.qInputs[0].name = context.selectedStudent.firstName;
         context.form.qInputs[1].name = context.selectedStudent.lastName;
-        context.form.qSelects[0].value =  context.selectedStudent.subscriptionType;
-        var birthDay = context.selectedStudent.birthDay > 9 ? toString(context.selectedStudent.birthDay) : `0${context.selectedStudent.birthDay}`;
-        var birthMonth = context.selectedStudent.birthMonth > 9 ? toString(context.selectedStudent.birthMonth) : `0${context.selectedStudent.birthMonth}`;
-        context.form.qDates[0].name = `${context.selectedStudent.birthYear}/${birthMonth}/${birthDay}`;
+        context.form.qInputs[2].name = context.selectedStudent.userName;
+
+
+        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[0].value = context.selectedStudent.designationId;
+
+        context.form.qSelects[1].list = this.$store.getters["levelStore/levels"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[1].value = context.selectedStudent.levelId;
+
+        context.form.qSelects[2].list = this.$store.getters["classRoomStore/classRooms"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[2].value = context.selectedStudent.classRoomId;
     }
 }
 </script>

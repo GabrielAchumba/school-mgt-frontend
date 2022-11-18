@@ -58,8 +58,8 @@ export default {
     },
     data(){
         return {
-            title: "Import Types of Staff",
-            appVariables: [{variableTitle: "Type of Staff", variableName: "type"}],
+            title: "Import Types of User",
+            appVariables: [{variableTitle: "Type of User", variableName: "type"}],
             applicationColumns: [],
             dialogs: dialogs,
             tableRows: [],
@@ -72,7 +72,7 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Many Staff"){
+                if(dialog.title == "Create Many Types of User"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
@@ -139,7 +139,7 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Many Staff":
+                        case "Create Many Types of User":
                             await context.createStaff();
                             break;
                         case "Success":

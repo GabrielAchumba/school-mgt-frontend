@@ -2,7 +2,8 @@
     <div class="q-pa-sm">
         <ExcelImport
         :title="title"
-        :applicationColumns="applicationColumns"/>
+        :applicationColumns="applicationColumns"
+        @saveTable="Create($event)"/>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">
@@ -42,10 +43,22 @@ import { loadSubjects } from "../subject/utils";
 import { loadClassRooms } from "../classroom/utils";
 import { loadStudents } from "../student/utils";
 import { loadStaffs } from "../staff/utils";
-import { loadUsers } from "../user/utils";
+import { loadLevels } from "../level/utils";
 import { loadAssessments } from "../assessment/utils";
+import { loadUsers } from "../user/utils";
 
 export default {
+    computed:{
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
+    },
     components:{
         ExcelImport,
         MessageBox,
@@ -53,11 +66,12 @@ export default {
     data(){
         return {
             title: "Import Results",
-            appVariables: [{variableTitle: "Class Room", variableName: "type"}],
-            applicationColumns: [
+            applicationColumns: [],
+            appVariables: [
                 {variableTitle: "Score", variableName: "score"},
                 {variableTitle: "Maximum Score", variableName: "scoreMax"},
                 {variableTitle: "Class Room", variableName: "classRoom"},
+                {variableTitle: "Level", variableName: "level"},
                 {variableTitle: "Subject", variableName: "subject"},
                 {variableTitle: "Student's Full Name", variableName: "student"},
                 {variableTitle: "Student's Username", variableName: "studentUserName"},
@@ -106,10 +120,14 @@ export default {
             const { result: students } = await loadStudents(user.schoolId);
             const { result: staffs } = await loadStaffs(user.schoolId);
             const { result: assessments } = await loadAssessments(user.schoolId);
-            const { result: users } = await loadUsers(user.schoolId);
+            const { result: levels } = await loadLevels(user.schoolId);
+             const { result: users } = await loadUsers(user.schoolId);
 
+            console.log("assessments: ", assessments)
+            console.log("classrooms: ", classrooms)
 
             let results = [];
+            let check = false;
             for(const row of context.tableRows) {
                 const newRow = {}
                 for (const appVariable of context.appVariables){
@@ -118,38 +136,58 @@ export default {
 
                 newRow.schoolId = user.schoolId;
 
-                let check = false;
-                for(const subject of subjects){
-                    for(const assessment of assessments){
-                        if(subject.type === newRow["subject"] &&
-                        assessment.type === newRow["assessment"]){
-                            newRow.subjectId = subject.id;
-                            newRow.assessmentId = assessment.id;
-                            check = true;
-                            break;
-                        }
-                    }
-                }
-
-                if(check == false){
-                    alert(`There is no subject or course name as ${newRow["subject"]}
-                                                or
-                        There is no assessment name as ${newRow["assessment"]}`)
-                    return;
-                }
-
                 check = false;
-                for(const classroom of classrooms){
-                    if(classroom.type === newRow["classroom"]){
-                        newRow.classroomId = classroom.id;
+                for(const subject of subjects){
+                    if(subject.type === newRow["subject"]){
+                        newRow.subjectId = subject.id;
                         check = true;
                         break;
                     }
                 }
 
                 if(check == false){
-                    alert(`There is no class name as ${newRow["classroom"]}`)
-                    return;
+                    continue;
+                }
+
+                
+                check = false;
+                for(const assessment of assessments){
+                    if(assessment.type === newRow["assessment"]){
+                        newRow.assessmentId = assessment.id;
+                        check = true;
+                        break;
+                    }
+                }
+
+                if(check == false){
+                    continue;
+                }
+
+
+                check = false;
+                for(const classroom of classrooms){
+                    if(classroom.type === newRow["classRoom"]){
+                        newRow.classRoomId = classroom.id;
+                        check = true;
+                        break;
+                    }
+                }
+
+                if(check == false){
+                    continue;
+                }
+
+                check = false;
+                for(const level of levels){
+                    if(level.type === newRow["level"]){
+                        newRow.levelId = level.id;
+                        check = true;
+                        break;
+                    }
+                }
+
+                if(check == false){
+                    continue;
                 }
 
                 check = false;
@@ -162,8 +200,7 @@ export default {
                 }
 
                 if(check == false){
-                    alert(`There is no type of staff as ${newRow["designation"]}`)
-                    return;
+                    continue;
                 }
 
                 check = false;
@@ -176,8 +213,7 @@ export default {
                 }
 
                 if(check == false){
-                    alert(`There is no student username as ${newRow["studentUserName"]}`)
-                    return;
+                    continue;
                 }
 
                 check = false;
@@ -190,12 +226,13 @@ export default {
                 }
 
                 if(check == false){
-                    alert(`There is no instructor username as ${newRow["instructorUserName"]}`)
-                    return;
+                    continue;
                 }
+
 
                 results.push(newRow)
             }
+
 
             console.log("results: ", results)
             var url = `result/createmany`;
@@ -213,6 +250,7 @@ export default {
                     success,
                 }
             } = response
+            console.log("message: ", message)
             context.dialogs[0].isVisible = false;
             if(success){
                 context.dialogs[1].isVisible = true;

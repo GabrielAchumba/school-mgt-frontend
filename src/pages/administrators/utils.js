@@ -42,15 +42,15 @@ export const menuList = [
     },
     {
         name: "showPage",
-        title: "Staff", 
-        description: "The types of employees of the schools",
+        title: "Types of Users", 
+        description: "The type user can be principal, teacher, student, etc",
         image: "/statics/images/staffs.jpg",
         to: "/staff-landing"
     },
     {
         name: "showPage",
         title: "Users", 
-        description: "The employees of the schools",
+        description: "The details of users in the school",
         image: "/statics/images/staffs.jpg",
         to: "/user-landing"
     },

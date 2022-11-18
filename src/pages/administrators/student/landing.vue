@@ -126,7 +126,7 @@
             var context = this;
             
             var user = this.$store.getters["authenticationStore/IdentityModel"];
-            var url = `student/${context.selectedStudent.id}/${user.schoolId}`;
+            var url = `user/${context.selectedStudent.id}/${user.schoolId}`;
             const payload = {
                 url,
             }
@@ -185,6 +185,7 @@
                     token
                 }
             })
+            console.log("students: ", context.tableVM.rows)
 
             if(result.length === 0){
                 context.isFetchTableDialog = true;

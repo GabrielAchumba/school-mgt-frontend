@@ -1,26 +1,15 @@
 const form = {
     title: "Create Student",
     qSelects: [
-        { label: "Type of Subscription *", value: "", type: "text", 
-         list: [{
-             value: 1,
-             type: "90 Days",
-             label: "90 Days",
-         }, 
-         {
-             value: 2,
-             type: "180 Days",
-             label: "180 Days",
-         }, 
-         {
-             value: 3,
-             type: "360 Days",
-             label: "360 Days"
-         }], actionName: "subscriptionType",
-         visible: true },
+        { label: "Designation *", value: "", type: "text", 
+        list: [], actionName: "designationAction", visible: true },
+        { label: "Level *", value: "", type: "text", 
+        list: [], actionName: "levelAction", visible: true },
+        { label: "Class Room *", value: "", type: "text", 
+        list: [], actionName: "classRoomAction", visible: true },
     ],
     qInputs: [
-        { label: "First Name *", name: "", type: "text", 
+        { label: "First Name *", name: "", type: "text",
         Template: {
             sn: 0,
             iconName: "",
@@ -32,14 +21,24 @@ const form = {
             iconName: "",
             visible: false,
         }},
+        { label: "User Name *", name: "", type: "text",
+        Template: {
+            sn: 2,
+            iconName: "",
+            visible: false,
+        }},
+        { label: "Password *", name: "", type: "text",
+        Template: {
+            sn: 3,
+            iconName: "",
+            visible: false,
+        }},
     ],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},
         {label: "Create", name: "Create", icon: "add"},
     ],
-    qDates: [
-         {label: "Date of Birth", name: "2019/02/01"},
-    ],
+    qDates: [],
     GroupedCheckBoxes: [],
     clearQInputs(){
         var i = 0;

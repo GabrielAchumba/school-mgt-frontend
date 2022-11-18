@@ -92,18 +92,19 @@ export default {
         async save(){
             var context = this;
             
-            var url = `student/create`;
+            var url = `user/create`;
              var user = this.$store.getters["authenticationStore/IdentityModel"]
-            const arr = context.form.qDates[0].name.split("/") 
             const payload = {
                 url,
                 req: {
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
-                    birthYear: Number(arr[0]),
-                    birthMonth: Number(arr[1]),
-                    birthDay: Number(arr[1]),
-                    subscriptionType: context.form.qSelects[0].value.value,
+                    userName: context.form.qInputs[2].name,
+                    password: context.form.qInputs[3].name,
+                    designationId: context.form.qSelects[0].value,
+                    levelId: context.form.qSelects[1].value,
+                    classRoomId: context.form.qSelects[2].value,
+                    userType: "Student",
                     schoolId: user.schoolId,
                 }
             }
@@ -153,6 +154,24 @@ export default {
         context.form.clearQInputs();
         context,form.clearQSelects();
         context.form.clearQDates();
+        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"].map((row) => {
+            return {
+                ...row,
+                type: row.type
+            }
+        })
+        context.form.qSelects[1].list = this.$store.getters["levelStore/levels"].map((row) => {
+            return {
+                ...row,
+                type: row.type
+            }
+        })
+        context.form.qSelects[2].list = this.$store.getters["classRoomStore/classRooms"].map((row) => {
+            return {
+                ...row,
+                type: row.type
+            }
+        }) 
     }
 }
 </script>

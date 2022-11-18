@@ -64,7 +64,8 @@ export default {
                 {variableTitle: "Last Name", variableName: "lastName"},
                 {variableTitle: "Username", variableName: "userName"},
                 {variableTitle: "Password", variableName: "password"},
-                {variableTitle: "Date of Birth", variableName: "dateOfBirth"}
+                {variableTitle: "Class Room", variableName: "classRoom"},
+                {variableTitle: "Level", variableName: "level"},
                 ],
             applicationColumns: [],
             dialogs: dialogs,
@@ -101,6 +102,9 @@ export default {
         async createStudents(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
+            var levels = this.$store.getters["levelStore/levels"];
+            var classRooms = this.$store.getters["classRoomStore/classRooms"];
+
             let students = [];
             for(const row of context.tableRows) {
                 const newRow = {}
@@ -108,13 +112,27 @@ export default {
                    newRow[`${appVariable.variableName}`] = row[`${appVariable.variableTitle}`];
                 }
 
+                for(const level of levels) {
+                    if(level.type === newRow[`level`]){
+                        newRow.levelId = level.id;
+                        break;
+                    }
+                }
+
+                for(const classRoom of classRooms) {
+                    if(classRoom.type === newRow[`classRoom`]){
+                        newRow.classRoomId = classRoom.id;
+                        break;
+                    }
+                }
+
                 newRow.schoolId = user.schoolId;
+                newRow.userType = "Student";
 
                 students.push(newRow)
             }
 
-            console.log("students: ", students)
-            var url = `student/createmany`;
+            var url = `user/createmany`;
             const payload = {
                 url,
                 req: students
