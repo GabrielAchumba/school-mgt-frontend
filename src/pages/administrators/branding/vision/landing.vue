@@ -38,7 +38,7 @@
 <script>
   import Table from "../../../../components/Tables/Table.vue";
   import MessageBox from "../../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../../store/modules/gcp-services";
+  import { get, remove, post } from "../../../../store/modules/gcp-services";
   import { loadVisions } from "./utils";
 
     export default {
@@ -121,11 +121,29 @@
                 }
             }
         },
+        async deleteFile(fileName){
+            
+            var url = `vision/removeFile`;
+            const payload = {
+                url,
+                req: {
+                    fileName: fileName,
+                }
+            }
+
+            console.log("payload: ", payload)
+            var response = await post(payload)
+            console.log("response: ",response)
+
+        },
         async delete(){
             var context = this;
+            console.log("selectedVision: ", context.selectedVision);
+            var deleteFileResponse = await context.deleteFile(context.selectedVision.fileName)
+            console.log("deleteFileResponse: ", deleteFileResponse)
             
             var user = this.$store.getters["authenticationStore/IdentityModel"]
-            var url = `vision/${context.selectedVisionModel.id}/${user.schoolId}`;
+            var url = `vision/${context.selectedVision._id}/${user.schoolId}`;
             const payload = {
                 url,
             }
@@ -133,18 +151,14 @@
             console.log("payload: ", payload)
             var response = await remove(payload)
 
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
+            context.dialogs[1].isVisible = true;
+
+
+            /* if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
-                context.dialogs[2].message = message;
                 context.dialogs[2].isVisible = true;
-            }
+            } */
 
         },
         async okDialog(payload){

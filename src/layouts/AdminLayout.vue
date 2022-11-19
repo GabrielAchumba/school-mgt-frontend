@@ -134,11 +134,12 @@ export default {
     },
     verifyResultsAnalysisSubscription(){
        var context = this;
+       context.checkSubscription.isResultsAnalysis = true;
       if(context.checkSubscription.isResultsAnalysis == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Student Results"){
+          if(context.landingMenu[i].title == "Results Analysis"){
             index = i;
             break;
           }
@@ -149,7 +150,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Student Results"){
+          if(context.contextMenuList[i].title == "Results Analysis"){
             index = i;
             break;
           }
@@ -161,6 +162,7 @@ export default {
     },
     verifyFileManagementSubscription(){
        var context = this;
+       context.checkSubscription.isFileManagement = true;
       if(context.checkSubscription.isFileManagement == false){
         let index = -1;
         let i = 0;
@@ -188,6 +190,7 @@ export default {
     },
     verifyAdevertizementSubscription(){
        var context = this;
+       context.checkSubscription.isAdvertizement = true;
       if(context.checkSubscription.isAdvertizement == false){
         let index = -1;
         let i = 0;

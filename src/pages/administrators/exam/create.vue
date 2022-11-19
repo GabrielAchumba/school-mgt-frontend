@@ -221,8 +221,6 @@ export default {
             dialogs: dialogs,
             selectedFile: null,
             selectedFileAnswerOption: null,
-            questionFiles: [],
-            answerOptionsFiles: [],
             questionImageUrls: [],
             answerOptionsImageUrls: [],
         }
@@ -256,8 +254,8 @@ export default {
         async uploadQuestionImages(){
             var context = this;
             const formData = new FormData();
-            for(let i = 0; i < context.questionFiles.length; i++){
-                formData.append('files', context.questionFiles[i].file);
+            for(let i = 0; i < context.exam_vm.examQuestionSessions.length; i++){
+                formData.append('files', context.exam_vm.examQuestionSessions[i].qFiles[0].selectedFile);
             }
             
             var url = `examquestion/upload`;
@@ -276,8 +274,8 @@ export default {
         async uploadAnswerOptionsImages(){
             var context = this;
             const formData = new FormData();
-            for(let i = 0; i < context.answerOptionsFiles.length; i++){
-                formData.append('files', context.answerOptionsFiles[i].file);
+            for(let i = 0; i < context.exam_vm.answerOptions.length; i++){
+                formData.append('files', context.exam_vm.answerOptions[i].qFiles[0].selectedFile);
             }
             
             var url = `examquestion/upload`;
@@ -308,8 +306,9 @@ export default {
 
                         const ans = row.isImage ? {
                             paragraph: row.qInputs[0].name,
-                            cloudImageUrl: questionImageUrls[i].cloudImageUrl,
-                            cloudImageName: questionImageUrls[i].cloudImageName,
+                            cloudImageUrl: questionImageUrls[i].url,
+                            cloudImageName: questionImageUrls[i].fileName,
+                            originalImageName: questionImageUrls[i].originalFileName,
                         }:{
                             paragraph: row.qInputs[0].name,
                         }
@@ -320,8 +319,9 @@ export default {
                         const ans = row.isImage ? {
                             title: row.qInputs[0].name,
                             description: row.qInputs[1].name,
-                            cloudImageUrl: questionImageUrls[i].cloudImageUrl,
-                            cloudImageName: questionImageUrls[i].cloudImageName,
+                            cloudImageUrl: questionImageUrls[i].url,
+                            cloudImageName: questionImageUrls[i].fileName,
+                            originalImageName: questionImageUrls[i].originalFileName,
                         }:{
                             title: row.qInputs[0].name,
                             description: row.qInputs[1].name,
@@ -360,7 +360,7 @@ export default {
                 if(dialog.title === payload){
                     switch(payload){
                         case "Create Examination Question":
-                            await context.save();
+                            await context.CreateAction();
                             break;
                         case "Success":
                             this.$router.push("/exam-question-landing");

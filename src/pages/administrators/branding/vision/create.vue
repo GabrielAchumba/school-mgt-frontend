@@ -63,6 +63,8 @@ export default {
             form: form,
             dialogs: dialogs,
             VisionUrl: "",
+            fileName: "",
+            originalFileName: "",
             doesVisionExists: false,
         }
     },
@@ -114,8 +116,9 @@ export default {
         },
         async uploadVision(){
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
             const formData = new FormData();
-            console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
+            context.form.qFiles[0].selectedFile.schoolId = user.schoolId;
             formData.append('file', context.form.qFiles[0].selectedFile);
             
             var url = `vision/upload`;
@@ -124,12 +127,11 @@ export default {
                 req: formData,
             }
 
-            console.log("payload: ", payload)
-            //uploadLogo
             var response = await post(payload)
             
-            context.VisionUrl = response.data;
-            console.log("VisionUrl: ", context.VisionUrl)
+            context.VisionUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
 
         },
         async checkVisionExistance(){
@@ -144,9 +146,7 @@ export default {
                 }
             }
 
-            console.log("payload: ", payload)
             var response = await post(payload)
-            console.log("response: ", response)
             
             context.doesLogoExists = response.data;
             console.log("doesLogoExists: ", context.doesLogoExists)
@@ -163,9 +163,18 @@ export default {
                     title: context.form.qInputs[0].name,
                     description: context.form.qInputs[1].name,
                     fileUrl: context.VisionUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     schoolId: user.schoolId,
                     createdBy: user.id,
                 }
+            }
+
+             context.dialogs[0].isVisible = true;
+
+            if(context.VisionUrl === ""){
+                alert("Failed to upload file. Please try again")
+                return;
             }
 
             console.log("payload: ", payload)
