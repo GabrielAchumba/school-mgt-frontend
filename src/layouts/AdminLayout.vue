@@ -41,6 +41,7 @@ import { loadSubjects } from "../pages/administrators/subject/utils";
 import { loadAssessments } from "../pages/administrators/assessment/utils";
 import { loadGrades } from "../pages/administrators/grade/utils";
 import { loadLevels } from "../pages/administrators/level/utils";
+import { loadSessions } from "../pages/administrators/session/utils";
 import { loadSchools } from "../pages/administrators/school/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
@@ -326,6 +327,8 @@ export default {
           this.$store.commit('gradeStore/SetGrades', grades.result);
           const levels = await loadLevels(user.schoolId);
           this.$store.commit('levelStore/SetLevels', levels.result);
+          const sessions = await loadSessions(user.schoolId);
+          this.$store.commit('sessionStore/SetSessions', sessions.result);
           context.checkSubscritpion();
        }
 

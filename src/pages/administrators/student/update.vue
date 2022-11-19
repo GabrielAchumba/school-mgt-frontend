@@ -104,6 +104,7 @@ export default {
                     designationId: context.form.qSelects[0].value,
                     levelId: context.form.qSelects[1].value,
                     classRoomId: context.form.qSelects[2].value,
+                    sessionId: context.form.qSelects[3].value,
                     userType: "Student",
                     schoolId: user.schoolId,
                 }
@@ -187,6 +188,16 @@ export default {
             }
         })
         context.form.qSelects[2].value = context.selectedStudent.classRoomId;
+
+        context.form.qSelects[3].list = this.$store.getters["sessionStore/sessions"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[3].value = context.selectedStudent.sessionId;
     }
 }
 </script>

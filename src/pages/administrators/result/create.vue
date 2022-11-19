@@ -108,6 +108,7 @@ export default {
                     teacherId: context.form.qSelects[4].value,
                     assessmentId: context.form.qSelects[5].value,
                     levelId: context.form.qSelects[6].value,
+                    sessionId: context.form.qSelects[7].value,
                     createdAt: context.form.qDates[0].name,
                     schoolId: user.schoolId,
                 }
@@ -214,6 +215,14 @@ export default {
             }
         })
         context.form.qSelects[6].list = this.$store.getters["levelStore/levels"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
+        context.form.qSelects[7].list = this.$store.getters["sessionStore/sessions"].map((row) => {
             return {
                 ...row,
                 type: row.type,

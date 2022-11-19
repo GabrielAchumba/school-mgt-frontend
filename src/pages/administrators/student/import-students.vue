@@ -66,6 +66,7 @@ export default {
                 {variableTitle: "Password", variableName: "password"},
                 {variableTitle: "Class Room", variableName: "classRoom"},
                 {variableTitle: "Level", variableName: "level"},
+                {variableTitle: "Session", variableName: "session"},
                 ],
             applicationColumns: [],
             dialogs: dialogs,
@@ -104,6 +105,7 @@ export default {
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             var levels = this.$store.getters["levelStore/levels"];
             var classRooms = this.$store.getters["classRoomStore/classRooms"];
+            var sessions = this.$store.getters["sessionStore/sessions"];
 
             let students = [];
             for(const row of context.tableRows) {
@@ -122,6 +124,13 @@ export default {
                 for(const classRoom of classRooms) {
                     if(classRoom.type === newRow[`classRoom`]){
                         newRow.classRoomId = classRoom.id;
+                        break;
+                    }
+                }
+
+                for(const session of sessions) {
+                    if(session.type === newRow[`session`]){
+                        newRow.sessionId = session.id;
                         break;
                     }
                 }

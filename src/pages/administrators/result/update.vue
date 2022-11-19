@@ -113,6 +113,7 @@ export default {
                     teacherId: context.form.qSelects[4].value,
                     assessmentId: context.form.qSelects[5].value,
                     levelId: context.form.qSelects[6].value,
+                    sessionId: context.form.qSelects[7].value,
                     updatedAt: context.form.qDates[0].name,
                     schoolId: user.schoolId,
                 }
@@ -258,6 +259,14 @@ export default {
                     label: row.type,
                 }
             })
+            context.form.qSelects[7].list = this.$store.getters["sessionStore/sessions"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            })
 
             context.form.qInputs[0].name = context.selectedResult.score;
             context.form.qInputs[1].name = context.selectedResult.scoreMax;
@@ -269,6 +278,7 @@ export default {
             context.form.qSelects[4].value = context.selectedResult.teacherId;
             context.form.qSelects[5].value = context.selectedResult.assessmentId;
             context.form.qSelects[6].value = context.selectedResult.levelId;
+            context.form.qSelects[7].value = context.selectedResult.sessionId;
 
             const dateObj = new Date(context.selectedResult.createdAt);
             var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);

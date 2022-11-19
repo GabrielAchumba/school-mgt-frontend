@@ -30,46 +30,6 @@
 
             <!-- <div v-show="!isTable" id="myDiv" class="col-12 q-pa-sm"></div> -->
         </div>
-<!-- 
-       <q-dialog 
-            v-for="dialog in dialogs" 
-            :key="dialog.title"
-            v-model="dialog.isVisible">
-            <Form
-                v-if="isForm"
-                style="width:400px;"
-                :formData="form"
-                @Compute="Compute($event)"
-                @typeOfInstructor="typeOfInstructor($event)"
-                @onStudentSelected="onStudentSelected($event)"
-                @showTeachersDialog="showTeachersDialog($event)"
-                @showStudentsDialog="showStudentsDialog($event)"
-                @showSubjectsDialog="showSubjectsDialog($event)"/>
-
-            <Form
-                v-if="isTeachersForm"
-                style="width:400px;"
-                :formData="teachersForm"
-                @closeTeachersDialog="closeTeachersDialog($event)"/>
-
-            <Form
-                v-if="isStudentsForm"
-                style="width:400px;"
-                :formData="studentsForm"
-                @closeStudentsDialog="closeStudentsDialog($event)"/>
-
-            <Form
-                v-if="isSubjectsForm"
-                style="width:400px;"
-                :formData="subjectsForm"
-                @closeSubjectsDialog="closeSubjectsDialog($event)"/>
-
-            <Form
-                v-if="isChartForm"
-                :formData="chartForm"
-                @Plot="Plot($event)"/>
-        </q-dialog>
- -->
 
        <q-dialog 
             v-model="dialogs[0].isVisible">
@@ -77,27 +37,15 @@
                 style="width:400px;"
                 :formData="form"
                 @Compute="Compute($event)"
-                @typeOfInstructor="typeOfInstructor($event)"
-                @onStudentSelected="onStudentSelected($event)"
-                @showTeachersDialog="showTeachersDialog($event)"
+                @showClassRoomDialog="showClassRoomDialog($event)"
                 @showStudentsDialog="showStudentsDialog($event)"
                 @showSubjectsDialog="showSubjectsDialog($event)"
                 @CancelFormDialog="CancelFormDialog($event)"/>
         </q-dialog>
 
 
-
        <q-dialog 
             v-model="dialogs[1].isVisible">
-            <Form
-                style="width:400px;"
-                :formData="teachersForm"
-                @closeTeachersDialog="closeTeachersDialog($event)"/>
-        </q-dialog>
-
-
-       <q-dialog 
-            v-model="dialogs[2].isVisible">
             <Form
                 style="width:400px;"
                 :formData="studentsForm"
@@ -106,7 +54,7 @@
 
 
        <q-dialog 
-            v-model="dialogs[3].isVisible">
+            v-model="dialogs[2].isVisible">
             <Form
                 style="width:400px;"
                 :formData="subjectsForm"
@@ -114,11 +62,19 @@
         </q-dialog>
 
         <q-dialog 
-            v-model="dialogs[4].isVisible">
+            v-model="dialogs[3].isVisible">
             <Form
                 style="width:400px;"
                 :formData="chartForm"
                 @Plot="Plot($event)"/>
+        </q-dialog>
+
+        <q-dialog 
+            v-model="dialogs[4].isVisible">
+            <Form
+                style="width:400px;"
+                :formData="classRoomsForm"
+                @closeClassRoomsDialog="closeClassRoomsDialog($event)"/>
         </q-dialog>
         
     </div>
@@ -134,8 +90,8 @@ import { createStudentsPositionReport } from "../utils";
 import Table from "../../../../components/Tables/Table.vue";
 import Chart from "../../../../components/Charts/Chart.vue";
 import Plotly from 'plotly.js-dist'
-import { form, subjectsForm, studentsForm, teachersForm,
- chartForm, tableVM, dialogs } from "./view_models/StudentsPositions-view-models";
+import { form, subjectsForm, studentsForm,
+ chartForm, tableVM, dialogs, classRoomsForm } from "./view_models/StudentsPositions-view-models";
 
 export default {
     components:{
@@ -149,7 +105,7 @@ export default {
             isForm: true,
             isSubjectsForm: false,
             isStudentsForm: false,
-            isTeachersForm: false,
+            isClassRoomsForm: false,
             isHeader: false,
             isResponsive: false,
             isExpanded: true,
@@ -163,7 +119,7 @@ export default {
             studentFullName: "",
             subjectsForm: subjectsForm,
             studentsForm: studentsForm,
-            teachersForm: teachersForm,
+            classRoomsForm: classRoomsForm,
             isChartForm: false,
         }
     },
@@ -172,10 +128,6 @@ export default {
             var context = this;
             context.dialogFailureOrScuess("Configure Result Analysis", false);
         },
-        showTeachersDialog(){
-            var context = this;
-            context.dialogFailureOrScuess("Instructors", true);
-        },
         showStudentsDialog(){
             var context = this;
             context.dialogFailureOrScuess("Students", true);
@@ -183,6 +135,10 @@ export default {
         showSubjectsDialog(){
             var context = this;
             context.dialogFailureOrScuess("Subjects", true);
+        },
+        showClassRoomDialog(){
+            var context = this;
+            context.dialogFailureOrScuess("Class Rooms", true);
         },
         showChartConfigDialog(){
             var context = this;
@@ -199,17 +155,17 @@ export default {
                 }
             }
         },
-        closeTeachersDialog(){
-            var context = this;
-            //context.dialogFailureOrScuess("Instructors", false);
-            context.dialogFailureOrScuess("Configure Result Analysis", true);
-        },
         closeStudentsDialog(){
             var context = this;
             //context.dialogFailureOrScuess("Students", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         closeSubjectsDialog(){
+            var context = this;
+            //context.dialogFailureOrScuess("Subjects", false);
+            context.dialogFailureOrScuess("Configure Result Analysis", true);
+        },
+        closeClassRoomsDialog(){
             var context = this;
             //context.dialogFailureOrScuess("Subjects", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
@@ -222,19 +178,20 @@ export default {
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             
-            var url = `result/summarizedstudentspositions`;
+            var url = `result/summarizedstudentspositions2`;
             const payload = {
                 url,
                 req: {
-                    startDate: context.form.qDates[0].name,
-                    endDate: context.form.qDates[1].name,
                     subjectIds: context.subjectsForm.GroupedCheckBoxes[0].group,
-                    teacherIds: context.teachersForm.GroupedCheckBoxes[0].group,
                     studentIds: context.studentsForm.GroupedCheckBoxes[0].group,
-                    classroomId: context.form.qSelects[1].value,
+                    classRoomIds: context.classRoomsForm.GroupedCheckBoxes[0].group,
+                    levelId: context.form.qSelects[0].value,
+                    sessionId: context.form.qSelects[1].value,
                     schoolId: user.schoolId,
                 }
             }
+
+            console.log("payload: ", payload)
 
             var response = await post(payload)
 
@@ -283,31 +240,16 @@ export default {
             })
             context.chartForm.qSelects[1].value = context.chartForm.qSelects[1].list[1].id;
         },
-        async typeOfInstructor(payload){
-            var context = this;
-            var user = this.$store.getters["authenticationStore/IdentityModel"]
-            const teachers = await loadUsersByCategory(payload.value, user.schoolId);
-            this.$store.commit('userStore/SetTeachers', teachers.result);
-            context.teachersForm.GroupedCheckBoxes[0].list = teachers.result.map((row) => {
-                return {
-                    ...row,
-                    label: `${row.firstName} ${row.lastName}`, 
-                    value: row.id,
-                }
-            })
-        },
         async loadConfigData(){
             var context =  this;
 
-            context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"];
+
+            context.form.qSelects[0].list = this.$store.getters["levelStore/levels"];
             if(context.form.qSelects[0].list.length > 0){
-                await context.typeOfInstructor({
-                    value: context.form.qSelects[0].list[0].id,
-                })
+                context.form.qSelects[0].value = context.form.qSelects[0].list[0].id;
             }
 
-            context.form.qSelects[1].list = this.$store.getters["classRoomStore/classRooms"];
-            console.log("classRooms: ", context.form.qSelects[1].list)
+            context.form.qSelects[1].list = this.$store.getters["sessionStore/sessions"];
             if(context.form.qSelects[1].list.length > 0){
                 context.form.qSelects[1].value = context.form.qSelects[1].list[0].id;
             }
@@ -324,6 +266,14 @@ export default {
                 return {
                     ...row,
                     label: `${row.firstName} ${row.lastName}`, 
+                    value: row.id,
+                }
+            })
+
+            context.classRoomsForm.GroupedCheckBoxes[0].list = this.$store.getters["classRoomStore/classRooms"].map((row) => {
+                return {
+                    ...row,
+                    label: row.type, 
                     value: row.id,
                 }
             })

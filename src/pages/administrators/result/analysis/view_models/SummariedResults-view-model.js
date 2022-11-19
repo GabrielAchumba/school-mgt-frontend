@@ -3,8 +3,8 @@ const form = {
     qSelects: [
         { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
         { label: "Student", value: "", type: "text", list: [], actionName: "onStudentSelected", visible: true },
-        { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
-        { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
+        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
+        { label: "Session", value: "", type: "text", list: [], actionName: "session", visible: true },
     ],
     qInputs: [],
     qBtns: [
@@ -12,10 +12,7 @@ const form = {
         {label: "Compute", name: "Compute", icon: "calculate"},
         {label: "Cancel", name: "CancelFormDialog", icon: "close"},
     ],
-    qDates: [
-         {label: "Start Date", name: "2019/02/01"},
-         {label: "End Date", name: "2019/02/01"},
-    ],
+    qDates: [],
     GroupedCheckBoxes: [],
 }
 

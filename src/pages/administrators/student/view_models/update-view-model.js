@@ -7,6 +7,8 @@ const form = {
         list: [], actionName: "levelAction", visible: true },
         { label: "Class Room *", value: "", type: "text", 
         list: [], actionName: "classRoomAction", visible: true },
+        { label: "Session *", value: "", type: "text", 
+        list: [], actionName: "sessionAction", visible: true },
     ],
     qInputs: [
         { label: "First Name *", name: "", type: "text",

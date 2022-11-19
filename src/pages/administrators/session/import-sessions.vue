@@ -127,7 +127,6 @@ export default {
                 return newRow;
             })
 
-            console.log("Sessions: ", Sessions)
             var url = `session/createmany`;
             const payload = {
                 url,

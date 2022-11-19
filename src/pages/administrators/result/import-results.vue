@@ -46,6 +46,7 @@ import { loadStaffs } from "../staff/utils";
 import { loadLevels } from "../level/utils";
 import { loadAssessments } from "../assessment/utils";
 import { loadUsers } from "../user/utils";
+import { loadSessions } from "../session/utils";
 
 export default {
     computed:{
@@ -72,6 +73,7 @@ export default {
                 {variableTitle: "Maximum Score", variableName: "scoreMax"},
                 {variableTitle: "Class Room", variableName: "classRoom"},
                 {variableTitle: "Level", variableName: "level"},
+                {variableTitle: "Session", variableName: "session"},
                 {variableTitle: "Subject", variableName: "subject"},
                 {variableTitle: "Student's Full Name", variableName: "student"},
                 {variableTitle: "Student's Username", variableName: "studentUserName"},
@@ -122,6 +124,7 @@ export default {
             const { result: assessments } = await loadAssessments(user.schoolId);
             const { result: levels } = await loadLevels(user.schoolId);
              const { result: users } = await loadUsers(user.schoolId);
+             const { result: sessions } = await loadSessions(user.schoolId);
 
             console.log("assessments: ", assessments)
             console.log("classrooms: ", classrooms)
@@ -181,6 +184,19 @@ export default {
                 for(const level of levels){
                     if(level.type === newRow["level"]){
                         newRow.levelId = level.id;
+                        check = true;
+                        break;
+                    }
+                }
+
+                if(check == false){
+                    continue;
+                }
+
+                check = false;
+                for(const session of sessions){
+                    if(session.type === newRow["session"]){
+                        newRow.sessionId = session.id;
                         check = true;
                         break;
                     }

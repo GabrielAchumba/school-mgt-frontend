@@ -84,17 +84,24 @@ export const menuList = [
     },
     {
         name: "showPage",
-        title: "Student", 
-        description: "Students in the school",
-        image: "/statics/images/students.jpg",
-        to: "/student-landing"
-    },
-    {
-        name: "showPage",
         title: "Assessment", 
         description: "Student's assessment in the school",
         image: "/statics/images/assessment.jpg",
         to: "/assessment-landing"
+    },
+    {
+        name: "showPage",
+        title: "Session", 
+        description: "Session can be first term, first semester, etc",
+        image: "/statics/images/assessment.jpg",
+        to: "/session-landing"
+    },
+    {
+        name: "showPage",
+        title: "Student", 
+        description: "Students in the school",
+        image: "/statics/images/students.jpg",
+        to: "/student-landing"
     },
     {
         name: "showPage",

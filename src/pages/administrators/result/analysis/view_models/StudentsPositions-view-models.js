@@ -1,23 +1,18 @@
 const form = { 
     title: "Configure Result Analysis",
     qSelects: [
-        { label: "Type of Instructor", value: "", 
-        type: "text", list: [], actionName: "typeOfInstructor", visible: true },
-        { label: "Class Room", value: "", 
-        type: "text", list: [], actionName: "classRoom", visible: true },
+        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
+        { label: "Session", value: "", type: "text", list: [], actionName: "session", visible: true },
     ],
     qInputs: [],
     qBtns: [
-        {label: "Instructors", name: "showTeachersDialog", icon: "escalator_warning"},
+        {label: "Class Rooms", name: "showClassRoomDialog", icon: "escalator_warning"},
         {label: "Students", name: "showStudentsDialog", icon: "groups"},
         {label: "Subjects", name: "showSubjectsDialog", icon: "book"},
         {label: "Compute", name: "Compute", icon: "calculate"},
         {label: "Cancel", name: "CancelFormDialog", icon: "close"},
     ],
-    qDates: [
-         {label: "Start Date", name: "2019/02/01"},
-         {label: "End Date", name: "2019/02/01"},
-    ],
+    qDates: [],
     GroupedCheckBoxes: [],
 }
 
@@ -59,12 +54,12 @@ const studentsForm = {
     ],
 }
 
-const teachersForm = { 
-    title: "Instructors",
+const classRoomsForm = { 
+    title: "Class Rooms",
     qSelects: [],
     qInputs: [],
     qBtns: [
-        {label: "Done", name: "closeTeachersDialog", icon: "done"},
+        {label: "Done", name: "closeClassRoomsDialog", icon: "done"},
     ],
     qDates: [],
     GroupedCheckBoxes: [
@@ -73,7 +68,7 @@ const teachersForm = {
             isExpanded: true, 
             list:[], 
             group: [],
-            label: "Teachers",
+            label: "Class Rooms",
         },
     ],
 }
@@ -105,14 +100,14 @@ const tableVM = {
 const dialogs = [
     { title: "Configure Result Analysis", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Instructors", isVisible: false, message: "",
-    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Students", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Subjects", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Configure Chart", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+    { title: "Class Rooms", isVisible: false, message: "",
+    okayEvent: "okDialog", cancelEvent: "cancelDialog" },
 ]
 
-export { form, subjectsForm, studentsForm, teachersForm, chartForm, tableVM, dialogs }
+export { form, subjectsForm, studentsForm, chartForm, tableVM, dialogs, classRoomsForm }

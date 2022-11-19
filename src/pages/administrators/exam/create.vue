@@ -175,24 +175,50 @@
             size="md"
             icon="save"
             no-caps
-            @click="CreateAction"
+            @click="Create"
+            />
+            <q-btn class="q-ma-sm bg-accent text-primary"
+            label="Create"
+            type="button"
+            size="md"
+            icon="save"
+            no-caps
+            @click="Cancel"
             />
         </div>
+
+        <q-dialog 
+            v-for="dialog in dialogs" 
+            :key="dialog.title"
+            v-model="dialog.isVisible">
+            <MessageBox
+            :title="dialog.title"
+            :message="dialog.message"
+            :okayEvent="dialog.okayEvent"
+            :cancelEvent="dialog.cancelEvent"
+            @cancelDialog="cancelDialog($event)"
+            @okDialog="okDialog($event)"
+            >
+            </MessageBox>
+        </q-dialog>
     </div>
 </template>
 
 <script>
 import Form from "../../../components/Forms/Form.vue";
-import { exam_vm } from "./view_models/create-view-model";
+import MessageBox from "../../../components/dialogs/MessageBox.vue";
+import { exam_vm, dialogs } from "./view_models/create-view-model";
 import { post, uploadCoreValue } from "../../../store/modules/gcp-services"
 
 export default {
     components: {
         Form,
+        MessageBox,
     },
     data(){
         return {
             exam_vm: exam_vm,
+            dialogs: dialogs,
             selectedFile: null,
             selectedFileAnswerOption: null,
             questionFiles: [],
@@ -202,6 +228,31 @@ export default {
         }
     },
     methods:{
+        Create(){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Create Examination Question"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
+        },
+        Cancel(){
+            this.$router.push('/exam-question-landing')
+        },
+        cancelDialog(payload){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title === payload){
+                    context.dialogs[i].isVisible = false;
+                    break;
+                }
+            }
+        },
         async uploadQuestionImages(){
             var context = this;
             const formData = new FormData();
@@ -242,7 +293,7 @@ export default {
             console.log("answerOptionsImageUrls: ", context.answerOptionsImageUrls)
 
         },
-        async CreateAction(){
+        async save(){
             var context = this;
             
             var url = `examquestion/create`;
@@ -250,11 +301,33 @@ export default {
             const payload = {
                 url,
                 req: {
-                    title: "",
-                    subjectId: "",
-                    levelId: "",
-                    questionSessions: [],
-                    answerOptions: [],
+                    title: exam_vm.title,
+                    subjectId: context.exam_vm.qSelectSubject.value,
+                    levelId: context.exam_vm.qSelectLevel.value,
+                    questionSessions: context.exam_vm.examQuestionSessions.map((row, i) => {
+
+                        const ans = row.isImage ? {
+                            paragraph: row.qInputs[0].name,
+                            cloudImageUrl: questionImageUrls[i].cloudImageUrl,
+                            cloudImageName: questionImageUrls[i].cloudImageName,
+                        }:{
+                            paragraph: row.qInputs[0].name,
+                        }
+                        return ans;
+                    }),
+                    answerOptions: context.exam_vm.qSelectAnswerOption.map((row, i) => {
+
+                        const ans = row.isImage ? {
+                            title: row.qInputs[0].name,
+                            description: row.qInputs[1].name,
+                            cloudImageUrl: questionImageUrls[i].cloudImageUrl,
+                            cloudImageName: questionImageUrls[i].cloudImageName,
+                        }:{
+                            title: row.qInputs[0].name,
+                            description: row.qInputs[1].name,
+                        }
+                        return ans;
+                    }),
                     schoolId: user.schoolId,
                     createdBy: user.id,
                 }
@@ -263,14 +336,40 @@ export default {
             console.log("payload: ", payload)
             var response = await post(payload)
 
-
-            if(response.status === 201 || response.status == 200){
+            context.dialogs[0].isVisible = false;
+            if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
                 context.dialogs[2].message = "Error while saving examination question";
                 context.dialogs[2].isVisible = true;
             }
 
+        },
+        async CreateAction(){
+            var context = this;
+            await context.uploadQuestionImages();
+            await context.uploadAnswerOptionsImages();
+            await context.save();
+
+        },
+        async okDialog(payload){
+            const context = this;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title === payload){
+                    switch(payload){
+                        case "Create Examination Question":
+                            await context.save();
+                            break;
+                        case "Success":
+                            this.$router.push("/exam-question-landing");
+                            break;
+                    }
+                    context.dialogs[i].isVisible = false;
+                    break;
+                }
+            }
         },
         onFileSelected(payload){
             var context = this;
@@ -625,7 +724,7 @@ export default {
                 }
             })
 
-            context.exam_vm.qSelectLevel.list = this.$store.getters["levelStore/subjects"].map((row) => {
+            context.exam_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"].map((row) => {
                 return {
                     ...row,
                     label: row.type, 
