@@ -634,13 +634,28 @@ const routes = [
         
       },
       { 
-        path: '/create-exam', 
+        path: '/exam-question-landing', 
+        component: () => import('pages/administrators/exam/question-landing.vue') 
+        
+      },
+      { 
+        path: '/create-exam-question', 
         component: () => import('pages/administrators/exam/create.vue') 
         
       },
       { 
-        path: '/update-exam', 
-        component: () => import('pages/administrators/exam/update.vue') 
+        path: '/update-exam-question', 
+        component: () => import('pages/administrators/exam/update.vue')
+        
+      },
+      { 
+        path: '/import-exam-questions', 
+        component: () => import('pages/administrators/exam/import-exam-questions.vue') 
+        
+      },
+      { 
+        path: '/exam-answer-landing', 
+        component: () => import('pages/administrators/exam/create-answer.vue') 
         
       },
     ]

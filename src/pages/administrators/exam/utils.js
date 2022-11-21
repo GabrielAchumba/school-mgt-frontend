@@ -1,24 +1,16 @@
 import { get } from "../../../store/modules/services";
 
-export const loadExams = async (schoolId) => {
+export const loadExams = async (schoolId, subjectId, levelId) => {
 
-    var url = `exam/${schoolId}`;
+    var url = `examquestion/${schoolId}/${subjectId}/${levelId}`;
     var response = await get({
     url
     })
 
-    const { 
-        data : {
-            data: result,
-            success,
-            message,
-        }
-    } = response
 
-
-    if(success){
-        return { result, message: "" }
+    if(response.data){
+        return { result:response.data, message: "" }
     }else{
-        return { result: [], message }
+        return { result: [], message: "Error fetching data" }
     }
 }

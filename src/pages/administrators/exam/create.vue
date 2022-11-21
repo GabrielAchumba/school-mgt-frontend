@@ -7,16 +7,6 @@
                     <q-space />
                 </q-bar>
 
-                <div class="q-pa-sm">
-                      <span><p class="q-ma-none text-accent"> Title* </p>
-                      <q-input class="q-ma-none"
-                      outlined 
-                      v-model="exam_vm.title" 
-                      type="text" >
-                      </q-input></span>
-                </div>
-                <q-separator />
-
                 <q-card-section class="bg-primary text-accent">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
@@ -170,12 +160,12 @@
         class="row q-pa-sm">
             <q-space />
             <q-btn class="q-ma-sm bg-accent text-primary"
-            label="Create"
+            label="Cancel"
             type="button"
             size="md"
-            icon="save"
+            icon="close"
             no-caps
-            @click="Create"
+            @click="Cancel"
             />
             <q-btn class="q-ma-sm bg-accent text-primary"
             label="Create"
@@ -183,7 +173,7 @@
             size="md"
             icon="save"
             no-caps
-            @click="Cancel"
+            @click="Create"
             />
         </div>
 
@@ -223,6 +213,8 @@ export default {
             selectedFileAnswerOption: null,
             questionImageUrls: [],
             answerOptionsImageUrls: [],
+            anyFormDataQuestion: false,
+            anyFormDataAnswerOptions: false,
         }
     },
     methods:{
@@ -251,7 +243,28 @@ export default {
                 }
             }
         },
+        checkFormData(){
+            var context = this;
+            context.anyFormDataQuestion = false;
+            context.anyFormDataAnswerOptions = false;
+
+            for(const examQuestionSession of context.exam_vm.examQuestionSessions){
+                if(examQuestionSession.qFiles.length > 0){
+                    context.anyFormDataQuestion = true;
+                    break;
+                }
+            }
+
+            for(const answerOption of context.exam_vm.answerOptions){
+                if(answerOption.qFiles.length > 0){
+                    context.anyFormDataAnswerOptions = true;
+                    break;
+                }
+            }
+
+        },
         async uploadQuestionImages(){
+            console.log("uploadQuestionImages started")
             var context = this;
             const formData = new FormData();
             for(let i = 0; i < context.exam_vm.examQuestionSessions.length; i++){
@@ -269,9 +282,11 @@ export default {
             
             context.questionImageUrls = response.data;
             console.log("questionImageUrls: ", context.questionImageUrls)
+            console.log("uploadQuestionImages completed")
 
         },
         async uploadAnswerOptionsImages(){
+            console.log("uploadAnswerOptionsImages started")
             var context = this;
             const formData = new FormData();
             for(let i = 0; i < context.exam_vm.answerOptions.length; i++){
@@ -289,42 +304,51 @@ export default {
             
             context.answerOptionsImageUrls = response.data;
             console.log("answerOptionsImageUrls: ", context.answerOptionsImageUrls)
+            console.log("uploadAnswerOptionsImages completed")
 
         },
         async save(){
+            console.log("save started")
             var context = this;
             
             var url = `examquestion/create`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
+
+            console.log("context.exam_vm.examQuestionSessions: ", context.exam_vm.examQuestionSessions)
+            console.log("context.exam_vm.qSelectAnswerOptions: ", context.exam_vm.answerOptions)
+
             const payload = {
                 url,
                 req: {
-                    title: exam_vm.title,
                     subjectId: context.exam_vm.qSelectSubject.value,
                     levelId: context.exam_vm.qSelectLevel.value,
-                    questionSessions: context.exam_vm.examQuestionSessions.map((row, i) => {
+                    question: context.exam_vm.examQuestionSessions[0].qInputs[0].name,
+                    cloudImageUrl: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].url : "",
+                    cloudImageName: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].fileName : "",
+                    originalImageName: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].originalFileName : "",
+
+                    /* questionSession: context.exam_vm.examQuestionSessions.map((row, i) => {
 
                         const ans = row.isImage ? {
-                            paragraph: row.qInputs[0].name,
+                            question: row.qInputs[0].name,
                             cloudImageUrl: questionImageUrls[i].url,
                             cloudImageName: questionImageUrls[i].fileName,
                             originalImageName: questionImageUrls[i].originalFileName,
                         }:{
-                            paragraph: row.qInputs[0].name,
+                            question: row.qInputs[0].name,
                         }
                         return ans;
-                    }),
-                    answerOptions: context.exam_vm.qSelectAnswerOption.map((row, i) => {
+                    })[0], */
+
+                    answerOptions: context.exam_vm.answerOptions.map((row, i) => {
 
                         const ans = row.isImage ? {
-                            title: row.qInputs[0].name,
-                            description: row.qInputs[1].name,
-                            cloudImageUrl: questionImageUrls[i].url,
-                            cloudImageName: questionImageUrls[i].fileName,
-                            originalImageName: questionImageUrls[i].originalFileName,
+                            answer: row.qInputs[0].name,
+                            cloudImageUrl: context.answerOptionsImageUrls[i].url,
+                            cloudImageName: context.answerOptionsImageUrls[i].fileName,
+                            originalImageName: context.answerOptionsImageUrls[i].originalFileName,
                         }:{
-                            title: row.qInputs[0].name,
-                            description: row.qInputs[1].name,
+                            answer: row.qInputs[0].name,
                         }
                         return ans;
                     }),
@@ -344,11 +368,20 @@ export default {
                 context.dialogs[2].isVisible = true;
             }
 
+            console.log("save completed")
+
         },
         async CreateAction(){
             var context = this;
-            await context.uploadQuestionImages();
-            await context.uploadAnswerOptionsImages();
+            context.checkFormData();
+            if(context.anyFormDataQuestion){
+                await context.uploadQuestionImages();
+            }
+            
+            if(context.anyFormDataAnswerOptions){
+                await context.uploadAnswerOptionsImages();
+            }
+            
             await context.save();
 
         },
@@ -422,20 +455,22 @@ export default {
         },
         onAddExamQuestionSession(){
             var context = this;
+            context.exam_vm.examQuestionSessions = [];
             if(context.exam_vm.qSelect.value == "Paragraph"){
                 const form = {
-                    id: context.exam_vm.examQuestionSessions.length + 1,
+                    id: 1,
                     title: "",
                     isImage: false,
                     qSelects: [],
                     qInputs: [
-                        { label: "Description", name: "", type: "text",
+                        { label: "Question", name: "", type: "text",
                         Template: {
                             sn: 0,
                             iconName: "",
                             visible: false,
                         }},
                     ],
+                    qFiles: [],
                     qBtns: [
                         {label: "Clear", name: "onClearParagraph", icon: "clear"},
                         {label: "Remove", name: "onRemoveParagraph", icon: "remove"},
@@ -452,12 +487,12 @@ export default {
                 context.exam_vm.examQuestionSessions.push(form);
             }else{
                 const form = {
-                    id: context.exam_vm.examQuestionSessions.length + 1,
+                    id: 1,
                     title: "",
                     isImage: true,
                     qSelects: [],
                     qInputs: [
-                        { label: "Description", name: "", type: "text",
+                        { label: "Question", name: "", type: "text",
                         Template: {
                             sn: 0,
                             iconName: "",
@@ -519,19 +554,14 @@ export default {
                     isImage: false,
                     qSelects: [],
                     qInputs: [
-                        { label: "Title", name: "", type: "text",
+                        { label: "Answer", name: "", type: "text",
                         Template: {
                             sn: 0,
                             iconName: "",
                             visible: false,
                         }},
-                        { label: "Description", name: "", type: "text",
-                        Template: {
-                            sn: 1,
-                            iconName: "",
-                            visible: false,
-                        }}
                     ],
+                    qFiles: [],
                     qBtns: [
                         {label: "Clear", name: "onClearParagraph", icon: "clear"},
                         {label: "Remove", name: "onRemoveParagraph", icon: "remove"},
@@ -553,18 +583,12 @@ export default {
                     isImage: true,
                     qSelects: [],
                     qInputs: [
-                        { label: "Title", name: "", type: "text",
+                        { label: "Answer", name: "", type: "text",
                         Template: {
                             sn: 0,
                             iconName: "",
                             visible: false,
                         }},
-                        { label: "Description", name: "", type: "text",
-                        Template: {
-                            sn: 1,
-                            iconName: "",
-                            visible: false,
-                        }}
                     ],
                     qFiles: [
                         { label: "Image", name: "", type: "file",
