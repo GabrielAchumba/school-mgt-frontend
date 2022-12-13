@@ -59,7 +59,8 @@ export default {
     data(){
         return {
             title: "Import Class Rooms",
-            appVariables: [{variableTitle: "Class Room", variableName: "type"}],
+            appVariables: [{variableTitle: "Class Room", variableName: "type"},
+            {variableTitle: "Level", variableName: "level"}],
             applicationColumns: [],
             dialogs: dialogs,
             tableRows: [],
@@ -79,7 +80,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/classroom-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-classroom-landing')
+            else  this.$router.push('/classroom-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -95,7 +98,9 @@ export default {
         async createClassRooms(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
+            var levels = this.$store.getters["levelStore/levels"]
             let classrooms = [];
+            let check = false;
             for(const row of context.tableRows) {
                 const newRow = {}
                 for (const appVariable of context.appVariables){
@@ -103,6 +108,17 @@ export default {
                 }
 
                 newRow.schoolId = user.schoolId;
+
+
+
+                check = false;
+                for(const level of levels){
+                    if(level.type === newRow["level"]){
+                        newRow.levelId = level.id;
+                        check = true;
+                        break;
+                    }
+                }
 
                 classrooms.push(newRow)
             }
@@ -143,7 +159,9 @@ export default {
                             await context.createClassRooms();
                             break;
                         case "Success":
-                            this.$router.push("/classroom-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-classroom-landing')
+                            else  this.$router.push('/classroom-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

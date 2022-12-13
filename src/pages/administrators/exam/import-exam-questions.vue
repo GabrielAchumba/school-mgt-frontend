@@ -69,7 +69,10 @@ export default {
                 {variableTitle: "Option B", variableName: "optionB"},
                 {variableTitle: "Option C", variableName: "optionC"},
                 {variableTitle: "Option D", variableName: "optionD"},
-                {variableTitle: "Option E", variableName: "optionE"}
+                {variableTitle: "Option E", variableName: "optionE"},
+                {variableTitle: "Option F", variableName: "optionF"},
+                {variableTitle: "Option G", variableName: "optionG"},
+                {variableTitle: "Examination Date", variableName: "examinationDate"}
             ],
             applicationColumns: [],
             dialogs: dialogs,
@@ -90,7 +93,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/exam-question-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-exam-question-landing')
+            else  this.$router.push('/exam-question-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -132,25 +137,31 @@ export default {
             const { result: subjects } = await loadSubjects(user.schoolId);
             const { result: levels } = await loadLevels(user.schoolId);
 
-            console.log("subjects: ", subjects)
-            console.log("levels: ", levels)
+            //console.log("subjects: ", subjects)
+            //console.log("levels: ", levels)
 
             let questions = [];
             let check = false;
             let answerOptions = [];
-            console.log("context.tableRows; ", context.tableRows)
+            //console.log("context.tableRows; ", context.tableRows)
             for(const row of context.tableRows) {
                 const newRow = {}
                 answerOptions = [];
-                for (const appVariable of context.appVariables){
-                    if(`${appVariable.variableTitle}` === "Question" ||
-                    `${appVariable.variableTitle}` === "Subject" ||
-                    `${appVariable.variableTitle}` === "Level"){
-                        newRow[`${appVariable.variableName}`] = row[`${appVariable.variableTitle}`];
-                        console.log("row: ", newRow[`${appVariable.variableName}`])
+                const columns = Object.keys(row);
+                for (const column of columns){
+                    if(`${column}` === "Question" ||
+                    `${column}` === "Subject" ||
+                    `${column}` === "Level"){
+                        let appVariable = context.appVariables.find(o => o.variableTitle === column);
+                        newRow[`${appVariable.variableName}`] = row[`${column}`];
+                    }else if(`${column}` === "Examination Date"){
+                        const yearMonthDay = row[`${column}`].split("/")
+                        newRow.examYear = Number(yearMonthDay[0]);
+                        newRow.examMonth = Number(yearMonthDay[1]);
+                        newRow.examDay = Number(yearMonthDay[2]);
                     }else{
                         answerOptions.push({
-                            answer: row[`${appVariable.variableTitle}`],
+                            answer: row[`${column}`],
                             cloudImageUrl: "",
                             cloudImageName: "",
                             originalImageName: "",
@@ -163,13 +174,14 @@ export default {
                 newRow.cloudImageUrl = "";
                 newRow.cloudImageName = "";
                 newRow.originalImageName = "";
-                newRow.answerOptions = answerOptions
-                console.log("newRow: ", newRow)
+                newRow.answerOptions = answerOptions;
+
 
                 check = false;
                 for(const subject of subjects){
                     if(subject.type === newRow["subject"]){
                         newRow.subjectId = subject.id;
+                        console.log("subject seen")
                         check = true;
                         break;
                     }
@@ -183,6 +195,7 @@ export default {
                 for(const level of levels){
                     if(level.type === newRow["level"]){
                         newRow.levelId = level.id;
+                        console.log("level seen")
                         check = true;
                         break;
                     }
@@ -227,7 +240,9 @@ export default {
                             await context.createQuestions();
                             break;
                         case "Success":
-                            this.$router.push("/exam-question-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-exam-question-landing')
+                            else  this.$router.push('/exam-question-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

@@ -6,6 +6,7 @@ const exam_vm = {
     qSelectLevel:{ label: "Level", value: "", type: "text", list: [], actionName: "onLevel", visible: true },
     answerOptions: [],
     qSelectAnswerOption:{ label: "Answer Option", value: "", type: "text", list: [], actionName: "onAnswerOption", visible: true },
+    qDate: {label: "Examination Date", name: "2021/02/05"}
 }
 
 const dialogs = [

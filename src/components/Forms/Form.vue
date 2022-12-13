@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row q-pa-none flex flex-center">
-             <q-card class="col-12">
+             <q-card class="col-12 bg-primary">
                 <q-bar class="bg-accent text-primary">
                     <div class="text-h6 text-primary text-center">{{ formData.title }}</div>
                 </q-bar>
@@ -66,6 +66,7 @@
                             style="height: 350px;"
                           >
                             <q-option-group
+                              class="text-accent bg-primary"
                               :options="GroupedCheckBox.list"
                               type="checkbox"
                               v-model="GroupedCheckBox.group"
@@ -163,8 +164,9 @@
                       v-for="qInput in formData.qInputs" 
                       :key="qInput.label">
                       <span><p class="q-ma-none">{{ qInput.label }}</p>
-                      <q-input class="q-ma-none"
+                      <q-input class="q-ma-none bg-primary text-accent"
                       outlined 
+                      bordered
                       v-model="qInput.name" 
                       :type="qInput.type" >
                           <template 
@@ -172,7 +174,7 @@
                             v-slot:append>
                             <q-icon :name="qInput.Template.iconName" 
                             class="bg-primary text-accent"
-                            @click="qInputTemplateAction(qInput.Template)" />
+                            @click="qInputTemplateAction(qInput.Template)"/>
                           </template>
                       </q-input></span>
                     </div>
@@ -245,6 +247,41 @@
                         </q-icon>
                       </template>
                     </q-input></span>
+                    </div>
+
+                    <div  
+                     v-for="qList in formData.qLists" 
+                    :key="qList.label"
+                    class="q-pa-sm">
+                      <q-list
+                      bordered>
+                        <q-item  
+                        v-for="item in qList.items" 
+                        :key="item.label"
+                        class="q-pa-sm" 
+                        clickable 
+                        v-ripple>
+                          <q-item-section avatar>
+                            <q-avatar color="accent" text-color="primary">
+                              {{ item.letter }}
+                              <!-- <img :src="`https://cdn.quasar.dev/img/${contact.avatar}`"> -->
+                            </q-avatar>
+                          </q-item-section>
+
+                          <q-item-section>
+                            <q-item-label>{{ item.name }}</q-item-label>
+                            <q-item-label caption lines="1">{{ item.address }}</q-item-label>
+                          </q-item-section>
+
+                          <q-item-section side>
+                            <q-icon 
+                            name="chat_bubble" 
+                            color="accent"
+                            @click="linkClick(item)" />
+                          </q-item-section>
+                        </q-item>
+                      </q-list>
+
                     </div>
                   </q-form>
                 </q-card-section>
@@ -339,6 +376,9 @@
           }
         },
         methods: {
+          linkClick(row){
+            this.$emit("linkClick", row)
+          },
           onEmbededContextMenu(e){
             alert("cannot save");
             return false; 

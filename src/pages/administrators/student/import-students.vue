@@ -87,7 +87,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/student-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-student-landing')
+            else  this.$router.push('/student-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -176,7 +178,9 @@ export default {
                             await context.createStudents();
                             break;
                         case "Success":
-                            this.$router.push("/student-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-student-landing')
+                            else  this.$router.push('/student-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

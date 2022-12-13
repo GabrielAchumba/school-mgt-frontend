@@ -1,9 +1,9 @@
 <template>
-    <div class="q-pa-sm">
+    <div class="q-pa-sm bg-primary text-accent">
         <div class="row">
              <q-toolbar class="col-12 bg-accent text-primary">
                 <q-btn  
-                    icon="edit"
+                    icon="table_view"
                     flat
                     class="text-capitalize"
                     @click="ShowResultConfiDialog">
@@ -49,7 +49,8 @@
             <Form
                 style="width:400px;"
                 :formData="studentsForm"
-                @closeStudentsDialog="closeStudentsDialog($event)"/>
+                @closeStudentsDialog="closeStudentsDialog($event)"
+                @onToggle="onToggleStudentsForm($event)"/>
         </q-dialog>
 
 
@@ -84,7 +85,7 @@
 
 import MessageBox from "../../../../components/dialogs/MessageBox";
 import Form from "../../../../components/Forms/Form.vue";
-import { post } from "../../../../store/modules/services";
+import { post, get } from "../../../../store/modules/services";
 import { loadUsersByCategory } from "../../user/utils";
 import { createStudentsPositionReport } from "../utils";
 import Table from "../../../../components/Tables/Table.vue";
@@ -110,7 +111,7 @@ export default {
             isResponsive: false,
             isExpanded: true,
             isTable: true,
-            form: form,
+            form: {...form },
             chartForm: chartForm,
             tableVM: tableVM,
             layout: {},
@@ -121,6 +122,7 @@ export default {
             studentsForm: studentsForm,
             classRoomsForm: classRoomsForm,
             isChartForm: false,
+            studentIds: [],
         }
     },
     methods:{
@@ -174,16 +176,29 @@ export default {
             var context = this;
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
+        onToggleStudentsForm(payload){
+            var context = this;
+            console.log("onToggleStudentsForm called",payload)
+            if(payload === "Disagreed"){
+              context.studentsForm.GroupedCheckBoxes[0].group = [];
+            }else{
+              context.studentsForm.GroupedCheckBoxes[0].group = this.$store.getters["studentStore/students"].map((row) => {
+                    return row.id
+                })
+            }
+        },
         async Compute(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
+            let studentIds = context.studentsForm.GroupedCheckBoxes[0].group;
+            if(user.userType === "Student") studentIds = context.studentIds;
             
             var url = `result/summarizedstudentspositions2`;
             const payload = {
                 url,
                 req: {
                     subjectIds: context.subjectsForm.GroupedCheckBoxes[0].group,
-                    studentIds: context.studentsForm.GroupedCheckBoxes[0].group,
+                    studentIds,
                     classRoomIds: context.classRoomsForm.GroupedCheckBoxes[0].group,
                     levelId: context.form.qSelects[0].value,
                     sessionId: context.form.qSelects[1].value,
@@ -203,10 +218,20 @@ export default {
                 }
             } = response
             if(success){
+                console.log("result: ", result)
                 const { columns, rows } = createStudentsPositionReport(result);
                 context.isExpanded = true;
                 context.tableVM.columns = columns;
-                context.tableVM.rows = rows;
+                context.tableVM.rows = rows.map((row) => {
+                    let newRow = {...row }
+                    newRow.isActive = false;
+                    if(user.userType === "Student"){
+                        if(user.userName == row.userName) newRow.isActive = true
+                    }   
+       
+                    return newRow;
+                })
+                console.log("context.tableVM.rows: ",  context.tableVM.rows)
                  this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
                 this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
@@ -215,6 +240,32 @@ export default {
             }
 
             context.dialogFailureOrScuess("Configure Result Analysis", false)
+        },
+        async fetchStudents(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            console.log("user: ", user)
+            var url = `user/students/${user.schoolId}/${user.sessionId}/${user.levelId}/${user.classRoomId}`;
+            console.log("url: ", url)
+            var response = await get({
+            url
+            })
+            const { 
+                data : {
+                    data: result,
+                    message,
+                    success,
+                }
+            } = response
+
+            if(success){
+                context.studentIds = [];
+                for(const item of result){
+                     context.studentIds.push(item.id);
+                } 
+                console.log("context.studentIds: ", context.studentIds) 
+            }
+
         },
         configurePlotData(){
             var context = this;
@@ -242,11 +293,15 @@ export default {
         },
         async loadConfigData(){
             var context =  this;
-
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
 
             context.form.qSelects[0].list = this.$store.getters["levelStore/levels"];
             if(context.form.qSelects[0].list.length > 0){
-                context.form.qSelects[0].value = context.form.qSelects[0].list[0].id;
+                if(user.userType === "Student"){
+                    context.form.qSelects[0].value = user.levelId;
+                }else{
+                    context.form.qSelects[0].value = context.form.qSelects[0].list[0].id;
+                }
             }
 
             context.form.qSelects[1].list = this.$store.getters["sessionStore/sessions"];
@@ -277,6 +332,13 @@ export default {
                     value: row.id,
                 }
             })
+
+            if(user.userType === "Student"){
+                context.classRoomsForm.GroupedCheckBoxes[0].group = [user.classRoomId];
+                context.studentFullName = user.firstName + " " + user.lastName;
+            }
+
+            await context.fetchStudents();
         },
         Plot(){
             var context = this;
@@ -287,12 +349,16 @@ export default {
             var context = this;
             var selectedXId = context.chartForm.qSelects[0].value
             let xListItem = context.chartForm.qSelects[0].list.find(o => o.value === selectedXId);
-            var xValues = context.tableVM.rows.map((row) => {
-                return row[xListItem.name]
-            })
-
             var selectedYId = context.chartForm.qSelects[1].value
             let yListItem = context.chartForm.qSelects[1].list.find(o => o.value === selectedYId);
+
+            context.tableVM.rows.sort((a, b) => parseFloat(b[yListItem.name]) - parseFloat(a[yListItem.name]));
+            
+            var xValues = context.tableVM.rows.map((row) => {
+                return `${row[xListItem.name]} (${row["userName"]})`
+            })
+
+            
             var yValues = context.tableVM.rows.map((row) => {
                 return row[yListItem.name]
             })
@@ -326,9 +392,12 @@ export default {
             
             this.$store.commit("chartStore/setSeriesCollection", context.seriesCollection)
             this.$store.commit("chartStore/setLayout", context.layout)
-            //this.$store.commit("chartStore/setTitle", context.studentFullName)
+            this.$store.commit("chartStore/setTitle", "")
             //Plotly.newPlot('myDiv', context.seriesCollection, context.layout);
-            this.$router.push('/chart')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-chart')
+             else if(user.userType === "Student")this.$router.push('/student-chart')
+            else  this.$router.push('/chart')
 
             context.isTable = false;
         }
@@ -342,6 +411,16 @@ export default {
     }, */
     async created(){
         var context = this;
+        //Students
+        console.log("form.qBtns: ", form.qBtns)
+        context.form.qBtns = [];
+        for(const qBtn of form.qBtns){
+            if(qBtn.label !== "Students"){
+                context.form.qBtns.push(qBtn)
+            }
+        }
+        
+
         await context.loadConfigData();
         await context.ShowResultConfiDialog();
         this.$store.commit("authenticationStore/setActiveRoute", "studentspositionsanalysis");

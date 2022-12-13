@@ -158,7 +158,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadSubjectf()
+                            await context._loadSubjects()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -166,7 +166,7 @@
                 }
             }
         },
-        async _loadSubjectf(){
+        async _loadSubjects(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
@@ -183,7 +183,13 @@
         },
         async created() {
             var context = this;
-            await context._loadSubjectf()
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-subject";
+                context.tableVM.updateItemUrl = "/super-admin-update-subject";
+                context.tableVM.importURL = "/super-admin-import-subjects";
+            }
+            await context._loadSubjects()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

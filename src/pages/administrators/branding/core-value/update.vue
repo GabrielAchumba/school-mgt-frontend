@@ -65,6 +65,8 @@ export default {
             CoreValueUrl: "",
             doesCoreValueExists: false,
             selectedCoreValue: {},
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -80,7 +82,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/core-value-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-core-value-landing')
+            else  this.$router.push('/core-value-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -127,9 +131,10 @@ export default {
 
             console.log("payload: ", payload)
             //uploadLogo
-            var response = await post(payload)
+            context.CoreValueUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             
-            context.CoreValueUrl = response.data;
             console.log("CoreValueUrl: ", context.CoreValueUrl)
 
         },
@@ -200,7 +205,9 @@ export default {
                             await context.uploadAndSaveCoreValueUr();
                             break;
                         case "Success":
-                            this.$router.push("/core-value-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-core-value-landing')
+                            else  this.$router.push('/core-value-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

@@ -1,3 +1,5 @@
+import { splitAssessment } from "../assessment/utils";
+
 export const createResultSummaryReport = (result) => {
 
     const columns = getColumns(result);
@@ -17,12 +19,13 @@ const getColumns = (result) =>  {
         
         const assessmentKeys = Object.keys(result[subjectKey].assessments);
         for(const assessmentKey of assessmentKeys){
-            const columnName = assessmentKey.split(' ').join('');
+            const { assessmentName } = splitAssessment(assessmentKey);
+            const columnName = assessmentName.split(' ').join('');
             let column = columns.find(o => o.name === columnName);
             if(!column){
                 columns.push({ 
                     name: columnName, 
-                    label: assessmentKey.toUpperCase(), 
+                    label: assessmentName.toUpperCase(), 
                     field: "", 
                     align: "left",
                     scoreMax: result[subjectKey].assessments[assessmentKey].scoreMax,
@@ -36,7 +39,7 @@ const getColumns = (result) =>  {
 }
 
 const getRows = (result, columns) => {
-    const dp =  5;
+    const dp =  2;
     const rows = [];
     const subjectKeys = Object.keys(result);
 
@@ -50,7 +53,8 @@ const getRows = (result, columns) => {
         row["totalScore"] = result[subjectKey].subjectScore.toFixed(dp);
         const assessmentKeys = Object.keys(result[subjectKey].assessments);
         for(const assessmentKey of assessmentKeys){
-            row[assessmentKey.split(' ').join('')] = result[subjectKey].assessments[assessmentKey].assessmentScore.toFixed(dp);
+           const { assessmentName } = splitAssessment(assessmentKey);
+           row[assessmentName.split(' ').join('')] = result[subjectKey].assessments[assessmentKey].assessmentScore.toFixed(dp);
         }
         rows.push(row)
     }
@@ -72,6 +76,8 @@ const getColumnsStudentsPositions = (result) => {
     if(result.length <= 0) return columns
 
     columns.push({ name: "fullName", label: "FULL NAME", 
+    field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "text" })
+    columns.push({ name: "userName", label: "USER NAME", 
     field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "text" })
     columns.push({ name: "overallScore", label: "OVERALL SCORE", 
     field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "number" })
@@ -98,7 +104,7 @@ const getColumnsStudentsPositions = (result) => {
 
 const getRowsStudentsPositions = (result, columns) => {
 
-    const dp = 5;
+    const dp = 2;
     const rows = [];
 
     for(const item of result){
@@ -108,6 +114,7 @@ const getRowsStudentsPositions = (result, columns) => {
         }
 
         row["fullName"] = item.fullName;
+        row["userName"] = item.userName;
         row["overallScore"] = item.overallScore.toFixed(dp);
 
         const subjectKeys = Object.keys(item.subjects);

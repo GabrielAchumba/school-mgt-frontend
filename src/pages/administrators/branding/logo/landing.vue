@@ -161,7 +161,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadLogoModels()
+                            await context._loadLogos()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -190,6 +190,11 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-logo";
+                context.tableVM.updateItemUrl = "/super-admin-create-logo";
+            }
             await context._loadLogos()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

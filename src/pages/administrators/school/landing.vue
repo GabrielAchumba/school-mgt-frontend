@@ -1,10 +1,15 @@
 <template>
   <div>
-    <Table
+    <Form
+        v-if="!showSpinner"
+        :formData="form"
+        @createSchool="createSchool($event)"
+        @linkClick="linkClick($event)"/>
+    <!-- <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
     @createSchool="createSchool($event)"
-    @linkClick="linkClick($event)"/>
+    @linkClick="linkClick($event)"/> -->
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -36,8 +41,10 @@
 
 <script>
   import Table from "../../../components/Tables/Table.vue";
+    import Form from "../../../components/Forms/Form.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/services"
+  import { form } from "./view_models/landing-view-model";
     export default {
       computed:{
           showSpinner(){
@@ -52,10 +59,12 @@
       },
       components:{
         Table,
-        MessageBox
+        MessageBox,
+        Form
       },
         data () {
     return {
+        form:form,
             tableVM: {
                 selectedSchool: {},
                 title: "Schools",
@@ -191,6 +200,26 @@
                     route: row.schoolName.replace(/\s+/g,"_")
                 }
             });
+            
+            context.form.qLists = [];
+            const items = result.map((row) => {
+                return {
+                    name: row.schoolName,
+                    address: row.address,
+                    route: row.schoolName.replace(/\s+/g,"_"),
+                    letter: row.schoolName.charAt(0)
+                }
+            });
+
+            console.log("items: ", items) 
+
+            context.form.qLists.push({
+                label: "Schools",
+                items: [...items],
+            })
+
+            console.log("context.form: ", context.form)
+
             this.$store.commit('schoolStore/SetSchools', result)
             }else{
                 context.isFetchTableDialog = true;
@@ -201,6 +230,12 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-school";
+                context.tableVM.updateItemUrl = "/super-admin-update-school";
+                //context.tableVM.importURL = "/super-admin-import-results";
+            }
             await context.loadSchools()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

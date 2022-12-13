@@ -156,7 +156,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadLevelf()
+                            await context._loadLevels()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -164,7 +164,7 @@
                 }
             }
         },
-        async _loadLevelf(){
+        async _loadLevels(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
@@ -181,7 +181,13 @@
         },
         async created() {
             var context = this;
-            await context._loadLevelf()
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-level";
+                context.tableVM.updateItemUrl = "/super-admin-update-level";
+                //context.tableVM.importURL = "/super-admin-import-exam-answers";
+            }
+            await context._loadLevels()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

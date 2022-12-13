@@ -41,6 +41,7 @@ import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { put } from "../../../store/modules/services";
 import { form, dialogs } from "./view_models/update-view-model";
+import { splitAssessment } from "./utils";
 
 export default {
     computed:{
@@ -78,7 +79,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/assessment-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-assessment-landing')
+            else  this.$router.push('/assessment-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -96,12 +99,15 @@ export default {
             
             var url = `assessment/${context.selectedAssessment.id}`;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
+            let selectedSubject = context.form.qSelects[0].list.find(o => o.id === context.form.qSelects[0].value);
+
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
+                    type: `${context.form.qInputs[0].name} (${selectedSubject.type})`,
                     percentage: Number(context.form.qInputs[1].name),
                     schoolId: user.schoolId,
+                    name: context.form.qInputs[0].name,
                     subjectId: context.form.qSelects[0].value,
                 }
             }
@@ -140,7 +146,9 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/assessment-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-assessment-landing')
+                            else  this.$router.push('/assessment-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -152,7 +160,8 @@ export default {
     created(){
         var context =  this;
         context.selectedAssessment = this.$store.getters["assessmentStore/selectedAssessment"];
-        context.form.qInputs[0].name = context.selectedAssessment.type;
+         const { assessmentName } = splitAssessment(context.selectedAssessment.type);
+        context.form.qInputs[0].name = assessmentName;
         context.form.qInputs[1].name = context.selectedAssessment.percentage;
         context.form.qSelects[0].list = this.$store.getters["subjectStore/subjects"];
         context.form.qSelects[0].value = context.selectedAssessment.subjectId;

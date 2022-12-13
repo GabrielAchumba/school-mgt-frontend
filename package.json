@@ -1,8 +1,8 @@
 {
-  "name": "rivweb",
+  "name": "torpa",
   "version": "0.0.1",
   "description": "Developed By Newway Standard Global",
-  "productName": "rivweb",
+  "productName": "torpa",
   "cordovaId": "org.cordova.quasar.app",
   "capacitorId": "",
   "author": "GabrielAchumba <36473816+GabrielAchumba@users.noreply.github.com>",
@@ -33,6 +33,7 @@
     "vue-paystack": "^2.0.3",
     "vue-pdf-embed": "^1.1.4",
     "vue-template-compiler": "^2.6.12",
+    "vuex-persistedstate": "^4.1.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

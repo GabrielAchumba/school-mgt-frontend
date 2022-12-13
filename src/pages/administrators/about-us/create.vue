@@ -76,7 +76,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/about-us-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-about-us-landing')
+            else  this.$router.push('/about-us-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -129,7 +131,9 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/about-us-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-about-us-landing')
+                            else  this.$router.push('/about-us-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

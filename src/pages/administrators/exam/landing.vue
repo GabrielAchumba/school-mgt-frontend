@@ -20,22 +20,22 @@
                 name: "showPage",
                 title: "Questions", 
                 description: "Create questions and anwser options for any subject",
-                image: "/statics/images/staffs.jpg",
-                to: "/exam-question-landing"
+                image: "/statics/images/examination.jpg",
+                to: "exam-question-landing"
               },
               {
                 name: "showPage",
                 title: "Answers", 
                 description: "Create accurate answers for any questions created",
-                image: "/statics/images/staffs.jpg",
-                to: "/exam-answer-landing"
+                image: "/statics/images/examinations3.jpg",
+                to: "exam-answer-landing"
               },
               {
                 name: "showPage",
                 title: "Take Exam", 
                 description: "State the mission of your organization and also upadate it any time",
-                image: "/statics/images/staffs.jpg",
-                to: "/take-exam"
+                image: "/statics/images/examinations2.jpg",
+                to: "take-exam-question"
               },
             ],
           }
@@ -43,6 +43,19 @@
         methods:{
             showPage(payload){
                 this.$router.push(payload.to)
+            }
+        },
+        created(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                for(let i = 0; i < context.cardList.length; i++){
+                  context.cardList[i].to = `/super-admin-${context.cardList[i].to}`
+                }
+            }else{
+              for(let i = 0; i < context.cardList.length; i++){
+                  context.cardList[i].to = `/${context.cardList[i].to}`
+                }
             }
         }
     }

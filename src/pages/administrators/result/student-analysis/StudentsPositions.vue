@@ -334,12 +334,14 @@ export default {
             context.dialogFailureOrScuess("Configure Chart", false)
         },
         RefreshPlot(){
+            console.log("RefreshPlot called")
             var context = this;
             var selectedXId = context.chartForm.qSelects[0].value
             let xListItem = context.chartForm.qSelects[0].list.find(o => o.value === selectedXId);
             var xValues = context.tableVM.rows.map((row) => {
-                return row[xListItem.name]
+                return `${row[xListItem.name]} (${row["userName"]})`
             })
+            console.log("xValues: ", xValues)
 
             var selectedYId = context.chartForm.qSelects[1].value
             let yListItem = context.chartForm.qSelects[1].list.find(o => o.value === selectedYId);

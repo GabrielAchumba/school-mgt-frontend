@@ -65,6 +65,8 @@ export default {
             MissionUrl: "",
             doesMissionExists: false,
             selectedMission: {},
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -80,7 +82,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/mission-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-mission-landing')
+            else  this.$router.push('/mission-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -129,8 +133,9 @@ export default {
             console.log("payload: ", payload)
             //uploadLogo
             var response = await post(payload)
-            
-            context.MissionUrl = response.data;
+            context.MissionUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             console.log("MissionUrl: ", context.MissionUrl)
 
         },
@@ -165,6 +170,8 @@ export default {
                     title: context.form.qInputs[0].name,
                     description: context.form.qInputs[1].name,
                     fileUrl: context.MissionUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     schoolId: user.schoolId,
                     createdBy: user.id,
                 }
@@ -201,7 +208,9 @@ export default {
                             await context.uploadAndSaveMissionUr();
                             break;
                         case "Success":
-                            this.$router.push("/mission-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-mission-landing')
+                            else  this.$router.push('/mission-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

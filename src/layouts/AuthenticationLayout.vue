@@ -99,9 +99,18 @@ export default {
   methods:{
     initializeLogo(){
       var context = this;
-      setBrand('primary', context.primaryColor);
+
+     /*  $primary   : #000000
+$secondary : #FFCC00
+$accent    :  #00FFFF */
+
+      setBrand('primary', '#000000');
+      setBrand('accent', '#00FFFF');
+      setBrand('secondary', '#FFCC00');
+
+      /* setBrand('primary', context.primaryColor);
       setBrand('accent', context.secondaryColor);
-      setBrand('secondary', context.tertiaryColor);
+      setBrand('secondary', context.tertiaryColor); */
     },
     create(){
             const routename = this.$store.getters["authenticationStore/createURL"];

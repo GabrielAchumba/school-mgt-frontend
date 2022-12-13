@@ -1,6 +1,9 @@
 const state = {
     exams: [],
-    selectedExam: {}
+    selectedExam: {},
+    answers: [],
+    selectedAnswer: {},
+    questions: [],
 }
 
 const getters = {
@@ -9,6 +12,15 @@ const getters = {
     },
     selectedExam(state){
         return state.selectedExam;
+    },
+    answers(state){
+        return state.answers;
+    },
+    selectedAnswer(state){
+        return state.selectedAnswer;
+    },
+    questions(state){
+        return state.questions;
     }
 } 
 
@@ -18,7 +30,16 @@ const mutations = {
     },
     SetSelectedExam(state, payload){
         state.selectedExam = payload;
-    }
+    },
+    SetAnswers(state, payload){
+        state.answers = payload
+    },
+    SetSelectedAnswer(state, payload){
+        state.selectedAnswer = payload;
+    },
+    SetQuestions(state, payload){
+        state.questions = payload;
+    },
 }
 
 const actions = {}

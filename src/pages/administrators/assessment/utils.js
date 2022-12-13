@@ -23,3 +23,12 @@ export const loadAssessments = async (schoolId) => {
     }
 
 }
+
+export const splitAssessment = (assessment) => {
+    let textArray = assessment.split("(")
+    const assessmentName = textArray[0].trim();
+    const term2 = textArray[1];
+    textArray = term2.split(")")
+    const subjectName = textArray[0];
+    return { assessmentName, subjectName };
+}

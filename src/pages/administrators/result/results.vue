@@ -138,7 +138,7 @@
                 if(dialog.title === payload){
                     switch(payload){
                         case "Success":
-                            await context.loadResult()
+                            await context.loadResults()
                             break;
                         case "Delete Success":
                             this.$router.push("/results");
@@ -179,7 +179,7 @@
             }
 
         },
-        async loadResult(){
+        async loadResults(){
             this.$store.commit("authenticationStore/setShowSpinner", true);
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
@@ -232,7 +232,13 @@
         },
         async created() {
             var context = this;
-            await context.loadResult()
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-result";
+                context.tableVM.updateItemUrl = "/super-admin-update-result";
+                context.tableVM.importURL = "/super-admin-import-results";
+            }
+            await context.loadResults()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

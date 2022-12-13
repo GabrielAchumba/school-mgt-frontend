@@ -159,7 +159,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadCarouselModels()
+                            await context._loadCarousels()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -188,6 +188,11 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-home";
+                context.tableVM.updateItemUrl = "/super-admin-update-home";
+            }
             await context._loadCarousels()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

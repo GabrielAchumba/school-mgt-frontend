@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md bg-primary">
     <div 
      v-if="!showSpinner"
      class="q-pa-md">
@@ -439,6 +439,9 @@ const auth = getAuth()
                 case "referal":
                 this.$router.push('/referal');
                 break;
+                case "student":
+                this.$router.push('/student');
+                break;
               case "member":
                 this.$router.push('/member');
                 break;
@@ -546,8 +549,9 @@ const auth = getAuth()
         //}
       },
       async VerifyOTP(){
+          var context = this;
          this.$store.commit("authenticationStore/setShowSpinner", true);
-        await VerifyCode();
+        await context.VerifyCode();
         this.$store.commit("authenticationStore/setShowSpinner", false);
       },
       async VerifyCode(){

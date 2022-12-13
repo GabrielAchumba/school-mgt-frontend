@@ -132,7 +132,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadLessonf()
+                            await context.loadLessons()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -140,7 +140,7 @@
                 }
             }
         },
-        async loadLessonf(){
+        async loadLessons(){
             var context = this;
         var url = "lesson";
         var response = await get({
@@ -167,7 +167,13 @@
         },
         async created() {
             var context = this;
-            await context.loadLessonf()
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-lesson";
+                context.tableVM.updateItemUrl = "/super-admin-update-lesson";
+                //context.tableVM.importURL = "/super-admin-import-exam-answers";
+            }
+            await context.loadLessons()
       }
     }
 </script>

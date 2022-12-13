@@ -184,6 +184,11 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-about-us";
+                context.tableVM.updateItemUrl = "/super-admin-update-about-us";
+            }
             await context.loadAboutUs()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

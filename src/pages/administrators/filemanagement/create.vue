@@ -64,6 +64,8 @@ export default {
             dialogs: dialogs,
             fileUrl: "",
             doesFileExists: false,
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -79,7 +81,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/filemanagement-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-filemanagement-landing')
+            else  this.$router.push('/filemanagement-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -151,9 +155,10 @@ export default {
             //uploadFile
             this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post(payload)
+            context.fileUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             this.$store.commit("authenticationStore/setShowSpinner", false);
-            
-            context.fileUrl = response.data;
             console.log("fileUrl: ", context.fileUrl)
 
         },
@@ -227,7 +232,9 @@ export default {
                             await context.uploadAndSaveFileUr();
                             break;
                         case "Success":
-                            this.$router.push("/filemanagement-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-filemanagement-landing')
+                            else  this.$router.push('/filemanagement-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

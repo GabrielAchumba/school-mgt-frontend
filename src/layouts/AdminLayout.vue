@@ -3,7 +3,7 @@
 
      <q-header class="q-pa-none bg-primary">
        <MainMenuBar
-       :menuList="menuList"
+       :menuList="contextMenuList"
        @logoutUser="logoutUser($event)"/>
     </q-header>
 
@@ -251,12 +251,18 @@ export default {
       context.checkSubscription = {...result}
       this.$store.commit("administratorStore/SetIsSubscription", result)
 
-      context.contextMenuList = context.menuList.map((row)=> {
+      var listOfMenuItems = [];
+      for(const mItem of context.menuList){
+        mItem.to = `/${mItem.to}`
+        listOfMenuItems.push(mItem)
+      }
+
+      context.contextMenuList = listOfMenuItems.map((row)=> {
           return {
             ...row
           }
         })
-      context.landingMenu = context.menuList.map((row)=> {
+      context.landingMenu = listOfMenuItems.map((row)=> {
           return {
             ...row
           }
@@ -268,14 +274,19 @@ export default {
       context.verifyAdevertizementSubscription();
       context.verifyExamQuizSubscription();
 
-      context.menuList = context.contextMenuList.map((row) => {
+      /* context.menuList = context.contextMenuList.map((row) => {
         return {
           ...row,
         }
-      })
+      }) */
+
       this.$store.commit("administratorStore/SetMainMenuList", context.landingMenu)
     },
     initializeLogo(logo){
+        /* setBrand('primary', '#000000');
+        setBrand('accent', '#00FFFF');
+        setBrand('secondary', '#FFCC00'); */
+
         setBrand('primary', logo.primaryColor);
         setBrand('accent', logo.tertiaryColor);
         setBrand('secondary', logo.secondaryColor);

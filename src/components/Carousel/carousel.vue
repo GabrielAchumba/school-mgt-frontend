@@ -1,6 +1,6 @@
 <template>
    <div
-   class="full-width text-primary">
+   class="full-width text-secondary">
     <q-carousel
           animated
           v-model="slide"

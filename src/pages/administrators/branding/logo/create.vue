@@ -64,6 +64,8 @@ export default {
             dialogs: dialogs,
             LogoUrl: "",
             doesLogoExists: false,
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -79,7 +81,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/logo-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-logo-landing')
+            else  this.$router.push('/logo-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -127,8 +131,9 @@ export default {
             console.log("payload: ", payload)
             //uploadLogo
             var response = await post(payload)
-            
-            context.LogoUrl = response.data;
+            context.LogoUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             console.log("LogoUrl: ", context.LogoUrl)
 
         },
@@ -165,6 +170,8 @@ export default {
                     tertiaryColor: context.form.qColors[2].name,
                     schoolId: user.schoolId,
                     fileUrl: context.LogoUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     createdBy: user.id,
                 }
             }
@@ -205,7 +212,9 @@ export default {
                             await context.uploadAndSaveLogoUr();
                             break;
                         case "Success":
-                            this.$router.push("/logo-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-logo-landing')
+                            else  this.$router.push('/logo-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

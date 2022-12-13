@@ -159,7 +159,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadNewsModels()
+                            await context._loadNewses()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -188,6 +188,12 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-news";
+                context.tableVM.updateItemUrl = "/super-admin-update-news";
+            }
+            
             await context._loadNewses()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

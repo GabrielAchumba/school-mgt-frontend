@@ -1,7 +1,9 @@
 
 const form = {
     title: "Create ClassRoom",
-    qSelects: [],
+    qSelects: [
+        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
+    ],
     qInputs: [
         { label: "Type of Class Room", name: "", type: "text",
         Template: {

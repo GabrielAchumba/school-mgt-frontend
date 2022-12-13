@@ -22,22 +22,22 @@
                 name: "showPage",
                 title: "Single Student Results Analysis", 
                 description: "The statistics analysis of a student results",
-                image: "/statics/images/analyse results.jpg",
-                to: "/single-student-results-analysis"
+                image: "/statics/images/single_student_result.jpg",
+                to: "single-student-results-analysis"
               },
               {
                 name: "showPage",
                 title: "Positions of Students", 
                 description: "The statistics analysis of position of students results",
-                image: "/statics/images/analyse results.jpg",
-                to: "/students-positions-analysis"
+                image: "/statics/images/results.jpg",
+                to: "students-positions-analysis"
               },
               {
                 name: "showPage",
                 title: "Multiple Students Results Analysis", 
                 description: "The statistics analysis of multiple students results",
-                image: "/statics/images/analyse results.jpg",
-                to: "/summarized-students-result"
+                image: "/statics/images/view results.jpg",
+                to: "summarized-students-result"
               },
               
             ],
@@ -47,6 +47,25 @@
             showPage(payload){
                 this.$router.push(payload.to)
             }
+        },
+        created(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                for(let i = 0; i < context.cardList.length; i++){
+                  context.cardList[i].to = `/super-admin-${context.cardList[i].to}`
+                }
+            }if(user.userType === "Student"){
+                for(let i = 0; i < context.cardList.length; i++){
+                  context.cardList[i].to = `/student-${context.cardList[i].to}`
+                }
+            }else{
+              for(let i = 0; i < context.cardList.length; i++){
+                  context.cardList[i].to = `/${context.cardList[i].to}`
+                }
+            }
+
+            console.log("context.cardList: ", context.cardList)
         }
     }
 </script>

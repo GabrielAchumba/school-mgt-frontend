@@ -1,12 +1,12 @@
 <template>
   <div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 q-pa-sm">
+      <div class="row bg-primary text-accent">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
             <span>
                 <p class="q-ma-none">{{ exam_vm.qSelectSubject.label }}</p>
                 <div class="row no-wrap">
                 <q-select
-                    class="q-ma-none col-12"
+                    class="q-ma-none col-12 bg-accent text-primary"
                     color="accent" 
                     outlined label-color="accent"
                     option-disable="inactive"
@@ -22,12 +22,12 @@
             </div>
             </span>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 q-pa-sm">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 q-pa-sm">
             <span>
                 <p class="q-ma-none">{{ exam_vm.qSelectLevel.label }}</p>
                 <div class="row no-wrap">
                 <q-select
-                    class="q-ma-none col-12"
+                    class="q-ma-none col-12 bg-accent text-primary"
                     color="accent" 
                     outlined label-color="accent"
                     option-disable="inactive"
@@ -42,6 +42,26 @@
                 </q-select>
             </div>
             </span>
+        </div>
+
+        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 q-pa-sm bg-primary text-accent">
+            <span><p class="q-ma-none">{{ exam_vm.qDate.label }}</p>
+            <q-input 
+            class="q-ma-none bg-accent"
+            filled 
+            v-model="exam_vm.qDate.name" mask="date" :rules="['date']">
+            <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                <q-date v-model="exam_vm.qDate.name">
+                    <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                </q-date>
+                </q-popup-proxy>
+            </q-icon>
+            </template>
+        </q-input></span>
         </div>
         <q-space/>
         <q-btn class="col-2" outline dense flat icon="table_view" @click="viewQuestions"/>
@@ -108,8 +128,8 @@
             selectedSubject: null,
             selectedLevel: null,
             exam_vm: exam_vm,
+            selectedExam: {},
             tableVM: {
-                selectedExam: {},
                 title: "Exams",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
@@ -241,6 +261,8 @@
             let rows = [];
             let subjectItem = context.exam_vm.qSelectSubject.list.find(o => o.value === context.selectedSubject);
             let levelItem = context.exam_vm.qSelectLevel.list.find(o => o.value === context.selectedLevel);
+            const myArray = context.exam_vm.qDate.name.split("/")
+
 
             const payload = {
                 url: "examquestion/findAll",
@@ -248,6 +270,9 @@
                     subjectId: subjectItem.value,
                     levelId: levelItem.value,
                     schoolId: user.schoolId,
+                    examYear: Number(myArray[0]),
+                    examMonth: Number(myArray[1]),
+                    examDay: Number(myArray[2])
                 }
             }
 
@@ -265,7 +290,6 @@
                  })
 
                  console.log("rows: ", rows)
-                this.$store.commit("authenticationStore/setShowSpinner", false);
                 this.$store.commit('examStore/SetExams', rows);
                 context.tableVM.rows = rows;
                 this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
@@ -277,17 +301,23 @@
             }
         
 
-            }
-        },
-        async created() {
-            var context = this;
-            context.initializeData()
-            this.$store.commit("authenticationStore/setActiveRoute", "exam");
-            this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
-            this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
-                this.$store.commit("authenticationStore/setActiveColumns", []);
-                this.$store.commit("authenticationStore/setActiveRows", []);
-                this.$store.commit("authenticationStore/setNewRows", []);
-      }
+        }
+    },
+    async created() {
+        var context = this;
+        var user = this.$store.getters["authenticationStore/IdentityModel"]
+        if(user.schoolId === "CEO"){
+            context.tableVM.createItemUrl = "/super-admin-create-exam-question";
+            context.tableVM.updateItemUrl = "/super-admin-update-exam-question";
+            context.tableVM.importURL = "/super-admin-import-exam-questions";
+        }
+        this.$store.commit("authenticationStore/setActiveColumns", []);
+        this.$store.commit("authenticationStore/setActiveRows", []);
+        this.$store.commit("authenticationStore/setNewRows", []);
+        context.initializeData()
+        this.$store.commit("authenticationStore/setActiveRoute", "exam");
+        this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
+        this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
+    }
     }
 </script>

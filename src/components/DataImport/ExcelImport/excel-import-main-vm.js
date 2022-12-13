@@ -2,7 +2,9 @@ const form = {
     title: "Data Import",
     qSelects: [
          { label: "Select Worksheet *", value: "", type: "text", 
-         list: [], actionName: "referedByAction", visible: true },
+         list: [], actionName: "referedByAction", visible: true,
+         isToggle: false,
+         qToggle: { name: true, label: ""}, }
     ],
     qBtns: [
         {label: "Preview", name: "Preview", icon: "preview"},

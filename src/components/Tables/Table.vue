@@ -33,7 +33,8 @@
       :separator="table_VM.separator"
       :filter="filter"
       :loading="loading"
-      class="screenwide q-ma-sm"
+      class="screenwide q-ma-sm bg-primary"
+      bordered
       >
 
          <!--  <template v-slot:top>
@@ -58,7 +59,35 @@
           </template>
 
           <template v-slot:body="props">
+
               <q-tr 
+              v-if="props.row.isActive"
+              :props="props">
+                <q-td key="actions" :props="props">
+                    <div class="row q-pa-md text-center">
+                        <q-icon 
+                        name="edit"
+                        @click="updateItem(props.row)"
+                        size="20px"/>
+                        <q-icon 
+                        name="delete" 
+                        @click="deleteItem(props.row)"
+                        size="20px" />
+                    </div>
+                </q-td>
+
+                <q-td key="route" :props="props">
+                    <a href="#" @click="linkClick(props.row)">{{ props.row['route']}}</a>
+                </q-td>
+
+                <q-td 
+                class="bg-accent text-primary"
+                v-for="column in removekeys()" :key="column.name"
+                :props="props">{{ props.row[column.name] }}</q-td>
+              </q-tr>
+
+              <q-tr 
+              v-else
               :props="props">
                 <q-td key="actions" :props="props">
                     <div class="row q-pa-md text-center">

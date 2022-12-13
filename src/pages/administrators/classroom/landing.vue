@@ -64,7 +64,8 @@
                 title: "Class Rooms",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
-                    { name: "type", label: "Type of Class Room", field: "", align: "left", type: "text" },
+                    { name: "type", label: "Class Room", field: "", align: "left", type: "text" },
+                    { name: "level", label: "Level", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
@@ -175,7 +176,14 @@
                 const { result, message } = await loadClassRooms(user.schoolId)
                 this.$store.commit("authenticationStore/setShowSpinner", false);
                 this.$store.commit('classRoomStore/SetClassRooms', result)
-                context.tableVM.rows = result;
+                context.tableVM.rows = result.map((row) => {
+                    let selectedItem = this.$store.getters["levelStore/levels"].find(o => o.id === row.levelId);
+                    const level= selectedItem.type;
+                    return {
+                        ...row,
+                        level,
+                    }
+                })
 
                 if(result.length === 0){
                     context.isFetchTableDialog = true;
@@ -186,6 +194,11 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-class-room";
+                context.tableVM.updateItemUrl = "/super-admin-update-class-room";
+            }
             await context._loadClassRooms()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

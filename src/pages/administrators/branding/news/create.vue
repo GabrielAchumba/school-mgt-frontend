@@ -64,6 +64,8 @@ export default {
             dialogs: dialogs,
             NewsUrl: "",
             doesNewsExists: false,
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -79,7 +81,10 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/news-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-news-landing')
+            else this.$router.push('/super-admin-news-landing')
+            
         },
         cancelDialog(payload){
             const context = this;
@@ -145,8 +150,12 @@ export default {
             console.log("payload: ", payload)
             //uploadNews
             var response = await post(payload)
+
+            context.NewsUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             
-            context.NewsUrl = response.data;
+         
             console.log("NewsUrl: ", context.NewsUrl)
 
         },
@@ -186,6 +195,8 @@ export default {
                     fileType: context.form.qFiles[0].fileType,
                     schoolId: user.schoolId,
                     fileUrl: context.NewsUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     createdBy: user.id,
                 }
             }
@@ -226,7 +237,9 @@ export default {
                             await context.uploadAndSaveNewsUr();
                             break;
                         case "Success":
-                            this.$router.push("/news-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-news-landing')
+                            else this.$router.push('/super-admin-news-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

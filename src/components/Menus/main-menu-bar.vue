@@ -1,5 +1,5 @@
 <template>
-    <q-bar class="q-pa-none row bg-accent" >
+    <q-bar class="q-pa-none row bg-accent text-primary" >
         <q-btn flat dense round icon="settings" aria-label="Settings" />
         <q-btn flat dense round icon="create" @click="create"/>
         <q-btn flat dense round icon="import_contacts" @click="dataImport"/>

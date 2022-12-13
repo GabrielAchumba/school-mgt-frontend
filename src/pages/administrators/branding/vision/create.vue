@@ -81,7 +81,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/vision-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-vision-landing')
+            else  this.$router.push('/vision-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -128,7 +130,6 @@ export default {
             }
 
             var response = await post(payload)
-            
             context.VisionUrl = response.data.url;
             context.fileName = response.data.fileName;
             context.originalFileName = response.data.originalFileName;
@@ -213,7 +214,9 @@ export default {
                             await context.uploadAndSaveVisionUr();
                             break;
                         case "Success":
-                            this.$router.push("/vision-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-vision-landing')
+                            else  this.$router.push('/vision-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

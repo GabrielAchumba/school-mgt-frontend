@@ -39,6 +39,7 @@ import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import ExcelImport from "../../../components/DataImport/ExcelImport/excel-import-main.vue";
 import { loadSubjects } from "../subject/utils";
 import { post } from "../../../store/modules/services";
+import { splitAssessment } from "./utils";
 import { dialogs } from "./view_models/import-view-model";
 
 export default {
@@ -81,7 +82,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/assessment-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-assessment-landing')
+            else  this.$router.push('/assessment-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -122,10 +125,21 @@ export default {
             let assessments = [];
             for(const row of context.tableRows) {
                 const newRow = {}
+                let selectedSubject = undefined
                 for (const appVariable of context.appVariables){
                    newRow[`${appVariable.variableName}`] = row[`${appVariable.variableTitle}`];
+                   if(appVariable.variableTitle === "Type of Assessment"){
+                       const { assessmentName, subjectName } = splitAssessment(newRow[`${appVariable.variableName}`]);
+                       newRow.name = assessmentName;
+                       selectedSubject = result.find(o => o.type === subjectName);
+                   }
                 }
 
+                if(selectedSubject === undefined){
+                    continue;
+                }
+
+                newRow.subjectId = selectedSubject.id;
                 newRow.schoolId = user.schoolId;
                 assessments.push(newRow)
             }
@@ -166,7 +180,9 @@ export default {
                             await context.createAssessments();
                             break;
                         case "Success":
-                            this.$router.push("/assessment-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-assessment-landing')
+                            else  this.$router.push('/assessment-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

@@ -186,6 +186,12 @@
         },
         async created() {
             var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-grade";
+                context.tableVM.updateItemUrl = "/super-admin-update-grade";
+                //context.tableVM.importURL = "/super-admin-import-exam-answers";
+            }
             await context._loadGrades()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);

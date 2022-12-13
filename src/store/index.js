@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 
 import authenticationStore from './modules/authenticationStore';
 import administratorStore from './modules/administratorStore';
@@ -28,6 +29,7 @@ import gradeStore from './modules/gradeStore';
 import levelStore from './modules/levelStore';
 import sessionStore from './modules/sessionStore';
 import examStore from './modules/examStore';
+import storyStore from './modules/storyStore';
 
 
 Vue.use(Vuex)
@@ -71,7 +73,9 @@ export default function (/* { ssrContext } */) {
       levelStore,
       sessionStore,
       examStore,
+      storyStore,
     },
+    plugins: [createPersistedState()],
 
     // enable strict mode (adds overhead!)
     // for dev mode only

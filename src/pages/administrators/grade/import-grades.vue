@@ -82,7 +82,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/grade-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-grade-landing')
+            else  this.$router.push('/grade-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -146,7 +148,9 @@ export default {
                             await context.createGrades();
                             break;
                         case "Success":
-                            this.$router.push("/grade-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-grade-landing')
+                            else  this.$router.push('/grade-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

@@ -76,7 +76,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/assessment-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-assessment-landing')
+            else  this.$router.push('/assessment-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -91,15 +93,18 @@ export default {
         },
         async save(){
             var context = this;
+
+            let selectedSubject = context.form.qSelects[0].list.find(o => o.id === context.form.qSelects[0].value);
             
             var url = `assessment/create`;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             const payload = {
                 url,
                 req: {
-                    type: context.form.qInputs[0].name,
+                    type: `${context.form.qInputs[0].name} (${selectedSubject.type})`,
                     percentage: Number(context.form.qInputs[1].name),
                     schoolId: user.schoolId,
+                    name: context.form.qInputs[0].name,
                     subjectId: context.form.qSelects[0].value,
                 }
             }
@@ -136,7 +141,9 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/assessment-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-assessment-landing')
+                            else  this.$router.push('/assessment-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="row q-pa-none">
-             <q-card class="col-12">
+        <div class="row q-pa-none bg-primary">
+             <q-card class="col-12 bg-primary">
                 <q-bar class="bg-accent text-primary">
                     <div class="text-h6 text-primary">{{ title }}</div>
 

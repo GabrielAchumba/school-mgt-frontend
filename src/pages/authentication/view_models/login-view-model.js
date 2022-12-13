@@ -2,9 +2,9 @@ import { countryCodes } from "./country-codes";
 
 const loginForm = {
     title: "Sign in User",
-    qToggles: [
+    /* qToggles: [
         { label: "Log in student", name: "Disagreed", visible: true}
-    ],
+    ], */
     qInputs: [
         { label: "User Name *", name: "", type: "text", 
         Template: {

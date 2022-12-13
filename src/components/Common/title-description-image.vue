@@ -1,13 +1,13 @@
 <template>
     <div class="row q-pa-sm bg-primary">
-        <q-card class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm">
+        <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
           <div class="text-h5 text-accent flex flex-center q-pa-sm">{{ title }}</div>
           <p class="q-pa-sm flex flex-center">{{ description }}</p>
         </q-card>
 
         <q-card 
         v-if="isImage"
-        class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm img">
+        class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm img flex flex-center">
             <q-img 
             :src="imageUrl"
             v-show="isImage"
@@ -22,7 +22,7 @@
 
          <q-card 
         v-if="isVideo"
-        class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm img">
+        class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
             <video 
             id="video-preview" 
             v-bind:src="imageUrl" 
@@ -73,12 +73,12 @@ export default {
 
 <style scoped>
 img {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 70%;
+    max-height: 90%;
 }
 
 video{
-		max-width: 100%;
-    max-height: 100%;
+		max-width: 90%;
+    max-height: 90%;
 }
 </style>

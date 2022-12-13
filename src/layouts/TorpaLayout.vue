@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh lpR fFf" class="bg-primary">
      <q-header>
          <SocialMedia/>
          <MainNavbar/>
@@ -7,6 +7,7 @@
 
      <q-page-container style="height: 100vh;">
       <router-view
+      class="bg-primary"
       v-if="!showSpinner"
       @linkClick="linkClick($event)"/>
       <div 
@@ -52,6 +53,10 @@ export default {
             setBrand('primary', logo.primaryColor);
             setBrand('accent', logo.tertiaryColor);
             setBrand('secondary', logo.secondaryColor);
+
+           /*  setBrand('primary', '#000000');
+            setBrand('accent', '#00FFFF');
+            setBrand('secondary', '#FFCC00'); */
         },
         async branding(school){
                 var schoolId = school.schoolId;

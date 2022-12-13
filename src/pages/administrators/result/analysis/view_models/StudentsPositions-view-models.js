@@ -18,7 +18,6 @@ const form = {
 
 const subjectsForm = { 
     title: "Subjects",
-    qSelects: [],
     qInputs: [],
     qBtns: [
         {label: "Done", name: "closeSubjectsDialog", icon: "done"},
@@ -37,6 +36,8 @@ const subjectsForm = {
 
 const studentsForm = { 
     title: "Students",
+    qToggles: [{ label: "Select All", visible: true, name: "Disagreed"}],
+    qSelects: [],
     qSelects: [],
     qInputs: [],
     qBtns: [

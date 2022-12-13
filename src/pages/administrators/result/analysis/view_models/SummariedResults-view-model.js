@@ -1,10 +1,10 @@
 const form = { 
     title: "Configure Result Analysis",
     qSelects: [
-        { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
+        { label: "Session", value: "", type: "text", list: [], actionName: "onSessionSelected", visible: true },
+        { label: "Level", value: "", type: "text", list: [], actionName: "onLevelSelected" ,visible: true },
+        { label: "Class Room", value: "", type: "text", list: [], actionName: "onClassRoomSelected", visible: true },
         { label: "Student", value: "", type: "text", list: [], actionName: "onStudentSelected", visible: true },
-        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
-        { label: "Session", value: "", type: "text", list: [], actionName: "session", visible: true },
     ],
     qInputs: [],
     qBtns: [

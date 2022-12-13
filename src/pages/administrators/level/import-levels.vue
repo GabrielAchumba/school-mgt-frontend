@@ -79,7 +79,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/level-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-level-landing')
+            else this.$router.push('/level-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -161,7 +163,9 @@ export default {
                             await context.createLevels();
                             break;
                         case "Success":
-                            this.$router.push("/level-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-level-landing')
+                            else this.$router.push('/level-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

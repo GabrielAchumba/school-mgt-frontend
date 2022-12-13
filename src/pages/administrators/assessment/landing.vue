@@ -40,6 +40,7 @@
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/services"
   import { loadSubjects } from "../subject/utils";
+  import { splitAssessment } from "./utils";
     export default {
      computed:{
           showSpinner(){
@@ -63,7 +64,8 @@
                 title: "Assessments",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
-                    { name: "type", label: "Type of Assessment", field: "", align: "left", type: "text" },
+                    { name: "assessment", label: "Assessment", field: "", align: "left", type: "text" },
+                    { name: "subject", label: "Subject", field: "", align: "left", type: "text" },
                     { name: "percentage", label: "Percentage", field: "", align: "left", type: "number" },    
                 ],
                 rows: [],
@@ -158,7 +160,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context.loadAssessmentf()
+                            await context.loadAssessments()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -166,7 +168,7 @@
                 }
             }
         },
-        async loadAssessmentf(){
+        async loadAssessments(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
         var url = `assessment/${user.schoolId}`;
@@ -186,7 +188,14 @@
             } = response
 
             if(success){
-            context.tableVM.rows = assessments;
+            context.tableVM.rows = assessments.map((row) => {
+                const { assessmentName, subjectName } = splitAssessment(row.type);
+                return {
+                    ...row,
+                    assessment: assessmentName,
+                    subject: subjectName,
+                }
+            })
             this.$store.commit('assessmentStore/SetAssessments', context.tableVM.rows)
             }else{
                 context.isFetchTableDialog = true;
@@ -197,7 +206,12 @@
         },
         async created() {
             var context = this;
-            await context.loadAssessmentf()
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            if(user.schoolId === "CEO"){
+                context.tableVM.createItemUrl = "/super-admin-create-assessment";
+                context.tableVM.updateItemUrl = "/super-admin-update-assessment";
+            }
+            await context.loadAssessments()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

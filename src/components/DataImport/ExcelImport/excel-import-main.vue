@@ -35,7 +35,8 @@
                       :dataTypes="dataTypes"
                       @onApplicationColumnChanged="onApplicationColumnChanged($event)"
                       @onWorksheetColumnChanged="onWorksheetColumnChanged($event)"
-                      @onDataTypeChanged="onDataTypeChanged($event)"/>
+                      @onDataTypeChanged="onDataTypeChanged($event)"
+                      @onToggle="onToggle($event)"/>
                    </q-form>
                  </q-card-section>
 
@@ -142,7 +143,10 @@ export default {
         applicationColumns: {
             type: Array,
             default: () => {
-                return []
+                return [{
+                     isToggle: true,
+                    qToggle: { name: true, label: ""}
+                }]
             }
         },
     },
@@ -157,6 +161,7 @@ export default {
                 selectedStaff: {},
                 title: "Employees",
                 columns: [],
+                columnsOriginal: [],
                 rows: [],
                 separator: "cell",
                 /* createItem: "createStaff",
@@ -185,6 +190,10 @@ export default {
             var context = this;
             context.dataTypes[qSelect.sn].value = qSelect.value.value;
         },
+        onToggle(payload){
+            var context = this;
+            context.tableVM.columnsOriginal[payload.qSelect.sn].data.qToggle.name = payload.evt;
+        },
         ClickAction(actionName){
             var context = this;
             context.setTableData();
@@ -211,7 +220,13 @@ export default {
             context.tableVM.rows = [];
             for(const selectedWorkSheetRow of context.selectedWorkSheetData){
                 const tableRow = context.setTableRow(selectedWorkSheetRow);
-                context.tableVM.rows.push({...tableRow});
+                let newRow = {};
+                for(const column of context.tableVM.columnsOriginal){
+                    if(column.data.qToggle.name === true){
+                        newRow[column.name] = tableRow[column.name]
+                    }
+                }
+                context.tableVM.rows.push({...newRow});
             }
 
             if(context.tableVM.rows.length > 0){
@@ -268,7 +283,9 @@ export default {
             if(Object.keys(selectedWorkSheetData).length > 0){
                 const selectedWorkSheetDataColumns = Object.keys(selectedWorkSheetData["0"])
                 const qSelect = { label: "", value: "", type: "text", 
-                                list: [], actionName: "referedByAction", visible: true }
+                                list: [], actionName: "referedByAction", visible: true,
+                                isToggle: false,
+                                qToggle: { name: true, label: ""}}
 
                 qSelect.list = selectedWorkSheetDataColumns.map((row) => {
                     return {
@@ -293,7 +310,9 @@ export default {
             var context = this;
             const dataTypes = ["text", "number", "date", "boolean"];
             const qSelect = { label: "", value: "", type: "text", 
-                            list: [], actionName: "referedByAction", visible: true }
+                            list: [], actionName: "referedByAction", visible: true,
+                            isToggle: false,
+                            qToggle: { name: true, label: ""} }
 
             qSelect.list = dataTypes.map((row) => {
                 return {
@@ -398,12 +417,26 @@ export default {
         context.form.clearQSelects();
         context.setImportFormData(context.workSheetsNames, context.workSheetsData);
         context.setDataTypes();
-        context.worksheetColumns = context.applicationColumns.map((row, index) => {
+        context.applicationColumns = context.applicationColumns.map((row) => {
             return {
                 ...row, 
+                isToggle: true,
+                qToggle: { name: true, label: ""},
+            }
+        })
+        context.worksheetColumns = context.applicationColumns.map((row, index) => {
+            return {
+                ...row,
+                isToggle: false,
                 i: `Worksheet Column ${index+1}`
             }
         })
+
+        context.tableVM.columnsOriginal = context.applicationColumns.map((row) => {
+                    return { data: {...row}, name: `${row.value}`, label: `${row.value.toUpperCase()}`, field: "", align: "left", type: "" }
+                })
+
+
     }
 }
 </script>

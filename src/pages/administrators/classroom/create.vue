@@ -76,7 +76,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/classroom-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-classroom-landing')
+            else  this.$router.push('/classroom-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -98,6 +100,7 @@ export default {
                 url,
                 req: {
                     type: context.form.qInputs[0].name,
+                    levelId: context.form.qSelects[0].value,
                     schoolId: user.schoolId,
                 }
             }
@@ -133,7 +136,9 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/classroom-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-classroom-landing')
+                            else  this.$router.push('/classroom-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -145,6 +150,14 @@ export default {
     created(){
         var context = this;
         context.form.clearQInputs();
+        context.form.qSelects[0].list = this.$store.getters["levelStore/levels"].map((row) => {
+            return {
+                ...row,
+                type: row.type,
+                value: row.id,
+                label: row.type,
+            }
+        })
     }
 }
 </script>

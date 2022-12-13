@@ -65,6 +65,8 @@ export default {
             VisionUrl: "",
             doesVisionExists: false,
             selectedVision: {},
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -80,7 +82,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/vision-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-vision-landing')
+            else  this.$router.push('/vision-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -128,8 +132,9 @@ export default {
             console.log("payload: ", payload)
             //uploadLogo
             var response = await post(payload)
-            
-            context.VisionUrl = response.data;
+            context.VisionUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             console.log("VisionUrl: ", context.VisionUrl)
 
         },
@@ -164,6 +169,8 @@ export default {
                     title: context.form.qInputs[0].name,
                     description: context.form.qInputs[1].name,
                     fileUrl: context.VisionUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     schoolId: user.schoolId,
                     createdBy: user.id,
                 }
@@ -200,7 +207,9 @@ export default {
                             await context.uploadAndSaveVisionUr();
                             break;
                         case "Success":
-                            this.$router.push("/vision-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-vision-landing')
+                            else  this.$router.push('/vision-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

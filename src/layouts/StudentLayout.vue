@@ -3,7 +3,7 @@
 
      <q-header class="q-pa-none bg-primary">
        <MainMenuBar
-       :menuList="menuList"
+       :menuList="contextMenuList"
        @logoutUser="logoutUser($event)"/>
     </q-header>
 
@@ -43,7 +43,7 @@ import { loadAssessments } from "../pages/administrators/assessment/utils";
 import { loadSchools } from "../pages/administrators/school/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
-import { checkResultsAnalysisSubscription, menuListForStudents } from "../pages/administrators/utils";
+import { checkResultsAnalysisSubscription, menuList } from "../pages/administrators/utils";
 import { loadLogos } from "../pages/administrators/branding/logo/utils";
 
 export default {
@@ -82,7 +82,7 @@ export default {
       rightMenuIcon: "menu",
       navs: [],
       rightDrawerOpen: window.innerWidth < 700 ? true : false,
-      menuList: menuListForStudents,
+      menuList: menuList,
       contextMenuList: [],
       landingMenu: [],
       checkSubscription: {},
@@ -131,11 +131,12 @@ export default {
     },
     verifyResultsAnalysisSubscription(){
        var context = this;
+       context.checkSubscription.isResultsAnalysis = true;
       if(context.checkSubscription.isResultsAnalysis == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Student Results"){
+          if(context.landingMenu[i].title == "Results Analysis"){
             index = i;
             break;
           }
@@ -146,7 +147,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Student Results"){
+          if(context.contextMenuList[i].title == "Results Analysis"){
             index = i;
             break;
           }
@@ -189,7 +190,7 @@ export default {
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Advertisement"){
+          if(context.landingMenu[i].title == "Branding & Advertisement"){
             index = i;
             break;
           }
@@ -200,7 +201,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Advertisement"){
+          if(context.contextMenuList[i].title == "Branding & Advertisement"){
             index = i;
             break;
           }
@@ -212,17 +213,41 @@ export default {
     },
     async checkSubscritpion(){
       var context = this;
+      var mList = ["Home", "Results Analysis", "Library Management", "Online Learning",
+       "Subscription", "File Management", "Socialize", "Examination & Quiz"];
+
       var user = this.$store.getters["authenticationStore/IdentityModel"]
       const { result } = await checkResultsAnalysisSubscription(user.schoolId);
       context.checkSubscription = {...result}
       this.$store.commit("administratorStore/SetIsSubscription", result)
 
-      context.contextMenuList = context.menuList.map((row)=> {
+      console.log("context.menuList: ", context.menuList)
+      var listOfMenuItems = [];
+      for(const mItem of mList){
+        let foundItem = context.menuList.find(o => o.title === mItem);
+        if(foundItem){
+          let to = "";
+          if(mItem === "Home") {
+            to = `/student`
+          }else{
+            to = `/student-${foundItem.to}`
+          }
+          //foundItem.to = to;
+          listOfMenuItems.push({
+            ...foundItem,
+            to: to,
+          })
+        }
+      }
+
+      console.log("listOfMenuItems: ", listOfMenuItems)
+      context.contextMenuList = listOfMenuItems.map((row)=> {
           return {
             ...row
           }
         })
-      context.landingMenu = context.menuList.map((row)=> {
+
+      context.landingMenu = listOfMenuItems.map((row)=> {
           return {
             ...row
           }
@@ -233,12 +258,12 @@ export default {
       context.verifyFileManagementSubscription();
       context.verifyAdevertizementSubscription();
 
-      context.menuList = context.contextMenuList.map((row) => {
+      /* context.menuList = context.contextMenuList.map((row) => {
         return {
           ...row,
         }
-      })
-      console.log("context.landingMenu: ", context.landingMenu)
+      }) */
+
       this.$store.commit("administratorStore/SetMainMenuList", context.landingMenu)
     },
     initializeLogo(logo){

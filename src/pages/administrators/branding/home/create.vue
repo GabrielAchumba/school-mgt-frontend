@@ -64,6 +64,8 @@ export default {
             dialogs: dialogs,
             CarouselUrl: "",
             doesCarouselExists: false,
+            fileName: "",
+            originalFileName: "",
         }
     },
     methods:{
@@ -79,7 +81,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/home-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-home-landing')
+            else  this.$router.push('/home-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -127,8 +131,10 @@ export default {
             console.log("payload: ", payload)
             //uploadCarousel
             var response = await post(payload)
+            context.CarouselUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
             
-            context.CarouselUrl = response.data;
             console.log("CarouselUrl: ", context.CarouselUrl)
 
         },
@@ -165,6 +171,8 @@ export default {
                     description: context.form.qInputs[1].name,
                     schoolId: user.schoolId,
                     fileUrl: context.CarouselUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     createdBy: user.id,
                 }
             }
@@ -205,7 +213,9 @@ export default {
                             await context.uploadAndSaveCarouselUr();
                             break;
                         case "Success":
-                            this.$router.push("/home-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-home-landing')
+                            else  this.$router.push('/home-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
