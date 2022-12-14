@@ -6,7 +6,7 @@
                 <p class="q-ma-none">{{ exam_vm.qSelectSubject.label }}</p>
                 <div class="row no-wrap">
                 <q-select
-                    class="q-ma-none col-12 bg-accent text-primary"
+                    class="q-ma-none col-12 bg-primary text-accent"
                     color="accent" 
                     outlined label-color="accent"
                     option-disable="inactive"
@@ -27,7 +27,7 @@
                 <p class="q-ma-none">{{ exam_vm.qSelectLevel.label }}</p>
                 <div class="row no-wrap">
                 <q-select
-                    class="q-ma-none col-12 bg-accent text-primary"
+                    class="q-ma-none col-12 bg-primary text-accent"
                     color="accent" 
                     outlined label-color="accent"
                     option-disable="inactive"
@@ -47,7 +47,7 @@
         <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 q-pa-sm bg-primary text-accent">
             <span><p class="q-ma-none">{{ exam_vm.qDate.label }}</p>
             <q-input 
-            class="q-ma-none bg-accent"
+            class="q-ma-none"
             filled 
             v-model="exam_vm.qDate.name" mask="date" :rules="['date']">
             <template v-slot:append>
@@ -55,7 +55,7 @@
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                 <q-date v-model="exam_vm.qDate.name">
                     <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="primary" flat />
+                    <q-btn v-close-popup label="Close" color="accent" flat />
                     </div>
                 </q-date>
                 </q-popup-proxy>

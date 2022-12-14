@@ -289,7 +289,7 @@
                  <q-separator />
 
                  <q-card-actions align="right">
-                   <div 
+                   <!-- <div 
                    v-if="setIsResponsive"
                    class="row q-pa-sm">
                       <q-space />
@@ -304,6 +304,20 @@
                             {{ qBtn.label }}
                           </q-tooltip>
                         </q-icon>
+                  </div> -->
+                   <div 
+                   v-if="setIsResponsive"
+                   class="row q-pa-sm">
+                      <q-space />
+                      <q-btn class="q-ma-sm bg-accent text-primary"
+                        v-for="qBtn in formData.qBtns" 
+                        :key="qBtn.label"
+                        :label="qBtn.label"
+                        type="button"
+                        size="sm"
+                        no-caps
+                        @click="ClickAction(qBtn.name, formData)"
+                      />
                   </div>
                    <div 
                    v-else
@@ -315,7 +329,6 @@
                         :label="qBtn.label"
                         type="button"
                         size="md"
-                        :icon="qBtn.icon"
                         no-caps
                         @click="ClickAction(qBtn.name, formData)"
                       />

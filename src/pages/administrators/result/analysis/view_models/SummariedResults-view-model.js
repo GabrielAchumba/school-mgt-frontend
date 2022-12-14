@@ -51,7 +51,7 @@ const chartForm = {
 
 const tableVM = {
     selectedResult: {},
-    title: "Summary Report",
+    title: "Report Card",
     columns: [],
     rows: [],
     separator: "cell",

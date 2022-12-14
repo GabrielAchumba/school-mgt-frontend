@@ -17,34 +17,43 @@
     </div> -->
 
     <div 
-      v-if="setIsResponsive()"
+      v-if="windowResize"
       class="row bg-primary q-pa-sm">
         <CardList 
-        :cardList="cardItems"
-        @updateItem="updateItem($event)"/>
+         :rows="table_VM.rows"
+        :columns="table_VM.columns" />
     </div>
 
     <q-table 
       v-else
-      :data="rows"
+      :data="table_VM.rows"
+      :title="table_VM.title"
       :columns="table_VM.columns" 
       row-key="name" 
       binary-state-sort
       :separator="table_VM.separator"
       :filter="filter"
+      :filter-method="customFilter"  
       :loading="loading"
       class="screenwide q-ma-sm bg-primary"
       bordered
       >
 
-         <!--  <template v-slot:top>
-              <q-space />
-              <q-input outlined dense debounce="300" color="accent" v-model="filter">
-                  <template v-slot:append>
-                    <q-icon name="search" />
-                  </template>
-              </q-input>
-          </template> -->
+         <template v-slot:top-right>
+          <q-input borderless dense debounce="300" v-model="search" placeholder="Search">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+
+        <!-- <q-input  dense debounce="400" color="primary" v-model="search">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input> -->
+
+        </template>
+
           <template v-slot:header="props">
             <q-tr :props="props">
               <q-th
@@ -110,7 +119,7 @@
                 v-for="column in removekeys()" :key="column.name"
                 :props="props">{{ props.row[column.name] }}</q-td>
               </q-tr>
-            </template>
+          </template>
     </q-table>
 
   </div>
@@ -118,7 +127,7 @@
 
 <script>
     import { tableVM } from "./TableVM.js";
-    import CardList from "../Cards/CardList2.vue";
+    import CardList from "../Cards/Card4Table.vue";
     import Search from "../Searches/Search.vue";
     export default {
         computed:{
@@ -130,6 +139,17 @@
           },
           rows(){ 
             return this.$store.getters["authenticationStore/newRows"];
+          },
+          setIsResponsive(){
+            console.log("setIsResponsive called")
+            if(window.innerWidth < 700) return true
+            else return false;
+          },
+          filter() {
+            var context = this;
+            return {
+              search: context.search,     
+            }
           }
         },
         components:{
@@ -155,21 +175,53 @@
             tableWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.6}px`: "100%",
             cardWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.7}px`: "100%",
             loading: false,
-            filter: '',
             rowCount: 10,
+            windowResize: false,
+            search: '',
           }
         },
         methods: {
+          customFilter(rows, terms){
+            // rows contain the entire data
+            // terms contains whatever you have as filter
+            
+            //console.log(terms,rows)
+            
+            var lowerSearch = terms.search ? terms.search.toLowerCase() : ""
+
+            const filteredRows = rows.filter(
+              (row, i) =>{
+              
+              //Gather search condition    
+
+              
+              //Assume true in case there is no search 
+              let s1 = true
+              
+              //If search term exists, convert to lower case and see which rows contain it
+              if(lowerSearch != ""){
+                s1 = false
+                //Get the values
+                let s1_values = Object.values(row)
+                //Convert to lowercase
+                let s1_lower = s1_values.map(x => x.toString().toLowerCase())
+              
+                for (let val = 0; val<s1_lower.length; val++){
+                  if (s1_lower[val].includes(lowerSearch)){
+                    s1 = true
+                    break
+                  }
+                }
+              }
+
+              return s1
+
+              })
+
+            return filteredRows
+          },
             linkClick(row){
               this.$emit("linkClick", row)
-            },
-            setIsResponsive(){
-              var context = this;
-              if(context.isResponsive == false){
-                return context.isResponsive;
-              }else{
-                return context.isMobile;
-              }
             },
             removekeys(){
               var context = this;
@@ -208,9 +260,13 @@
             if(width < 700) {
               context.tableWidth = `${width * 0.6}px`;
               context.cardWidth = `${width * 0.7}px`;
+              context.windowResize = true;
+              console.log("windowResize: ", context.windowResize)
             }else{
               context.tableWidth = "100%"
               context.cardWidth = "100%"
+              context.windowResize = false;
+              console.log("windowResize: ", context.windowResize)
             }
           },
 

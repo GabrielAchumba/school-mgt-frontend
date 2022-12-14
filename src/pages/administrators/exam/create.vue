@@ -9,28 +9,23 @@
 
                 <q-card-section class="bg-primary text-accent">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelect.label }}</p>
                                 <div class="row no-wrap">
-                                <q-select
+                                <q-toggle
                                     class="q-ma-none col-12"
-                                    color="accent" 
-                                    outlined label-color="accent"
-                                    option-disable="inactive"
-                                    v-model="exam_vm.qSelect.value"
-                                    :options="exam_vm.qSelect.list"
-                                    option-value="id"
-                                    :option-label="'type'"
-                                    :name="exam_vm.qSelect.value"
-                                    emit-value
-                                    map-options
-                                    >
-                                </q-select>
+                                    :label="exam_vm.qToggle.label"
+                                    v-model="exam_vm.qToggle.name"
+                                    color="accent"
+                                    :false-value="toggleFalse"
+                                    :true-value="toggleTrue"
+                                    @input="onToggle"
+                                />
                             </div>
                             </span>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
+                        </div> -->
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelectSubject.label }}</p>
                                 <div class="row no-wrap">
@@ -51,7 +46,7 @@
                             </div>
                             </span>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelectLevel.label }}</p>
                                 <div class="row no-wrap">
@@ -72,8 +67,8 @@
                             </div>
                             </span>
                         </div>
-                        <q-btn class="col-1" outline dense flat icon="add" @click="onAddExamQuestionSession"/>
-                        <q-btn class="col-1" outline dense flat icon="refresh" @click="clearExamQuestionSessions"/>
+                        <!-- <q-btn class="col-1" outline dense flat icon="add" @click="onAddExamQuestionSession"/>
+                        <q-btn class="col-1" outline dense flat icon="refresh" @click="clearExamQuestionSessions"/> -->
                     </div>
                 </q-card-section>
 
@@ -207,6 +202,8 @@ export default {
     },
     data(){
         return {
+            toggleTrue: true,
+            toggleFalse: false,
             exam_vm: exam_vm,
             dialogs: dialogs,
             selectedFile: null,
@@ -457,7 +454,33 @@ export default {
                 }
             }
         },
+        onToggle(payload){
+            var context = this;
+            console.log("Payload: ", payload)
+            if(payload === true){
+                let check = false;
+                let i = -1;
+                for(const examQuestionSession of context.exam_vm.examQuestionSessions){
+                    i++;
+                    if(examQuestionSession.isImage === true){
+                        check = true;
+                        break;
+                    }
+                }
+                console.log("i: ", i)
+                if(check) context.exam_vm.examQuestionSessions.splice(i,1)
+                context.exam_vm.qSelect.value = "Image";
+                context.onAddExamQuestionSessionInternal();
+            }
+            //context.exam_vm.qSelect.value = "Paragraph";
+
+        },
         onAddExamQuestionSession(){
+            var context = this;
+            context.exam_vm.qSelect.value = "Image";
+            context.onAddExamQuestionSessionInternal();
+        },
+        onAddExamQuestionSessionInternal(){
             var context = this;
             context.exam_vm.examQuestionSessions = [];
             if(context.exam_vm.qSelect.value == "Paragraph"){
@@ -762,6 +785,7 @@ export default {
 
             context.exam_vm.examQuestionSessions = [];
             context.exam_vm.answerOptions = [];
+            context.onAddExamQuestionSession();
         }
     },
     created(){

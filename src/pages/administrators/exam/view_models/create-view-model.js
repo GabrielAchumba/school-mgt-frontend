@@ -1,6 +1,7 @@
 const exam_vm = {
     title: "",
     examQuestionSessions: [],
+    qToggle: { label: "Add Image", visible: true, name: false},
     qSelect:{ label: "Variables", value: "", type: "text", list: [], actionName: "onVariables", visible: true },
     qSelectSubject:{ label: "Subject", value: "", type: "text", list: [], actionName: "onSubject", visible: true },
     qSelectLevel:{ label: "Level", value: "", type: "text", list: [], actionName: "onLevel", visible: true },

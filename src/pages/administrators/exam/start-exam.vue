@@ -176,6 +176,7 @@ export default {
           }
 
           context.selectedQuestion = `Question ${context.counter+1}: ${context.questions[context.counter].question}`;
+          console.log("context.selectedQuestion: ", context.selectedQuestion)
           context.getAnswerOptions();
           
         },

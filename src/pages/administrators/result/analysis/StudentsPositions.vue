@@ -167,9 +167,9 @@ export default {
             //context.dialogFailureOrScuess("Subjects", false);
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
-        closeClassRoomsDialog(){
+        async closeClassRoomsDialog(){
             var context = this;
-            //context.dialogFailureOrScuess("Subjects", false);
+            await context.fetchStudents();
             context.dialogFailureOrScuess("Configure Result Analysis", true);
         },
         ShowResultConfiDialog(){
@@ -190,7 +190,7 @@ export default {
         async Compute(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
-            let studentIds = context.studentsForm.GroupedCheckBoxes[0].group;
+            let studentIds = context.studentIds;
             if(user.userType === "Student") studentIds = context.studentIds;
             
             var url = `result/summarizedstudentspositions2`;
@@ -245,11 +245,30 @@ export default {
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             console.log("user: ", user)
-            var url = `user/students/${user.schoolId}/${user.sessionId}/${user.levelId}/${user.classRoomId}`;
-            console.log("url: ", url)
-            var response = await get({
-            url
-            })
+            let i = 0;
+            let classRoomIds = context.classRoomsForm.GroupedCheckBoxes[0].group;
+            const schoolId = user.schoolId;
+            let levelId = context.form.qSelects[i].value;
+            i++;
+            let sessionId = context.form.qSelects[i].value;
+            let url = `user/selectedstudents`;
+            if(user.userType === "Student"){
+                classRoomIds = [user.classRoomId]
+            }
+            
+            var payload = {
+                url,
+                req: {
+                    schoolId,
+                    sessionId,
+                    levelId,
+                    classRoomIds
+                }
+            }
+            //console.log("payload: ", payload)
+            var response = await post(payload)
+            //console.log("response: ", response)
+
             const { 
                 data : {
                     data: result,
@@ -364,7 +383,7 @@ export default {
             })
 
             context.layout = { 
-                title: `${xListItem.type} vs ${yListItem.type}`,
+                title: `${xListItem.type} VERSUS ${yListItem.type}`,
                 font: {
                     },
                     showlegend: true,

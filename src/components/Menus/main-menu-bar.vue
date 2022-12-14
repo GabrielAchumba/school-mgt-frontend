@@ -12,7 +12,7 @@
         </q-btn>
         
         <q-space />
-        <q-btn dense flat round icon="search" @click="onSearch" />
+        <!-- <q-btn dense flat round icon="search" @click="onSearch" /> -->
         <PDFWriter/>
         <q-btn
             icon="menu"
@@ -57,7 +57,7 @@
           flat>{{ IdentityModel.firstName }}</q-btn>
           <q-menu
             fit>
-                      <q-list dense class="text-accent text-caption bg-primary">
+                      <q-list dense class="text-accent text-caption bg-primary flex flex-center">
                         <q-item
                             class="bg-primary text-accent">
                             <q-item-section avatar>
@@ -94,17 +94,15 @@
                             <q-item
                             class="bg-primary accent-white">
                             <q-item-section avatar>
-                            <div class="row text-center flex flex-center q-pb-lg">
-                              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                                <q-btn 
-                                  class="q-mr-md bg-accent text-primary" 
+                            <div class="row text-center q-pa-sm">
+                              <q-btn 
+                                  class="bg-accent text-primary" 
                                   size="12px" 
                                   :style="'min-height:auto; padding:1px;'" 
                                   dense icon="color_lens"
                                   @click="logOut">
                                       Logout
                                     </q-btn>
-                              </div>
                               </div>
                             </q-item-section>
                             </q-item>

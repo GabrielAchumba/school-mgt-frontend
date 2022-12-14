@@ -9,28 +9,23 @@
 
                 <q-card-section class="bg-primary text-accent">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelect.label }}</p>
                                 <div class="row no-wrap">
-                                <q-select
+                                <q-toggle
                                     class="q-ma-none col-12"
-                                    color="accent" 
-                                    outlined label-color="accent"
-                                    option-disable="inactive"
-                                    v-model="exam_vm.qSelect.value"
-                                    :options="exam_vm.qSelect.list"
-                                    option-value="id"
-                                    :option-label="'type'"
-                                    :name="exam_vm.qSelect.value"
-                                    emit-value
-                                    map-options
-                                    >
-                                </q-select>
+                                    :label="exam_vm.qToggle.label"
+                                    v-model="exam_vm.qToggle.name"
+                                    color="accent"
+                                    :false-value="toggleFalse"
+                                    :true-value="toggleTrue"
+                                    @input="onToggle"
+                                />
                             </div>
                             </span>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
+                        </div> -->
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelectSubject.label }}</p>
                                 <div class="row no-wrap">
@@ -51,7 +46,7 @@
                             </div>
                             </span>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-3 q-pa-sm">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelectLevel.label }}</p>
                                 <div class="row no-wrap">
@@ -72,8 +67,8 @@
                             </div>
                             </span>
                         </div>
-                        <q-btn class="col-1" outline dense flat icon="add" @click="onAddExamQuestionSession"/>
-                        <q-btn class="col-1" outline dense flat icon="refresh" @click="clearExamQuestionSessions"/>
+                        <!-- <q-btn class="col-1" outline dense flat icon="add" @click="onAddExamQuestionSession"/>
+                        <q-btn class="col-1" outline dense flat icon="refresh" @click="clearExamQuestionSessions"/> -->
                     </div>
                 </q-card-section>
 
@@ -107,7 +102,7 @@
                 </q-bar>
                 <q-card-section class="bg-primary text-accent">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 q-pa-sm">
+                        <!-- <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-9 q-pa-sm">
                             <span>
                                 <p class="q-ma-none">{{ exam_vm.qSelectAnswerOption.label }}</p>
                                 <div class="row no-wrap">
@@ -127,11 +122,11 @@
                                 </q-select>
                             </div>
                             </span>
-                        </div>
-                        <q-space/>
+                        </div> -->
+                        <!-- <q-space/>
                         <q-btn class="col-1" outline dense flat icon="add" @click="onAddAnswerOption"/>
                         <q-btn class="col-1" outline dense flat>{{ exam_vm.answerOptions.length }}</q-btn>
-                        <q-btn class="col-1" outline dense flat icon="refresh" @click="clearAnswerOptions"/>
+                        <q-btn class="col-1" outline dense flat icon="refresh" @click="clearAnswerOptions"/> -->
                     </div>
                 </q-card-section>
                 
@@ -198,7 +193,7 @@
 import Form from "../../../components/Forms/Form.vue";
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import { exam_vm, dialogs } from "./view_models/create-view-model";
-import { post, uploadCoreValue } from "../../../store/modules/gcp-services"
+import { post, uploadCoreValue, put } from "../../../store/modules/gcp-services"
 
 export default {
     components: {
@@ -207,6 +202,8 @@ export default {
     },
     data(){
         return {
+            toggleTrue: true,
+            toggleFalse: false,
             exam_vm: exam_vm,
             dialogs: dialogs,
             selectedFile: null,
@@ -215,6 +212,7 @@ export default {
             answerOptionsImageUrls: [],
             anyFormDataQuestion: false,
             anyFormDataAnswerOptions: false,
+            selectedExam: {},
         }
     },
     methods:{
@@ -230,7 +228,9 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/exam-question-landing')
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-exam-question-landing')
+            else  this.$router.push('/exam-question-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -267,6 +267,7 @@ export default {
             console.log("uploadQuestionImages started")
             var context = this;
             const formData = new FormData();
+            console.log("context.exam_vm.examQuestionSessions: ", context.exam_vm.examQuestionSessions)
             for(let i = 0; i < context.exam_vm.examQuestionSessions.length; i++){
                 formData.append('files', context.exam_vm.examQuestionSessions[i].qFiles[0].selectedFile);
             }
@@ -311,7 +312,7 @@ export default {
             console.log("save started")
             var context = this;
             
-            var url = `examquestion/create`;
+            var url = `examquestion/${context.selectedExam._id}`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
 
             console.log("context.exam_vm.examQuestionSessions: ", context.exam_vm.examQuestionSessions)
@@ -322,7 +323,12 @@ export default {
                 req: {
                     subjectId: context.exam_vm.qSelectSubject.value,
                     levelId: context.exam_vm.qSelectLevel.value,
-                    questionSession: context.exam_vm.examQuestionSessions.map((row, i) => {
+                    question: context.exam_vm.examQuestionSessions[0].qInputs[0].name,
+                    cloudImageUrl: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].url : "",
+                    cloudImageName: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].fileName : "",
+                    originalImageName: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].originalFileName : "",
+
+                    /* questionSession: context.exam_vm.examQuestionSessions.map((row, i) => {
 
                         const ans = row.isImage ? {
                             question: row.qInputs[0].name,
@@ -333,14 +339,15 @@ export default {
                             question: row.qInputs[0].name,
                         }
                         return ans;
-                    })[0],
+                    })[0], */
+
                     answerOptions: context.exam_vm.answerOptions.map((row, i) => {
 
                         const ans = row.isImage ? {
                             answer: row.qInputs[0].name,
-                            cloudImageUrl: questionImageUrls[i].url,
-                            cloudImageName: questionImageUrls[i].fileName,
-                            originalImageName: questionImageUrls[i].originalFileName,
+                            cloudImageUrl: "",  //context.answerOptionsImageUrls[i].url,
+                            cloudImageName: "", //context.answerOptionsImageUrls[i].fileName,
+                            originalImageName: "", //context.answerOptionsImageUrls[i].originalFileName,
                         }:{
                             answer: row.qInputs[0].name,
                         }
@@ -351,8 +358,8 @@ export default {
                 }
             }
 
-            console.log("payload: ", payload)
-            var response = await post(payload)
+            console.log("payload: ", payload)  
+            var response = await put(payload)
 
             context.dialogs[0].isVisible = false;
             if(response.data){
@@ -390,7 +397,9 @@ export default {
                             await context.CreateAction();
                             break;
                         case "Success":
-                            this.$router.push("/exam-question-landing");
+                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-exam-question-landing')
+                            else  this.$router.push('/exam-question-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -413,6 +422,8 @@ export default {
                 context.exam_vm.examQuestionSessions[selectedIndex].qFiles[0].showPreview = false;
                 context.exam_vm.examQuestionSessions[selectedIndex].qFiles[0].imagePreview = reader.result;
                 context.exam_vm.examQuestionSessions[selectedIndex].qImages[0].imageUrl = reader.result;
+                console.log("context.exam_vm.examQuestionSessions[selectedIndex]: ",
+                context.exam_vm.examQuestionSessions[selectedIndex])
             }.bind(context), false);
 
             if(context.exam_vm.examQuestionSessions[selectedIndex].qFiles[0].selectedFile){
@@ -447,7 +458,33 @@ export default {
                 }
             }
         },
+        onToggle(payload){
+            var context = this;
+            console.log("Payload: ", payload)
+            if(payload === true){
+                let check = false;
+                let i = -1;
+                for(const examQuestionSession of context.exam_vm.examQuestionSessions){
+                    i++;
+                    if(examQuestionSession.isImage === true){
+                        check = true;
+                        break;
+                    }
+                }
+                console.log("i: ", i)
+                if(check) context.exam_vm.examQuestionSessions.splice(i,1)
+                context.exam_vm.qSelect.value = "Image";
+                context.onAddExamQuestionSessionInternal();
+            }
+            //context.exam_vm.qSelect.value = "Paragraph";
+
+        },
         onAddExamQuestionSession(){
+            var context = this;
+            context.exam_vm.qSelect.value = "Image";
+            context.onAddExamQuestionSessionInternal();
+        },
+        onAddExamQuestionSessionInternal(){
             var context = this;
             context.exam_vm.examQuestionSessions = [];
             if(context.exam_vm.qSelect.value == "Paragraph"){
@@ -752,11 +789,48 @@ export default {
 
             context.exam_vm.examQuestionSessions = [];
             context.exam_vm.answerOptions = [];
+        },
+        setSelectedExam(){
+             var context = this;
+            context.selectedExam = this.$store.getters["examStore/selectedExam"];
+            console.log("context.selectedExam: ", context.selectedExam)
+            context.onAddExamQuestionSession();
+            context.exam_vm.qSelectSubject.value = context.selectedExam.subjectId;
+            context.exam_vm.qSelectLevel.value = context.selectedExam.levelId;
+            context.exam_vm.examQuestionSessions[0].qInputs[0].name = context.selectedExam.question;
+            let objQ = { url: "", fileName: "", originalFileName: "" }
+            if(context.selectedExam.cloudImageUrl) objQ.url = context.selectedExam.cloudImageUrl;
+            if(context.selectedExam.cloudImageName) objQ.fileName = context.selectedExam.cloudImageUrl;
+            if(context.selectedExam.originalImageName) objQ.originalFileName = context.selectedExam.cloudImageUrl;
+            if(objQ.url !== "") context.questionImageUrls.push({...objQ})
+
+            let i = -1;    
+            for(const answerOption of  context.selectedExam.answerOptions){
+                context.exam_vm.qSelectAnswerOption.value == "Paragraph";
+                context.onAddAnswerOption();
+                i++;   
+                context.exam_vm.answerOptions[i].qInputs[0].name = answerOption.answer;
+                
+
+                let obj = { url: "", fileName: "", originalFileName: "" }
+                if(answerOption.cloudImageUrl){
+                    obj.url = answerOption.cloudImageUrl; 
+                }
+                if(answerOption.cloudImageName){
+                    obj.fileName = answerOption.cloudImageName;
+                }
+                if(answerOption.originalImageName){
+                    obj.originalFileName = answerOption.originalImageName;
+                }
+
+                if(obj.url !== "")context.answerOptionsImageUrls.push({...obj});
+            }
         }
     },
     created(){
         var context = this;
-        context.initializeData();        
+        context.initializeData();
+        context.setSelectedExam();        
     }
 }
 </script>

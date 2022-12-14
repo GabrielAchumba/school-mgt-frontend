@@ -3,9 +3,9 @@ import { splitAssessment } from "../assessment/utils";
 export const createResultSummaryReport = (result) => {
 
     const columns = getColumns(result);
-    const rows = getRows(result, columns);
+    const { rows, year } = getRows(result, columns);
 
-    return { columns, rows };
+    return { columns, rows, year };
 }
 
 const getColumns = (result) =>  {
@@ -14,6 +14,7 @@ const getColumns = (result) =>  {
     const subjectKeys = Object.keys(result);
     columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left", scoreMax: 100, type: "text" })
     columns.push({ name: "totalScore", label: "TOTAL SCORE", field: "", align: "left", scoreMax: 100, type: "number" })
+    columns.push({ name: "grade", label: "GRADE", field: "", align: "left", scoreMax: 100, type: "text" })
 
     for(const subjectKey of subjectKeys){
         
@@ -41,7 +42,10 @@ const getColumns = (result) =>  {
 const getRows = (result, columns) => {
     const dp =  2;
     const rows = [];
+    console.log("result: ", result)
     const subjectKeys = Object.keys(result);
+    let year = "";
+    let uniqueYears = [];
 
     for(const subjectKey of subjectKeys){
         const row = {};
@@ -51,15 +55,34 @@ const getRows = (result, columns) => {
 
         row["subject"] = subjectKey;
         row["totalScore"] = result[subjectKey].subjectScore.toFixed(dp);
+        row["grade"] = result[subjectKey].grade;
         const assessmentKeys = Object.keys(result[subjectKey].assessments);
         for(const assessmentKey of assessmentKeys){
            const { assessmentName } = splitAssessment(assessmentKey);
            row[assessmentName.split(' ').join('')] = result[subjectKey].assessments[assessmentKey].assessmentScore.toFixed(dp);
+           
+           console.log("year: ", result[subjectKey].assessments[assessmentKey].year)
+           const foundYear = uniqueYears.find(o => o === result[subjectKey].assessments[assessmentKey].year);
+           if(!foundYear) uniqueYears.push(result[subjectKey].assessments[assessmentKey].year);
+           
+           
         }
+
         rows.push(row)
     }
 
-    return rows;
+    let i = -1;
+    for(const uniqueYear of uniqueYears){
+        i++;
+        if(i == 0) year = year + `${uniqueYear}`
+        else{
+            year = year + `- ${uniqueYear}`
+        }
+
+    }
+    
+
+    return { rows, year };
 }
 
 export const createStudentsPositionReport = (result) => {

@@ -29,7 +29,7 @@
         class="row q-pa-sm">
             <div class="col-12 text-center">RESULT OF {{ selectedSessionName }}</div>
             <div class="col-6 text-left">NAME: {{ studentFullName }}</div>
-            <div class="col-6 text-right">DATE: 12/12/2022</div>
+            <div class="col-6 text-right">Year: {{ resultYear }}</div>
             <div class="col-6 text-left">LEVEL: {{ selectedLevelName }}</div>
             <div class="col-6 text-right">CLASS: {{ selectedClassRoomName }}</div>
             <div class="col-6 text-left">POSITION: {{ studentPosition }}</div>
@@ -139,7 +139,31 @@ export default {
         },
         spinnerThickness(){
             return this.$store.getters["authenticationStore/spinnerThickness"];
-        }
+        },
+        selectedClassRoomName(){
+            return this.$store.getters["resultStore/selectedClassRoomName"];
+        },
+        selectedLevelName(){
+            return this.$store.getters["resultStore/selectedLevelName"];
+        },
+        selectedSessionName(){
+            return this.$store.getters["resultStore/selectedSessionName"];
+        },
+        studentPosition(){
+            return this.$store.getters["resultStore/studentPosition"];
+        },
+        overallScore(){
+            return this.$store.getters["resultStore/overallScore"];
+        },
+        overallScoreMax(){
+            return this.$store.getters["resultStore/overallScoreMax"];
+        },
+        resultYear(){
+            return this.$store.getters["resultStore/resultYear"];
+        },
+        studentFullName(){
+            return this.$store.getters["resultStore/studentFullName"];
+        },
     },
     components:{
         MessageBox,
@@ -161,21 +185,14 @@ export default {
             layout: {},
             seriesCollection: [],
             dialogs: dialogs,
-            studentFullName: "",
             studentUsername: "",
             subjectsForm: subjectsForm,
             isChartForm: false,
             selectedClassRoomId: "",
             selectedLevelId: "",
             selectedSessionId: "",
-            selectedClassRoomName: "",
-            selectedLevelName: "",
-            selectedSessionName: "",
             studentIds: [],
             classRoomIds: [],
-            studentPosition: 0,
-            overallScore: 0,
-            overallScoreMax: 0,
         }
     },
     methods:{
@@ -245,13 +262,16 @@ export default {
                 }
             } = response
             if(success){
-                const { columns, rows } = createResultSummaryReport(result);
-                context.overallScoreMax = 100 * rows.length;
+                const { columns, rows, year } = createResultSummaryReport(result);
+                const overallScoreMax = 100 * rows.length;
                 context.tableVM.columns = columns;
                 context.tableVM.rows = rows;
                 this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
                 this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
+                this.$store.commit("resultStore/SetResultYear", year)
+                this.$store.commit("resultStore/SetOverallScoreMax", overallScoreMax)
+                
                 context.isTable = true;
                 context.configurePlotData();
             }
@@ -289,15 +309,15 @@ export default {
             } = response
             if(success){
                 const { columns, rows } = createStudentsPositionReport(result);
-                context.studentPosition = 0;
-                console.log("rows: ", rows)
-                console.log("studentFullName: ", context.studentFullName)
-                console.log("studentUsername: ", context.studentUsername)
+                let studentPosition = 0;
+                let overallScore = 0;
                 for(const row of rows){
-                    context.studentPosition++;
+                    studentPosition++;
                     if(row.fullName.toUpperCase() === context.studentFullName &&
                     row.userName === context.studentUsername){
-                        context.overallScore = Number(row.overallScore).toFixed(2);
+                        overallScore = Number(row.overallScore).toFixed(2);
+                        this.$store.commit("resultStore/SetStudentPosition", studentPosition)
+                        this.$store.commit("resultStore/SetOverallScore", overallScore)
                         break;
                     }
                 }
@@ -334,8 +354,8 @@ export default {
             console.log("payload: ", payload)
             var context = this;
             let selectedItem = payload.list.find(o => o.id === payload.value);
-            context.studentFullName = selectedItem.type.toUpperCase();
             context.studentUsername = selectedItem.userName;
+            this.$store.commit("resultStore/SetStudentFullName", selectedItem.type.toUpperCase())
         },
         async fetchClassRooms(){
             var context = this;
@@ -367,21 +387,36 @@ export default {
                 })
                 if(context.form.qSelects[i].list.length > 0){
                     context.form.qSelects[i].value = context.form.qSelects[i].list[0].id;
-                    context.selectedClassRoomName = context.form.qSelects[i].list[0].type.toUpperCase();
                     context.selectedClassRoomId = context.form.qSelects[i].value;
+                    this.$store.commit("resultStore/SetSelectedClassRoomName", context.form.qSelects[i].list[0].type.toUpperCase())
                 }
             }
         },
         async fetchStudents(){
             var context = this;
-            const selectedClassRoomId = context.selectedClassRoomId;
-            const selectedLevelId = context.selectedLevelId;
-            const selectedSessionId = context.selectedSessionId;
+            let classRoomIds = [context.selectedClassRoomId];
+            const levelId = context.selectedLevelId;
+            const sessionId = context.selectedSessionId;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
-            var url = `user/students/${user.schoolId}/${selectedSessionId}/${selectedLevelId}/${selectedClassRoomId}`;
-            var response = await get({
-            url
-            })
+            const schoolId = user.schoolId;
+            let url = `user/selectedstudents`;
+            if(user.userType === "Student"){
+                classRoomIds = [user.classRoomId]
+            }
+            
+            var payload = {
+                url,
+                req: {
+                    schoolId,
+                    sessionId,
+                    levelId,
+                    classRoomIds
+                }
+            }
+            //console.log("payload: ", payload)
+            var response = await post(payload)
+            //console.log("response: ", response)
+
             const { 
                 data : {
                     data: result,
@@ -415,13 +450,13 @@ export default {
             var context = this;
             context.selectedSessionId = payload.value;
             let selectedItem = payload.list.find(o => o.id === payload.value);
-            context.selectedSessionName = selectedItem.type.toUpperCase();
+            this.$store.commit("resultStore/SetSelectedSessionName", selectedItem.type.toUpperCase())
         },
         async onLevelSelected(payload){
             var context = this;
             context.selectedLevelId = payload.value;
             let selectedItem = payload.list.find(o => o.id === payload.value);
-            context.selectedLevelName = selectedItem.type.toUpperCase();
+            this.$store.commit("resultStore/SetSelectedLevelName", selectedItem.type.toUpperCase())
             await context.fetchClassRooms();
             await context.fetchStudents()
         },
@@ -429,7 +464,7 @@ export default {
             var context = this;
             context.selectedClassRoomId = payload.value;
             let selectedItem = payload.list.find(o => o.id === payload.value);
-            context.selectedClassRoomName = selectedItem.type.toUpperCase();
+            this.$store.commit("resultStore/SetSelectedClassRoomName", selectedItem.type.toUpperCase())
             await context.fetchStudents()
         },
         async loadConfigData(){
@@ -446,8 +481,8 @@ export default {
             })
             if(context.form.qSelects[i].list.length > 0){
                 context.form.qSelects[i].value = context.form.qSelects[i].list[0].id;
-                context.selectedLevelName = context.form.qSelects[i].list[0].type.toUpperCase();
                 context.selectedLevelId = context.form.qSelects[i].value;
+                this.$store.commit("resultStore/SetSelectedLevelName", context.form.qSelects[i].list[0].type.toUpperCase())
             }
 
             i = 0;
@@ -460,8 +495,8 @@ export default {
             })
             if(context.form.qSelects[i].list.length > 0){
                 context.form.qSelects[i].value = context.form.qSelects[i].list[0].id;
-                context.selectedSessionName = context.form.qSelects[i].list[0].type.toUpperCase();
                 context.selectedSessionId = context.form.qSelects[i].value;
+                this.$store.commit("resultStore/SetSelectedSessionName", context.form.qSelects[i].list[0].type.toUpperCase())
             }
 
             context.subjectsForm.GroupedCheckBoxes[0].list = this.$store.getters["subjectStore/subjects"].map((row) => {
@@ -476,8 +511,8 @@ export default {
             if(user.userType === "Student"){
                 context.form.qSelects[i].visible = false;
                 context.form.qSelects[i].value = user.id;
-                context.studentFullName = (`${user.firstName} ${user.lastName}`).toUpperCase();
                 context.studentUsername = user.userName;
+                this.$store.commit("resultStore/SetStudentFullName", (`${user.firstName} ${user.lastName}`).toUpperCase())
             }
  
             await context.fetchClassRooms();
