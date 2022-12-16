@@ -4,7 +4,19 @@
       <q-space/>
       <p>{{ minutes }}: {{ seconds }}</p>
     </div>
-    <p class="q-pa-sm text-h6">{{ selectedQuestion }}</p>
+
+    <div>
+      <p class="q-pa-sm text-h6">{{ selectedQuestion }}</p>
+    </div>
+
+    <div 
+    v-if="isImage"
+    class="q-pa-sm geeks">
+      <img 
+          :src="selectedImageUrl"
+          spinner-color="accent"/>
+    </div>
+    
     <q-list>
       <!--
         Rendering a <label> tag (notice tag="label")
@@ -118,6 +130,8 @@ export default {
               ],
             counter: -1,
             selectedQuestion: "",
+            selectedImageUrl: "",
+            isImage: false,
             options: [{id: 0, value: "A"}, {id: 1, value: "B"}, {id: 2, value: "C"}, 
                     {id: 3, value: "D"}, {id: 4, value: "E"}],
         }
@@ -176,6 +190,13 @@ export default {
           }
 
           context.selectedQuestion = `Question ${context.counter+1}: ${context.questions[context.counter].question}`;
+          context.isImage = false;
+          if(context.questions[context.counter].cloudImageUrl !== ""){
+            context.selectedImageUrl = context.questions[context.counter].cloudImageUrl;
+            context.isImage = true;
+          }
+        
+          
           console.log("context.selectedQuestion: ", context.selectedQuestion)
           context.getAnswerOptions();
           
@@ -189,6 +210,11 @@ export default {
           }
 
           context.selectedQuestion = `Question ${context.counter+1}: ${context.questions[context.counter].question}`;
+          context.isImage = false;
+          if(context.questions[context.counter].cloudImageUrl !== ""){
+            context.selectedImageUrl = context.questions[context.counter].cloudImageUrl;
+            context.isImage = true;
+          }
           context.getAnswerOptions();
         },
         renderTimer(){
@@ -210,3 +236,14 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.geeks {
+      width:60%;
+      /* height:300px; */
+  }
+  img {
+      width:100%;
+      height:100%;
+  }
+</style>

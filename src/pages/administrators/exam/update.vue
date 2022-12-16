@@ -800,9 +800,14 @@ export default {
             context.exam_vm.examQuestionSessions[0].qInputs[0].name = context.selectedExam.question;
             let objQ = { url: "", fileName: "", originalFileName: "" }
             if(context.selectedExam.cloudImageUrl) objQ.url = context.selectedExam.cloudImageUrl;
-            if(context.selectedExam.cloudImageName) objQ.fileName = context.selectedExam.cloudImageUrl;
-            if(context.selectedExam.originalImageName) objQ.originalFileName = context.selectedExam.cloudImageUrl;
-            if(objQ.url !== "") context.questionImageUrls.push({...objQ})
+            if(context.selectedExam.cloudImageName) objQ.fileName = context.selectedExam.cloudImageName;
+            if(context.selectedExam.originalImageName) objQ.originalFileName = context.selectedExam.originalImageName;
+            if(objQ.url !== "") {
+                context.questionImageUrls.push({...objQ})
+                context.exam_vm.examQuestionSessions[0].qFiles[0].showPreview = false;
+                context.exam_vm.examQuestionSessions[0].qFiles[0].imagePreview = context.selectedExam.cloudImageUrl;
+                context.exam_vm.examQuestionSessions[0].qImages[0].imageUrl = context.selectedExam.cloudImageUrl;
+            }
 
             let i = -1;    
             for(const answerOption of  context.selectedExam.answerOptions){
