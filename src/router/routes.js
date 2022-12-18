@@ -542,6 +542,11 @@ const routes = [
         component: () => import('pages/administrators/exam/start-exam.vue') 
         
       },
+      { 
+        path: '/super-admin-exam-score',   
+        component: () => import('pages/administrators/exam/exam-score.vue') 
+        
+      },
     ]
   },
   {
@@ -1026,6 +1031,11 @@ const routes = [
       { 
         path: '/start-exam',   
         component: () => import('pages/administrators/exam/start-exam.vue') 
+        
+      },
+      { 
+        path: '/exam-score',   
+        component: () => import('pages/administrators/exam/exam-score.vue') 
         
       },
     ]

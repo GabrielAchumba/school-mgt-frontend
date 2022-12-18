@@ -217,6 +217,12 @@ export default {
             this.$store.commit("authenticationStore/setShowSpinner", true);
             let subjectItem = context.exam_vm.qSelectSubject.list.find(o => o.value === context.selectedSubject);
             let levelItem = context.exam_vm.qSelectLevel.list.find(o => o.value === context.selectedLevel);
+            console.log("subjectItem: ", subjectItem)
+            console.log("levelItem: ", levelItem)
+
+            this.$store.commit("examStore/setSubjectName", subjectItem.type);
+            this.$store.commit("examStore/setLevelName", levelItem.type);
+            
             const myArray = context.exam_vm.qDate.name.split("/")
 
             const payload = {
@@ -230,6 +236,8 @@ export default {
                     examDay: Number(myArray[2])
                 }
             }
+
+            this.$store.commit("examStore/setYear", payload.req.examYear);
 
             try{
                  const response = await post(payload);

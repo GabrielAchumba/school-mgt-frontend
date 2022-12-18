@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <div>
       <q-space/>
-      <p>{{ minutes }}: {{ seconds }}</p>
+      <p>{{ minutes }}: {{ seconds }} of 60 minutes</p>
     </div>
 
     <div>
@@ -77,7 +77,7 @@
             </q-tooltip>
           </q-icon>
     </div>
-      <div 
+    <div 
       v-else
       class="row q-pa-sm">
         <q-space />
@@ -93,10 +93,27 @@
         />
     </div>
 
+    <q-dialog 
+            v-for="dialog in dialogs" 
+            :key="dialog.title"
+            v-model="dialog.isVisible">
+            <MessageBox
+            :title="dialog.title"
+            :message="dialog.message"
+            :okayEvent="dialog.okayEvent"
+            :cancelEvent="dialog.cancelEvent"
+            @cancelDialog="cancelDialog($event)"
+            @okDialog="okDialog($event)"
+            >
+            </MessageBox>
+        </q-dialog>
+
   </div>
 </template>
 
 <script>
+import { post } from "../../../store/modules/gcp-services";
+import MessageBox from "../../../components/dialogs/MessageBox.vue";
 
 export default {
     computed:{
@@ -106,8 +123,15 @@ export default {
           else return false;
         }
     },
+    components:{
+      MessageBox,
+    },
     data(){
         return {
+            dialogs: [
+              { title: "Submit Answers", isVisible: false, message: "Do you want to submit your results",
+              okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+            ],
             vmodel: "",
             name: "answers",
             color: "cyan",
@@ -122,6 +146,7 @@ export default {
                 {vmodel: "", val: "polygon", label: "(D) Polygon", color: "green", questionId: "", subjectId: "", levelId: ""}
             ],
             answers:[],
+            answersIndex:[],
             questions: [],
             qBtns: [
               {label: "Back", name: "Back", icon: ""},
@@ -147,40 +172,165 @@ export default {
             context.nextQuestion();
             break;
           case "Submit":
+            context.submit();
             break;
         }
       },
+      cancelDialog(payload){
+          const context = this;
+          var i = -1;
+          for(const dialog of context.dialogs){
+              i++;
+              if(dialog.title === payload){
+                  context.dialogs[i].isVisible = false;
+                  break;
+              }
+          }
+      },
+      submit(){
+          const context = this;
+          var i = -1;
+          for(const dialog of context.dialogs){
+              i++;
+              if(dialog.title == "Submit Answers"){
+                  context.dialogs[i].isVisible = true;
+                  break;
+              }
+          }
+      },
+      async okDialog(payload){
+          console.log("payload: ", payload)
+          const context = this;
+          var i = -1;
+          for(const dialog of context.dialogs){
+              i++;
+              if(dialog.title === payload){
+                  switch(payload){
+                      case "Submit Answers":
+                          await context.submitAnsweredQuestions();
+                          break;
+                  }
+                  context.dialogs[i].isVisible = false;
+                  break;
+              }
+          }
+      },
+      setAnswerOption(optionsIndices){
+        let ans = "No Answer";
+        let i = -1;
+        const options = ["A", "B", "C", "D", "E", "F", "G"];
+        for(const optionsIndex of optionsIndices){
+          i++;
+          if(optionsIndex !== -1){
+            ans = options[i];
+            break;
+          }
+        }
+        return ans
+      },
+      async submitAnsweredQuestions(){
+        var context = this;
+        var user = this.$store.getters["authenticationStore/IdentityModel"];
+        //this.$store.commit("authenticationStore/setShowSpinner", true);
+        let answeredQuestions = [];
+        let i = -1;
+        for(const question of context.questions){
+          i++;
+          answeredQuestions.push({
+          question: question.question,
+          answer: context.answers[i].vmodel,
+          answerOption: context.setAnswerOption(context.answersIndex[i]),
+          subjectId: question.subjectId,
+          levelId: question.levelId,
+          questionId: question._id,
+          createdBy: user.id,
+          schoolId: user.schoolId,
+        })
+        }
+
+        var payload = {
+          url: "examanswer/computeScore",
+          req: answeredQuestions
+        }
+
+        console.log("payload: ", payload)
+        var response = await post(payload)
+        console.log("data: ", response.data)
+        this.$store.commit("examStore/setScore", response.data.score);
+        this.$store.commit("examStore/setTotalNumber", response.data.totalNumber);
+        this.$router.push('/exam-score')
+        //this.$store.commit("authenticationStore/setShowSpinner", false);
+      },
       onOptionSelected(selectedOption){
-            console.log("selectedOption: ", selectedOption)
             var context = this;
-            let answerOption = context.answerOptions.find(o => o.questionId === selectedOption);
-            let check = true;
-            for(let i = 0; i < this.answers.length; i++){
-                if(answers.questionId === answerOption.questionId){
-                    answers[i] = answerOption;
-                    check = false;
-                    break;
-                }
+            //console.log("selectedOption: ", selectedOption)
+            //console.log("context.answerOptions: ", context.answerOptions)
+            //console.log("conttext.vmodel: ", context.vmodel)
+            //context.answersIndex
+            
+            let j = -1;
+            let selectedIndex = -1;
+            for(const answerOption of context.answerOptions){
+              j++;
+              if(answerOption.val === selectedOption){
+                context.answerOptions[j].vmodel = context.vmodel;
+                selectedIndex = j;
+                break;
+              }
             }
 
-            if(!check){
-                answers.push({...answerOption})
+            //console.log("selectedIndex: ", selectedIndex)
+            let check = true;
+            if(selectedIndex !== -1){
+              for(let i = 0; i < context.answers.length; i++){
+                  if(context.answers[i].questionId === context.answerOptions[selectedIndex].questionId){
+                    context.answersIndex[i] = [-1, -1, -1, -1]
+                      context.answers[i] = context.answerOptions[selectedIndex];
+                      context.answers[i].vmodel = context.vmodel;
+                      context.answersIndex[i][selectedIndex] = selectedIndex;
+                      check = false;
+                      break;
+                  }
+              }
             }
+
+            //console.log("onOptionSelected answers", context.answers)
+          //console.log("onOptionSelected answersIndex", context.answersIndex)
             
         },
         getAnswerOptions(){
           var context = this;
+          let selectedOption = "@*%#";
+
+          //console.log("context.counter: ", context.counter)
           context.answerOptions = context.questions[context.counter].answerOptions.map((row, i) => {
-            return {
+            let ans = {
               vmodel: "", 
               val:  row.answer, 
               label: `(${context.options[i].value}) ${row.answer}`, 
               color: "green", 
-              questionId: context.questions[context.counter].questionId, 
+              questionId: context.questions[context.counter]._id, 
               subjectId: context.questions[context.counter].subjectId, 
               levelId: context.questions[context.counter].levelId,
               }
+
+              if(context.answersIndex[context.counter][i] !== -1) {
+                ans.vmodel = row.answer;
+                selectedOption = row.answer
+                context.vmodel = selectedOption;
+                //console.log("selectedOption: ", selectedOption)
+              }else{
+                 ans.vmodel = "";
+              }
+
+            return ans
           })
+
+          //console.log("selectedOption", selectedOption)
+          context.onOptionSelected(selectedOption)
+
+          //console.log("getAnswerOptions answers ", context.answers)
+          //console.log("getAnswerOptions answersIndex ", context.answersIndex)
         },
         nextQuestion(){
           var context = this;
@@ -197,7 +347,7 @@ export default {
           }
         
           
-          console.log("context.selectedQuestion: ", context.selectedQuestion)
+          //console.log("context.selectedQuestion: ", context.selectedQuestion)
           context.getAnswerOptions();
           
         },
@@ -217,6 +367,28 @@ export default {
           }
           context.getAnswerOptions();
         },
+        initializeAnswers(){
+          var context =  this;
+          context.answers = [];
+          const len = context.questions.length;
+          let i = 0;
+          for(i = 0; i < len; i++){
+            const optionsIndex = [-1, -1, -1, -1]
+            context.answersIndex.push(optionsIndex)
+            context.answers.push({
+              vmodel: "", 
+              val: "line", 
+              label: "(A) Line", 
+              color: "green", 
+              questionId: context.questions[i]._id, 
+              subjectId: context.questions[i].subjectId,  
+              levelId: context.questions[i].levelId
+              })
+          }
+
+          //console.log("initializeAnswers answers", context.answers) 
+          //console.log("initializeAnswers answersIndex", context.answersIndex)
+        },
         renderTimer(){
           var context = this;
           context.count += 1;
@@ -224,14 +396,18 @@ export default {
           context.seconds = (context.count % 60).toString().padStart(2, "0");
         }
     },
-    mounted() {
+    async mounted() {
         var context =  this;
        setInterval(() => { context.renderTimer() }, 1000);
+       if(context.minutes === "60"){
+         console.log("context.minutes: ", context.minutes)
+         await context.submitAnsweredQuestions();
+       }
     },
     created(){
       var context = this;
       context.questions = this.$store.getters["examStore/questions"];
-      console.log("context.questions: ", context.questions)
+      context.initializeAnswers();
       context.nextQuestion();
     }
 }

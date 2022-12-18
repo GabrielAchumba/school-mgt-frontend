@@ -224,14 +224,12 @@ export default {
                 if(questions.length > 0){
                     let question = questions.find(o => o.question === newRow.question);
                     const options= [{id: 0, value: "A"}, {id: 1, value: "B"}, {id: 2, value: "C"}, 
-                    {id: 3, value: "D"}, {id: 4, value: "E"}];
+                    {id: 3, value: "D"}, {id: 4, value: "E"}, {id: 5, value: "F"}, {id: 6, value: "G"}];
                     let j = -1;
 
                     newRow.questionId = question._id;
 
-                    if(question.answerOptions.length > 5){
-                        continue;
-                    }
+
                     for(const answerOption  of  question.answerOptions){
                         j++;
                         if( answerOption.answer === newRow.answer){

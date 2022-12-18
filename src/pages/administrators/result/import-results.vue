@@ -128,9 +128,6 @@ export default {
              const { result: users } = await loadUsers(user.schoolId);
              const { result: sessions } = await loadSessions(user.schoolId);
 
-            console.log("assessments: ", assessments)
-            console.log("classrooms: ", classrooms)
-
             let results = [];
             let check = false;
             for(const row of context.tableRows) {

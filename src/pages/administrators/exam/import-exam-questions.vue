@@ -137,31 +137,32 @@ export default {
             const { result: subjects } = await loadSubjects(user.schoolId);
             const { result: levels } = await loadLevels(user.schoolId);
 
-            //console.log("subjects: ", subjects)
-            //console.log("levels: ", levels)
+            console.log("subjects: ", subjects)
+            console.log("levels: ", levels)
 
             let questions = [];
             let check = false;
             let answerOptions = [];
-            //console.log("context.tableRows; ", context.tableRows)
+            console.log("context.tableRows; ", context.tableRows)
             for(const row of context.tableRows) {
                 const newRow = {}
                 answerOptions = [];
                 const columns = Object.keys(row);
                 for (const column of columns){
-                    if(`${column}` === "Question" ||
-                    `${column}` === "Subject" ||
+                    if(`${column}` === "Question" || `${column}` === "Subject" ||
                     `${column}` === "Level"){
+                        const field = `${column}`
                         let appVariable = context.appVariables.find(o => o.variableTitle === column);
-                        newRow[`${appVariable.variableName}`] = row[`${column}`];
+                        newRow[`${appVariable.variableName}`] = `${row[field]}`;
                     }else if(`${column}` === "Examination Date"){
                         const yearMonthDay = row[`${column}`].split("/")
                         newRow.examYear = Number(yearMonthDay[0]);
                         newRow.examMonth = Number(yearMonthDay[1]);
                         newRow.examDay = Number(yearMonthDay[2]);
                     }else{
+                        const field = `${column}`
                         answerOptions.push({
-                            answer: row[`${column}`],
+                            answer: `${row[field]}`,
                             cloudImageUrl: "",
                             cloudImageName: "",
                             originalImageName: "",

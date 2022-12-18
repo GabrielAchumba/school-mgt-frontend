@@ -4,9 +4,29 @@ const state = {
     answers: [],
     selectedAnswer: {},
     questions: [],
+    score: 0, 
+    totalNumber:0,
+    subjectName: "",
+    levelName: "",
+    year: 0,
 }
 
 const getters = {
+    subjectName(state){
+        return state.subjectName;
+    },
+    levelName(state){
+        return state.levelName;
+    },
+    year(state){
+        return state.year;
+    },
+    score(state){
+        return state.score;
+    },
+    totalNumber(state){
+        return state.totalNumber;
+    },
     exams(state){
         return state.exams;
     },
@@ -25,6 +45,12 @@ const getters = {
 } 
 
 const mutations = {
+    setScore(state, payload){
+        state.score = payload
+    },
+    setTotalNumber(state, payload){
+        state.totalNumber = payload
+    },
     SetExams(state, payload){
         state.exams = payload
     },
@@ -39,6 +65,15 @@ const mutations = {
     },
     SetQuestions(state, payload){
         state.questions = payload;
+    },
+    setSubjectName(state, payload){
+        state.subjectName = payload;
+    },
+    setLevelName(state, payload){
+        state.levelName = payload
+    },
+    setYear(state, payload){
+        state.year = payload
     },
 }
 
