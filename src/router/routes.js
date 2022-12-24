@@ -499,7 +499,7 @@ const routes = [
       },
       { 
         path: '/super-admin-exam-question-landing', 
-        component: () => import('pages/administrators/exam/question-landing.vue') 
+        component: () => import('src/pages/administrators/exam/question-landing.vue') 
         
       },
       { 
@@ -990,7 +990,7 @@ const routes = [
       },
       { 
         path: '/exam-question-landing', 
-        component: () => import('pages/administrators/exam/question-landing.vue') 
+        component: () => import('src/pages/administrators/exam/question-landing.vue') 
         
       },
       { 

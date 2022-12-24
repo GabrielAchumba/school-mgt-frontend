@@ -130,7 +130,6 @@ export default {
           height: `100vh`,
           width: `${context.width}px`,
         }
-        //${Math.min(600, 0.66 * context.width)}px
       }
   },
   components:{

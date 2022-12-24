@@ -1,89 +1,61 @@
 <template>
-    <div class="q-pa-md">
-
-      <div class="row"
-       v-if="!showSpinner">
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 q-pa-sm">
-            <span>
-                <p class="q-ma-none">{{ exam_vm.qSelectSubject.label }}</p>
-                <div class="row no-wrap">
-                <q-select
-                    class="q-ma-none col-12"
-                    color="accent" 
-                    outlined label-color="accent"
-                    option-disable="inactive"
-                    v-model="selectedSubject"
-                    :options="exam_vm.qSelectSubject.list"
-                    option-value="id"
-                    :option-label="'type'"
-                    :name="exam_vm.qSelectSubject.value"
-                    emit-value
-                    map-options
-                    >
-                </q-select>
-            </div>
-            </span>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 q-pa-sm">
-            <span>
-                <p class="q-ma-none">{{ exam_vm.qSelectLevel.label }}</p>
-                <div class="row no-wrap">
-                <q-select
-                    class="q-ma-none col-12"
-                    color="accent" 
-                    outlined label-color="accent"
-                    option-disable="inactive"
-                    v-model="selectedLevel"
-                    :options="exam_vm.qSelectLevel.list"
-                    option-value="id"
-                    :option-label="'type'"
-                    :name="exam_vm.qSelectLevel.value"
-                    emit-value
-                    map-options
-                    >
-                </q-select>
-            </div>
-            </span>
-        </div>
-
-
-        <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 q-pa-sm">
-            <span><p class="q-ma-none">{{ exam_vm.qDate.label }}</p>
-            <q-input 
-            class="q-ma-none"
-            filled 
-            v-model="exam_vm.qDate.name" mask="date" :rules="['date']">
-            <template v-slot:append>
-            <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-date v-model="exam_vm.qDate.name">
-                    <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="accent" flat />
-                    </div>
-                </q-date>
-                </q-popup-proxy>
-            </q-icon>
-            </template>
-        </q-input></span>
-        </div>
+  <div class="q-pa-sm">
+    <div v-if="isMobile">
+      <div 
+      class="row">
+          <LevelSelector class="col-12"
+          :qSelect="exam_vm.qSelectLevel"
+          @onLevelValueChange="onLevelValueChange($event)"/>
+          <SubjectSelector class="col-12"
+          :qSelect="exam_vm.qSelectSubject"
+          @onSubjectValueChange="onSubjectValueChange($event)"/>
+          <Form
+          class="col-12"
+            :formData="questionsForms"
+            @linkClick="selectPastQuestions($event)"/>
+          <Form
+            class="col-12"
+            :formData="form"
+            @Cancel="Cancel($event)"/>
+      </div>
     </div>
+    <div v-else>
+    <q-resize-observer @resize="onResize" :debounce="0" />
+
+    <q-splitter
+      id="photos"
+      v-model="splitterModel"
+      :limits="[0, 100]"
+      :style="splitterStyle"
+      before-class="overflow-hidden"
+      after-class="overflow-hidden"
+    >
+
+      <template v-slot:before>
+        <div class="row">
+          <LevelSelector class="col-12"
+          :qSelect="exam_vm.qSelectLevel"
+          @onLevelValueChange="onLevelValueChange($event)"/>
+          <SubjectSelector class="col-12"
+          :qSelect="exam_vm.qSelectSubject"
+          @onSubjectValueChange="onSubjectValueChange($event)"/>
+          <Form
+            class="col-12"
+            :formData="questionsForms"
+            @linkClick="selectPastQuestions($event)"/>
+        </div>
+      </template>
+
+      <template v-slot:after>
         <Form
-        v-if="!showSpinner"
         :formData="form"
         @Start="Start($event)"
         @Cancel="Cancel($event)"/>
-        <div 
-        v-show="showSpinner"
-        class="q-gutter-md row">
-            <div class="col-12 q-pa-sm absolute-center flex flex-center">
-                <q-spinner
-                    color="accent"
-                    :size="spinnerSize"
-                    :thickness="spinnerThickness"
-                />
-            </div>
-        </div>
-        
+      </template>
+
+    </q-splitter>
+    </div>
+
         <q-dialog 
             v-for="dialog in dialogs" 
             :key="dialog.title"
@@ -98,14 +70,16 @@
             >
             </MessageBox>
         </q-dialog>
-    </div>
+  </div>
 </template>
 
 <script>
-
 import Form from "../../../components/Forms/Form.vue";
 import  MessageBox from "../../../components/dialogs/MessageBox.vue";
-import  { form, dialogs } from "./view_models/exam-rules-view-model";
+import { qSelectLevel } from "./view_models/selectors-view-model";
+import LevelSelector from "./level-selector.vue";
+import SubjectSelector from "./subject-selector.vue";
+import  { form, dialogs, questionsForms } from "./view_models/exam-rules-view-model";
 import { post } from "../../../store/modules/gcp-services";
 import { exam_vm } from "./view_models/create-view-model";
 
@@ -119,32 +93,47 @@ export default {
         },
         spinnerThickness(){
             return this.$store.getters["authenticationStore/spinnerThickness"];
+        },
+        splitterStyle(){
+            var context = this;
+            return {
+            height: `100vh`,
+            width: `${context.width}px`,
+            }
         }
     },
     components:{
         Form,
         MessageBox,
+        LevelSelector,
+        SubjectSelector,
     },
     data(){
         return {
+            width: 400, 
+            splitterModel: 30, // start at 30%,
+            isMobile: false,
             form: form,
             dialogs: dialogs,
             selectedSubject: null,
             selectedLevel: null,
             exam_vm: exam_vm,
+            questionsForms: questionsForms,
+            selectedPastQuestions: {},
         }
     },
     methods:{
-        Start(){
-            const context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title == "Start Examination"){
-                    context.dialogs[i].isVisible = true;
-                    break;
-                }
-            }
+        async onLevelValueChange(payload){
+            console.log("selectedLevel: ", payload)
+            var context = this;
+            context.selectedLevel = payload.qSelect;
+            await context.FetchExamQuestions();
+        },
+        async onSubjectValueChange(payload){
+            console.log("selectedSubject: ", payload)
+            var context = this;
+            context.selectedSubject = payload.qSelect;
+            await context.FetchExamQuestions();
         },
         Cancel(){
             var user = this.$store.getters["authenticationStore/IdentityModel"];
@@ -166,6 +155,18 @@ export default {
             var context = this;
             await context.viewQuestions();
             this.$router.push('/start-exam')
+        },
+        selectPastQuestions(payload){
+            const context = this;
+            context.selectedPastQuestions = payload;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Start Examination"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
         },
         async okDialog(payload){
             const context = this;
@@ -210,30 +211,77 @@ export default {
                 }
             })
             this.$store.commit("authenticationStore/setShowSpinner", false);
+            console.log("context.exam_vm: ", context.exam_vm)
+        },
+        async FetchExamQuestions(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
+            console.log("context.selectedSubject: ", context.selectedSubject)
+            console.log("context.selectedLevel: ", context.selectedLevel);
+
+            if(context.selectedSubject && context.selectedLevel){
+
+                const payload = {
+                    url: "examquestion/findAll",
+                    req: {
+                        subjectId: context.selectedSubject.value,
+                        levelId: context.selectedLevel.value,
+                        schoolId: user.schoolId,
+                    }
+                }
+
+                try{
+                    const response = await post(payload);
+                    console.log("response.data: ", response.data);
+
+                    context.questionsForms.qLists = [];
+                    const items = response.data.map((row) => {
+                        return {
+                            name: `${context.selectedSubject.type}_${row.date}`,
+                            address: "",
+                            route: "/exam-rules",
+                            letter: context.selectedSubject.type.charAt(0),
+                            subjectId: row.subjectId,
+                            levelId: row.levelId,
+                            schoolId: row.schoolId,
+                            createdAt: row.createdAt,
+                            examDay: row.examDay,
+                            examMonth: row.examMonth,
+                            examYear: row.examYear,
+
+                        }
+                    });
+
+                    console.log("items: ", items) 
+
+                    context.questionsForms.qLists.push({
+                        label: "Past Questions",
+                        items: [...items],
+                    })
+
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                    
+                }catch{
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                }
+            }
+
         },
         async viewQuestions(){
             var context = this;
-             var user = this.$store.getters["authenticationStore/IdentityModel"]
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
-            let subjectItem = context.exam_vm.qSelectSubject.list.find(o => o.value === context.selectedSubject);
-            let levelItem = context.exam_vm.qSelectLevel.list.find(o => o.value === context.selectedLevel);
-            console.log("subjectItem: ", subjectItem)
-            console.log("levelItem: ", levelItem)
-
-            this.$store.commit("examStore/setSubjectName", subjectItem.type);
-            this.$store.commit("examStore/setLevelName", levelItem.type);
-            
-            const myArray = context.exam_vm.qDate.name.split("/")
 
             const payload = {
-                url: "examquestion/findAll",
+                url: "examquestion/selectedPastQuestions",
                 req: {
-                    subjectId: subjectItem.value,
-                    levelId: levelItem.value,
+                    subjectId: context.selectedSubject.value,
+                    levelId: context.selectedLevel.value,
                     schoolId: user.schoolId,
-                    examYear: Number(myArray[0]),
-                    examMonth: Number(myArray[1]),
-                    examDay: Number(myArray[2])
+                    examYear: context.selectedPastQuestions.examYear,
+                    examMonth: context.selectedPastQuestions.examMonth,
+                    examDay: context.selectedPastQuestions.examDay,
                 }
             }
 
@@ -245,8 +293,8 @@ export default {
                      return {
                          ...row,
                          question: row.question,
-                         subject: subjectItem.type,
-                         level: levelItem.type,
+                         subject: context.selectedSubject.type,
+                         level: context.selectedLevel.type,
                      }
                  })
 
@@ -259,12 +307,23 @@ export default {
             }
         
 
-        }
-
+        },
+        onResize (info) {
+        var context = this;
+        context.width = info.width;
+        },
+        onResizePage(e) {
+                const width = window.innerWidth;
+                var context = this;
+                if(width < 700) context.isMobile = true;
+                else context.isMobile = false;
+        },
     },
     created(){
         var context = this;
+        window.addEventListener("resize", context.onResizePage);
         context.initializeData()
     }
+    
 }
 </script>

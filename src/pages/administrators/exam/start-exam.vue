@@ -284,7 +284,9 @@ export default {
             if(selectedIndex !== -1){
               for(let i = 0; i < context.answers.length; i++){
                   if(context.answers[i].questionId === context.answerOptions[selectedIndex].questionId){
-                    context.answersIndex[i] = [-1, -1, -1, -1]
+                    context.answersIndex[i] = context.answerOptions.map((row) => {
+                      return -1;
+                    })
                       context.answers[i] = context.answerOptions[selectedIndex];
                       context.answers[i].vmodel = context.vmodel;
                       context.answersIndex[i][selectedIndex] = selectedIndex;
@@ -373,7 +375,9 @@ export default {
           const len = context.questions.length;
           let i = 0;
           for(i = 0; i < len; i++){
-            const optionsIndex = [-1, -1, -1, -1]
+            const optionsIndex = context.questions[i].answerOptions.map((row) => {
+              return -1;
+            })
             context.answersIndex.push(optionsIndex)
             context.answers.push({
               vmodel: "", 

@@ -18,7 +18,6 @@ const form = {
     qColors: [],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},
-        {label: "Start", name: "Start", icon: "send"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -30,9 +29,19 @@ const form = {
     },
 }
 
+const questionsForms = {
+    title: "Past Questions",
+    qSelects: [],
+    qInputs: [],
+    qBtns: [],
+    qDates: [],
+    GroupedCheckBoxes: [],
+    qLists:[],
+}
+
 const dialogs = [
     { title: "Start Examination", isVisible: false, message: "Do you want to start an examination. Once you start, there is no room for canceling the examination. Good luck!!!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
 ]
 
-export { form, dialogs }
+export { form, dialogs, questionsForms }

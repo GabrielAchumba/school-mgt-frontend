@@ -251,10 +251,12 @@ export default {
       context.checkSubscription = {...result}
       this.$store.commit("administratorStore/SetIsSubscription", result)
 
+      console.log("context.menuList: ", context.menuList)
       var listOfMenuItems = [];
       for(const mItem of context.menuList){
-        mItem.to = `/${mItem.to}`
-        listOfMenuItems.push(mItem)
+        let _mItem = {...mItem};
+        _mItem.to = `/${mItem.to}`
+        listOfMenuItems.push({..._mItem})
       }
 
       context.contextMenuList = listOfMenuItems.map((row)=> {

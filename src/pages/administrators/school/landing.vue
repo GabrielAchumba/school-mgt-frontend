@@ -64,7 +64,10 @@
       },
         data () {
     return {
-        form:form,
+            form:form,
+            cssProps: {
+            backgroundImage: `url(${require('../../../statics/images/Neway_Logo.jpg')})`
+            },
             tableVM: {
                 selectedSchool: {},
                 title: "Schools",

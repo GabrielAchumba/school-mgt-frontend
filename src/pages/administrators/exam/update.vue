@@ -213,6 +213,7 @@ export default {
             anyFormDataQuestion: false,
             anyFormDataAnswerOptions: false,
             selectedExam: {},
+            isQuestionImageNew: false,
         }
     },
     methods:{
@@ -375,7 +376,7 @@ export default {
         async CreateAction(){
             var context = this;
             context.checkFormData();
-            if(context.anyFormDataQuestion){
+            if(context.anyFormDataQuestion && context.isQuestionImageNew){
                 await context.uploadQuestionImages();
             }
             
@@ -440,6 +441,7 @@ export default {
         },
         onFileSelectedAnswerOption2(answerOption){
             var context = this;
+            context.isQuestionImageNew = false;
             const selectedIndex = answerOption.id - 1;
             context.exam_vm.answerOptions[selectedIndex].qFiles[0].selectedFile = context.selectedFileAnswerOption;
             let reader  = new FileReader();
@@ -448,6 +450,7 @@ export default {
                 context.exam_vm.answerOptions[selectedIndex].qFiles[0].showPreview = false;
                 context.exam_vm.answerOptions[selectedIndex].qFiles[0].imagePreview = reader.result;
                 context.exam_vm.answerOptions[selectedIndex].qImages[0].imageUrl = reader.result;
+                context.isQuestionImageNew = true;
             }.bind(context), false);
 
             if(context.exam_vm.answerOptions[selectedIndex].qFiles[0].selectedFile){

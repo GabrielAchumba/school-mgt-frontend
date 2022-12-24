@@ -9,7 +9,8 @@
       <router-view
       class="bg-primary"
       v-if="!showSpinner"
-      @linkClick="linkClick($event)"/>
+      @linkClick="linkClick($event)"
+      />
       <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -46,6 +47,8 @@ export default {
     data(){
         return {
             showSpinner: true,
+            image: "/statics/images/Neway_Logo.jpg"
+            
         }
     },
     methods:{
@@ -259,3 +262,10 @@ export default {
 }
 
 </script>
+<style>
+#layout {
+ background-image: url("/statics/images/Neway_Logo.jpg");
+ background-color: #cccccc;
+}
+
+</style>

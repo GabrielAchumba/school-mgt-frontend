@@ -2,7 +2,7 @@
     <div class="q-pa-sm">
         <ExcelImport
         :title="title"
-        :applicationColumns="applicationColumns"
+        :_applicationColumns="applicationColumns"
         @saveTable="Create($event)"/>
          <div 
         v-show="showSpinner"
