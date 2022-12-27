@@ -129,7 +129,7 @@ export const menuList = [
         title: "Online Learning", 
         description: "Management of the studying of courses online",
         image: "/statics/images/online_learning.jpg",
-        to: "result-landing"
+        to: "online-learning-landing"
     },
     {
         name: "showPage",

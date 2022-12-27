@@ -1,11 +1,94 @@
 <template>
   <div>
-    <Table
-    v-if="!showSpinner"
-    :table_VM="tableVM"
-    @createItem="createItem($event)"
-    @updateItem="updateItem($event)"
-    @deleteItem="deleteItem($event)"/>
+    
+      <div v-if="!showSpinner"
+      class="q-pa-sm">
+        <div v-if="isMobile">
+        <div 
+        class="row">
+            <LevelSelector class="col-12"
+            :qSelect="selectors_vm.qSelectLevel"
+            @onLevelValueChange="onLevelValueChange($event)"/>
+            <SubjectSelector class="col-12"
+            :qSelect="selectors_vm.qSelectSubject"
+            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            <LevelSelector class="col-12"
+            :qSelect="selectors_vm.qSelectLessonNotes"
+            @onLevelValueChange="onLessonNoteValueChange($event)"/>
+            <Form
+            class="col-12"
+                :formData="lessonNoteSectionsForm"
+                @linkClick="GetSelectedLessonNoteSection($event)"/>
+            <TitleDescriptionImage 
+            class="col-12"
+            v-if="isFileUrl(noteSection.fileUrl)"
+            :title="noteSection.title"
+            :description="noteSection.description"
+            :imageUrl="noteSection.fileUrl"
+            :imageTitle="noteSection.imageTitle"
+            :imageDescription="noteSection.imageDescription"
+            :isVideo="noteSection.isVideo"
+            :isImage="noteSection.isImage"
+            :isAudio="noteSection.isAudio"/>
+            <TitleDescription
+            class="col-12"
+            v-else
+            :title="noteSection.title"
+            :description="noteSection.description"/>
+        </div>
+        </div>
+        <div v-else>
+        <q-resize-observer @resize="onResize" :debounce="0" />
+
+        <q-splitter
+        id="photos"
+        v-model="splitterModel"
+        :limits="[0, 100]"
+        :style="splitterStyle"
+        before-class="overflow-hidden"
+        after-class="overflow-hidden"
+        >
+
+        <template v-slot:before>
+            <div class="row">
+            <LevelSelector class="col-12"
+            :qSelect="selectors_vm.qSelectLevel"
+            @onLevelValueChange="onLevelValueChange($event)"/>
+            <SubjectSelector class="col-12"
+            :qSelect="selectors_vm.qSelectSubject"
+            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            <LevelSelector class="col-12"
+            :qSelect="selectors_vm.qSelectLessonNotes"
+            @onLevelValueChange="onLessonNoteValueChange($event)"/>
+            <Form
+                class="col-12"
+                :formData="lessonNoteSectionsForm"
+                @linkClick="GetSelectedLessonNoteSection($event)"/>
+            </div>
+        </template>
+
+        <template v-slot:after>
+            <TitleDescriptionImage 
+            class="col-12"
+            v-if="isFileUrl(noteSection.fileUrl)"
+            :title="noteSection.title"
+            :description="noteSection.description"
+            :imageUrl="noteSection.fileUrl"
+            :imageTitle="noteSection.imageTitle"
+            :imageDescription="noteSection.imageDescription"
+            :isVideo="noteSection.isVideo"
+            :isImage="noteSection.isImage"
+            :isAudio="noteSection.isAudio"/>
+            <TitleDescription
+            class="col-12"
+            v-else
+            :title="noteSection.title"
+            :description="noteSection.description"/>
+        </template>
+
+        </q-splitter>
+        </div>
+      </div>
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -36,10 +119,16 @@
 </template>
 
 <script>
-  import Table from "../../../components/Tables/Table.vue";
+    import TitleDescription from "../../../components/Common/title-description.vue";
+    import TitleDescriptionImage from "../../../components/Common/title-description-image.vue";
+   import Table from "../../../components/Tables/Table.vue";
+   import Form from "../../../components/Forms/Form.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/gcp-services";
+  import LevelSelector from "../exam/level-selector.vue";
+  import SubjectSelector from "../exam/subject-selector.vue";
+  import { post, get, remove } from "../../../store/modules/gcp-services";
   import { loadLessonNoteSections } from "./utils";
+  import { lessonNoteSectionsForm, selectors_vm, selectedLessonNoteSectionForm } from "./view_models/landing-view-model";
 
     export default {
       computed:{
@@ -51,16 +140,34 @@
         },
         spinnerThickness(){
             return this.$store.getters["authenticationStore/spinnerThickness"];
+        },
+        splitterStyle(){
+            var context = this;
+            return {
+            height: `100vh`,
+            width: `${context.width}px`,
+            }
         }
       },
       components:{
         Table,
-        MessageBox
+        MessageBox,
+        Form,
+        LevelSelector,
+        SubjectSelector,
+        TitleDescription,
+        TitleDescriptionImage
       },
         data () {
     return {
+            width: 400, 
+            splitterModel: 30, // start at 30%,
+            isMobile: false,
             cardList: [],
             selectedLessonNoteSection: {},
+            lessonNoteSectionsForm: lessonNoteSectionsForm,
+            selectedLessonNoteSectionForm: selectedLessonNoteSectionForm,
+            selectors_vm: selectors_vm,
             tableVM: {
                 title: "Lesson Note Sections",
                 columns: [
@@ -82,10 +189,36 @@
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+                ],
+                selectedLevel: null,
+                selectedSubject: null,
+                selectedLessonNote: null,
+                noteSection: {
+                    title: "", 
+                    description: "", 
+                    fileUrl: "", 
+                    imageTitle: "", 
+                    imageDescription: "",
+                    isVideo: false, 
+                    isImage: false, 
+                    isAudio: false,
+                    isPdf: false,
+                },
             }
         },
         methods: {
+            isFileUrl(fileUrl){
+                if(fileUrl === "" || fileUrl == undefined) return false;
+                else return true;
+            },
+            getFileExtension(fileUrl){
+                const arr = fileUrl.split(".")
+                return arr[1];
+            },
+            onResize (info) {
+                var context = this;
+                context.width = info.width;
+            },
           okayEvent(){
             var context = this;
             context.isFetchTableDialog = false
@@ -167,43 +300,175 @@
                 }
             }
         },
-        async _loadLessonNoteSections(){
+        onLevelValueChange(payload){
+            console.log("selectedLevel: ", payload)
+            var context = this;
+            context.selectedLevel = payload.qSelect;
+            context.selectors_vm.qSelectSubject.value = "";
+            context.selectors_vm.qSelectLessonNotes.value = "";
+            context.selectors_vm.qSelectLessonNotes.list = [];
+            context.lessonNoteSectionsForm.qLists = [];
+        },
+        async onSubjectValueChange(payload){
+            console.log("selectedSubject: ", payload)
+            var context = this;
+            context.selectedSubject = payload.qSelect;
+            context.selectors_vm.qSelectLessonNotes.value = "";
+            context.selectors_vm.qSelectLessonNotes.list = [];
+            context.lessonNoteSectionsForm.qLists = [];
+            await context.FetchLessonNotes();
+        },
+        async FetchLessonNotes(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
+            //console.log("context.selectedSubject: ", context.selectedSubject)
+            //console.log("context.selectedLevel: ", context.selectedLevel);
 
-                var context = this;
-                var user = this.$store.getters["authenticationStore/IdentityModel"]
-                this.$store.commit("authenticationStore/setShowSpinner", true);
-                const { result, message } = await loadLessonNoteSections(user.schoolId)
-                this.$store.commit("authenticationStore/setShowSpinner", false);
-                this.$store.commit('lessonNoteSectionStore/SetLessonNoteSections', result)
-                context.tableVM.rows = result;
-                context.cardList = result.map((row, i) => {
-                    let  description = row.description;
-                    if(description.length > 300){
-                        description = row.description.substr(1, 3000);
+            if(context.selectedSubject && context.selectedLevel){
+
+                const payload = {
+                    url: "lessonnote/notes",
+                    req: {
+                        subjectId: context.selectedSubject.value,
+                        levelId: context.selectedLevel.value,
+                        schoolId: user.schoolId,
                     }
-
-                return {
-                    id: i+1,
-                    ...row,
-                    name: "showPage",
-                    title: row.title, 
-                    description,
-                    createdDate: (new Date(row.createdAt)).toDateString(),
-                    qBtns: [
-                            {label: "View", name: "View"},
-                        ],
-                    }
-            })
-
-            console.log("context.cardList: ", context.cardList);
-            this.$store.commit('resultStore/SetResults', result)
-            this.$store.commit('componentsStore/setCardItems', context.cardList)
-
-                if(result.length === 0){
-                    context.isFetchTableDialog = true;
-                    context.message = message;
                 }
 
+                try{
+                    const response = await post(payload);
+                    console.log("response.data: ", response.data);
+                    context.selectors_vm.qSelectLessonNotes.list = response.data
+                    .map((row) => {
+                        return {
+                            id: row._id,
+                            type: row.title, 
+                            label: row.title, 
+                            value: row._id,
+                        }
+                    })
+
+                    
+
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                    
+                }catch{
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                }
+            }
+
+        },
+        async onLessonNoteValueChange(payload){
+            console.log("selectedLessonNote: ", payload)
+            var context = this;
+            context.selectedLessonNote = payload.qSelect;
+            context.lessonNoteSectionsForm.qLists = [];
+            await context.FetchLessonNoteSections();
+        },
+        GetSelectedLessonNoteSection(selectedLessonNoteSection){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            this.$store.commit("authenticationStore/setShowSpinner", true);
+            try{
+                
+                context.noteSection.title = selectedLessonNoteSection.sectionTitle
+                context.noteSection.description = selectedLessonNoteSection.content
+                context.noteSection.fileUrl = selectedLessonNoteSection.fileUrl
+                context.noteSection.isVideo = false
+                context.noteSection.isImage = false
+                context.noteSection.isAudio = false
+                context.noteSection.isPdf = false
+                if(context.isFileUrl(context.noteSection.fileUrl)){
+                    const fileExtension = context.getFileExtension(context.noteSection.fileUrl)
+                    switch(fileExtension){
+                        case "pdf":
+                            context.noteSection.isPdf = true;
+                            break;
+                        case "mp4":
+                            context.noteSection.isVideo = true;
+                            break;
+                        case "mp3":
+                            context.noteSection.isAudio = true;
+                            break;
+                        default:
+                            context.noteSection.isImage = true;
+                    }
+                }
+
+                this.$store.commit("authenticationStore/setShowSpinner", false);
+                
+            }catch{
+                this.$store.commit("authenticationStore/setShowSpinner", false);
+            }
+        },
+        async FetchLessonNoteSections(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
+
+            if(context.selectedLessonNote){
+
+                const payload = {
+                    url: "lessonnotesection/findAll",
+                    req: {
+                        lessonNoteId: context.selectedLessonNote.value,
+                        schoolId: user.schoolId,
+                    }
+                }
+
+                try{
+                    const response = await post(payload);
+                    console.log("response.data: ", response.data);
+
+                    context.lessonNoteSectionsForm.qLists = [];
+                    const items = response.data.map((row) => {
+                        return {
+                            ...row,
+                            name: row.sectionTitle,
+                            address: "",
+                            route: "/lesson-note-section-landing",
+                            letter: row.sectionTitle.charAt(0),
+                        }
+                    });
+
+                    console.log("items: ", items) 
+
+                    context.lessonNoteSectionsForm.qLists.push({
+                        label: "Notes",
+                        items: [...items],
+                    })
+
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                    
+                }catch{
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                }
+            }
+
+        },
+        initializeSelectors(){
+                var context = this;
+                context.selectors_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
+                .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
+                .map((row) => {
+                    return {
+                        ...row,
+                        label: row.type, 
+                        value: row.id,
+                    }
+                })
+
+
+                context.selectors_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
+                .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
+                .map((row) => {
+                    return {
+                        ...row,
+                        label: row.type, 
+                        value: row.id,
+                    }
+                })
             }
         },
         async created() {
@@ -214,7 +479,7 @@
                 context.tableVM.updateItemUrl = "/super-admin-update-lesson-note-section";
                 //context.tableVM.importURL = "/super-admin-import-exam-answers";
             }
-            await context._loadLessonNoteSections()
+            context.initializeSelectors();
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

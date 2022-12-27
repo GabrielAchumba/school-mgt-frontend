@@ -1,9 +1,9 @@
 <template>
     <div class="row q-pa-sm bg-primary">
-        <q-card class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm">
+        <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
           <div class="text-h4 text-accent q-pa-sm">{{ title }}</div>
         </q-card>
-        <q-card class="col-lg-6 col-md-6 col-sm-12 col-xs-12 q-pa-sm">
+        <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
             <p class="q-pa-sm">{{ description }}</p>
         </q-card>
     </div>

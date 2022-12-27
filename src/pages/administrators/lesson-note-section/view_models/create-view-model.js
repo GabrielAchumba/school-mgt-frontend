@@ -1,6 +1,13 @@
 const form = {
     title: "Create Lesson Note Section",
-    qSelects: [],
+    qSelects: [
+         { label: "Level *", value: "", type: "text", 
+         list: [], actionName: "onLevel", visible: true },
+         { label: "Subject *", value: "", type: "text", 
+         list: [], actionName: "onSubject", visible: true },
+         { label: "Lesson Note *", value: "", type: "text", 
+         list: [], actionName: "lessonNoteAction", visible: true },
+    ],
     qInputs: [
         { label: "Section Title", name: "", type: "text",
         selectedFile: null,
@@ -58,9 +65,9 @@ const form = {
 }
 
 const dialogs = [
-    { title: "Create Lesson Note Section", isVisible: false, message: "Do you want to create lesson note",
+    { title: "Create Lesson Note Section", isVisible: false, message: "Do you want to create lesson note section",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Success", isVisible: false, message: "Lesson note created successfully!",
+    { title: "Success", isVisible: false, message: "Lesson note section created successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Failure", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },

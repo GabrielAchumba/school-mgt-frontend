@@ -36,6 +36,7 @@ const form = {
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},
         {label: "Update", name: "Update", icon: "add"},
+        {label: "Delete", name: "Delete", icon: "remove"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

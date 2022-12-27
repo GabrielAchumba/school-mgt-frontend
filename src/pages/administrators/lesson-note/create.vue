@@ -38,7 +38,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { post } from "../../../store/modules/services";
+import { post } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/create-view-model";
 
 export default {
@@ -112,14 +112,8 @@ export default {
             var response = await post(payload)
             this.$store.commit("authenticationStore/setShowSpinner", false);
 
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
             context.dialogs[0].isVisible = false;
-            if(success){
+            if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
                 context.dialogs[2].message = message;
@@ -154,7 +148,8 @@ export default {
         var context = this;
         context.form.clearQInputs();
         context.form.clearQSelects();
-        context.form.qSelects[0].list = this.$store.getters["subjectStore/subjects"];
+        context.form.qSelects[0].list = this.$store.getters["levelStore/levels"];
+        context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
     }
 }
 </script>

@@ -39,7 +39,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
-import { put } from "../../../store/modules/services";
+import { put } from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/update-view-model";
 import { splitAssessment } from "./utils";
 
@@ -115,14 +115,8 @@ export default {
             this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await put(payload)
             this.$store.commit("authenticationStore/setShowSpinner", false);
-
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
+            
+            if(response.data){
                 context.dialogs[1].isVisible = true;
             }else{
                 context.dialogs[2].message = message;

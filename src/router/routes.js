@@ -622,6 +622,11 @@ const routes = [
         component: () => import('pages/administrators/ca-answer/update.vue') 
         
       },
+      { 
+        path: '/super-admin-online-learning-landing', 
+        component: () => import('pages/administrators/online-learning/landing.vue') 
+        
+      }
     ]
   },
   {
@@ -1188,6 +1193,11 @@ const routes = [
         component: () => import('pages/administrators/ca-answer/update.vue') 
         
       },
+      { 
+        path: '/online-learning-landing', 
+        component: () => import('pages/administrators/online-learning/landing.vue') 
+        
+      }
     ]
   },
   {

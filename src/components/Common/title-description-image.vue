@@ -1,6 +1,11 @@
 <template>
     <div class="row q-pa-sm bg-primary">
 
+         <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
+          <div class="text-h5 text-accent flex flex-center q-pa-sm">{{ title }}</div>
+          <p class="q-pa-sm flex flex-center">{{ description }}</p>
+        </q-card>
+
         <q-card 
         v-if="isImage"
         class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm img flex flex-center">
@@ -16,19 +21,31 @@
             </q-img>
         </q-card>
 
-         <q-card 
+        <q-card 
         v-if="isVideo"
         class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
             <video 
-            id="video-preview" 
             v-bind:src="imageUrl" 
             controls 
             v-show="isVideo"/>
         </q-card>
 
-        <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
-          <div class="text-h5 text-accent flex flex-center q-pa-sm">{{ title }}</div>
-          <p class="q-pa-sm flex flex-center">{{ description }}</p>
+        <q-card 
+        v-if="isAudio"
+        class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
+            <video 
+            v-bind:src="imageUrl" 
+            controls 
+            v-show="isAudio"/>
+        </q-card>
+
+         <q-card 
+        v-if="isPdf"
+        class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
+            <embed 
+            :src="imageUrl" 
+            controls 
+            v-show="isPdf"/>
         </q-card>
     </div>
 </template>
@@ -67,7 +84,11 @@ export default {
     isAudio:{
       type: Boolean,
       default: false,
-    }
+    },
+    isPdf:{
+      type: Boolean,
+      default: false,
+    },
   },
 }
 </script>

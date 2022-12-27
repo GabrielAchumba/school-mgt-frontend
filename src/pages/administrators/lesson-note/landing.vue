@@ -1,11 +1,92 @@
 <template>
   <div>
-    <Table
-    v-if="!showSpinner"
-    :table_VM="tableVM"
-    @createLessonNote="createLessonNote($event)"
-    @updateLessonNote="updateLessonNote($event)"
-    @deleteLessonNote="deleteLessonNote($event)"/>
+      <div v-if="!showSpinner"
+      class="q-pa-sm">
+        <div v-if="isMobile">
+        <div 
+        class="row">
+            <LevelSelector class="col-12"
+            :qSelect="selectors_vm.qSelectLevel"
+            @onLevelValueChange="onLevelValueChange($event)"/>
+            <SubjectSelector class="col-12"
+            :qSelect="selectors_vm.qSelectSubject"
+            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            <Form
+            class="col-12"
+                :formData="lessonNotesForm"
+                @linkClick="GetSelectedLessonNote($event)"/>
+            <div
+            v-for="news in newses" 
+            :key="news.title" >
+                <TitleDescriptionImage 
+                v-if="isFileUrl(news.fileUrl)"
+                :title="news.title"
+                :description="news.description"
+                :imageUrl="news.fileUrl"
+                :imageTitle="news.imageTitle"
+                :imageDescription="news.imageDescription"
+                :isVideo="news.isVideo"
+                :isImage="news.isImage"
+                :isAudio="news.isAudio"/>
+                <TitleDescription
+                v-else
+                :title="news.title"
+                :description="news.description"/>
+            </div>
+        </div>
+        </div>
+        <div v-else>
+        <q-resize-observer @resize="onResize" :debounce="0" />
+
+        <q-splitter
+        id="photos"
+        v-model="splitterModel"
+        :limits="[0, 100]"
+        :style="splitterStyle"
+        before-class="overflow-hidden"
+        after-class="overflow-hidden"
+        >
+
+        <template v-slot:before>
+            <div class="row">
+            <LevelSelector class="col-12"
+            :qSelect="selectors_vm.qSelectLevel"
+            @onLevelValueChange="onLevelValueChange($event)"/>
+            <SubjectSelector class="col-12"
+            :qSelect="selectors_vm.qSelectSubject"
+            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            <Form
+                class="col-12"
+                :formData="lessonNotesForm"
+                @linkClick="GetSelectedLessonNote($event)"/>
+            </div>
+        </template>
+
+        <template v-slot:after>
+            <div
+            v-for="news in newses" 
+            :key="news.title" >
+                <TitleDescriptionImage 
+                v-if="isFileUrl(news.fileUrl)"
+                :title="news.title"
+                :description="news.description"
+                :imageUrl="news.fileUrl"
+                :imageTitle="news.imageTitle"
+                :imageDescription="news.imageDescription"
+                :isVideo="news.isVideo"
+                :isImage="news.isImage"
+                :isAudio="news.isAudio"/>
+                <TitleDescription
+                v-else
+                :title="news.title"
+                :description="news.description"/>
+            </div>
+        </template>
+
+        </q-splitter>
+        </div>
+      </div>
+
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -36,9 +117,15 @@
 </template>
 
 <script>
+    import TitleDescription from "../../../components/Common/title-description.vue";
+    import TitleDescriptionImage from "../../../components/Common/title-description-image.vue";
   import Table from "../../../components/Tables/Table.vue";
+  import Form from "../../../components/Forms/Form.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { get, remove } from "../../../store/modules/services"
+  import LevelSelector from "../exam/level-selector.vue";
+  import SubjectSelector from "../exam/subject-selector.vue";
+  import { post, remove, get } from "../../../store/modules/gcp-services"
+  import { lessonNotesForm, selectors_vm, selectedLessonNoteForm } from "./view_models/landing-view-model";
   import { splitAssessment } from "./utils";
     export default {
      computed:{
@@ -50,15 +137,32 @@
         },
         spinnerThickness(){
             return this.$store.getters["authenticationStore/spinnerThickness"];
+        },
+        splitterStyle(){
+            var context = this;
+            return {
+            height: `100vh`,
+            width: `${context.width}px`,
+            }
         }
       },
       components:{
         Table,
-        MessageBox
+        MessageBox,
+        Form,
+        LevelSelector,
+        SubjectSelector,
+        TitleDescription,
+        TitleDescriptionImage
       },
     data () {
     return {
+            width: 400, 
+            splitterModel: 30, // start at 30%,
+            isMobile: false,
             selectedLessonNote: {},
+            lessonNotesForm: lessonNotesForm,
+            selectors_vm: selectors_vm,
             tableVM: {
                 title: "Lesson Notes",
                 columns: [
@@ -80,10 +184,17 @@
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+                ],
+                selectedLevel: null,
+                selectedSubject: null,
+                selectedLessonNoteForm: selectedLessonNoteForm,
             }
         },
         methods: {
+            onResize (info) {
+                var context = this;
+                context.width = info.width;
+            },
           okayEvent(){
             var context = this;
             context.isFetchTableDialog = false
@@ -164,47 +275,130 @@
                 }
             }
         },
-        async loadLessonNotes(){
+        onLevelValueChange(payload){
+            console.log("selectedLevel: ", payload)
             var context = this;
-            var user = this.$store.getters["authenticationStore/IdentityModel"]
-        var url = `lessonnote/${user.schoolId}`;
-
-        this.$store.commit("authenticationStore/setShowSpinner", true);
-        var response = await get({
-          url
-        })
-        this.$store.commit("authenticationStore/setShowSpinner", false);
-
-        const { 
-                data : {
-                    data: lessNotes,
-                    message,
-                    success,
-                }
-            } = response
-
-            if(success){
-            context.tableVM.rows = lessNotes.map((row) => {
-                return {
-                    title: row.title,
-                }
-            })
-            this.$store.commit('lessonNoteStore/SetLessonNotes', context.tableVM.rows)
-            }else{
-                context.isFetchTableDialog = true;
-                context.message = message;
+            context.selectedLevel = payload.qSelect;
+            context.selectors_vm.qSelectSubject.value = "";
+            context.lessonNotesForm.qLists = [];
+        },
+        async onSubjectValueChange(payload){
+            console.log("selectedSubject: ", payload)
+            var context = this;
+            context.selectedSubject = payload.qSelect;
+            await context.FetchLessonNotes();
+        },
+        async GetSelectedLessonNote(selectedLessonNote){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            this.$store.commit("authenticationStore/setShowSpinner", true);
+            let payload = {
+                url: `lessonnote/findOne/${selectedLessonNote._id}`,
+                req: {}
             }
 
+            context.selectedLessonNoteForm.qParagraphs = [];
+            try{
+                let response = await get(payload);
+                console.log("lesson note: ", response.data);
+
+                payload = {
+                    url: `lessonnotesection/findAll`,
+                    req: {
+                        lessonNoteId: selectedLessonNote._id,
+                        schoolId: user.schoolId,              
+                    }
+                }
+                
+                response = await post(payload);
+                console.log("lesson note sections: ", response.data);
+
+                this.$store.commit("authenticationStore/setShowSpinner", false);
+                
+            }catch{
+                this.$store.commit("authenticationStore/setShowSpinner", false);
             }
         },
-        async created() {
+        async FetchLessonNotes(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
+            console.log("context.selectedSubject: ", context.selectedSubject)
+            console.log("context.selectedLevel: ", context.selectedLevel);
+
+            if(context.selectedSubject && context.selectedLevel){
+
+                const payload = {
+                    url: "lessonnote/notes",
+                    req: {
+                        subjectId: context.selectedSubject.value,
+                        levelId: context.selectedLevel.value,
+                        schoolId: user.schoolId,
+                    }
+                }
+
+                try{
+                    const response = await post(payload);
+                    console.log("response.data: ", response.data);
+
+                    context.lessonNotesForm.qLists = [];
+                    const items = response.data.map((row) => {
+                        return {
+                            ...row,
+                            name: row.title,
+                            address: "",
+                            route: "/lesson-note-landing",
+                            letter: row.title.charAt(0),
+                        }
+                    });
+
+                    console.log("items: ", items) 
+
+                    context.lessonNotesForm.qLists.push({
+                        label: "Notes",
+                        items: [...items],
+                    })
+
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                    
+                }catch{
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                }
+            }
+
+        },
+        initializeSelectors(){
+                var context = this;
+                context.selectors_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
+                .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
+                .map((row) => {
+                    return {
+                        ...row,
+                        label: row.type, 
+                        value: row.id,
+                    }
+                })
+
+
+                context.selectors_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
+                .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
+                .map((row) => {
+                    return {
+                        ...row,
+                        label: row.type, 
+                        value: row.id,
+                    }
+                })
+            }
+        },
+        created() {
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             if(user.schoolId === "CEO"){
                 context.tableVM.createItemUrl = "/super-admin-create-lesson-note";
                 context.tableVM.updateItemUrl = "/super-admin-update-lesson-note";
             }
-            await context.loadLessonNotes()
+            context.initializeSelectors();
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

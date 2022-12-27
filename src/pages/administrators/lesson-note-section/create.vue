@@ -5,7 +5,9 @@
         :formData="form"
         @Create="Create($event)"
         @Cancel="Cancel($event)"
-        @onFileSelected="onFileSelected($event)"/>
+        @onFileSelected="onFileSelected($event)"
+        @onSubject="onSubject($event)"
+        @onLevel="onLevel($event)"/>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">
@@ -67,6 +69,8 @@ export default {
             fileName: "",
             originalFileName: "",
             fileType: "",
+            selectedLevel: null,
+            selectedSubject: null,
         }
     },
     methods:{
@@ -143,6 +147,64 @@ export default {
             
             
         },
+        onLevel(payload){
+            let selectedItem = payload.list.find(o => o.id === payload.value);
+            var context = this;
+            context.selectedLevel = selectedItem;
+            console.log("selectedLevel: ", context.selectedLevel)
+            context.form.qSelects[1].value = "";
+            context.form.qSelects[2].value = "";
+        },
+        async onSubject(payload){
+            let selectedItem = payload.list.find(o => o.id === payload.value);
+            var context = this;
+            context.selectedSubject = selectedItem;
+            console.log("selectedSubject: ", context.selectedSubject)
+            context.form.qSelects[2].value = "";
+            await context.FetchLessonNotes();
+        },
+        async FetchLessonNotes(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
+            console.log("context.selectedSubject: ", context.selectedSubject)
+            console.log("context.selectedLevel: ", context.selectedLevel);
+
+            if(context.selectedSubject && context.selectedLevel){
+
+                const payload = {
+                    url: "lessonnote/notes",
+                    req: {
+                        subjectId: context.selectedSubject.id,
+                        levelId: context.selectedLevel.id,
+                        schoolId: user.schoolId,
+                    }
+                }
+
+                try{
+                    console.log("payload: ", payload)
+                    const response = await post(payload);
+                    console.log("response.data: ", response.data);
+                    context.form.qSelects[2].list = response.data
+                    .map((row) => {
+                        return {
+                            ...row,
+                            type: row.title,
+                            label: row.type, 
+                            value: row.id,
+                        }
+                    })
+
+                    
+
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                    
+                }catch{
+                    //this.$store.commit("authenticationStore/setShowSpinner", false);
+                }
+            }
+
+        },
         async uploadFile(){
             var context = this;
             const formData = new FormData();
@@ -175,7 +237,7 @@ export default {
                 url,
                 req: {
                     sectionTitle: context.form.qInputs[0].name,
-                    lessonNoteId: "",
+                    lessonNoteId: context.form.qSelects[2].value,
                     createdBy: user.id,
                     schoolId: user.schoolId,
                 }
@@ -199,13 +261,13 @@ export default {
                 req: {
                     fileType: context.fileType,
                     sectionTitle: context.form.qInputs[0].name,
-                    content: context.form.qInputs[1].name,
+                    content: `${context.form.qInputs[1].name}`,
                     schoolId: user.schoolId,
                     fileUrl: context.fileUrl,
                     fileName: context.fileName,
                     originalFileName: context.originalFileName,
                     createdBy: user.id,
-                    lessonNoteId: "",
+                    lessonNoteId: context.form.qSelects[2].value,
                 }
             }
 
@@ -225,7 +287,9 @@ export default {
             var context = this;
             await context.checkFileExistance();
             if(context.doesFileExists === false){
-                await context.uploadFile();
+                if(context.form.qFiles[0].selectedFile !== null){
+                    await context.uploadFile();
+                }
                 await context.save();
             }
         },
@@ -256,6 +320,11 @@ export default {
         var context = this;
         context.form.clearQInputs();
         context.form.clearQFiles();
+        context.form.qSelects[0].list = this.$store.getters["levelStore/levels"];
+        context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
+        for(let i = 0; i < context.form.qSelects.length; i++){
+            context.form.qSelects[i].value = "";
+        }
     }
 }
 </script>

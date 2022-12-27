@@ -93,6 +93,7 @@
                       :key="qParagraph.label">
                       <div class="row">
                         <!-- <p class="col-12 q-pa-md">{{ qParagraph.label }}:</p> -->
+                        <div class="col-12 q-pa-sm text-center text-h5" >{{ qParagraph.title }}</div>
                         <p class="col-12 q-pa-sm">{{ qParagraph.name }}</p>
                       </div>
                     </div>
