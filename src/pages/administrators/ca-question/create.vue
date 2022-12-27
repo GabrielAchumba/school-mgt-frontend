@@ -197,7 +197,6 @@ export default {
             const payload = {
                 url,
                 req: {
-                    fileType: context.fileType,
                     sectionTitle: context.form.qInputs[0].name,
                     content: context.form.qInputs[1].name,
                     schoolId: user.schoolId,
@@ -205,7 +204,7 @@ export default {
                     fileName: context.fileName,
                     originalFileName: context.originalFileName,
                     createdBy: user.id,
-                    lessonNoteId: "",
+                    cAId: "",
                 }
             }
 
@@ -242,8 +241,8 @@ export default {
                             break;
                         case "Success":
                             var user = this.$store.getters["authenticationStore/IdentityModel"];
-                            if(user.schoolId === "CEO")this.$router.push('/super-admin-lesson-note-section-landing')
-                            else  this.$router.push('/lesson-note-section-landing')
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-ca-question-landing')
+                            else  this.$router.push('/ca-question-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;

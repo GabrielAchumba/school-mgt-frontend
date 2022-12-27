@@ -162,7 +162,7 @@ export default {
             var context = this;
             
             var user = this.$store.getters["authenticationStore/IdentityModel"];
-            var url = `lessonnotesection/${context.selectedVision.id}`;
+            var url = `lessonnotesection/${context.selectedLessonNoteSection.id}`;
             const payload = {
                 url,
                 req: {

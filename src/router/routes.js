@@ -562,6 +562,66 @@ const routes = [
         component: () => import('pages/administrators/lesson-note/update.vue') 
         
       },
+      { 
+        path: '/super-admin-lesson-note-section-landing', 
+        component: () => import('pages/administrators/lesson-note-section/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-lesson-note-section', 
+        component: () => import('pages/administrators/lesson-note-section/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-lesson-note-section', 
+        component: () => import('pages/administrators/lesson-note-section/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-ca-landing', 
+        component: () => import('pages/administrators/ca/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-ca', 
+        component: () => import('pages/administrators/ca/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-ca', 
+        component: () => import('pages/administrators/ca/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-ca-question-landing', 
+        component: () => import('pages/administrators/ca-question/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-ca-question', 
+        component: () => import('pages/administrators/ca-question/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-ca-question', 
+        component: () => import('pages/administrators/ca-question/update.vue') 
+        
+      },
+      { 
+        path: '/super-admin-ca-answer-landing', 
+        component: () => import('pages/administrators/ca-answer/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-ca-answer', 
+        component: () => import('pages/administrators/ca-answer/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-ca-answer', 
+        component: () => import('pages/administrators/ca-answer/update.vue') 
+        
+      },
     ]
   },
   {
@@ -1066,6 +1126,66 @@ const routes = [
       { 
         path: '/update-lesson-note', 
         component: () => import('pages/administrators/lesson-note/update.vue') 
+        
+      },
+      { 
+        path: '/lesson-note-section-landing', 
+        component: () => import('pages/administrators/lesson-note-section/landing.vue') 
+        
+      },
+      { 
+        path: '/create-lesson-note-section', 
+        component: () => import('pages/administrators/lesson-note-section/create.vue') 
+        
+      },
+      { 
+        path: '/update-lesson-note-section', 
+        component: () => import('pages/administrators/lesson-note-section/update.vue') 
+        
+      },
+      { 
+        path: '/ca-landing', 
+        component: () => import('pages/administrators/ca/landing.vue') 
+        
+      },
+      { 
+        path: '/create-ca', 
+        component: () => import('pages/administrators/ca/create.vue') 
+        
+      },
+      { 
+        path: '/update-ca', 
+        component: () => import('pages/administrators/ca/update.vue') 
+        
+      },
+      { 
+        path: '/ca-question-landing', 
+        component: () => import('pages/administrators/ca-question/landing.vue') 
+        
+      },
+      { 
+        path: '/create-ca-question', 
+        component: () => import('pages/administrators/ca-question/create.vue') 
+        
+      },
+      { 
+        path: '/update-ca-question', 
+        component: () => import('pages/administrators/ca-question/update.vue') 
+        
+      },
+      { 
+        path: '/ca-answer-landing', 
+        component: () => import('pages/administrators/ca-answer/landing.vue') 
+        
+      },
+      { 
+        path: '/create-ca-answer', 
+        component: () => import('pages/administrators/ca-answer/create.vue') 
+        
+      },
+      { 
+        path: '/update-ca-answer', 
+        component: () => import('pages/administrators/ca-answer/update.vue') 
         
       },
     ]

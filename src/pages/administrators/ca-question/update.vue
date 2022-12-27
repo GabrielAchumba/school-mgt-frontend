@@ -64,7 +64,7 @@ export default {
             dialogs: dialogs,
             fileUrl: "",
             doesVisionExists: false,
-            selectedLessonNoteSection: {},
+            selectedCAQuestion: {},
             fileName: "",
             originalFileName: "",
         }
@@ -75,7 +75,7 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Update Lesson Note Section"){
+                if(dialog.title == "Update Continuous Assessment Question"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
@@ -83,8 +83,8 @@ export default {
         },
         Cancel(){
             var user = this.$store.getters["authenticationStore/IdentityModel"];
-            if(user.schoolId === "CEO")this.$router.push('/super-admin-lesson-note-section-landing')
-            else  this.$router.push('/lesson-note-section-landing')
+            if(user.schoolId === "CEO")this.$router.push('/super-admin-ca-question-landing')
+            else  this.$router.push('/ca-question-landing')
         },
         cancelDialog(payload){
             const context = this;
@@ -123,7 +123,7 @@ export default {
             console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
             formData.append('file', context.form.qFiles[0].selectedFile);
             
-            var url = `lessonnotesection/upload`;
+            var url = `caquestion/upload`;
             const payload = {
                 url,
                 req: formData,
@@ -141,7 +141,7 @@ export default {
         async checkVisionExistance(){
             var context = this;
             
-            var url = `lessonnotesection/checkfile`;
+            var url = `caquestion/checkfile`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
@@ -162,7 +162,7 @@ export default {
             var context = this;
             
             var user = this.$store.getters["authenticationStore/IdentityModel"];
-            var url = `lessonnotesection/${context.selectedVision.id}`;
+            var url = `caquestion/${context.selectedCAQuestion.id}`;
             const payload = {
                 url,
                 req: {
@@ -174,7 +174,7 @@ export default {
                     fileName: context.fileName,
                     originalFileName: context.originalFileName,
                     createdBy: user.id,
-                    lessonNoteId: "",
+                    cAId: "",
                 }
             }
 
@@ -205,13 +205,13 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Update Lesson Note Section":
+                        case "Update Continuous Assessment Question":
                             await context.uploadAndSaveVisionUr();
                             break;
                         case "Success":
                             var user = this.$store.getters["authenticationStore/IdentityModel"];
-                            if(user.schoolId === "CEO")this.$router.push('/super-admin-lesson-note-section-landing')
-                            else  this.$router.push('/lesson-note-section-landing')
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-ca-question-landing')
+                            else  this.$router.push('/ca-question-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -222,12 +222,12 @@ export default {
     },
     created(){
         var context =  this;
-        context.selectedLessonNoteSection = this.$store.getters["lessonNoteSectionStore/selectedLessonNoteSection"];
-        context.VisionUrl = context.selectedLessonNoteSection.fileUrl;
+        context.selectedCAQuestion = this.$store.getters["cAQuestionStore/selectedCAQuestion"];
+        context.fileUrl = context.selectedCAQuestion.fileUrl;
         context.form.qFiles[0].showPreview = true;
-        context.form.qFiles[0].imagePreview = context.selectedLessonNoteSection.fileUrl;
-        context.form.qInputs[0].name = context.selectedLessonNoteSection.sectionTitle;
-        context.form.qInputs[1].name = context.selectedLessonNoteSection.content;
+        context.form.qFiles[0].imagePreview = context.selectedCAQuestion.fileUrl;
+        context.form.qInputs[0].name = context.selectedCAQuestion.sectionTitle;
+        context.form.qInputs[1].name = context.selectedCAQuestion.content;
     }
 }
 </script>

@@ -59,30 +59,31 @@
       },
         data () {
     return {
+            selectedCAAnswer: {},
             cardList: [],
             tableVM: {
-                selectedLessonNoteSection: {},
-                title: "Lesson Note Sections",
+                title: "Continuous Assessment Answers",
                 columns: [
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
-                    { name: "type", label: "Type of Class Room", field: "", align: "left", type: "text" },
+                    { name: "sectionTitle", label: "Section Title", field: "", align: "left", type: "text" },
                 ],
                 rows: [],
                 separator: "cell",
                 createItem: "createItem",
                 updateItem: "updateItem",
                 deleteItem: "deleteItem",
-                createItemUrl: "/create-lesson-note-section",
-                updateItemUrl: "/update-lesson-note-section",
+                createItemUrl: "/create-ca-answer",
+                updateItemUrl: "/update-ca-answer",
                 },
                 dialogs:[
-                { title: "Delete Lesson Note Section", isVisible: false, message: "Do you want to delete lesson note section",
+                { title: "Delete Continuous Assessment Answer", isVisible: false, message: "Do you want to delete continuous assessment answer",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-                { title: "Success", isVisible: false, message: "Lesson note section deleted successfully!",
+                { title: "Success", isVisible: false, message: "Continuous assessment answer deleted successfully!",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+                ],
+                isFetchTableDialog: false,
             }
         },
         methods: {
@@ -99,15 +100,15 @@
              console.log(context.tableVM.createItemUrl)
               this.$router.push(context.tableVM.createItemUrl);
           },
-          updateItem(selectedLessonNoteSection){
+          updateItem(selectedCAAnswer){
              var context = this;
-             this.$store.commit('lessonNoteSectionStore/SetSelectedLessonNoteSection', selectedLessonNoteSection)
+             this.$store.commit('cAAnswerStore/SetSelectedCAAnswer', selectedCAAnswer)
             this.$router.push(context.tableVM.updateItemUrl);
           },
-          deleteItem(selectedLessonNoteSection){
+          deleteItem(selectedCAAnswer){
              var context = this;
-             context.selectedLessonNoteSection = selectedLessonNoteSection;
-             console.log(context.selectedLessonNoteSection)
+             context.selectedCAAnswer = selectedCAAnswer;
+             console.log(context.selectedCAAnswer)
              context.dialogs[0].isVisible = true;
           },
           cancelDialog(payload){
@@ -125,7 +126,7 @@
             var context = this;
             
             var user = this.$store.getters["authenticationStore/IdentityModel"]
-            var url = `lessonnotesection/${context.selectedFileModel.id}/${user.schoolId}`;
+            var url = `caanswer/${context.selectedCAAnswer.id}/${user.schoolId}`;
             const payload = {
                 url,
             }
@@ -155,11 +156,11 @@
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete Lesson Note Section":
+                        case "Delete Continuous Assessment Answer":
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadLessonNoteSections()
+                            await context._loadCAAnswers()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -167,37 +168,15 @@
                 }
             }
         },
-        async _loadLessonNoteSections(){
+        async _loadCAAnswers(){
 
                 var context = this;
                 var user = this.$store.getters["authenticationStore/IdentityModel"]
                 this.$store.commit("authenticationStore/setShowSpinner", true);
                 const { result, message } = await loadLessonNoteSections(user.schoolId)
                 this.$store.commit("authenticationStore/setShowSpinner", false);
-                this.$store.commit('lessonNoteSectionStore/SetLessonNoteSections', result)
+                this.$store.commit('cAAnswerStore/SetCAAnswers', result)
                 context.tableVM.rows = result;
-                context.cardList = result.map((row, i) => {
-                    let  description = row.description;
-                    if(description.length > 300){
-                        description = row.description.substr(1, 3000);
-                    }
-
-                return {
-                    id: i+1,
-                    ...row,
-                    name: "showPage",
-                    title: row.title, 
-                    description,
-                    createdDate: (new Date(row.createdAt)).toDateString(),
-                    qBtns: [
-                            {label: "View", name: "View"},
-                        ],
-                    }
-            })
-
-            console.log("context.cardList: ", context.cardList);
-            this.$store.commit('resultStore/SetResults', result)
-            this.$store.commit('componentsStore/setCardItems', context.cardList)
 
                 if(result.length === 0){
                     context.isFetchTableDialog = true;
@@ -210,11 +189,11 @@
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             if(user.schoolId === "CEO"){
-                context.tableVM.createItemUrl = "/super-admin-create-lesson-note-section";
-                context.tableVM.updateItemUrl = "/super-admin-update-lesson-note-section";
+                context.tableVM.createItemUrl = "/super-admin-create-ca-answer";
+                context.tableVM.updateItemUrl = "/super-admin-update-ca-answer";
                 //context.tableVM.importURL = "/super-admin-import-exam-answers";
             }
-            await context._loadLessonNoteSections()
+            await context._loadCAAnswers()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);

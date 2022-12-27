@@ -1,5 +1,5 @@
 const form = {
-    title: "Create Lesson Note Section",
+    title: "Create Continuous Assessment Answer",
     qSelects: [],
     qInputs: [
         { label: "Section Title", name: "", type: "text",
@@ -11,6 +11,14 @@ const form = {
             visible: false,
         }},
         { label: "Content", name: "", type: "textarea",
+        selectedFile: null,
+        files: [],
+        Template: {
+            sn: 1,
+            iconName: "",
+            visible: false,
+        }},
+        { label: "Score", name: "", type: "number",
         selectedFile: null,
         files: [],
         Template: {
@@ -58,9 +66,9 @@ const form = {
 }
 
 const dialogs = [
-    { title: "Create Lesson Note Section", isVisible: false, message: "Do you want to create File",
+    { title: "Create Continuous Assessment Answer", isVisible: false, message: "Do you want to create continuous assessment answer",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Success", isVisible: false, message: "File created successfully!",
+    { title: "Success", isVisible: false, message: "Continuous assessment answer created successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Failure", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },

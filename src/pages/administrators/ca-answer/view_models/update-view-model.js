@@ -1,5 +1,5 @@
 const form = {
-    title: "Update Lesson Note Section",
+    title: "Update Continuous Assessment Answer",
     qSelects: [],
     qInputs: [
         { label: "Section Title", name: "", type: "text",
@@ -11,6 +11,14 @@ const form = {
             visible: false,
         }},
         { label: "Content", name: "", type: "textarea",
+        selectedFile: null,
+        files: [],
+        Template: {
+            sn: 1,
+            iconName: "",
+            visible: false,
+        }},
+        { label: "Score", name: "", type: "number",
         selectedFile: null,
         files: [],
         Template: {
@@ -35,7 +43,7 @@ const form = {
     ],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close"},
-        {label: "Create", name: "Create", icon: "add"},
+        {label: "Update", name: "Update", icon: "add"},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -58,9 +66,9 @@ const form = {
 }
 
 const dialogs = [
-    { title: "Update Lesson Note Section", isVisible: false, message: "Do you want to update file",
+    { title: "Update Continuous Assessment Answer", isVisible: false, message: "Do you want to update continuous assessment answer",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-    { title: "Success", isVisible: false, message: "File updated successfully!",
+    { title: "Success", isVisible: false, message: "Continuous assessment answer updated successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Failure", isVisible: false, message: "",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },

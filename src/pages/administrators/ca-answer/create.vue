@@ -75,7 +75,7 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Lesson Note Section"){
+                if(dialog.title == "Create Continuous Assessment Answer"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
@@ -149,7 +149,7 @@ export default {
             console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
             formData.append('file', context.form.qFiles[0].selectedFile);
             
-            var url = `lessonnotesection/upload`;
+            var url = `caanswer/upload`;
             const payload = {
                 url,
                 req: formData,
@@ -169,7 +169,7 @@ export default {
         async checkFileExistance(){
             var context = this;
             
-            var url = `lessonnotesection/checkfile`;
+            var url = `caanswer/checkfile`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
@@ -192,20 +192,22 @@ export default {
          async save(){
             var context = this;
             
-            var url = `lessonnotesection/create`;
+            var url = `caanswer/create`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
                 req: {
-                    fileType: context.fileType,
                     sectionTitle: context.form.qInputs[0].name,
                     content: context.form.qInputs[1].name,
+                    score: context.form.qInputs[2].name,
                     schoolId: user.schoolId,
                     fileUrl: context.fileUrl,
                     fileName: context.fileName,
                     originalFileName: context.originalFileName,
                     createdBy: user.id,
-                    lessonNoteId: "",
+                    cAId: "",
+                    cAQuestionId: "",
+                    userType: user.userType
                 }
             }
 
@@ -237,13 +239,13 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Lesson Note Section":
+                        case "Create Continuous Assessment Answer":
                             await context.uploadAndSaveFileUr();
                             break;
                         case "Success":
                             var user = this.$store.getters["authenticationStore/IdentityModel"];
-                            if(user.schoolId === "CEO")this.$router.push('/super-admin-lesson-note-section-landing')
-                            else  this.$router.push('/lesson-note-section-landing')
+                            if(user.schoolId === "CEO")this.$router.push('/super-admin-ca-answer-landing')
+                            else  this.$router.push('/ca-answer-landing')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
