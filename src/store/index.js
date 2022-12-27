@@ -30,6 +30,11 @@ import levelStore from './modules/levelStore';
 import sessionStore from './modules/sessionStore';
 import examStore from './modules/examStore';
 import storyStore from './modules/storyStore';
+import lessonNoteStore from './modules/lessonNoteStore'
+import lessonNoteSectionStore from './modules/lessonNoteSectionStore';
+import cAStore from './modules/cAStore';
+import cAQuestionStore from './modules/cAQuestionStore';
+import cAAnswerStore from './modules/cAAnswerStore';
 
 
 Vue.use(Vuex)
@@ -74,6 +79,11 @@ export default function (/* { ssrContext } */) {
       sessionStore,
       examStore,
       storyStore,
+      lessonNoteStore,
+      lessonNoteSectionStore,
+      cAStore,
+      cAQuestionStore,
+      cAAnswerStore,
     },
     plugins: [createPersistedState()],
 

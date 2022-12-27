@@ -547,6 +547,21 @@ const routes = [
         component: () => import('pages/administrators/exam/exam-score.vue') 
         
       },
+      { 
+        path: '/super-admin-lesson-note-landing', 
+        component: () => import('pages/administrators/lesson-note/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-lesson-note', 
+        component: () => import('pages/administrators/lesson-note/create.vue') 
+        
+      },
+      { 
+        path: '/super-admin-update-lesson-note', 
+        component: () => import('pages/administrators/lesson-note/update.vue') 
+        
+      },
     ]
   },
   {
@@ -1036,6 +1051,21 @@ const routes = [
       { 
         path: '/exam-score',   
         component: () => import('pages/administrators/exam/exam-score.vue') 
+        
+      },
+      { 
+        path: '/lesson-note-landing', 
+        component: () => import('pages/administrators/lesson-note/landing.vue') 
+        
+      },
+      { 
+        path: '/create-lesson-note', 
+        component: () => import('pages/administrators/lesson-note/create.vue') 
+        
+      },
+      { 
+        path: '/update-lesson-note', 
+        component: () => import('pages/administrators/lesson-note/update.vue') 
         
       },
     ]
