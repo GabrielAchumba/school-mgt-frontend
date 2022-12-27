@@ -2,7 +2,7 @@
     <div class="row q-pa-sm bg-primary">
 
          <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
-          <div class="text-h5 text-accent flex flex-center q-pa-sm">{{ title }}</div>
+          <div class="text-h5 text-accent text-left q-pa-sm">{{ title }}</div>
           <p class="q-pa-sm flex flex-center">{{ description }}</p>
         </q-card>
 

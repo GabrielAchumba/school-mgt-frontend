@@ -2,7 +2,7 @@
   <div>
       <div v-if="!showSpinner"
       class="q-pa-sm">
-        <div v-if="isMobile">
+        <div v-if="setIsResponsive">
         <div 
         class="row">
             <LevelSelector class="col-12"
@@ -16,22 +16,22 @@
                 :formData="lessonNotesForm"
                 @linkClick="GetSelectedLessonNote($event)"/>
             <div
-            v-for="news in newses" 
-            :key="news.title" >
+            v-for="noteSection in noteSections" 
+            :key="noteSection.title" >
                 <TitleDescriptionImage 
-                v-if="isFileUrl(news.fileUrl)"
-                :title="news.title"
-                :description="news.description"
-                :imageUrl="news.fileUrl"
-                :imageTitle="news.imageTitle"
-                :imageDescription="news.imageDescription"
-                :isVideo="news.isVideo"
-                :isImage="news.isImage"
-                :isAudio="news.isAudio"/>
+                v-if="isFileUrl(noteSection.fileUrl)"
+                :title="noteSection.title"
+                :description="noteSection.description"
+                :imageUrl="noteSection.fileUrl"
+                :imageTitle="noteSection.imageTitle"
+                :imageDescription="noteSection.imageDescription"
+                :isVideo="noteSection.isVideo"
+                :isImage="noteSection.isImage"
+                :isAudio="noteSection.isAudio"/>
                 <TitleDescription
                 v-else
-                :title="news.title"
-                :description="news.description"/>
+                :title="noteSection.title"
+                :description="noteSection.description"/>
             </div>
         </div>
         </div>
@@ -63,24 +63,26 @@
         </template>
 
         <template v-slot:after>
+             <q-scroll-area style="height: 100vh; max-width: 100%;">
             <div
-            v-for="news in newses" 
-            :key="news.title" >
+            v-for="noteSection in noteSections" 
+            :key="noteSection.title" >
                 <TitleDescriptionImage 
-                v-if="isFileUrl(news.fileUrl)"
-                :title="news.title"
-                :description="news.description"
-                :imageUrl="news.fileUrl"
-                :imageTitle="news.imageTitle"
-                :imageDescription="news.imageDescription"
-                :isVideo="news.isVideo"
-                :isImage="news.isImage"
-                :isAudio="news.isAudio"/>
+                v-if="isFileUrl(noteSection.fileUrl)"
+                :title="noteSection.title"
+                :description="noteSection.description"
+                :imageUrl="noteSection.fileUrl"
+                :imageTitle="noteSection.imageTitle"
+                :imageDescription="noteSection.imageDescription"
+                :isVideo="noteSection.isVideo"
+                :isImage="noteSection.isImage"
+                :isAudio="noteSection.isAudio"/>
                 <TitleDescription
                 v-else
-                :title="news.title"
-                :description="news.description"/>
+                :title="noteSection.title"
+                :description="noteSection.description"/>
             </div>
+             </q-scroll-area>
         </template>
 
         </q-splitter>
@@ -144,6 +146,11 @@
             height: `100vh`,
             width: `${context.width}px`,
             }
+        },
+        setIsResponsive(){
+        const width = window.innerWidth;
+        if(width < 700) return true;
+        else return false;
         }
       },
       components:{
@@ -188,9 +195,18 @@
                 selectedLevel: null,
                 selectedSubject: null,
                 selectedLessonNoteForm: selectedLessonNoteForm,
+                noteSections: [],
             }
         },
         methods: {
+            isFileUrl(fileUrl){
+                if(fileUrl === "" || fileUrl == undefined) return false;
+                else return true;
+            },
+            getFileExtension(fileUrl){
+                const arr = fileUrl.split(".")
+                return arr[1];
+            },
             onResize (info) {
                 var context = this;
                 context.width = info.width;
@@ -292,17 +308,23 @@
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             this.$store.commit("authenticationStore/setShowSpinner", true);
-            let payload = {
-                url: `lessonnote/findOne/${selectedLessonNote._id}`,
-                req: {}
-            }
 
-            context.selectedLessonNoteForm.qParagraphs = [];
+            context.noteSections = [];
+            context.noteSections.push({
+                title: selectedLessonNote.title, 
+                description: "", 
+                fileUrl: "", 
+                imageTitle: "", 
+                imageDescription: "",
+                isVideo: false, 
+                isImage: false, 
+                isAudio: false,
+                isPdf: false,
+            })
+
             try{
-                let response = await get(payload);
-                console.log("lesson note: ", response.data);
 
-                payload = {
+                const payload = {
                     url: `lessonnotesection/findAll`,
                     req: {
                         lessonNoteId: selectedLessonNote._id,
@@ -310,8 +332,50 @@
                     }
                 }
                 
-                response = await post(payload);
-                console.log("lesson note sections: ", response.data);
+                const response = await post(payload);
+                console.log("response: ", response)
+                let i = 0;
+                for(const item of response.data){
+                    i++;
+                    context.noteSections.push({
+                        title: item.sectionTitle, 
+                        description: item.content, 
+                        fileUrl: item.fileUrl,
+                        imageTitle: "", 
+                        imageDescription: "",
+                        isVideo: false, 
+                        isImage: false, 
+                        isAudio: false,
+                        isPdf: false,
+                    })
+
+                    if(context.isFileUrl(item.originalFileName)){
+                        const fileExtension = context.getFileExtension(item.originalFileName)
+                        console.log("fileExtension: ", fileExtension)
+                        switch(fileExtension){
+                            case "pdf":
+                                context.noteSections[i].isPdf = true;
+                                break;
+                            case "mp4":
+                                context.noteSections[i].isVideo = true;
+                                break;
+                            case "mp3":
+                                context.noteSections[i].isAudio = true;
+                                break;
+                            case "png":
+                                context.noteSections[i].isImage = true;
+                                break;
+                            case "jpeg":
+                                context.noteSections[i].isImage = true;
+                                break;
+                            case "jpg":
+                                context.noteSections[i].isImage = true;
+                                break;
+                        }
+                    }
+                }
+
+                console.log("context.noteSections: ", context.noteSections)
 
                 this.$store.commit("authenticationStore/setShowSpinner", false);
                 

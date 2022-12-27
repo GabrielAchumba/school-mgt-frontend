@@ -379,8 +379,8 @@
                 context.noteSection.isImage = false
                 context.noteSection.isAudio = false
                 context.noteSection.isPdf = false
-                if(context.isFileUrl(context.noteSection.fileUrl)){
-                    const fileExtension = context.getFileExtension(context.noteSection.fileUrl)
+                if(context.isFileUrl(selectedLessonNoteSection.originalFileName)){
+                    const fileExtension = context.getFileExtension(selectedLessonNoteSection.originalFileName)
                     switch(fileExtension){
                         case "pdf":
                             context.noteSection.isPdf = true;
@@ -391,8 +391,15 @@
                         case "mp3":
                             context.noteSection.isAudio = true;
                             break;
-                        default:
+                        case "png":
                             context.noteSection.isImage = true;
+                            break;
+                        case "jpeg":
+                            context.noteSection.isImage = true;
+                            break;
+                        case "jpg":
+                            context.noteSection.isImage = true;
+                            break;
                     }
                 }
 

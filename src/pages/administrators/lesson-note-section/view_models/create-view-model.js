@@ -27,7 +27,7 @@ const form = {
         }}
     ],
     qFiles: [
-        { label: "File Path", name: "", type: "file",
+        { label: "File Path (10MB Maximum)", name: "", type: "file",
         selectedFile: null,
         showPreview: false,
 		imagePreview: '',
