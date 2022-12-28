@@ -4,7 +4,8 @@
         v-if="!showSpinner"
         :formData="form"
         @createSchool="createSchool($event)"
-        @linkClick="linkClick($event)"/>
+        @linkClick="linkClick($event)"
+        @qListTemplateAction="filterSchools($event)"/>
     <!-- <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
@@ -45,6 +46,7 @@
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/services"
   import { form } from "./view_models/landing-view-model";
+  import { customFilter } from "../../../components/Utils/searchListUtil";
     export default {
       computed:{
           showSpinner(){
@@ -179,6 +181,18 @@
                 }
             }
         },
+        filterSchools(payload){
+            var context = this;
+            console.log("payload: ", payload)
+            switch(payload.label){
+                case "Schools":
+                    console.log("payload.originalItems: ", payload.originalItems)
+                    console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
+                    context.form.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
+                    console.log("context.questionsForms.qLists.items: ", context.form.qLists[0].items)
+                    break;
+            }
+        },
         async loadSchools(){
             var context = this;
         var url = "school";
@@ -219,6 +233,7 @@
             context.form.qLists.push({
                 label: "Schools",
                 items: [...items],
+                originalItems: [...items],
             })
 
             console.log("context.form: ", context.form)

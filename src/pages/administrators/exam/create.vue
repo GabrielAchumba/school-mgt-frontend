@@ -490,7 +490,7 @@ export default {
                     isImage: false,
                     qSelects: [],
                     qInputs: [
-                        { label: "Question", name: "", type: "text",
+                        { label: "Question", name: "", type: "textarea",
                         Template: {
                             sn: 0,
                             iconName: "",
@@ -519,7 +519,7 @@ export default {
                     isImage: true,
                     qSelects: [],
                     qInputs: [
-                        { label: "Question", name: "", type: "text",
+                        { label: "Question", name: "", type: "textarea",
                         Template: {
                             sn: 0,
                             iconName: "",

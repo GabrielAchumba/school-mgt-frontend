@@ -1,14 +1,7 @@
 const form = {
     title: "",
-    qSelects: [ ],
-    qInputs: [
-        { label: "", name: "", type: "text", 
-        Template: {
-            sn: 0,
-            iconName: "search",
-            visible: true,
-        }},
-    ],
+    qSelects: [],
+    qInputs: [],
     qBtns: [],
     qDates: [],
     GroupedCheckBoxes: [],

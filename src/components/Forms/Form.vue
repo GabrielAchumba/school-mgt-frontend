@@ -1,5 +1,6 @@
 <template>
     <div>
+        <q-scroll-area style="height: 80vh; max-width: 100%;">
         <div class="row q-pa-none flex flex-center">
              <q-card class="col-12 bg-primary">
                 <q-bar class="bg-accent text-primary">
@@ -94,7 +95,7 @@
                       <div class="row">
                         <!-- <p class="col-12 q-pa-md">{{ qParagraph.label }}:</p> -->
                         <div class="col-12 q-pa-sm text-center text-h5" >{{ qParagraph.title }}</div>
-                        <p class="col-12 q-pa-sm">{{ qParagraph.name }}</p>
+                        <p class="col-12 q-pa-sm" style="white-space: pre-line">{{ qParagraph.name }}</p>
                       </div>
                     </div>
 
@@ -254,34 +255,49 @@
                      v-for="qList in formData.qLists" 
                     :key="qList.label"
                     class="q-pa-sm">
-                      <q-list
-                      bordered>
-                        <q-item  
-                        v-for="item in qList.items" 
-                        :key="item.label"
-                        class="q-pa-sm" 
-                        clickable 
-                        v-ripple>
-                          <q-item-section avatar>
-                            <q-avatar color="accent" text-color="primary">
-                              {{ item.letter }}
-                              <!-- <img :src="`https://cdn.quasar.dev/img/${contact.avatar}`"> -->
-                            </q-avatar>
-                          </q-item-section>
+                     <span>
+                        <q-input class="q-ma-none bg-primary text-accent"
+                        outlined 
+                        bordered
+                        v-model="qList.listBoxSearchModel" 
+                        type="text" >
+                            <template  
+                              v-slot:append>
+                              <q-icon name="search" 
+                              class="bg-primary text-accent"
+                              @click="qListTemplateAction(qList)"/>
+                            </template>
+                        </q-input>
 
-                          <q-item-section>
-                            <q-item-label>{{ item.name }}</q-item-label>
-                            <q-item-label caption lines="1">{{ item.address }}</q-item-label>
-                          </q-item-section>
+                        <q-list
+                        bordered>
+                          <q-item  
+                          v-for="item in qList.items" 
+                          :key="item.label"
+                          class="q-pa-sm" 
+                          clickable 
+                          v-ripple>
+                            <q-item-section avatar>
+                              <q-avatar color="accent" text-color="primary" size="md">
+                                <p class="text-caption text-center">{{ item.letter }}</p>
+                                <!-- <img :src="`https://cdn.quasar.dev/img/${contact.avatar}`"> -->
+                              </q-avatar>
+                            </q-item-section>
 
-                          <q-item-section side>
-                            <q-icon 
-                            name="chat_bubble" 
-                            color="accent"
-                            @click="linkClick(item)" />
-                          </q-item-section>
-                        </q-item>
-                      </q-list>
+                            <q-item-section>
+                              <q-item-label>{{ item.name }}</q-item-label>
+                              <q-item-label caption lines="1">{{ item.address }}</q-item-label>
+                            </q-item-section>
+
+                            <q-item-section side>
+                              <q-icon 
+                              name="chat_bubble" 
+                              color="accent"
+                              @click="linkClick(item)" />
+                            </q-item-section>
+                          </q-item>
+                        </q-list>
+                      </span>
 
                     </div>
                   </q-form>
@@ -338,6 +354,7 @@
 
              </q-card>
         </div>
+        </q-scroll-area>
     </div>
 </template>
 
@@ -386,7 +403,8 @@
         },
         data(){
           return {
-            show: true
+            show: true,
+            listBoxSearchTemplate:{ sn: 0, iconName: "search", visible: true},
           }
         },
         methods: {
@@ -442,6 +460,9 @@
           },
           qInputTemplateAction(payload){
             this.$emit("qInputTemplateAction", payload);
+          },
+          qListTemplateAction(payload){
+            this.$emit("qListTemplateAction", payload);
           },
           handleAddEditableTable(payload) {
             this.$emit(payload.handleAddName, payload);

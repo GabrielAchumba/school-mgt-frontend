@@ -14,7 +14,8 @@
             <Form
             class="col-12"
                 :formData="lessonNotesForm"
-                @linkClick="GetSelectedLessonNote($event)"/>
+                @linkClick="GetSelectedLessonNote($event)"
+                @qListTemplateAction="filterLessonNotes($event)"/>
             <div
             v-for="noteSection in noteSections" 
             :key="noteSection.title" >
@@ -54,7 +55,8 @@
             @onLevelValueChange="onLevelValueChange($event)"/>
             <SubjectSelector class="col-12"
             :qSelect="selectors_vm.qSelectSubject"
-            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            @onSubjectValueChange="onSubjectValueChange($event)"
+            @qListTemplateAction="filterLessonNotes($event)"/>
             <Form
                 class="col-12"
                 :formData="lessonNotesForm"
@@ -421,6 +423,7 @@
                     context.lessonNotesForm.qLists.push({
                         label: "Notes",
                         items: [...items],
+                        originalItems: [...items],
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -430,6 +433,18 @@
                 }
             }
 
+        },
+        filterLessonNotes(payload){
+            var context = this;
+            console.log("payload: ", payload)
+            switch(payload.label){
+                case "Notes":
+                    console.log("payload.originalItems: ", payload.originalItems)
+                    console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
+                    context.lessonNotesForm.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
+                    console.log("context.lessonNotesForm.qLists.items: ", context.lessonNotesForm.qLists[0].items)
+                    break;
+            }
         },
         initializeSelectors(){
                 var context = this;

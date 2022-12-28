@@ -6,7 +6,7 @@
     </div>
 
     <div>
-      <p class="q-pa-sm text-h6">{{ selectedQuestion }}</p>
+      <p class="q-pa-sm text-h6" style="white-space: pre-line">{{ selectedQuestion }}</p>
     </div>
 
     <div 

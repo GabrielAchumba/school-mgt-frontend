@@ -12,7 +12,8 @@
           <Form
           class="col-12"
             :formData="questionsForms"
-            @linkClick="selectPastQuestions($event)"/>
+            @linkClick="selectPastQuestions($event)"
+            @qListTemplateAction="filterPastQuestions($event)"/>
           <Form
             class="col-12"
             :formData="form"
@@ -42,7 +43,8 @@
           <Form
             class="col-12"
             :formData="questionsForms"
-            @linkClick="selectPastQuestions($event)"/>
+            @linkClick="selectPastQuestions($event)"
+            @qListTemplateAction="filterPastQuestions($event)"/>
         </div>
       </template>
 
@@ -82,6 +84,7 @@ import SubjectSelector from "./subject-selector.vue";
 import  { form, dialogs, questionsForms } from "./view_models/exam-rules-view-model";
 import { post } from "../../../store/modules/gcp-services";
 import { exam_vm } from "./view_models/create-view-model";
+import { customFilter } from "../../../components/Utils/searchListUtil";
 
 export default {
     computed:{
@@ -127,12 +130,15 @@ export default {
             console.log("selectedLevel: ", payload)
             var context = this;
             context.selectedLevel = payload.qSelect;
+            context.exam_vm.qSelectSubject.value = "";
+            context.questionsForms.qLists = [];
             await context.FetchExamQuestions();
         },
         async onSubjectValueChange(payload){
             console.log("selectedSubject: ", payload)
             var context = this;
             context.selectedSubject = payload.qSelect;
+            context.questionsForms.qLists = [];
             await context.FetchExamQuestions();
         },
         Cancel(){
@@ -189,6 +195,7 @@ export default {
             var context = this;
 
             //objArray.sort((a, b) => a.DepartmentName.toLowerCase().localeCompare(b.DepartmentName.toLowerCase()))
+            context.questionsForms.qLists = [];
 
             context.exam_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
             .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
@@ -199,6 +206,7 @@ export default {
                     value: row.id,
                 }
             })
+            context.exam_vm.qSelectSubject.value = "";
 
 
             context.exam_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
@@ -210,6 +218,7 @@ export default {
                     value: row.id,
                 }
             })
+            context.exam_vm.qSelectLevel.value = "";
             this.$store.commit("authenticationStore/setShowSpinner", false);
             console.log("context.exam_vm: ", context.exam_vm)
         },
@@ -258,6 +267,7 @@ export default {
                     context.questionsForms.qLists.push({
                         label: "Past Questions",
                         items: [...items],
+                        originalItems: [...items],
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -267,6 +277,18 @@ export default {
                 }
             }
 
+        },
+        filterPastQuestions(payload){
+            var context = this;
+            console.log("payload: ", payload)
+            switch(payload.label){
+                case "Past Questions":
+                    console.log("payload.originalItems: ", payload.originalItems)
+                    console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
+                    context.questionsForms.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
+                    console.log("context.questionsForms.qLists.items: ", context.questionsForms.qLists[0].items)
+                    break;
+            }
         },
         async viewQuestions(){
             var context = this;

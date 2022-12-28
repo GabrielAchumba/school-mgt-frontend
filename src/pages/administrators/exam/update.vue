@@ -163,7 +163,7 @@
             @click="Cancel"
             />
             <q-btn class="q-ma-sm bg-accent text-primary"
-            label="Create"
+            label="Update"
             type="button"
             size="md"
             icon="save"
@@ -192,7 +192,7 @@
 <script>
 import Form from "../../../components/Forms/Form.vue";
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
-import { exam_vm, dialogs } from "./view_models/create-view-model";
+import { exam_vm, dialogs } from "./view_models/update-view-model";
 import { post, uploadCoreValue, put } from "../../../store/modules/gcp-services"
 
 export default {
@@ -222,7 +222,7 @@ export default {
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
-                if(dialog.title == "Create Examination Question"){
+                if(dialog.title == "Update Examination Question"){
                     context.dialogs[i].isVisible = true;
                     break;
                 }
@@ -394,7 +394,7 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Examination Question":
+                        case "Update Examination Question":
                             await context.CreateAction();
                             break;
                         case "Success":
@@ -497,7 +497,7 @@ export default {
                     isImage: false,
                     qSelects: [],
                     qInputs: [
-                        { label: "Question", name: "", type: "text",
+                        { label: "Question", name: "", type: "textarea",
                         Template: {
                             sn: 0,
                             iconName: "",
@@ -526,7 +526,7 @@ export default {
                     isImage: true,
                     qSelects: [],
                     qInputs: [
-                        { label: "Question", name: "", type: "text",
+                        { label: "Question", name: "", type: "textarea",
                         Template: {
                             sn: 0,
                             iconName: "",

@@ -18,7 +18,8 @@
             <Form
             class="col-12"
                 :formData="lessonNoteSectionsForm"
-                @linkClick="GetSelectedLessonNoteSection($event)"/>
+                @linkClick="GetSelectedLessonNoteSection($event)"
+                @qListTemplateAction="filterLessonNoteSections($event)"/>
             <TitleDescriptionImage 
             class="col-12"
             v-if="isFileUrl(noteSection.fileUrl)"
@@ -63,7 +64,8 @@
             <Form
                 class="col-12"
                 :formData="lessonNoteSectionsForm"
-                @linkClick="GetSelectedLessonNoteSection($event)"/>
+                @linkClick="GetSelectedLessonNoteSection($event)"
+                @qListTemplateAction="filterLessonNoteSections($event)"/>
             </div>
         </template>
 
@@ -442,8 +444,9 @@
                     console.log("items: ", items) 
 
                     context.lessonNoteSectionsForm.qLists.push({
-                        label: "Notes",
+                        label: "Note Sections",
                         items: [...items],
+                        originalItems: [...items],
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -453,6 +456,18 @@
                 }
             }
 
+        },
+        filterLessonNoteSections(payload){
+            var context = this;
+            console.log("payload: ", payload)
+            switch(payload.label){
+                case "Note Sections":
+                    console.log("payload.originalItems: ", payload.originalItems)
+                    console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
+                    context.lessonNoteSectionsForm.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
+                    console.log("context.lessonNoteSectionsForm.qLists.items: ", context.lessonNoteSectionsForm.qLists[0].items)
+                    break;
+            }
         },
         initializeSelectors(){
                 var context = this;

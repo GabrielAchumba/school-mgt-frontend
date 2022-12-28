@@ -1,7 +1,7 @@
 <template>
     <div class="row q-pa-sm bg-primary">
          <div class="col-12 text-h4 text-accent text-center q-pa-sm">{{ title }}</div>
-         <p class="col-12 q-pa-sm text-center">{{ description }}</p>
+         <p class="col-12 q-pa-sm text-center" style="white-space: pre-line">{{ description }}</p>
 
         <!-- <q-card class="col-12 q-pa-sm flex flex-center">
           <div class="text-h4 text-accent text-center q-pa-sm">{{ title }}</div>
