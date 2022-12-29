@@ -93,33 +93,43 @@ export default {
             }
         },
         async save(){
-            var context = this;
-            var user = this.$store.getters["authenticationStore/IdentityModel"]
-            
-            var url = `level/${context.selectedlevel.id}`;
-            const payload = {
-                url,
-                req: {
-                    type: context.form.qInputs[0].name,
-                    schoolId: user.schoolId,
+            try{
+                var context = this;
+                var user = this.$store.getters["authenticationStore/IdentityModel"]
+                
+                var url = `level/${context.selectedlevel.id}`;
+                const payload = {
+                    url,
+                    req: {
+                        type: context.form.qInputs[0].name,
+                        schoolId: user.schoolId,
+                    }
                 }
-            }
 
-            this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await put(payload)
-            this.$store.commit("authenticationStore/setShowSpinner", false);
+                this.$store.commit("authenticationStore/setShowSpinner", true);
+                var response = await put(payload)
+                this.$store.commit("authenticationStore/setShowSpinner", false);
 
-            const { 
-                data : {
-                    message,
-                    success,
+                const { 
+                    data : {
+                        message,
+                        success,
+                    }
+                } = response
+                if(success){
+                    context.dialogs[1].isVisible = true;
+                    this.$store.commit("authenticationStore/setIsError", false);
+                    this.$store.commit("authenticationStore/setErrorMessages", "");
+                }else{
+                    context.dialogs[2].message = message;
+                    context.dialogs[2].isVisible = true;
+
+                    this.$store.commit("authenticationStore/setIsError", true);
+                    this.$store.commit("authenticationStore/setErrorMessages", message);
                 }
-            } = response
-            if(success){
-                context.dialogs[1].isVisible = true;
-            }else{
-                context.dialogs[2].message = message;
-                context.dialogs[2].isVisible = true;
+            }catch(e){
+                this.$store.commit("authenticationStore/setIsError", true);
+                this.$store.commit("authenticationStore/setErrorMessages", "Could not update selected level item. Please check your data");
             }
 
         },
@@ -147,8 +157,11 @@ export default {
     },
     created(){
         var context =  this;
-        context.selectedlevel = this.$store.getters["levelStore/selectedlevel"];
+        context.selectedlevel = this.$store.getters["levelStore/selectedLevel"];
+        console.log("context.selectedlevel: ", context.selectedlevel) 
         context.form.qInputs[0].name = context.selectedlevel.type;
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
     }
 }
 </script>

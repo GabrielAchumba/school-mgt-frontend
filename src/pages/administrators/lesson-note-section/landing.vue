@@ -3,7 +3,7 @@
     
       <div v-if="!showSpinner"
       class="q-pa-sm">
-        <div v-if="isMobile">
+        <div v-if="setIsResponsive">
         <div 
         class="row">
             <LevelSelector class="col-12"
@@ -149,6 +149,11 @@
             height: `100vh`,
             width: `${context.width}px`,
             }
+        },
+        setIsResponsive(){
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
         }
       },
       components:{
@@ -506,6 +511,8 @@
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
             //this.$store.commit("authenticationStore/setActiveRoute", "fileModels");
       }
     }

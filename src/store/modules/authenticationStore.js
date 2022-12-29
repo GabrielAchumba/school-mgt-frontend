@@ -45,9 +45,17 @@ const state = {
     spinnerThickness: 10,
     workSheetsNames: [],
     workSheetsData: [],
+    isError: false,
+    errorMessages: false,
   }
 
   const getters = {
+    isError(state){
+      return state.isError;
+    },
+    errorMessages(state){
+      return state.errorMessages;
+    },
     workSheetsNames(state){
       return state.workSheetsNames;
     },
@@ -144,6 +152,14 @@ const state = {
 }
 
 const mutations = {
+  setIsError(state, payload){
+    state.isError = payload;
+    console.log("state.isError: ", state.isError)
+  },
+  setErrorMessages(state, payload){
+    state.errorMessages = payload;
+    console.log("state.errorMessages: ", state.errorMessages)
+  },
   setImportedData(state, payload){
     state.workSheetsNames = payload.workSheetsNames;
     state.workSheetsData = payload.workSheetsData;

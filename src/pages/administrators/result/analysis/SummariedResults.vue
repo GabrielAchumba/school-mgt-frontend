@@ -617,6 +617,8 @@ export default {
         var context = this;
         await context.loadConfigData();
         this.$store.commit("authenticationStore/setActiveRoute", "singlestudentresultsanalysis");
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
         //await context.ShowResultConfiDialog();
         
     }

@@ -57,6 +57,8 @@
                   context.cardList[i].to = `/${context.cardList[i].to}`
                 }
             }
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
         }
     }
 </script>

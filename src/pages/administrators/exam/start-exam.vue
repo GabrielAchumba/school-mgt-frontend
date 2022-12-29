@@ -11,7 +11,7 @@
 
     <div 
     v-if="isImage"
-    class="q-pa-sm geeks">
+    class="q-pa-sm">
       <img 
           :src="selectedImageUrl"
           spinner-color="accent"/>
@@ -65,17 +65,16 @@
       v-if="setIsResponsive"
       class="row q-pa-sm">
         <q-space />
-        <q-icon
-          class="q-pa-md text-accent"
+        <q-btn class="q-ma-sm bg-accent text-primary"
           v-for="qBtn in qBtns" 
-          :key="qBtn.label" 
-          :name="qBtn.icon"
+          :key="qBtn.label"
+          :label="qBtn.label"
+          type="button"
+          size="sm"
+          :icon="qBtn.icon"
+          no-caps
           @click="ClickAction(qBtn.name)"
-          size="30px">
-            <q-tooltip>
-              {{ qBtn.label }}
-            </q-tooltip>
-          </q-icon>
+        />
     </div>
     <div 
       v-else
@@ -228,38 +227,24 @@ export default {
         }
         return ans
       },
-      async submitAnsweredQuestions(){
+      submitAnsweredQuestions(){
         var context = this;
         var user = this.$store.getters["authenticationStore/IdentityModel"];
-        //this.$store.commit("authenticationStore/setShowSpinner", true);
         let answeredQuestions = [];
         let i = -1;
+        const totalNumber = context.questions.length;
+        let score = 0;
         for(const question of context.questions){
           i++;
-          answeredQuestions.push({
-          question: question.question,
-          answer: context.answers[i].vmodel,
-          answerOption: context.setAnswerOption(context.answersIndex[i]),
-          subjectId: question.subjectId,
-          levelId: question.levelId,
-          questionId: question._id,
-          createdBy: user.id,
-          schoolId: user.schoolId,
-        })
+          const answerOption = context.setAnswerOption(context.answersIndex[i]);
+          if(answerOption ===  question.answer){
+                score++;
+          }
         }
 
-        var payload = {
-          url: "examanswer/computeScore",
-          req: answeredQuestions
-        }
-
-        console.log("payload: ", payload)
-        var response = await post(payload)
-        console.log("data: ", response.data)
-        this.$store.commit("examStore/setScore", response.data.score);
-        this.$store.commit("examStore/setTotalNumber", response.data.totalNumber);
+        this.$store.commit("examStore/setScore", score);
+        this.$store.commit("examStore/setTotalNumber", totalNumber);
         this.$router.push('/exam-score')
-        //this.$store.commit("authenticationStore/setShowSpinner", false);
       },
       onOptionSelected(selectedOption){
             var context = this;
@@ -413,6 +398,8 @@ export default {
       context.questions = this.$store.getters["examStore/questions"];
       context.initializeAnswers();
       context.nextQuestion();
+      this.$store.commit("authenticationStore/setIsError", false);
+      this.$store.commit("authenticationStore/setErrorMessages", "");
     }
 }
 </script>

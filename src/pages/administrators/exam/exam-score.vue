@@ -52,6 +52,10 @@ export default {
             const percentage = ((score/totalNumber) * 100).toFixed(dp);
             return percentage;
         }
+    },
+    created(){
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
     }
 }
 </script>

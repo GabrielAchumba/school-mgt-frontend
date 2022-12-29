@@ -443,6 +443,8 @@ export default {
         await context.loadConfigData();
         await context.ShowResultConfiDialog();
         this.$store.commit("authenticationStore/setActiveRoute", "studentspositionsanalysis");
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
         
     }
 }

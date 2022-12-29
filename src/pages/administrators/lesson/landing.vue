@@ -174,6 +174,8 @@
                 //context.tableVM.importURL = "/super-admin-import-exam-answers";
             }
             await context.loadLessons()
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
       }
     }
 </script>

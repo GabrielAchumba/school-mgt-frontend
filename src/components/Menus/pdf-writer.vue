@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="q-pa-sm">
         <q-btn flat dense round icon="print" aria-label="PDF" @click="generatePDF"/>
 
         <vue-html2pdf
@@ -41,9 +41,14 @@ import { printableRoutes } from "./printable-routes";
 export default {
 computed:{
     getFileName(){
-        const activeRoute = this.$store.getters["authenticationStore/activeRoute"];
-        console.log("fileName: ", printableRoutes[activeRoute].fileName);
-        return printableRoutes[activeRoute].fileName == undefined ? "file1" : printableRoutes[activeRoute].fileName;
+        try{
+            const activeRoute = this.$store.getters["authenticationStore/activeRoute"];
+            console.log("fileName: ", printableRoutes[activeRoute].fileName);
+            return printableRoutes[activeRoute].fileName == undefined ? "file1" : printableRoutes[activeRoute].fileName;
+        }catch(e){
+            return "file1";
+        }
+        
     }
 },
 components:{

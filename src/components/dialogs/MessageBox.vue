@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div  :style="dialogStyle">
         <div class="row q-pa-none bg-primary">
              <q-card class="col-12 bg-primary">
                 <q-bar class="bg-accent text-primary">
@@ -42,6 +42,14 @@
 
 export default {
     name: 'savingImportDataDialog',
+    computed:{
+        dialogStyle(){
+            return {
+                maxHeight: `500px`,
+                maxWidth: `500px`,
+            }
+        },
+    },
     props: {
     title: {
       type: String,

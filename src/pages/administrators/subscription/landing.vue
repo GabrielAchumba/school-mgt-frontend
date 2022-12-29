@@ -37,6 +37,10 @@
             showPage(payload){
                 this.$router.push(payload.to)
             }
+        },
+        created(){
+          this.$store.commit("authenticationStore/setIsError", false);
+          this.$store.commit("authenticationStore/setErrorMessages", "");
         }
     }
 </script>

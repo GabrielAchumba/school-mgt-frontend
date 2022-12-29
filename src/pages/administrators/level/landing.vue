@@ -5,7 +5,8 @@
     :table_VM="tableVM"
     @createLevel="createLevel($event)"
     @updateLevel="updateLevel($event)"
-    @deleteLevel="deleteLevel($event)"/>
+    @deleteLevel="deleteLevel($event)"
+    @deleteAllItems="deleteLevels($event)"/>
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -38,7 +39,7 @@
 <script>
   import Table from "../../../components/Tables/Table.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { remove } from "../../../store/modules/services";
+  import { remove, post } from "../../../store/modules/services";
   import { loadLevels } from "./utils";
     export default {
       computed:{
@@ -62,6 +63,7 @@
                 selectedLevel: {},
                 title: "Levels",
                 columns: [
+                    { name: "sn", label: "SN", field: "", align: "left", type: "text"},
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "type", label: "Type of Level", field: "", align: "left", type: "text"},
                 ],
@@ -81,7 +83,14 @@
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+                { title: "Delete Levels", isVisible: false, message: "Do you want to delete levels",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Success", isVisible: false, message: "Levels deleted successfully!",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Failure", isVisible: false, message: "",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                ],
+                ids: [],
             }
         },
         methods: {
@@ -120,6 +129,18 @@
                 }
             }
         },
+        deleteLevels(checkBoxModels){
+            console.log("checkBoxModels: ", checkBoxModels)
+            var context = this;
+            context.ids = [];
+            let i = -1;
+            for(const checkBoxModel of checkBoxModels){
+                i++;
+                if(checkBoxModel === "Agreed") context.ids.push(context.tableVM.rows[i].id)
+            }
+            console.log("context.ids: ", context.ids);
+            //context.dialogs[3].isVisible = true;
+        },
         async delete(){
             var context = this;
             
@@ -145,6 +166,35 @@
             }
 
         },
+        async deleteAll(){
+            var context = this;
+            
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            var url = `level/deletemany`;
+            const payload = {
+                url,
+                req: {
+                    ids: context.ids,
+                    schoolId: user.schoolId,
+                }
+            }
+
+            var response = await post(payload)
+
+            const { 
+                data : {
+                    message,
+                    success,
+                }
+            } = response
+            if(success){
+                context.dialogs[4].isVisible = true;
+            }else{
+                context.dialogs[5].message = message;
+                context.dialogs[5].isVisible = true;
+            }
+
+        },
         async okDialog(payload){
             const context = this;
             var i = -1;
@@ -156,6 +206,12 @@
                             await context.delete();
                             break;
                         case "Success":
+                            await context._loadLevels()
+                            break;
+                        case "Delete Levels":
+                            await context.deleteAll();
+                            break;
+                        case "Delete Success":
                             await context._loadLevels()
                             break;
                     }
@@ -171,7 +227,14 @@
             const { result, message } = await loadLevels(user.schoolId);
             this.$store.commit("authenticationStore/setShowSpinner", false);
             this.$store.commit('levelStore/SetLevels', result);
-            context.tableVM.rows = result;
+            context.tableVM.rows = result.map((row, i) => {
+                return {
+                    sn: i+1,
+                    ...row,
+                    route: "/level-landing"
+                }
+            })
+            console.log("context.tableVM.rows: ", context.tableVM.rows)
             if(result.length === 0){
                 context.isFetchTableDialog = true;
                 context.message = message;
@@ -194,6 +257,8 @@
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "level");
             this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
       }
     }
 </script>

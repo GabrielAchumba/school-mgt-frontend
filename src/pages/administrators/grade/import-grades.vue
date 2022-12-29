@@ -182,6 +182,8 @@ export default {
     created(){
         var context = this;
         context.setWorkSheetColumns();
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
     }
 }
 </script>

@@ -267,22 +267,24 @@ export default {
         async uploadQuestionImages(){
             console.log("uploadQuestionImages started")
             var context = this;
-            const formData = new FormData();
+            
             console.log("context.exam_vm.examQuestionSessions: ", context.exam_vm.examQuestionSessions)
+            context.questionImageUrls = [];
             for(let i = 0; i < context.exam_vm.examQuestionSessions.length; i++){
-                formData.append('files', context.exam_vm.examQuestionSessions[i].qFiles[0].selectedFile);
-            }
-            
-            var url = `examquestion/upload`;
-            const payload = {
-                url,
-                req: formData,
-            }
+                const formData = new FormData();
+                formData.append('file', context.exam_vm.examQuestionSessions[i].qFiles[0].selectedFile);
+                var url = `examquestion/uploadfile`;
+                const payload = {
+                    url,
+                    req: formData,
+                }
 
-            console.log("payload: ", payload)
-            var response = await post(payload)
+                console.log("payload: ", payload)
+                var response = await post(payload)
+                
+                context.questionImageUrls.push({...response.data});
+            }
             
-            context.questionImageUrls = response.data;
             console.log("questionImageUrls: ", context.questionImageUrls)
             console.log("uploadQuestionImages completed")
 
@@ -290,21 +292,23 @@ export default {
         async uploadAnswerOptionsImages(){
             console.log("uploadAnswerOptionsImages started")
             var context = this;
-            const formData = new FormData();
+            context.answerOptionsImageUrls = [];
             for(let i = 0; i < context.exam_vm.answerOptions.length; i++){
+                const formData = new FormData();
                 formData.append('files', context.exam_vm.answerOptions[i].qFiles[0].selectedFile);
-            }
-            
-            var url = `examquestion/upload`;
-            const payload = {
-                url,
-                req: formData,
-            }
+                var url = `examquestion/uploadfile`;
+                const payload = {
+                    url,
+                    req: formData,
+                }
 
-            console.log("payload: ", payload)
-            var response = await post(payload)
+                console.log("payload: ", payload)
+                var response = await post(payload)
+                
+                context.answerOptionsImageUrls.push({...response.data})
+            }
             
-            context.answerOptionsImageUrls = response.data;
+            
             console.log("answerOptionsImageUrls: ", context.answerOptionsImageUrls)
             console.log("uploadAnswerOptionsImages completed")
 
@@ -414,6 +418,7 @@ export default {
         },
         onFileSelected2(examQuestionSession){
             var context = this;
+            context.isQuestionImageNew = false;
             const selectedIndex = examQuestionSession.id - 1;
             context.exam_vm.examQuestionSessions[selectedIndex].qFiles[0].selectedFile = context.selectedFile;
             let reader  = new FileReader();
@@ -425,6 +430,7 @@ export default {
                 context.exam_vm.examQuestionSessions[selectedIndex].qImages[0].imageUrl = reader.result;
                 console.log("context.exam_vm.examQuestionSessions[selectedIndex]: ",
                 context.exam_vm.examQuestionSessions[selectedIndex])
+                context.isQuestionImageNew = true;
             }.bind(context), false);
 
             if(context.exam_vm.examQuestionSessions[selectedIndex].qFiles[0].selectedFile){
@@ -441,7 +447,6 @@ export default {
         },
         onFileSelectedAnswerOption2(answerOption){
             var context = this;
-            context.isQuestionImageNew = false;
             const selectedIndex = answerOption.id - 1;
             context.exam_vm.answerOptions[selectedIndex].qFiles[0].selectedFile = context.selectedFileAnswerOption;
             let reader  = new FileReader();
@@ -450,7 +455,6 @@ export default {
                 context.exam_vm.answerOptions[selectedIndex].qFiles[0].showPreview = false;
                 context.exam_vm.answerOptions[selectedIndex].qFiles[0].imagePreview = reader.result;
                 context.exam_vm.answerOptions[selectedIndex].qImages[0].imageUrl = reader.result;
-                context.isQuestionImageNew = true;
             }.bind(context), false);
 
             if(context.exam_vm.answerOptions[selectedIndex].qFiles[0].selectedFile){

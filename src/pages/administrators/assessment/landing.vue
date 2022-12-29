@@ -218,6 +218,8 @@
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "assessments");
             this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
       }
     }
 </script>

@@ -295,6 +295,8 @@ export default {
   created(){
     window.addEventListener("resize", this.onResizePage);
     this.$store.commit("authenticationStore/setActiveRoute", "createsubscription");
+    this.$store.commit("authenticationStore/setIsError", false);
+    this.$store.commit("authenticationStore/setErrorMessages", "");
   }
 }
 </script>

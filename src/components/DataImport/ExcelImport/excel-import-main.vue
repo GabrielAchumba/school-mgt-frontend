@@ -533,6 +533,9 @@ export default {
                             if(j === 0){
                                 line = line.replace(`${sn}.`,'').trim();
                                 context.lines[i + j] = line;
+                            }else if(j === nonConstantColumns.length-1){
+                                line = line.trim();
+                                context.lines[i + j] = line;
                             }else{
                                 line = line.replace(`${options[j-1]}.`,'').trim();
                                 context.lines[i + j] = line;

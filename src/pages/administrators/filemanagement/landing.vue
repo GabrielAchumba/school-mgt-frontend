@@ -218,6 +218,8 @@
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             //this.$store.commit("authenticationStore/setActiveRoute", "fileModels");
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
       }
     }
 </script>

@@ -39,19 +39,31 @@
       bordered
       >
 
-         <template v-slot:top-right>
-          <q-input borderless dense debounce="300" v-model="search" placeholder="Search">
-            <template v-slot:append>
-              <q-icon name="search" />
-            </template>
-          </q-input>
+         <template v-slot:top-left>
+            <q-input borderless dense debounce="300" v-model="search" placeholder="Search" class="col">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+        </template>
 
-        <!-- <q-input  dense debounce="400" color="primary" v-model="search">
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-        </q-input> -->
-
+        <template v-slot:top-right>
+            <q-icon 
+              class="col"
+              name="delete" 
+              @click="deleteAllItems"
+              size="20px">
+              <q-tooltip>
+                Delete Selected Rows
+              </q-tooltip>
+              </q-icon>
+              <q-toggle
+                v-model="qToggleModel"
+                color="accent"
+                false-value="Disagreed"
+                true-value="Agreed"
+                @input="onToggleAllTableRows"
+              />
         </template>
 
           <template v-slot:header="props">
@@ -72,22 +84,32 @@
               <q-tr 
               v-if="props.row.isActive"
               :props="props">
+                <q-td key="sn" :props="props">
+                   {{ props.row.sn}}
+                </q-td>
+
                 <q-td key="actions" :props="props">
                     <div class="row q-pa-md text-center">
+                       <q-toggle
+                          v-model="checkBoxModels[props.row.sn-1]"
+                          color="accent"
+                          false-value="Disagreed"
+                          true-value="Agreed"
+                        />
                         <q-icon 
                         name="edit"
                         @click="updateItem(props.row)"
-                        size="20px"/>
+                        size="sm"/>
                         <q-icon 
                         name="delete" 
                         @click="deleteItem(props.row)"
-                        size="20px" />
+                        size="sm" />
                     </div>
                 </q-td>
 
-                <q-td key="route" :props="props">
+                <!-- <q-td key="route" :props="props">
                     <a href="#" @click="linkClick(props.row)">{{ props.row['route']}}</a>
-                </q-td>
+                </q-td> -->
 
                 <q-td 
                 class="bg-accent text-primary"
@@ -98,22 +120,31 @@
               <q-tr 
               v-else
               :props="props">
+                <q-td key="sn" :props="props">
+                   {{ props.row.sn}}
+                </q-td>
                 <q-td key="actions" :props="props">
-                    <div class="row q-pa-md text-center">
+                    <div class="row q-pa-sm text-center">
+                        <q-toggle
+                          v-model="checkBoxModels[props.row.sn-1]"
+                          color="accent"
+                          false-value="Disagreed"
+                          true-value="Agreed"
+                        />
                         <q-icon 
                         name="edit"
                         @click="updateItem(props.row)"
-                        size="20px"/>
+                        size="sm"/>
                         <q-icon 
                         name="delete" 
                         @click="deleteItem(props.row)"
-                        size="20px" />
+                        size="sm" />
                     </div>
                 </q-td>
 
-                <q-td key="route" :props="props">
+                <!-- <q-td key="route" :props="props">
                     <a href="#" @click="linkClick(props.row)">{{ props.row['route']}}</a>
-                </q-td>
+                </q-td> -->
 
                 <q-td 
                 v-for="column in removekeys()" :key="column.name"
@@ -138,7 +169,7 @@
             return this.$store.getters["componentsStore/cardItems"];
           },
           rows(){ 
-            return this.$store.getters["authenticationStore/newRows"];
+            return this.$store.getters["authenticationStore/newRows"];;
           },
           setIsResponsive(){
             console.log("setIsResponsive called")
@@ -168,16 +199,22 @@
             isHeader:{
               type:Boolean,
               default: true
+            },
+            tableRows:{
+              type: Array,
+              default: []
             }
         },
         data(){
           return {
+            qToggleModel: "Disagreed",
             tableWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.6}px`: "100%",
             cardWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.7}px`: "100%",
             loading: false,
             rowCount: 10,
-            windowResize: false,
+            windowResize: false,  
             search: '',
+            checkBoxModels: [],
           }
         },
         methods: {
@@ -227,7 +264,9 @@
               var context = this;
               var columnsNew = []
               for(const column of context.table_VM.columns){
-                  if(column.name != "actions" && column.name != "route"){
+                  if(column.name != "actions" 
+                  && column.name != "route"  
+                  && column.name != "sn"){
                       columnsNew.push(column);
                   }
               }
@@ -254,6 +293,10 @@
             var context = this
             this.$emit(context.table_VM.deleteItem, selectedItem);
           },
+          deleteAllItems(){
+            var context = this;
+            this.$emit("deleteAllItems", context.checkBoxModels);
+          },
           onResize(e) {
             const width = window.innerWidth;
             var context = this;
@@ -269,14 +312,39 @@
               console.log("windowResize: ", context.windowResize)
             }
           },
+          onToggleAllTableRows(event){
+            var context = this;
+            console.log("event: ", event)
+            for(let i = 0; i < context.checkBoxModels.length; i++){
+              context.checkBoxModels[i] = event;
+            }
+          },
 
-        },
+      },
+      watch: {
+          tableRows: function(val) {
+              //console.log("val: ", val)
+              if (val) {
+                var context = this;
+                context.checkBoxModels = [];
+                context.checkBoxModels = context.rows.map((row) => {
+                  return "Disagreed";
+                })
+              }
+          }
+      },
       mounted() {
         window.addEventListener("resize", this.onResize);
       },
       unmounted() {
         window.removeEventListener("resize", this.onResize);
       },
+      created(){
+        var context = this
+        context.checkBoxModels = context.table_VM.rows.map((row) => {
+          return "Disagreed";
+        })
+      }
     }
 </script>
 

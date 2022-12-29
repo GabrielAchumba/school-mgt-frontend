@@ -150,9 +150,9 @@
             }
         },
         setIsResponsive(){
-        const width = window.innerWidth;
-        if(width < 700) return true;
-        else return false;
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
         }
       },
       components:{
@@ -483,6 +483,8 @@
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setActiveRoute", "lessonnotes");
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
       }
     }
 </script>

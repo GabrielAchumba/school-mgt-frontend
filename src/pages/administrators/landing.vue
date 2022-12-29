@@ -16,14 +16,18 @@
           return this.$store.getters["administratorStore/mainMenuList"]
         }
       },
-        components:{
-          CardList,
-        },
-        methods:{
-            showPage(payload){
-                this.$router.push(payload.to)
-            },
-        },
+      components:{
+        CardList,
+      },
+      methods:{
+          showPage(payload){
+              this.$router.push(payload.to)
+          },
+      },
+      created(){
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
+      }
     }
 </script>
 

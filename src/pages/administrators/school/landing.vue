@@ -3,9 +3,9 @@
     <Form
         v-if="!showSpinner"
         :formData="form"
-        @createSchool="createSchool($event)"
         @linkClick="linkClick($event)"
-        @qListTemplateAction="filterSchools($event)"/>
+        @qListTemplateAction="filterSchools($event)"
+        @qListAddItemAction="createSchool($event)"/>
     <!-- <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
@@ -259,6 +259,8 @@
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
       }
     }
 </script>

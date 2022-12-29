@@ -79,6 +79,8 @@
             }
 
             console.log("context.cardList: ", context.cardList)
+            this.$store.commit("authenticationStore/setIsError", false);
+            this.$store.commit("authenticationStore/setErrorMessages", "");
         }
     }
 </script>

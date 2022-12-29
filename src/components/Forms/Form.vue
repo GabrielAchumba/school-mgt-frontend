@@ -254,13 +254,17 @@
                     <div  
                      v-for="qList in formData.qLists" 
                     :key="qList.label"
-                    class="q-pa-sm">
+                    class="q-pa-md">
                      <span>
                         <q-input class="q-ma-none bg-primary text-accent"
                         outlined 
                         bordered
                         v-model="qList.listBoxSearchModel" 
                         type="text" >
+                        <template v-slot:prepend>
+                          <q-icon name="add" 
+                          @click="qListAddItemAction(qList)"/>
+                        </template>
                             <template  
                               v-slot:append>
                               <q-icon name="search" 
@@ -286,10 +290,10 @@
 
                             <q-item-section>
                               <q-item-label>{{ item.name }}</q-item-label>
-                              <q-item-label caption lines="1">{{ item.address }}</q-item-label>
+                              <q-item-label caption>{{ item.address }}</q-item-label>
                             </q-item-section>
 
-                            <q-item-section side>
+                            <q-item-section side top>
                               <q-icon 
                               name="chat_bubble" 
                               color="accent"
@@ -374,13 +378,21 @@
     import EditableTable from "../Tables/EditableTable.vue";
     import ContextMenu from "../Menus/context-menu.vue";
     import ContextMenuItem from "../Menus/context-menu-item.vue";
+import { getLineWidth } from 'plotly.js-dist';
     export default {
         computed:{
           setIsResponsive(){
             const width = window.innerWidth;
             if(width < 700) return true;
             else return false;
-          }
+          },
+          listBoxStyle(){
+              const width = window.innerWidth - 20;
+              return {
+              //height: `100vh`,
+              width: `${width}px`,
+              }
+          },
         },
         components:{
           EditableTable,
@@ -463,6 +475,9 @@
           },
           qListTemplateAction(payload){
             this.$emit("qListTemplateAction", payload);
+          },
+          qListAddItemAction(payload){
+            this.$emit("qListAddItemAction", payload);
           },
           handleAddEditableTable(payload) {
             this.$emit(payload.handleAddName, payload);

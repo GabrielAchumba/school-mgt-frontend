@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm">
-    <div v-if="isMobile">
+    <div v-if="setIsResponsive">
       <div 
       class="row">
           <LevelSelector class="col-12"
@@ -103,6 +103,11 @@ export default {
             height: `100vh`,
             width: `${context.width}px`,
             }
+        },
+        setIsResponsive(){
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
         }
     },
     components:{
@@ -345,6 +350,8 @@ export default {
         var context = this;
         window.addEventListener("resize", context.onResizePage);
         context.initializeData()
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
     }
     
 }

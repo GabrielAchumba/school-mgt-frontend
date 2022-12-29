@@ -72,6 +72,7 @@ export default {
                 {variableTitle: "Option E", variableName: "optionE"},
                 {variableTitle: "Option F", variableName: "optionF"},
                 {variableTitle: "Option G", variableName: "optionG"},
+                {variableTitle: "Answer", variableName: "answer"},
                 {variableTitle: "Examination Date", variableName: "examinationDate"}
             ],
             applicationColumns: [],
@@ -133,6 +134,7 @@ export default {
         async createQuestions(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
+            let errorMessages = "";
 
             const { result: subjects } = await loadSubjects(user.schoolId);
             const { result: levels } = await loadLevels(user.schoolId);
@@ -150,7 +152,7 @@ export default {
                 const columns = Object.keys(row);
                 for (const column of columns){
                     if(`${column}` === "Question" || `${column}` === "Subject" ||
-                    `${column}` === "Level"){
+                    `${column}` === "Level" || `${column}` === "Answer"){
                         const field = `${column}`
                         let appVariable = context.appVariables.find(o => o.variableTitle === column);
                         newRow[`${appVariable.variableName}`] = `${row[field]}`;
@@ -189,6 +191,7 @@ export default {
                 }
 
                 if(check == false){
+                    errorMessages = errorMessages + "The subject specified in the external file does not exist in your school database" + "\n";
                     continue;
                 }
 
@@ -203,6 +206,7 @@ export default {
                 }
 
                 if(check == false){
+                    errorMessages = errorMessages + "The subject specified in the external file does not exist in your school database" + "\n";
                     continue;
                 }
 
@@ -211,23 +215,32 @@ export default {
             }
 
 
-            console.log("questions: ", questions)
-            var url = `examquestion/createmany`;
-            const payload = {
-                url,
-                req: questions
-            }
-            this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await post(payload)
-            this.$store.commit("authenticationStore/setShowSpinner", false);
+            if(errorMessages === ""){
+                console.log("questions: ", questions)
+                var url = `examquestion/createmany`;
+                const payload = {
+                    url,
+                    req: questions
+                }
+                console.log("payload: ", payload)
+                this.$store.commit("authenticationStore/setShowSpinner", true);
+                var response = await post(payload)
+                this.$store.commit("authenticationStore/setShowSpinner", false);
 
-            console.log("response: ", response);
+                console.log("response: ", response);
 
-            context.dialogs[0].isVisible = false;
-            if(response.data){
-                context.dialogs[1].isVisible = true;
+                context.dialogs[0].isVisible = false;
+                if(response.data){
+                    context.dialogs[1].isVisible = true;
+                }else{
+                    context.dialogs[2].isVisible = true;
+                }
+                
+                this.$store.commit("authenticationStore/setIsError", false);
+                this.$store.commit("authenticationStore/setErrorMessages", "");
             }else{
-                context.dialogs[2].isVisible = true;
+                this.$store.commit("authenticationStore/setIsError", true);
+                this.$store.commit("authenticationStore/setErrorMessages", errorMessages);
             }
         },
         async okDialog(payload){
@@ -255,6 +268,8 @@ export default {
     created(){
         var context = this;
         context.setWorkSheetColumns();
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
     }
 }
 </script>

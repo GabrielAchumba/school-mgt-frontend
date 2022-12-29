@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm">
-    <div v-if="isMobile">
+    <div v-if="setIsResponsive">
       <div 
       class="row">
           <LevelSelector class="col-12"
@@ -19,7 +19,8 @@
             :table_VM="tableVM"
             @createExam="createExam($event)"
             @updateExam="updateExam($event)"
-            @deleteExam="deleteExam($event)"/>
+            @deleteExam="deleteExam($event)"
+            @deleteAllItems="deleteQuestions($event)"/>
       </div>
     </div>
     <div v-else>
@@ -54,9 +55,11 @@
           <Table
             class="col-12"
             :table_VM="tableVM"
+            :tableRows="tableVM.rows"
             @createExam="createExam($event)"
             @updateExam="updateExam($event)"
-            @deleteExam="deleteExam($event)"/>
+            @deleteExam="deleteExam($event)"
+            @deleteAllItems="deleteQuestions($event)"/>
       </template>
 
     </q-splitter>
@@ -108,6 +111,11 @@ export default {
             height: `100vh`,
             width: `${context.width}px`,
             }
+        },
+        setIsResponsive(){
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
         }
     },
     components:{
@@ -132,6 +140,7 @@ export default {
             tableVM: {
                 title: "Examination",
                 columns: [
+                    { name: "sn", label: "SN", field: "", align: "left", type: "text"},
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "question", label: "Question", field: "", align: "left", type: "text"},
                     { name: "subject", label: "Subject", field: "", align: "left", type: "text"},
@@ -153,7 +162,14 @@ export default {
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
-            ]
+                { title: "Delete Questions", isVisible: false, message: "Do you want to delete questions",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Success", isVisible: false, message: "Questions deleted successfully!",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+                { title: "Delete Failure", isVisible: false, message: "",
+                okayEvent: "okDialog", cancelEvent: "cancelDialog" },
+            ],
+            ids: [],
         }
     },
     methods:{
@@ -173,18 +189,26 @@ export default {
             console.log(context.selectedExam)
             context.dialogs[0].isVisible = true;
         },
+        clearData(){
+            var context = this;
+            context.questionsForms.qLists = [];
+            context.tableVM.rows = [];
+            this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
+            this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
+        },
         async onLevelValueChange(payload){
             console.log("selectedLevel: ", payload)
             var context = this;
             context.selectedLevel = payload.qSelect;
            context.exam_vm.qSelectSubject.value = "";
-           context.questionsForms.qLists = [];
+           context.clearData();
+           
         },
         async onSubjectValueChange(payload){
             console.log("selectedSubject: ", payload)
             var context = this;
             context.selectedSubject = payload.qSelect;
-            context.questionsForms.qLists = [];
+            context.clearData();
             await context.FetchExamQuestions();
         },
         Cancel(){
@@ -220,6 +244,43 @@ export default {
                 }
             }
         },
+        deleteQuestions(checkBoxModels){
+            var context = this;
+            context.ids = [];
+            let i = -1;
+            for(const checkBoxModel of checkBoxModels){
+                i++;
+                if(checkBoxModel === "Agreed") context.ids.push(context.tableVM.rows[i]._id)
+            }
+            console.log("context.ids: ", context.ids);
+            context.dialogs[3].isVisible = true;
+        },
+        async deleteAll(){
+            var context = this;
+            
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            var url = `examquestion/deletemany`;
+            const payload = {
+                url,
+                req: {
+                    ids: context.ids,
+                    schoolId: user.schoolId,
+                }
+            }
+
+            console.log("payload: ", payload)
+            var response = await post(payload)
+            console.log("response: ", response)
+            context.dialogs[3].isVisible = false;
+
+            if(response.status === 201){
+                context.dialogs[4].isVisible = true;
+            }else{
+                context.dialogs[5].message = "Could not complete the deleting process. Error occured while deleting questions";
+                context.dialogs[5].isVisible = true;
+            }
+
+        },
         async okDialog(payload){
             const context = this;
             var i = -1;
@@ -229,6 +290,13 @@ export default {
                     switch(payload){
                         case "Start Examination":
                             await context.startExamination();
+                            break;
+                        case "Delete Questions":
+                            await context.deleteAll();
+                            break;
+                        case  "Delete Success":
+                            context.dialogs[i].isVisible = false;
+                            await context.viewQuestions(context.selectedPastQuestions)
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -287,6 +355,7 @@ export default {
                 }
 
                 try{
+                    console.log("payload: ", payload)
                     const response = await post(payload);
                     console.log("response.data: ", response.data);
 
@@ -308,7 +377,7 @@ export default {
                         }
                     });
 
-                    console.log("items: ", items) 
+                    //console.log("items: ", items) 
 
                     context.questionsForms.qLists.push({
                         label: "Past Questions",
@@ -326,18 +395,19 @@ export default {
         },
         filterPastQuestions(payload){
             var context = this;
-            console.log("payload: ", payload)
+            //console.log("payload: ", payload)
             switch(payload.label){
                 case "Past Questions":
-                    console.log("payload.originalItems: ", payload.originalItems)
-                    console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
+                    //console.log("payload.originalItems: ", payload.originalItems)
+                    //console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
                     context.questionsForms.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
-                    console.log("context.questionsForms.qLists.items: ", context.questionsForms.qLists[0].items)
+                    //console.log("context.questionsForms.qLists.items: ", context.questionsForms.qLists[0].items)
                     break;
             }
         },
         async viewQuestions(data){
             var context = this;
+            context.selectedPastQuestions = data;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
             context.tableVM.title = `${context.selectedLevel.type} ${data.name}`;
@@ -358,19 +428,22 @@ export default {
 
             try{
                  const response = await post(payload);
-                 console.log("result: ", response.data)
-                 const rows = response.data.map((row) => {
+                 //console.log("result: ", response.data)
+                 context.tableVM.rows = response.data.map((row, i) => {
                      return {
+                         sn: i+1,
                          ...row,
                          question: row.question,
                          subject: context.selectedSubject.type,
                          level: context.selectedLevel.type,
+                         route: "/exam-question-landing"
                      }
                  })
 
-                 console.log("rows: ", rows)
-                this.$store.commit('examStore/SetExams', rows);
-                context.tableVM.rows = rows;
+                 console.log("context.tableVM.rows: ", context.tableVM.rows)
+
+                
+                this.$store.commit('examStore/SetExams', context.tableVM.rows);
                 this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
                 this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
@@ -409,6 +482,8 @@ export default {
         this.$store.commit("authenticationStore/setActiveRoute", "exam");
         this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
         this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
     }
     
 }

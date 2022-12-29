@@ -265,21 +265,22 @@ export default {
         async uploadQuestionImages(){
             console.log("uploadQuestionImages started")
             var context = this;
-            const formData = new FormData();
+            context.questionImageUrls = [];
             for(let i = 0; i < context.exam_vm.examQuestionSessions.length; i++){
+                const formData = new FormData();
                 formData.append('files', context.exam_vm.examQuestionSessions[i].qFiles[0].selectedFile);
-            }
-            
-            var url = `examquestion/upload`;
-            const payload = {
-                url,
-                req: formData,
-            }
+                var url = `examquestion/uploadfile`;
+                const payload = {
+                    url,
+                    req: formData,
+                }
 
-            console.log("payload: ", payload)
-            var response = await post(payload)
+                console.log("payload: ", payload)
+                var response = await post(payload)
+                
+                context.questionImageUrls.push({...response.data})
+            }
             
-            context.questionImageUrls = response.data;
             console.log("questionImageUrls: ", context.questionImageUrls)
             console.log("uploadQuestionImages completed")
 
@@ -287,21 +288,22 @@ export default {
         async uploadAnswerOptionsImages(){
             console.log("uploadAnswerOptionsImages started")
             var context = this;
-            const formData = new FormData();
+            context.answerOptionsImageUrls = [];
             for(let i = 0; i < context.exam_vm.answerOptions.length; i++){
+                const formData = new FormData();
                 formData.append('files', context.exam_vm.answerOptions[i].qFiles[0].selectedFile);
-            }
-            
-            var url = `examquestion/upload`;
-            const payload = {
-                url,
-                req: formData,
-            }
+                var url = `examquestion/uploadfile`;
+                const payload = {
+                    url,
+                    req: formData,
+                }
 
-            console.log("payload: ", payload)
-            var response = await post(payload)
+                console.log("payload: ", payload)
+                var response = await post(payload)
+                
+                context.answerOptionsImageUrls.push({...response.data})
+            }
             
-            context.answerOptionsImageUrls = response.data;
             console.log("answerOptionsImageUrls: ", context.answerOptionsImageUrls)
             console.log("uploadAnswerOptionsImages completed")
 

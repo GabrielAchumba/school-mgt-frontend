@@ -33,12 +33,6 @@
         </q-icon>
         
       </q-bar>
-      <q-bar 
-      v-if="isSchoolRoute"
-      class="bg-accent text-primary">
-           <q-btn 
-            flat dense round icon="create" @click="create" class="text-primary bg-accent"/>
-      </q-bar>
     </div>
 </template>
 
