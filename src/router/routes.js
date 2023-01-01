@@ -6,7 +6,7 @@ const routes = [
     children: [
       { 
         path: '/', 
-        component: () => import('pages/authentication/landing.vue') 
+        component: () => import('pages/authentication/loginregister.vue') 
         
       },
       { 
