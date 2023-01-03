@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createLevel="createLevel($event)"
     @updateLevel="updateLevel($event)"
     @deleteLevel="deleteLevel($event)"

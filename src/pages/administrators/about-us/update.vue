@@ -72,6 +72,7 @@ export default {
                 i++;
                 if(dialog.title == "Update About Us"){
                     context.dialogs[i].isVisible = true;
+                    context.form.qBtns[1].btnDisabled = true;
                     break;
                 }
             }
@@ -91,6 +92,8 @@ export default {
                     break;
                 }
             }
+            context.form.qBtns[0].btnDisabled = false;
+            context.form.qBtns[1].btnDisabled = false;
         },
         async save(){
             var context = this;
@@ -130,6 +133,7 @@ export default {
                     switch(payload){
                         case "Update About Us":
                             await context.save();
+                            context.form.qBtns[1].btnDisabled = false;
                             break;
                         case "Success":
                             var user = this.$store.getters["authenticationStore/IdentityModel"];

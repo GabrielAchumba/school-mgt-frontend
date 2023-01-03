@@ -44,8 +44,8 @@ const form = {
         /* { label: "Email", name: "", type: "text"}, */
     ],
     qBtns: [
-        {label: "Cancel", name: "Cancel", icon: "close"},
-        {label: "Create", name: "Create", icon: "add"},
+        {label: "Cancel", name: "Cancel", icon: "close", btnDisabled: false},
+        {label: "Create", name: "Create", icon: "add", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

@@ -45,7 +45,7 @@ import { loadSessions } from "../pages/administrators/session/utils";
 import { loadSchools } from "../pages/administrators/school/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
-import { checkResultsAnalysisSubscription, menuList } from "../pages/administrators/utils";
+import { checkResultsAnalysisSubscription, menuList, torpaFeatures } from "../pages/administrators/utils";
 import { loadLogos } from "../pages/administrators/branding/logo/utils";
 
 export default {
@@ -133,13 +133,13 @@ export default {
       this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
     },
     verifyResultsAnalysisSubscription(){
-       var context = this;
-       context.checkSubscription.isResultsAnalysis = true;
+      var context = this;
+      context.checkSubscription.isResultsAnalysis = true;
       if(context.checkSubscription.isResultsAnalysis == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Results Analysis"){
+          if(context.landingMenu[i].title == torpaFeatures.cGPAComputation){
             index = i;
             break;
           }
@@ -150,7 +150,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Results Analysis"){
+          if(context.contextMenuList[i].title == torpaFeatures.cGPAComputation){
             index = i;
             break;
           }
@@ -167,7 +167,7 @@ export default {
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "File Management"){
+          if(context.landingMenu[i].title == torpaFeatures.directories){
             index = i;
             break;
           }
@@ -178,7 +178,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "File Management"){
+          if(context.contextMenuList[i].title == torpaFeatures.directories){
             index = i;
             break;
           }
@@ -195,7 +195,7 @@ export default {
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Branding & Advertisement"){
+          if(context.landingMenu[i].title == torpaFeatures.ads){
             index = i;
             break;
           }
@@ -206,7 +206,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Branding & Advertisement"){
+          if(context.contextMenuList[i].title == torpaFeatures.ads){
             index = i;
             break;
           }
@@ -218,12 +218,12 @@ export default {
     },
     verifyExamQuizSubscription(){
        var context = this;
-       context.checkSubscription.isExamQuiz = true; // to be removed
+       context.checkSubscription.isExamQuiz = true;
       if(context.checkSubscription.isExamQuiz == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Examination & Quiz"){
+          if(context.landingMenu[i].title == torpaFeatures.cBTPractice){
             index = i;
             break;
           }
@@ -234,7 +234,91 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Examination & Quiz"){
+          if(context.contextMenuList[i].title == torpaFeatures.cBTPractice){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyLibraryManagementSubscription(){
+       var context = this;
+       context.checkSubscription.isLibraryManagement = true;
+      if(context.checkSubscription.isLibraryManagement == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.libraryMgt){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.libraryMgt){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyOnlineLearningSubscription(){
+       var context = this;
+       context.checkSubscription.isOnlineLearning = true;
+      if(context.checkSubscription.isOnlineLearning == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.onlineLearning){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.onlineLearning){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifySocialize(){
+       var context = this;
+       context.checkSubscription.isSocialize = true;
+      if(context.checkSubscription.isSocialize == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.socialize){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.socialize){
             index = i;
             break;
           }
@@ -275,6 +359,9 @@ export default {
       context.verifyFileManagementSubscription();
       context.verifyAdevertizementSubscription();
       context.verifyExamQuizSubscription();
+      context.verifyLibraryManagementSubscription();
+      context.verifyOnlineLearningSubscription();
+      context.verifySocialize();
 
       /* context.menuList = context.contextMenuList.map((row) => {
         return {

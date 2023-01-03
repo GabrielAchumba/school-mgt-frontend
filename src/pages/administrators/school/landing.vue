@@ -6,11 +6,6 @@
         @linkClick="linkClick($event)"
         @qListTemplateAction="filterSchools($event)"
         @qListAddItemAction="createSchool($event)"/>
-    <!-- <Table
-    v-if="!showSpinner"
-    :table_VM="tableVM"
-    @createSchool="createSchool($event)"
-    @linkClick="linkClick($event)"/> -->
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">

@@ -1,0 +1,12 @@
+{
+  "name": "torpa",
+  "version": "0.0.1",
+  "description": "Developed By Newway Standard Global",
+  "author": "GabrielAchumba <36473816+GabrielAchumba@users.noreply.github.com>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^4.6.1",
+    "@capacitor/cli": "^1.0.0",
+    "@capacitor/core": "^1.0.0"
+  }
+}

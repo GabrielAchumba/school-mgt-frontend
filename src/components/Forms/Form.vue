@@ -10,7 +10,7 @@
                 <q-separator />
 
                 <q-card-section class="bg-primary text-accent">
-                   <q-form class="q-pa-sm">
+                   <q-form class="q-pa-none">
 
                      <div
                      class="q-pa-sm"
@@ -254,7 +254,7 @@
                     <div  
                      v-for="qList in formData.qLists" 
                     :key="qList.label"
-                    class="q-pa-md">
+                    class="q-pa-sm">
                      <span>
                         <q-input class="q-ma-none bg-primary text-accent"
                         outlined 
@@ -282,8 +282,9 @@
                           clickable 
                           v-ripple>
                             <q-item-section avatar>
-                              <q-avatar color="accent" text-color="primary" size="md">
-                                <p class="text-caption text-center">{{ item.letter }}</p>
+                              <q-avatar color="accent" text-color="primary" size="md" square>
+                                {{ item.letter }}
+                                <!-- <p class="text-caption text-center">{{ item.letter }}</p> -->
                                 <!-- <img :src="`https://cdn.quasar.dev/img/${contact.avatar}`"> -->
                               </q-avatar>
                             </q-item-section>
@@ -295,9 +296,30 @@
 
                             <q-item-section side top>
                               <q-icon 
-                              name="chat_bubble" 
+                              name="more_vert" 
                               color="accent"
-                              @click="linkClick(item)" />
+                              @click="linkClick(item)">
+                              <q-menu fit>
+                                <q-list dense class="text-accent text-caption bg-primary">
+                                    <q-item
+                                    class="bg-primary text-accent"
+                                    clickable
+                                    @click="updateListItemHandler(item)">
+                                        <q-item-section>
+                                            Edit
+                                        </q-item-section>
+                                    </q-item>
+                                    <q-item
+                                    class="bg-primary text-accent"
+                                    clickable
+                                    @click="deleteListItemHandler(col)">
+                                        <q-item-section>
+                                            Delete
+                                        </q-item-section>
+                                    </q-item>
+                                </q-list>
+                                </q-menu>
+                              </q-icon>
                             </q-item-section>
                           </q-item>
                         </q-list>
@@ -325,34 +347,40 @@
                             {{ qBtn.label }}
                           </q-tooltip>
                         </q-icon>
-                  </div> -->
+                  </div> --> 
                    <div 
                    v-if="setIsResponsive"
                    class="row q-pa-sm">
                       <q-space />
-                      <q-btn class="q-ma-sm bg-accent text-primary"
+                      <div class="text-right">
+                        <q-btn class="q-ma-sm bg-accent text-primary"
                         v-for="qBtn in formData.qBtns" 
                         :key="qBtn.label"
                         :label="qBtn.label"
+                        :disabled="qBtn.btnDisabled"
                         type="button"
                         size="sm"
                         no-caps
                         @click="ClickAction(qBtn.name, formData)"
                       />
+                      </div>
                   </div>
                    <div 
                    v-else
                    class="row q-pa-sm">
                       <q-space />
-                      <q-btn class="q-ma-sm bg-accent text-primary"
+                      <div class="text-right">
+                        <q-btn class="q-ma-sm bg-accent text-primary"
                         v-for="qBtn in formData.qBtns" 
                         :key="qBtn.label"
                         :label="qBtn.label"
+                        :disabled="qBtn.btnDisabled"
                         type="button"
                         size="md"
                         no-caps
                         @click="ClickAction(qBtn.name, formData)"
                       />
+                      </div>
                   </div>
                 </q-card-actions>
 
@@ -468,6 +496,9 @@ import { getLineWidth } from 'plotly.js-dist';
             this.$emit(qSelect.actionName, qSelect);
           },
           ClickAction(actionName, formData){
+              var context = this;
+              if(context.btnDisabled === true)context.btnDisabled = false;
+              else context.btnDisabled = true;
               this.$emit(actionName, formData);
           },
           qInputTemplateAction(payload){
@@ -490,6 +521,12 @@ import { getLineWidth } from 'plotly.js-dist';
           },
           handleDeleteEditableTable(payload) {
             this.$emit(payload.tableVM.handleDeleteName, payload);
+          },
+          updateListItemHandler(payload){
+            this.$emit("updateListItemHandler", payload);
+          },
+          deleteListItemHandler(payload){
+            this.$emit("deleteListItemHandler", payload);
           },
           disableRightclick(evt){
             var context = this;

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardList from "../../../components/Cards/CardList.vue";
+  import CardList from "../../../components/Cards/CardList3.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
 
     export default {
@@ -20,21 +20,21 @@
             cardList: [
               {
                 name: "showPage",
-                title: "Single Student Results Analysis", 
+                title: "SSRA", 
                 description: "The statistics analysis of a student results",
                 image: "/statics/images/single_student_result.jpg",
                 to: "single-student-results-analysis"
               },
               {
                 name: "showPage",
-                title: "Positions of Students", 
+                title: "POS", 
                 description: "The statistics analysis of position of students results",
                 image: "/statics/images/results.jpg",
                 to: "students-positions-analysis"
               },
               {
                 name: "showPage",
-                title: "Multiple Students Results Analysis", 
+                title: "MSRA", 
                 description: "The statistics analysis of multiple students results",
                 image: "/statics/images/view results.jpg",
                 to: "summarized-students-result"

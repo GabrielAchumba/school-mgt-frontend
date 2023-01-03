@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createClassRoom="createClassRoom($event)"
     @updateClassRoom="updateClassRoom($event)"
     @deleteClassRoom="deleteClassRoom($event)"/>
@@ -63,6 +64,7 @@
                 selectedClassRoom: {},
                 title: "Class Rooms",
                 columns: [
+                    { name: "sn", label: "SN", field: "", align: "left", type: "text" },
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "type", label: "Class Room", field: "", align: "left", type: "text" },
                     { name: "level", label: "Level", field: "", align: "left", type: "text" },
@@ -176,10 +178,11 @@
                 const { result, message } = await loadClassRooms(user.schoolId)
                 this.$store.commit("authenticationStore/setShowSpinner", false);
                 this.$store.commit('classRoomStore/SetClassRooms', result)
-                context.tableVM.rows = result.map((row) => {
+                context.tableVM.rows = result.map((row, i) => {
                     let selectedItem = this.$store.getters["levelStore/levels"].find(o => o.id === row.levelId);
                     const level= selectedItem.type;
                     return {
+                        sn: i+1,
                         ...row,
                         level,
                     }

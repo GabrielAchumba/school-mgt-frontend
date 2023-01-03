@@ -21,9 +21,9 @@ const loginForm = {
         
     ],
     qBtns: [
-        {label: "Forgot Password", name: "ForgotPassword", icon: "lock_reset"},
-        {label: "Sign In", name: "SignIn", icon: "login"},
-        {label: "Sign Up", name: "SignUp", icon: "how_to_reg"},
+        {label: "Forgot Password", name: "ForgotPassword", icon: "lock_reset", btnDisabled: false},
+        {label: "Sign In", name: "SignIn", icon: "login", btnDisabled: false},
+        {label: "Sign Up", name: "SignUp", icon: "how_to_reg", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -57,9 +57,9 @@ const forgotPasswordForm = {
         
     ],
     qBtns: [
-        {label: "Send OTP", name: "SendOTP", icon: "send", disabled: false},
-        {label: "Reset", name: "resetRecaptcha", icon: "refresh"},
-        {label: "Cancel", name: "CancelForgotPassword", icon: "close"},
+        {label: "Send OTP", name: "SendOTP", icon: "send", btnDisabled: false},
+        {label: "Reset", name: "resetRecaptcha", icon: "refresh", btnDisabled: false},
+        {label: "Cancel", name: "CancelForgotPassword", icon: "close", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -90,8 +90,8 @@ const verifyOTPForm = {
         
     ],
     qBtns: [
-        {label: "Verify", name: "VerifyOTP", icon: "verify_user"},
-        {label: "Cancel", name: "CancelVerifyOTP", icon: "close"},
+        {label: "Verify", name: "VerifyOTP", icon: "verify_user", btnDisabled: false},
+        {label: "Cancel", name: "CancelVerifyOTP", icon: "close", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -121,8 +121,8 @@ const resetPasswordForm = {
         
     ],
     qBtns: [
-        {label: "Reset Password", name: "ResetPassword", icon: "lock_reset"},
-        {label: "Cancel", name: "CancelResetPassword", icon: "close"},
+        {label: "Reset Password", name: "ResetPassword", icon: "lock_reset", btnDisabled: false},
+        {label: "Cancel", name: "CancelResetPassword", icon: "close", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

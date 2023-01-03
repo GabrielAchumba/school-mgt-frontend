@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createStaff="createStaff($event)"
     @updateStaff="updateStaff($event)"
     @deleteStaff="deleteStaff($event)"/>
@@ -62,6 +63,7 @@
                 selectedStaff: {},
                 title: "Types of Users",
                 columns: [
+                    { name: "sn", label: "SN", field: "", align: "left", type: "text" },
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "type", label: "Type of User", field: "", align: "left", type: "text" },
                 ],
@@ -176,7 +178,12 @@
         this.$store.commit("authenticationStore/setShowSpinner", false);
         console.log("result: ", result)
         this.$store.commit('staffStore/SetStaffs', result)
-        context.tableVM.rows = result;
+        context.tableVM.rows = result.map((row, i) => {
+            return {
+                sn: i+1,
+                ...row
+            }
+        });
 
             if(result.length === 0){
                 context.isFetchTableDialog = true;

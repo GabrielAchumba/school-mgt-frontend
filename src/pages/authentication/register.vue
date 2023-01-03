@@ -113,10 +113,12 @@ export default {
         GenerateVerificationCode(payload){
             var context = this;
             const sn = payload.sn
+            context.phoneNumberForm.qInputs[sn].Template.visible = false;
             console.log("phoneNumberFormVisible: ", context.phoneNumberFormVisible)
 
             if(context.phoneNumberForm.qInputs[sn].name.length < 10){
                 alert("Phone number can not be less than 10 digits")
+                context.phoneNumberForm.qInputs[sn].Template.visible = true;
                 return;
             }
 
@@ -131,7 +133,7 @@ export default {
             if(context.phoneNumberForm.qInputs[sn].Template.iconName === "send"){
                console.log("code: ", context.phoneNumberForm.qSelects[0].value.code);
                 context.sendOtp(phone,
-                context.phoneNumberForm.qSelects[0].value.code);
+                context.phoneNumberForm.qSelects[0].value.code, sn);
                 // For offline mode - to be removed
               /*   context.registrationFormVisible = false;
                 context.phoneNumberFormVisible = false;
@@ -141,6 +143,7 @@ export default {
         async Next(){
 
           const context = this;
+          context.registrationForm.qBtns[1].btnDisabled = true;
           await context.userIsExist();
         },
         Submit(){
@@ -150,6 +153,7 @@ export default {
                 i++;
                 if(dialog.title == "Verify Code"){
                     context.dialogs[i].isVisible = true;
+                    context.otpForm.qBtns[1].btnDisabled = true;
                     break;
                 }
             }
@@ -172,11 +176,24 @@ export default {
         },
         cancelDialog(payload){
             const context = this;
+            const FALSE = false;
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
                 if(dialog.title === payload){
                     context.dialogs[i].isVisible = false;
+                    switch(payload){
+                      case "Create User":
+                        context.registrationForm.qBtns[0].btnDisabled = FALSE;
+                        context.registrationForm.qBtns[1].btnDisabled = FALSE;
+                        break;
+                      case "Send Code":
+                        context.phoneNumberForm.qBtns[0].btnDisabled = FALSE;
+                        break;
+                      case "Verify Code":
+                        context.otpForm.qBtns[0].btnDisabled = FALSE;
+                        break;
+                    }
                     break;
                 }
             }
@@ -187,7 +204,7 @@ export default {
             
             var url = `user/create-admin`;
             var schoolId = context.registrationForm.qSelects[1].value;
-            if(context.registrationForm.qSelects[0].value.type === "Referal"){
+            if(context.registrationForm.qSelects[0].value === "Referral"){
               schoolId = "CEO";
             }
             const payload = {
@@ -198,7 +215,7 @@ export default {
                     userName: context.registrationForm.qInputs[2].name,
                     password: context.registrationForm.qInputs[3].name,
                     phoneNumber: context.phoneNumberForm.qInputs[0].name,
-                    userType: context.registrationForm.qSelects[0].value.type,
+                    userType: context.registrationForm.qSelects[0].value,
                     countryCode: context.phoneNumberForm.qSelects[0].value.code,
                     schoolId,
                 }
@@ -219,6 +236,7 @@ export default {
             }else{
                 context.dialogFailureOrScuess("Verify Code Failure", true);
             }
+            context.otpForm.qBtns[1].btnDisabled = false;
 
         },
          async userIsExist(){
@@ -226,7 +244,7 @@ export default {
             
             var url = `user/user-is-exist`;
             var schoolId = context.registrationForm.qSelects[1].value;
-            if(context.registrationForm.qSelects[0].value.type === "Referal"){
+            if(context.registrationForm.qSelects[0].value === "Referral"){
               schoolId = "CEO";
             }
             const payload = {
@@ -237,7 +255,7 @@ export default {
                     userName: context.registrationForm.qInputs[2].name,
                     password: context.registrationForm.qInputs[3].name,
                     phoneNumber: context.phoneNumberForm.qInputs[0].name,
-                    userType: context.registrationForm.qSelects[0].value.type,
+                    userType: context.registrationForm.qSelects[0].value,
                     schoolId,
                 }
             }
@@ -267,6 +285,7 @@ export default {
             }else{
               alert("user already exist")
             }
+            context.registrationForm.qBtns[1].btnDisabled = false;
 
         },
         async okDialog(payload){
@@ -299,13 +318,13 @@ export default {
       userTypeAction(payload){
             var context = this;
             console.log("payload: ", payload)
-            if(payload.value.value === 1){
+            if(payload.value === "Referral"){
                 context.registrationForm.qSelects[1].visible = false;
             }else{
                 context.registrationForm.qSelects[1].visible = true;
             }
       },
-      sendOtp(phNo, countryCode){
+      sendOtp(phNo, countryCode, sn){
           var context = this;
        /*  if(phNo.length != 10){
           alert('Invalid Phone Number Format !');
@@ -325,6 +344,7 @@ export default {
               context.registrationFormVisible = false;
               context.phoneNumberFormVisible = false;
               context.otpFormVisible = true;
+              context.phoneNumberForm.qInputs[sn].Template.visible = true;
               window.confirmationResult = confirmationResult;
 
               //
@@ -332,6 +352,7 @@ export default {
             }).catch(function (error) {
             // Error; SMS not sent
             // ...
+            console.log('error: ', error)
             alert('Error ! SMS not sent')
           });
         //}
@@ -354,7 +375,7 @@ export default {
             //route to set password !
             //context.$router.push({path:'/setPassword'})
           }).catch(function (error) {
-              console.log("User couldn't sign in (bad verification code?)")
+              console.log("User couldn't sign in (bad verification code?). ", error)
             // User couldn't sign in (bad verification code?)
             // ...
           });

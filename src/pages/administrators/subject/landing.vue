@@ -1,11 +1,23 @@
 <template>
   <div>
-    <Table
-    v-if="!showSpinner"
-    :table_VM="tableVM"
-    @createSubject="createSubject($event)"
-    @updateSubject="updateSubject($event)"
-    @deleteSubject="deleteSubject($event)"/>
+      <div v-if="!showSpinner">
+        <Form
+        v-if="setIsResponsive"
+        :formData="form"
+        @updateListItemHandler="updateSubject($event)"
+        @deleteListItemHandler="deleteSubject($event)"
+        @qListTemplateAction="filterSubjects($event)"
+        @qListAddItemAction="createSubject($event)"/>
+
+        <Table
+        v-else
+        :table_VM="tableVM"
+        :tableRows="tableVM.rows"
+        @createSubject="createSubject($event)"
+        @updateSubject="updateSubject($event)"
+        @deleteSubject="deleteSubject($event)"/>
+      </div>
+
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -37,9 +49,12 @@
 
 <script>
   import Table from "../../../components/Tables/Table.vue";
+  import Form from "../../../components/Forms/Form.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { remove } from "../../../store/modules/services";
   import { loadSubjects } from "./utils";
+  import { form } from "./view_models/landing-view-model";
+  import { customFilter } from "../../../components/Utils/searchListUtil";
     export default {
       computed:{
           showSpinner(){
@@ -50,18 +65,27 @@
         },
         spinnerThickness(){
             return this.$store.getters["authenticationStore/spinnerThickness"];
-        }
+        },
+        setIsResponsive(){
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
+          },
       },
       components:{
         Table,
-        MessageBox
+        MessageBox,
+        Form
       },
-        data () {
-    return {
+    data () {
+        return {
+            title: "Subjects",
+            form:form,
             tableVM: {
                 selectedSubject: {},
                 title: "Subjects",
                 columns: [
+                    { name: "sn", label: "SN", field: "", align: "left", type: "text"},
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "type", label: "Type of Subject", field: "", align: "left", type: "text"},
                 ],
@@ -85,6 +109,17 @@
             }
         },
         methods: {
+            linkClick(selectedSchool){
+                
+            },
+        filterSubjects(payload){
+            var context = this;
+            switch(payload.label){
+                case "Subjects":
+                    context.form.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
+                    break;
+            }
+        },
           okayEvent(){
             var context = this;
             context.isFetchTableDialog = false
@@ -173,11 +208,39 @@
             const { result, message } = await loadSubjects(user.schoolId);
             this.$store.commit("authenticationStore/setShowSpinner", false);
             this.$store.commit('subjectStore/SetSubjects', result);
-            context.tableVM.rows = result;
+            context.tableVM.rows = result.map((row, i) => {
+                return {
+                    sn: i+1,
+                    ...row,
+                }
+            })
+
+            context.form.qLists = [];
+            const items = result.map((row) => {
+                return {
+                    name: row.type,
+                    address: "",
+                    route: "/subject-landing",
+                    letter: row.type.charAt(0)
+                }
+            });
+
+            console.log("items: ", items) 
+
+            context.form.title = context.title;
+            context.form.qLists.push({
+                label: context.title,
+                items: [...items],
+                originalItems: [...items],
+            })
+            console.log("context.form.qLists: ", context.form.qLists)
+
             if(result.length === 0){
                 context.isFetchTableDialog = true;
                 context.message = message;
             }
+
+            
 
             }
         },

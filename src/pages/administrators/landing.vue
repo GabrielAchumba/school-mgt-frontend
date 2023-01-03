@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardList from "../../components/Cards/CardList.vue";
+  import CardList from "../../components/Cards/CardList3.vue";
   
 
     export default {

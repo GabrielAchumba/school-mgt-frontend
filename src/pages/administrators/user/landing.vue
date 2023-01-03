@@ -62,6 +62,7 @@
                 selectedUser: {},
                 title: "Users",
                 columns: [
+                    { name: "sn", label: "SN", field: "", align: "left", type: "text" },
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "firstName", label: "First Name", field: "", align: "left", type: "text" },
                     { name: "lastName", label: "Last Name", field: "", align: "left", type: "text" },
@@ -177,7 +178,12 @@
             const { result, message } = await loadUsers(user.schoolId);
             this.$store.commit("authenticationStore/setShowSpinner", false);
             this.$store.commit('userStore/SetUsers', result)
-            context.tableVM.rows = result;
+            context.tableVM.rows = result.map((row, i) => {
+                return {
+                    sn: i+1,
+                    ...row
+                }
+            })
             console.log("result: ", result)
 
             if(result.length === 0){

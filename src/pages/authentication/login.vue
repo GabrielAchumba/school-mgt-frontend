@@ -190,6 +190,7 @@ const auth = getAuth()
             context.isResetPassword = false;
             context.isVerifyOTP = false;
             context.isLoginFormWithToken = false;
+            context.forgotPasswordForm.qBtns[2].btnDisabled = false;
           },
           CancelVerifyOTP(){
             var context = this;
@@ -198,6 +199,7 @@ const auth = getAuth()
             context.isResetPassword = false;
             context.isVerifyOTP = false;
             context.isLoginFormWithToken = false;
+            context.verifyOTPForm.qBtns[1].btnDisabled = false;
           },
           CancelResetPassword(){
             var context = this;
@@ -206,6 +208,7 @@ const auth = getAuth()
             context.isResetPassword = false;
             context.isVerifyOTP = true;
             context.isLoginFormWithToken = false;
+            context.resetPasswordForm.qBtns[1].btnDisabled = false;
           },
           SendOTP(){
             const context = this;
@@ -214,6 +217,7 @@ const auth = getAuth()
                 i++;
                 if(dialog.title == "Send OTP"){
                     context.dialogs[i].isVisible = true;
+                    context.forgotPasswordForm.qBtns[0].btnDisabled = false;
                     break;
                 }
             }
@@ -225,6 +229,7 @@ const auth = getAuth()
                 i++;
                 if(dialog.title == "Sign In"){
                     context.dialogs[i].isVisible = true;
+                    context.loginForm.qBtns[1].btnDisabled = true;
                     break;
                 }
             }
@@ -256,6 +261,7 @@ const auth = getAuth()
                 i++;
                 if(dialog.title == "Reset Password"){
                     context.dialogs[i].isVisible = true;
+                    context.resetPasswordForm.qBtns[0].btnDisabled = false;
                     break;
                 }
             }
@@ -301,12 +307,37 @@ const auth = getAuth()
             }
         },
         cancelDialog(payload){
+            console.log("payload: ", payload)
             const context = this;
+            const FALSE = false;
             var i = -1;
             for(const dialog of context.dialogs){
                 i++;
                 if(dialog.title === payload){
-                    context.dialogs[i].isVisible = false;
+                    context.dialogs[i].isVisible = FALSE;
+                    switch(payload){
+                      case "Send OTP":
+                        context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
+                        break;
+                      case "Reset":
+                        context.forgotPasswordForm.qBtns[1].btnDisabled = FALSE;
+                        break;
+                      case "Forgot Password":
+                        context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
+                        break;
+                      case "Sign In":
+                        context.loginForm.qBtns[1].btnDisabled = FALSE;
+                        break;
+                      case  "Sign Up":
+                        context.loginForm.qBtns[2].btnDisabled = FALSE;
+                        break;
+                      case  "Verify OTP":
+                        context.verifyOTPForm.qBtns[0].btnDisabled = FALSE;
+                        break;
+                      case  "Reset Password":
+                        context.loginForm.qBtns[1].btnDisabled = FALSE;
+                        break;
+                    }
                     break;
                 }
             }
@@ -412,6 +443,8 @@ const auth = getAuth()
 
             if(!success){
                 alert("Failed")
+            }else{
+              context.forgotPasswordForm.qBtns[0].btnDisabled = false;
             }
 
             console.log("context.userExists: ", userExists);
@@ -459,6 +492,7 @@ const auth = getAuth()
                     switch(payload){
                         case "Sign In":
                             await context.login();
+                            context.loginForm.qBtns[1].btnDisabled = false;
                             break;
                         case "Sign In Success":
                             context.logInSuccessOkay();
@@ -475,6 +509,7 @@ const auth = getAuth()
                           break;
                         case "Reset Password":
                             context.ChangePassword();
+                            context.resetPasswordForm.qBtns[0].btnDisabled = true;
                         case "Reset Password Success":
                           context.isForgotPassword = false;
                           context.isVerifyOTP = false
@@ -551,6 +586,7 @@ const auth = getAuth()
       async VerifyOTP(){
           var context = this;
          this.$store.commit("authenticationStore/setShowSpinner", true);
+         context.verifyOTPForm.qBtns[0].btnDisabled = true;
         await context.VerifyCode();
         this.$store.commit("authenticationStore/setShowSpinner", false);
       },
@@ -572,6 +608,7 @@ const auth = getAuth()
             context.isResetPassword = true;
             context.isLoginForm = false;
             context.isLoginFormWithToken = false;
+            context.verifyOTPForm.qBtns[0].btnDisabled = false;
           }).catch(function (error) {
               alert("User couldn't sign in (bad verification code?)")
           });
@@ -602,9 +639,10 @@ const auth = getAuth()
       },
       resetRecaptcha(){
         var context = this;
+        context.forgotPasswordForm.qBtns[1].btnDisabled = true;
          window.recaptchaVerifier.clear()
          context.appVerifier =  window.recaptchaVerifier
-         console.log("appVerifier: ", context.appVerifier)
+         context.forgotPasswordForm.qBtns[1].btnDisabled = false;
       }
       },
       async created(){

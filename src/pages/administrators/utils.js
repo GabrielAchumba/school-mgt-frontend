@@ -32,143 +32,174 @@ export const checkResultsAnalysisSubscription = async (schoolId) => {
     }
 }
 
+export const torpaFeatures = {
+    home: "Home",
+    designations: "Designations",
+    users: "Users",
+    levels: "Levels",
+    subscription: "Subscription",
+    classRooms: "Class Rooms",
+    subjects: "Subjects",
+    grades: "Grades",
+    assessments: "Assessments",
+    sessions: "Sessions",
+    students: "Students",
+    cAResults: "CA Results",
+    cGPAComputation: "CGPA Computation",
+    libraryMgt: "Library Mgt",
+    onlineLearning: "Online Learning",
+    cBTPractice: "CBT Practice",
+    quizGame: "Quiz Game",
+    socialize: "Socialize",
+    directories: "Directories",
+    ads: "Ads",
+    payments: "Payments"
+}
+
 export const menuList = [
     {
         name: "showPage",
-        title: "Home", 
+        title: torpaFeatures.home, 
         description: "Landing Page",
         image: "/statics/images/staffs.jpg",
         to: "admin"
     },
     {
         name: "showPage",
-        title: "Types of Users", 
-        description: "The type user can be principal, teacher, student, etc",
+        title: torpaFeatures.designations, 
+        description: "Designation can be instructor, student etc",
         image: "/statics/images/staffs.jpg",
         to: "staff-landing"
     },
     {
         name: "showPage",
-        title: "Users", 
+        title: torpaFeatures.users, 
         description: "The details of users in the school",
         image: "/statics/images/users.jpg",
         to: "user-landing"
     },
     {
         name: "showPage",
-        title: "Level", 
+        title: torpaFeatures.levels, 
         description: "The school levels like primary 1, primary 2, etc",
         image: "/statics/images/levels.jpg",
         to: "level-landing"
     },
+    /* {
+        name: "showPage",
+        title: torpaFeatures.subscription, 
+        description: "The shool management subscription plans",
+        image: "/statics/images/lesson.jpg",
+        to: "subscription-landing"
+    }, */
     {
         name: "showPage",
-        title: "Class Rooms", 
+        title: torpaFeatures.classRooms, 
         description: "The school class rooms like Class A, Class B, etc",
         image: "/statics/images/classroom.jpg",
         to: "classroom-landing"
     },
     {
         name: "showPage",
-        title: "Subjects", 
+        title: torpaFeatures.subjects, 
         description: "Subjects that students learn in the school",
         image: "/statics/images/subjects.jpg",
         to: "subject-landing"
     },
     {
         name: "showPage",
-        title: "Grade", 
+        title: torpaFeatures.grades, 
         description: "Grade based on range of score for subjects",
         image: "/statics/images/grades.jpg",
         to: "grade-landing"
     },
     {
         name: "showPage",
-        title: "Assessment", 
+        title: torpaFeatures.assessments, 
         description: "Student's assessment in the school",
         image: "/statics/images/assessment.jpg",
         to: "assessment-landing"
     },
     {
         name: "showPage",
-        title: "Session", 
+        title: torpaFeatures.sessions, 
         description: "Session can be first term, first semester, etc",
         image: "/statics/images/sessions.jpg",
         to: "session-landing"
     },
     {
         name: "showPage",
-        title: "Student", 
+        title: torpaFeatures.students, 
         description: "Students in the school",
         image: "/statics/images/students.jpg",
         to: "student-landing"
     },
     {
         name: "showPage",
-        title: "Result Management", 
-        description: "Create, update and delete results. Also view result report",
+        title: torpaFeatures.cAResults, 
+        description: "Store students' CA results",
         image: "/statics/images/view results.jpg",
         to: "results"
     },
     {
         name: "showPage",
-        title: "Results Analysis", 
-        description: "Compute and analyse results of students",
+        title: torpaFeatures.cGPAComputation, 
+        description: "Compute and analyze results of students",
         image: "/statics/images/results.jpg",
         to: "result-landing"
     },
     {
         name: "showPage",
-        title: "Library Management", 
-        description: "Management of schools books store",
+        title: torpaFeatures.libraryMgt, 
+        description: "Manage school book-store",
         image: "/statics/images/library.jpg",
         to: "result-landing"
     },
     {
         name: "showPage",
-        title: "Online Learning", 
-        description: "Management of the studying of courses online",
+        title: torpaFeatures.onlineLearning, 
+        description: "Setup online course programs",
         image: "/statics/images/online_learning.jpg",
         to: "online-learning-landing"
     },
     {
         name: "showPage",
-        title: "Subscription", 
-        description: "The shool management subscription plans",
-        image: "/statics/images/lesson.jpg",
-        to: "subscription-landing"
-    },
-    {
-        name: "showPage",
-        title: "File Management", 
-        description: "Managing teachers lesson notes, past questions and answers, and other office files",
-        image: "/statics/images/file_management.jpg",
-        to: "filemanagement-landing"
-    },
-    {
-        name: "showPage",
-        title: "Socialize", 
-        description: "This feature enables you to chat and interact with friends from same or differnet school",
-        image: "/statics/images/socialize.jpg",
-        to: "filemanagement-landing"
-    },
-    {
-        name: "showPage",
-        title: "Branding & Advertisement", 
-        description: "Subscribe to app customization and advertisement",
-        image: "/statics/images/branding.jpg",
-        to: "branding-landing"
-    },
-    {
-        name: "showPage",
-        title: "Examination & Quiz", 
-        description: "Set online examinations",
+        title: torpaFeatures.cBTPractice, 
+        description: "Take exams to determine your readiness",
         image: "/statics/images/examination.jpg",
         to: "exam-landing"
     },
     {
         name: "showPage",
-        title: "Schools Payments", 
+        title: torpaFeatures.quizGame, 
+        description: "Make cash while learning in funny way",
+        image: "/statics/images/examination.jpg",
+        to: "exam-landing"
+    },
+    {
+        name: "showPage",
+        title: torpaFeatures.socialize, 
+        description: "Chat and interact with friends from same or differnet school",
+        image: "/statics/images/socialize.jpg",
+        to: "filemanagement-landing"
+    },
+    {
+        name: "showPage",
+        title: torpaFeatures.directories, 
+        description: "Manage organization directories",
+        image: "/statics/images/file_management.jpg",
+        to: "filemanagement-landing"
+    },
+    {
+        name: "showPage",
+        title: torpaFeatures.ads, 
+        description: "Brand & advertise your organisation on the app",
+        image: "/statics/images/branding.jpg",
+        to: "branding-landing"
+    },
+    {
+        name: "showPage",
+        title: torpaFeatures.payments, 
         description: "All Payments made by schools you refered to Newway",
         image: "/statics/images/payments.jpg",
         to: "school-all-payment-landing"

@@ -1,10 +1,11 @@
 <template>
-    <q-bar class="q-pa-none row bg-accent text-primary" >
+    <q-bar class="q-pa-none row bg-accent text-primary">
         <div class="col-12">
           <div class="row">
-            <q-btn flat dense round icon="settings" aria-label="Settings" />
-            <q-btn flat dense round icon="create" @click="create"/>
-            <q-btn flat dense round icon="import_contacts" @click="dataImport"/>
+            <q-btn flat icon="arrow_back" class="text-capitalize" @click="goBack"/>
+            <!-- <q-btn flat dense round icon="create" @click="create"/>
+            <q-btn flat dense round icon="import_contacts" @click="dataImport"/> -->
+            <q-space />
             <q-btn flat dense round @click="create" avatar>
               <q-avatar 
                 class="bg-primary text-accent"
@@ -14,7 +15,7 @@
             </q-btn>
             
             <q-space />
-             <PDFWriter/>
+             <!-- <PDFWriter/> -->
             <q-btn
                 icon="menu"
                 flat
@@ -170,6 +171,9 @@ export default {
         IdentityModel() {
             return this.$store.getters['authenticationStore/IdentityModel'];
         },
+        backRoute() {
+            return this.$store.getters['authenticationStore/backRoute'];
+        },
         selectedLogo(){
             return this.$store.getters['LogoStore/selectedLogo'];
         }
@@ -256,7 +260,12 @@ export default {
         onSearch(){
             console.log("onSearch")
             this.$store.commit("authenticationStore/setGlobalSearchDialog", true)
-        }
+        },
+        goBack(){
+            var context = this;
+            console.log("context.backRoute: ", context.backRoute)
+            this.$router.push(context.backRoute)
+        },
     }
 }
 </script>

@@ -24,6 +24,7 @@ const state = {
     activeRows: [],
     newRows: [],
     activeRoute: "",
+    backRoute: "",
     menuList: [],
     torpa_menuList: [
       { name: "/", tabIndex: "home", label: "Home" },
@@ -148,10 +149,16 @@ const state = {
   },
   importURL(state){
     return state.importURL;
+  },
+  backRoute(state){
+    return state.backRoute;
   }
 }
 
 const mutations = {
+  setBackRoute(state, payload){
+    state.backRoute = payload;
+  },
   setIsError(state, payload){
     state.isError = payload;
     console.log("state.isError: ", state.isError)
