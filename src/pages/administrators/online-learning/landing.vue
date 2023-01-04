@@ -45,7 +45,14 @@
         methods:{
             showPage(payload){
                 this.$router.push(payload.to)
-            }
+            },
+          setBackRoute(){
+              var user = this.$store.getters["authenticationStore/IdentityModel"];
+              let backRoute= "";
+              if(user.schoolId === "CEO")backRoute='/super-admin';
+              else  backRoute = '/admin';
+              this.$store.commit("authenticationStore/setBackRoute", backRoute);
+          }
         },
         created(){
             var context = this;
@@ -67,6 +74,7 @@
             console.log("context.cardList: ", context.cardList)
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+            context.setBackRoute();
         }
     }
 </script>
