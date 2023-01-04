@@ -145,6 +145,13 @@ export default {
                     break;
                 }
             }
+        },
+        setBackRoute(){
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            let backRoute= "";
+            if(user.schoolId === "CEO")backRoute='/super-admin-about-us-landing';
+            else  backRoute = '/about-us-landing';
+             this.$store.commit("authenticationStore/setBackRoute", backRoute);
         }
     },
     created(){
@@ -152,6 +159,7 @@ export default {
         context.selectedAboutUs = this.$store.getters["AboutUsStore/selectedAboutUs"];
         context.form.qInputs[0].name = context.selectedAboutUs.title;
         context.form.qInputs[1].name = context.selectedAboutUs.description;
+        context.setBackRoute();
     }
 }
 </script>

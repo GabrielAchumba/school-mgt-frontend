@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     :isResponsive="isResponsive"
     @createResult="createResult($event)"
     @updateResult="updateResult($event)"

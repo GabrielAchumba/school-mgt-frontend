@@ -1,12 +1,10 @@
 <template>
-    <div class="row q-pa-sm bg-primary">
+    <div class="row q-pa-none bg-primary">
+        <p class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm" v-html="title"></p>
+        <p class="q-pa-sm" v-html="description"></p>
 
-         <q-card class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm">
-          <div class="text-h5 text-accent text-left q-pa-sm">{{ title }}</div>
-          <p class="q-pa-sm flex flex-center">{{ description }}</p>
-        </q-card>
 
-        <q-card 
+      <div 
         v-if="isImage"
         class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm img flex flex-center">
             <q-img 
@@ -19,34 +17,34 @@
                 <div class="text-subtitle2">{{ imageDescription }}</div>
               </div>
             </q-img>
-        </q-card>
+        </div>
 
-        <q-card 
+        <div 
         v-if="isVideo"
         class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
             <video 
             v-bind:src="imageUrl" 
             controls 
             v-show="isVideo"/>
-        </q-card>
+        </div>
 
-        <q-card 
+        <div 
         v-if="isAudio"
         class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
             <video 
             v-bind:src="imageUrl" 
             controls 
             v-show="isAudio"/>
-        </q-card>
+        </div>
 
-         <q-card 
+         <div 
         v-if="isPdf"
         class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm video flex flex-center">
             <embed 
             :src="imageUrl" 
             controls 
             v-show="isPdf"/>
-        </q-card>
+        </div>
     </div>
 </template>
 

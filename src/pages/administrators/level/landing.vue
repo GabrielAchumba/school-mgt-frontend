@@ -241,7 +241,14 @@
                 context.message = message;
             }
 
-            }
+            },
+          setBackRoute(){
+              var user = this.$store.getters["authenticationStore/IdentityModel"];
+              let backRoute= "";
+              if(user.schoolId === "CEO")backRoute='/super-admin';
+              else  backRoute = '/admin';
+              this.$store.commit("authenticationStore/setBackRoute", backRoute);
+          }
         },
         async created() {
             var context = this;
@@ -260,6 +267,7 @@
             this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+            context.setBackRoute();
       }
     }
 </script>

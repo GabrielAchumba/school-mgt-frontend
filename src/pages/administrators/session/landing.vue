@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createSession="createSession($event)"
     @updateSession="updateSession($event)"
     @deleteSession="deleteSession($event)"/>

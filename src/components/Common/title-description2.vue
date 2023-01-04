@@ -1,14 +1,7 @@
 <template>
-    <div class="row q-pa-sm bg-primary">
-         <div class="col-12 text-h4 text-accent text-center q-pa-sm">{{ title }}</div>
-         <p class="col-12 q-pa-sm text-center" style="white-space: pre-line">{{ description }}</p>
-
-        <!-- <q-card class="col-12 q-pa-sm flex flex-center">
-          <div class="text-h4 text-accent text-center q-pa-sm">{{ title }}</div>
-        </q-card>
-        <q-card class="col-12 flex flex-center q-pa-sm">
-            <p class="q-pa-sm text-center">{{ description }}</p>
-        </q-card> -->
+    <div class="row q-pa-none bg-primary">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm" v-html="title"></div>
+        <p class="col-lg-12 col-md-12 col-sm-12 col-xs-12 q-pa-sm" v-html="description"></p>
     </div>
 </template>
 

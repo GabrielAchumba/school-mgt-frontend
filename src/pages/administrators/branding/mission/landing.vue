@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @updateItem="updateItem($event)"
     @deleteMission="deleteMission($event)"/>
     <div 

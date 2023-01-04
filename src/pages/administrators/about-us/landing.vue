@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createAboutUs="createAboutUs($event)"
     @updateAboutUs="updateAboutUs($event)"
     @deleteAboutUs="deleteAboutUs($event)"/>
@@ -180,6 +181,13 @@
 
         
 
+        },
+        setBackRoute(){
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            let backRoute= "";
+            if(user.schoolId === "CEO")backRoute='/super-admin';
+            else  backRoute = '/admin';
+             this.$store.commit("authenticationStore/setBackRoute", backRoute);
         }
         },
         async created() {
@@ -197,6 +205,7 @@
             //this.$store.commit("authenticationStore/setActiveRoute", "aboutUs");
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+            context.setBackRoute();
       }
     }
 </script>

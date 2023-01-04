@@ -236,7 +236,7 @@ export default {
             const payload = {
                 url,
                 req: {
-                    sectionTitle: context.form.qInputs[0].name,
+                    sectionTitle: context.form.qEditors[0].name,
                     lessonNoteId: context.form.qSelects[2].value,
                     createdBy: user.id,
                     schoolId: user.schoolId,
@@ -260,8 +260,8 @@ export default {
                 url,
                 req: {
                     fileType: context.fileType,
-                    sectionTitle: context.form.qInputs[0].name,
-                    content: `${context.form.qInputs[1].name}`,
+                    sectionTitle: context.form.qEditors[0].name,
+                    content: `${context.form.qEditors[1].name}`,
                     schoolId: user.schoolId,
                     fileUrl: context.fileUrl,
                     fileName: context.fileName,
@@ -318,7 +318,9 @@ export default {
     },
     created(){
         var context = this;
-        context.form.clearQInputs();
+        this.$store.commit("authenticationStore/setBackRoute", '/lesson-note-section-landing');
+        //context.form.clearQInputs();
+        console.log("form.qEditors: ", form.qEditors)
         context.form.clearQFiles();
         context.form.qSelects[0].list = this.$store.getters["levelStore/levels"];
         context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];

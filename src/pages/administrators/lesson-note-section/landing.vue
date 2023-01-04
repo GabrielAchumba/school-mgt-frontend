@@ -1,42 +1,70 @@
 <template>
   <div>
-    
+      <q-scroll-area style="height: 80vh; max-width: 100%;">
       <div v-if="!showSpinner"
       class="q-pa-sm">
         <div v-if="setIsResponsive">
-        <div 
-        class="row">
-            <LevelSelector class="col-12"
-            :qSelect="selectors_vm.qSelectLevel"
-            @onLevelValueChange="onLevelValueChange($event)"/>
-            <SubjectSelector class="col-12"
-            :qSelect="selectors_vm.qSelectSubject"
-            @onSubjectValueChange="onSubjectValueChange($event)"/>
-            <LevelSelector class="col-12"
-            :qSelect="selectors_vm.qSelectLessonNotes"
-            @onLevelValueChange="onLessonNoteValueChange($event)"/>
-            <Form
-            class="col-12"
-                :formData="lessonNoteSectionsForm"
-                @linkClick="GetSelectedLessonNoteSection($event)"
-                @qListTemplateAction="filterLessonNoteSections($event)"/>
-            <TitleDescriptionImage 
-            class="col-12"
-            v-if="isFileUrl(noteSection.fileUrl)"
-            :title="noteSection.title"
-            :description="noteSection.description"
-            :imageUrl="noteSection.fileUrl"
-            :imageTitle="noteSection.imageTitle"
-            :imageDescription="noteSection.imageDescription"
-            :isVideo="noteSection.isVideo"
-            :isImage="noteSection.isImage"
-            :isAudio="noteSection.isAudio"/>
-            <TitleDescription
-            class="col-12"
-            v-else
-            :title="noteSection.title"
-            :description="noteSection.description"/>
-        </div>
+            <div 
+            class="row">
+                <LevelSelector 
+                v-show="!isLesson"
+                class="col-12"
+                :qSelect="selectors_vm.qSelectLevel"
+                @onLevelValueChange="onLevelValueChange($event)"/>
+                <SubjectSelector 
+                v-show="!isLesson"
+                class="col-12"
+                :qSelect="selectors_vm.qSelectSubject"
+                @onSubjectValueChange="onSubjectValueChange($event)"/>
+                <LevelSelector 
+                v-show="!isLesson"
+                class="col-12"
+                :qSelect="selectors_vm.qSelectLessonNotes"
+                @onLevelValueChange="onLessonNoteValueChange($event)"/>
+                <Form
+                v-show="!isLesson"
+                class="col-12"
+                    :formData="lessonNoteSectionsForm"
+                    @readNoteSection="readNoteSection($event)"
+                    @editNoteSection="editNoteSection($event)"
+                    @deleteNoteSection="deleteNoteSection($event)"
+                    @qListTemplateAction="filterLessonNoteSections($event)"
+                    @qListAddItemAction="createItem($event)"/>
+                <div
+                v-show="isLesson">
+                    <div class="row">
+                        <TitleDescriptionImage 
+                        class="col-12"
+                        v-if="isFileUrl(noteSection.fileUrl)"
+                        :title="noteSection.title"
+                        :description="noteSection.description"
+                        :imageUrl="noteSection.fileUrl"
+                        :imageTitle="noteSection.imageTitle"
+                        :imageDescription="noteSection.imageDescription"
+                        :isVideo="noteSection.isVideo"
+                        :isImage="noteSection.isImage"
+                        :isAudio="noteSection.isAudio"/>
+                        <TitleDescription
+                        class="col-12"
+                        v-else
+                        :title="noteSection.title"
+                        :description="noteSection.description"/>
+                        <div 
+                        class="col-12 q-pa-sm">
+                            <q-space />
+                            <div class="text-right">
+                                <q-btn class="q-ma-sm bg-accent text-primary"
+                                label="Done"
+                                type="button"
+                                size="sm"
+                                no-caps
+                                @click="IslessonAction"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-else>
         <q-resize-observer @resize="onResize" :debounce="0" />
@@ -64,8 +92,11 @@
             <Form
                 class="col-12"
                 :formData="lessonNoteSectionsForm"
-                @linkClick="GetSelectedLessonNoteSection($event)"
-                @qListTemplateAction="filterLessonNoteSections($event)"/>
+                @readNoteSection="readNoteSection($event)"
+                @editNoteSection="editNoteSection($event)"
+                @deleteNoteSection="deleteNoteSection($event)"
+                @qListTemplateAction="filterLessonNoteSections($event)"
+                @qListAddItemAction="createItem($event)"/>
             </div>
         </template>
 
@@ -117,6 +148,7 @@
             >
             </MessageBox>
         </q-dialog>
+         </q-scroll-area>
   </div>
 </template>
 
@@ -167,6 +199,7 @@
       },
         data () {
     return {
+            isLesson: false,
             width: 400, 
             splitterModel: 30, // start at 30%,
             isMobile: false,
@@ -214,6 +247,10 @@
             }
         },
         methods: {
+            IslessonAction(){
+                var context = this;
+                context.isLesson = context.isLesson === true ? false : true;
+            },
             isFileUrl(fileUrl){
                 if(fileUrl === "" || fileUrl == undefined) return false;
                 else return true;
@@ -245,6 +282,17 @@
             this.$router.push(context.tableVM.updateItemUrl);
           },
           deleteItem(selectedLessonNoteSection){
+             var context = this;
+             context.selectedLessonNoteSection = selectedLessonNoteSection;
+             console.log(context.selectedLessonNoteSection)
+             context.dialogs[0].isVisible = true;
+          },
+          editNoteSection(selectedLessonNoteSection){
+             var context = this;
+             this.$store.commit('lessonNoteSectionStore/SetSelectedLessonNoteSection', selectedLessonNoteSection)
+            this.$router.push(context.tableVM.updateItemUrl);
+          },
+          deleteNoteSection(selectedLessonNoteSection){
              var context = this;
              context.selectedLessonNoteSection = selectedLessonNoteSection;
              console.log(context.selectedLessonNoteSection)
@@ -373,14 +421,21 @@
             context.lessonNoteSectionsForm.qLists = [];
             await context.FetchLessonNoteSections();
         },
-        GetSelectedLessonNoteSection(selectedLessonNoteSection){
+        readNoteSection(selectedLessonNoteSection){
+            console.log("selectedLessonNoteSection: ", selectedLessonNoteSection)
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             this.$store.commit("authenticationStore/setShowSpinner", true);
             try{
-                
-                context.noteSection.title = selectedLessonNoteSection.sectionTitle
+                let title = selectedLessonNoteSection.sectionTitle;
+                title = title.replace("<pre","<p");
+                title = title.replace("</pre>","");
+                context.noteSection.title = ""
                 context.noteSection.description = selectedLessonNoteSection.content
+                context.noteSection.description=context.noteSection.description.replace("<pre>","");
+                context.noteSection.description=context.noteSection.description.replace("</pre>","</p>");
+                context.noteSection.description=title + context.noteSection.description;
+                
                 context.noteSection.fileUrl = selectedLessonNoteSection.fileUrl
                 context.noteSection.isVideo = false
                 context.noteSection.isImage = false
@@ -409,6 +464,10 @@
                             break;
                     }
                 }
+
+                console.log('context.noteSection.description: ', context.noteSection.description)
+
+                context.isLesson = true;
 
                 this.$store.commit("authenticationStore/setShowSpinner", false);
                 
@@ -452,6 +511,11 @@
                         label: "Note Sections",
                         items: [...items],
                         originalItems: [...items],
+                        qBtns: [
+                            {label: "Read", name: "readNoteSection", icon: "view"},
+                            {label: "Edit", name: "editNoteSection", icon: "update"},
+                            {label: "Delete", name: "deleteNoteSection", icon: "delete"},
+                        ]
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -513,6 +577,7 @@
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+
             //this.$store.commit("authenticationStore/setActiveRoute", "fileModels");
       }
     }

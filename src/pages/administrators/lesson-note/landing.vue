@@ -1,22 +1,33 @@
 <template>
   <div>
+      <q-scroll-area style="height: 80vh; max-width: 100%;">
       <div v-if="!showSpinner"
       class="q-pa-sm">
         <div v-if="setIsResponsive">
         <div 
         class="row">
-            <LevelSelector class="col-12"
+            <LevelSelector 
+            v-show="!isLesson"
+            class="col-12"
             :qSelect="selectors_vm.qSelectLevel"
             @onLevelValueChange="onLevelValueChange($event)"/>
-            <SubjectSelector class="col-12"
+            <SubjectSelector 
+            v-show="!isLesson"
+            class="col-12"
             :qSelect="selectors_vm.qSelectSubject"
             @onSubjectValueChange="onSubjectValueChange($event)"/>
             <Form
+            v-show="!isLesson"
             class="col-12"
                 :formData="lessonNotesForm"
-                @linkClick="GetSelectedLessonNote($event)"
-                @qListTemplateAction="filterLessonNotes($event)"/>
+                @readNote="GetSelectedLessonNote($event)"
+                @editNote="editNote($event)"
+                @deleteNote="deleteNote($event)"
+                @qListTemplateAction="filterLessonNotes($event)"
+                @qListAddItemAction="createLessonNote($event)"/>
             <div
+            v-show="isLesson"
+            class="col-12"
             v-for="noteSection in noteSections" 
             :key="noteSection.title" >
                 <TitleDescriptionImage 
@@ -29,10 +40,27 @@
                 :isVideo="noteSection.isVideo"
                 :isImage="noteSection.isImage"
                 :isAudio="noteSection.isAudio"/>
+                <Title
+                v-if="noteSection.isTitle"
+                :title="noteSection.title"/>
                 <TitleDescription
                 v-else
                 :title="noteSection.title"
                 :description="noteSection.description"/>
+            </div>
+            <div 
+             v-show="isLesson"
+            class="col-12 q-pa-sm">
+                <q-space />
+                <div class="text-right">
+                <q-btn class="q-ma-sm bg-accent text-primary"
+                label="Done"
+                type="button"
+                size="sm"
+                no-caps
+                @click="IslessonAction"
+                />
+                </div>
             </div>
         </div>
         </div>
@@ -60,7 +88,11 @@
             <Form
                 class="col-12"
                 :formData="lessonNotesForm"
-                @linkClick="GetSelectedLessonNote($event)"/>
+                @readNote="GetSelectedLessonNote($event)"
+                @editNote="editNote($event)"
+                @deleteNote="deleteNote($event)"
+                @qListTemplateAction="filterLessonNotes($event)"
+                @qListAddItemAction="createLessonNote($event)"/>
             </div>
         </template>
 
@@ -70,7 +102,6 @@
             v-for="noteSection in noteSections" 
             :key="noteSection.title" >
                 <TitleDescriptionImage 
-                v-if="isFileUrl(noteSection.fileUrl)"
                 :title="noteSection.title"
                 :description="noteSection.description"
                 :imageUrl="noteSection.fileUrl"
@@ -79,10 +110,13 @@
                 :isVideo="noteSection.isVideo"
                 :isImage="noteSection.isImage"
                 :isAudio="noteSection.isAudio"/>
+                <!-- <Title
+                v-if="noteSection.isTitle"
+                :title="noteSection.title"/>
                 <TitleDescription
-                v-else
+                v-if="!isFileUrl(noteSection.fileUrl)"
                 :title="noteSection.title"
-                :description="noteSection.description"/>
+                :description="noteSection.description"/> -->
             </div>
              </q-scroll-area>
         </template>
@@ -117,11 +151,13 @@
             >
             </MessageBox>
         </q-dialog>
+        </q-scroll-area>
   </div>
 </template>
 
 <script>
     import TitleDescription from "../../../components/Common/title-description.vue";
+    import Title from "../../../components/Common/title-description2.vue";
     import TitleDescriptionImage from "../../../components/Common/title-description-image.vue";
   import Table from "../../../components/Tables/Table.vue";
   import Form from "../../../components/Forms/Form.vue";
@@ -162,10 +198,12 @@
         LevelSelector,
         SubjectSelector,
         TitleDescription,
-        TitleDescriptionImage
+        TitleDescriptionImage,
+        Title,
       },
     data () {
     return {
+            isLesson: false,
             width: 400, 
             splitterModel: 30, // start at 30%,
             isMobile: false,
@@ -201,9 +239,15 @@
             }
         },
         methods: {
+            IslessonAction(){
+                var context = this;
+                context.isLesson = context.isLesson === true ? false : true;
+            },
             isFileUrl(fileUrl){
-                if(fileUrl === "" || fileUrl == undefined) return false;
-                else return true;
+                let check = true;
+                if(fileUrl === "" || fileUrl == undefined) check = false;
+                console.log("check: ", check)
+                return check;
             },
             getFileExtension(fileUrl){
                 const arr = fileUrl.split(".")
@@ -225,12 +269,23 @@
              var context = this;
               this.$router.push(context.tableVM.createItemUrl);
           },
+          editNote(selectedLessonNote){
+             var context = this;
+             this.$store.commit('lessonNoteStore/SetSelectedLessonNote', selectedLessonNote)
+            this.$router.push(context.tableVM.updateItemUrl);
+          },
           updateLessonNote(selectedLessonNote){
              var context = this;
              this.$store.commit('lessonNoteStore/SetSelectedLessonNote', selectedLessonNote)
             this.$router.push(context.tableVM.updateItemUrl);
           },
           deleteLessonNote(selectedLessonNote){
+             var context = this;
+             context.selectedLessonNote = selectedLessonNote;
+             console.log(context.selectedLessonNote)
+             context.dialogs[0].isVisible = true;
+          },
+          deleteNote(selectedLessonNote){
              var context = this;
              context.selectedLessonNote = selectedLessonNote;
              console.log(context.selectedLessonNote)
@@ -299,30 +354,21 @@
             context.selectedLevel = payload.qSelect;
             context.selectors_vm.qSelectSubject.value = "";
             context.lessonNotesForm.qLists = [];
+            context.noteSections = []
         },
         async onSubjectValueChange(payload){
             console.log("selectedSubject: ", payload)
             var context = this;
             context.selectedSubject = payload.qSelect;
+            context.noteSections = []
             await context.FetchLessonNotes();
         },
         async GetSelectedLessonNote(selectedLessonNote){
+            console.log("selectedLessonNote: ", selectedLessonNote)
+            console.log()
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             this.$store.commit("authenticationStore/setShowSpinner", true);
-
-            context.noteSections = [];
-            context.noteSections.push({
-                title: selectedLessonNote.title, 
-                description: "", 
-                fileUrl: "", 
-                imageTitle: "", 
-                imageDescription: "",
-                isVideo: false, 
-                isImage: false, 
-                isAudio: false,
-                isPdf: false,
-            })
 
             try{
 
@@ -335,13 +381,38 @@
                 }
                 
                 const response = await post(payload);
+                let description = "";
+                let title = "";
                 console.log("response: ", response)
+                let noteSections = [];
+                noteSections.push({
+                    title: selectedLessonNote.title, 
+                    description: "", 
+                    fileUrl: "", 
+                    imageTitle: "", 
+                    imageDescription: "",
+                    isVideo: false, 
+                    isImage: false, 
+                    isAudio: false,
+                    isPdf: false,
+                    isTitle: true,
+                })
                 let i = 0;
                 for(const item of response.data){
                     i++;
-                    context.noteSections.push({
-                        title: item.sectionTitle, 
-                        description: item.content, 
+                    title = item.sectionTitle;
+                    title = title.replace("<pre","<p");
+                    title = title.replace("</pre>","");
+                    description =  item.content;
+                    description=description.replace("<pre>","");
+                    description=description.replace("</pre>","</p>");
+                    description=title + description;
+
+                    console.log("description: ", description)
+
+                    noteSections.push({
+                        title: "", 
+                        description: description, 
                         fileUrl: item.fileUrl,
                         imageTitle: "", 
                         imageDescription: "",
@@ -353,29 +424,31 @@
 
                     if(context.isFileUrl(item.originalFileName)){
                         const fileExtension = context.getFileExtension(item.originalFileName)
-                        console.log("fileExtension: ", fileExtension)
                         switch(fileExtension){
                             case "pdf":
-                                context.noteSections[i].isPdf = true;
+                                noteSections[i].isPdf = true;
                                 break;
                             case "mp4":
-                                context.noteSections[i].isVideo = true;
+                                noteSections[i].isVideo = true;
                                 break;
                             case "mp3":
-                                context.noteSections[i].isAudio = true;
+                                noteSections[i].isAudio = true;
                                 break;
                             case "png":
-                                context.noteSections[i].isImage = true;
+                                noteSections[i].isImage = true;
                                 break;
                             case "jpeg":
-                                context.noteSections[i].isImage = true;
+                                noteSections[i].isImage = true;
                                 break;
                             case "jpg":
-                                context.noteSections[i].isImage = true;
+                                noteSections[i].isImage = true;
                                 break;
                         }
                     }
                 }
+
+                context.isLesson = true;
+                context.noteSections = [...noteSections]
 
                 console.log("context.noteSections: ", context.noteSections)
 
@@ -424,6 +497,11 @@
                         label: "Notes",
                         items: [...items],
                         originalItems: [...items],
+                        qBtns: [
+                            {label: "Read", name: "readNote", icon: "view"},
+                            {label: "Edit", name: "editNote", icon: "update"},
+                            {label: "Delete", name: "deleteNote", icon: "delete"},
+                        ]
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -468,7 +546,8 @@
                         value: row.id,
                     }
                 })
-            }
+                context.noteSections = []
+            } 
         },
         created() {
             var context = this;

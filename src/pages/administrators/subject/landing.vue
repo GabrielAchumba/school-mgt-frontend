@@ -4,8 +4,8 @@
         <Form
         v-if="setIsResponsive"
         :formData="form"
-        @updateListItemHandler="updateSubject($event)"
-        @deleteListItemHandler="deleteSubject($event)"
+        @updateListItem="updateListItem($event)"
+        @deleteListItem="deleteListItem($event)"
         @qListTemplateAction="filterSubjects($event)"
         @qListAddItemAction="createSubject($event)"/>
 
@@ -138,7 +138,18 @@
              this.$store.commit('subjectStore/SetSelectedSubject', selectedSubject)
             this.$router.push(context.tableVM.updateItemUrl);
           },
+          updateListItem(selectedSubject){
+             var context = this;
+             this.$store.commit('subjectStore/SetSelectedSubject', selectedSubject)
+            this.$router.push(context.tableVM.updateItemUrl);
+          },
           deleteSubject(selectedSubject){
+             var context = this;
+             context.selectedSubject = selectedSubject;
+             console.log(context.selectedSubject)
+             context.dialogs[0].isVisible = true;
+          },
+          deleteListItem(selectedSubject){
              var context = this;
              context.selectedSubject = selectedSubject;
              console.log(context.selectedSubject)
@@ -232,6 +243,10 @@
                 label: context.title,
                 items: [...items],
                 originalItems: [...items],
+                qBtns: [
+                    {label: "Edit", name: "updateListItem", icon: "update"},
+                    {label: "Delete", name: "deleteListItem", icon: "delete"},
+                ]
             })
             console.log("context.form.qLists: ", context.form.qLists)
 

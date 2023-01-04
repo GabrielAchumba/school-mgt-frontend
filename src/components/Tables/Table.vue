@@ -16,16 +16,15 @@
         size=md no-caps />  
     </div> -->
 
-    <div 
+    <!-- <div 
       v-if="windowResize"
       class="row bg-primary q-pa-sm">
         <CardList 
          :rows="table_VM.rows"
         :columns="table_VM.columns" />
-    </div>
+    </div> -->
 
     <q-table 
-      v-else
       :data="table_VM.rows"
       :title="table_VM.title"
       :columns="table_VM.columns" 
@@ -35,6 +34,7 @@
       :filter="filter"
       :filter-method="customFilter"  
       :loading="loading"
+      :wrap-cells="autoWidth"
       class="screenwide q-ma-sm bg-primary"
       bordered
       >
@@ -56,7 +56,25 @@
               <q-tooltip>
                 Delete Selected Rows
               </q-tooltip>
-              </q-icon>
+            </q-icon>
+             <q-icon 
+              class="col"
+              name="add" 
+              @click="createItem"
+              size="20px">
+              <q-tooltip>
+                Add Row Item
+              </q-tooltip>
+            </q-icon>
+            <q-icon 
+              class="col"
+              name="import_contacts" 
+              @click="dataImport"
+              size="20px">
+              <q-tooltip>
+                Import Rows
+              </q-tooltip>
+            </q-icon>
               <q-toggle
                 v-model="qToggleModel"
                 color="accent"
@@ -207,6 +225,7 @@
         },
         data(){
           return {
+            autoWidth: true,
             qToggleModel: "Disagreed",
             tableWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.6}px`: "100%",
             cardWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.7}px`: "100%",
@@ -296,6 +315,11 @@
           deleteAllItems(){
             var context = this;
             this.$emit("deleteAllItems", context.checkBoxModels);
+          },
+          dataImport(){
+            var context = this;
+            console.log('context.table_VM.dataImport: ', context.table_VM.dataImport)
+            this.$emit(context.table_VM.dataImport);
           },
           onResize(e) {
             const width = window.innerWidth;

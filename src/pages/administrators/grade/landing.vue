@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createGrade="createGrade($event)"
     @updateGrade="updateGrade($event)"
     @deleteGrade="deleteGrade($event)"/>

@@ -24,6 +24,7 @@
             <div class="col-12">
                 <Table
                 :table_VM="tableVM"
+                :tableRows="tableVM.rows"
                 :isResponsive="isResponsive"
                 :isHeader="isHeader"/>
             </div>

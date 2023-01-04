@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createStudent="createStudent($event)"
     @updateStudent="updateStudent($event)"
     @deleteStudent="deleteStudent($event)"/>
@@ -65,7 +66,7 @@
                     { name: "actions", label: "Actions", field: "", align: "left", type: "" },
                     { name: "firstName", label: "First Name", field: "", align: "left", type: "text" },
                     { name: "lastName", label: "Last Name", field: "", align: "left", type: "text" },
-                    { name: "token", label: "Token", field: "", align: "left", type: "text" },
+                    /* { name: "token", label: "Token", field: "", align: "left", type: "text" }, */
                 ],
                 rows: [],
                 separator: "cell",

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardList from "../../../components/Cards/CardList.vue"
+  import CardList from "../../../components/Cards/CardList3.vue"
 
     export default {
         components:{
@@ -18,22 +18,15 @@
             cardList: [
               {
                 name: "showPage",
-                title: "Questions", 
+                title: "Questions & Answers", 
                 description: "Create questions and anwser options for any subject",
                 image: "/statics/images/examination.jpg",
                 to: "exam-question-landing"
               },
               {
                 name: "showPage",
-                title: "Answers", 
-                description: "Create accurate answers for any questions created",
-                image: "/statics/images/examinations3.jpg",
-                to: "exam-answer-landing"
-              },
-              {
-                name: "showPage",
-                title: "Take Exam", 
-                description: "State the mission of your organization and also upadate it any time",
+                title: "Take Cont. Ass.", 
+                description: "Access your readiness",
                 image: "/statics/images/examinations2.jpg",
                 to: "take-exam-question"
               },

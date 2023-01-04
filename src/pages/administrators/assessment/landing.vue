@@ -3,6 +3,8 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
+    @dataImport="dataImport($event)"
     @createAssessment="createAssessment($event)"
     @updateAssessment="updateAssessment($event)"
     @deleteAssessment="deleteAssessment($event)"/>
@@ -73,6 +75,7 @@
                 createItem: "createAssessment",
                 updateItem: "updateAssessment",
                 deleteItem: "deleteAssessment",
+                dataImport: "dataImport",
                 createItemUrl: "/create-assessment",
                 updateItemUrl: "/update-assessment",
                 importURL: "/import-assessments"
@@ -96,9 +99,13 @@
             var context = this;
             context.isFetchTableDialog = false
           },
+        dataImport(){
+            var context = this;
+            this.$router.push(context.tableVM.importURL);
+        },
          createAssessment(){
-             var context = this;
-              this.$router.push(context.tableVM.createItemUrl);
+            var context = this;
+            this.$router.push(context.tableVM.createItemUrl);
           },
           updateAssessment(selectedAssessment){
              var context = this;

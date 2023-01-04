@@ -144,11 +144,19 @@ export default {
                     break;
                 }
             }
+        },
+        setBackRoute(){
+            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            let backRoute= "";
+            if(user.schoolId === "CEO")backRoute='/super-admin-about-us-landing';
+            else  backRoute = '/about-us-landing';
+             this.$store.commit("authenticationStore/setBackRoute", backRoute);
         }
     },
     created(){
         var context = this;
         context.form.clearQInputs();
+        context.setBackRoute();
     }
 }
 </script>

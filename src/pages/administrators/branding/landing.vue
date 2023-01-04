@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardList from "../../../components/Cards/CardList.vue"
+  import CardList from "../../../components/Cards/CardList3.vue"
 
     export default {
         components:{
@@ -16,6 +16,20 @@
         data () {
           return {
             cardList: [
+              {
+                name: "showPage",
+                title: "Landing Page", 
+                description: "Customize the images and texts of your landing page",
+                image: "/statics/images/home.jpg",
+                to: "home-landing"
+              },
+              {
+                name: "showPage",
+                title: "News & Events", 
+                description: "Post up to date news and events about your organization",
+                image: "/statics/images/news.jpg",
+                to: "news-landing"
+              },
               {
                 name: "showPage",
                 title: "Logo", 
@@ -58,27 +72,20 @@
                 image: "/statics/images/contact.jpg",
                 to: "contact-landing"
               },
-              {
-                name: "showPage",
-                title: "Landing Page", 
-                description: "Customize the images and texts of your landing page",
-                image: "/statics/images/home.jpg",
-                to: "home-landing"
-              },
-              {
-                name: "showPage",
-                title: "News & Events", 
-                description: "Post up to date news and events about your organization",
-                image: "/statics/images/news.jpg",
-                to: "news-landing"
-              },
             ],
           }
         },
         methods:{
-            showPage(payload){
-                this.$router.push(payload.to)
-            }
+          showPage(payload){
+              this.$router.push(payload.to)
+          },
+          setBackRoute(){
+              var user = this.$store.getters["authenticationStore/IdentityModel"];
+              let backRoute= "";
+              if(user.schoolId === "CEO")backRoute='/super-admin';
+              else  backRoute = '/admin';
+              this.$store.commit("authenticationStore/setBackRoute", backRoute);
+          }
         },
         created(){
             var context = this;
@@ -96,6 +103,7 @@
             console.log("context.cardList: ", context.cardList)
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+            context.setBackRoute();
           
         }
     }

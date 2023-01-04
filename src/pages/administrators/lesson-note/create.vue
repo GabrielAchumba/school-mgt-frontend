@@ -101,7 +101,7 @@ export default {
                 req: {
                     createdBy: user.id,
                     schoolId: user.schoolId,
-                    title: context.form.qInputs[0].name,
+                    title: context.form.qEditors[0].name,
                     levelId: context.form.qSelects[0].value,
                     subjectId: context.form.qSelects[1].value,
                 }

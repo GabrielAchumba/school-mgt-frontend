@@ -3,8 +3,6 @@
         <div class="col-12">
           <div class="row">
             <q-btn flat icon="arrow_back" class="text-capitalize" @click="goBack"/>
-            <!-- <q-btn flat dense round icon="create" @click="create"/>
-            <q-btn flat dense round icon="import_contacts" @click="dataImport"/> -->
             <q-space />
             <q-btn flat dense round @click="create" avatar>
               <q-avatar 

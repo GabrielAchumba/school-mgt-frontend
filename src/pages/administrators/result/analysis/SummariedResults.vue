@@ -37,6 +37,7 @@
             <div class="col-12">
                 <Table
                 :table_VM="tableVM"
+                :tableRows="tableVM.rows"
                 :isResponsive="isResponsive"
                 :isHeader="isHeader"/>
             </div>
@@ -545,13 +546,13 @@ export default {
 
 
             context.layout = { 
-                title: `${xListItem.type} vs ${yListItem.type}`,
+                title: "", // `${xListItem.type} vs ${yListItem.type}`,
                 barmode: 'stack',
                 font: {
                     //size: 18,
                     //family: 'Raleway, sans-serif'
                     },
-                    showlegend: true,
+                    showlegend: false,
                     /* xaxis: {
                         tickangle: -45
                     }, */
@@ -584,7 +585,7 @@ export default {
             name: 'Maximum Score',
             type: 'bar',
             marker: {
-                    color: 'orange',
+                    color: 'transparent',
                     line: {
                         width: 2.5
                     }

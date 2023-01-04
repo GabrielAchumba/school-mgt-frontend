@@ -44,10 +44,11 @@ export const torpaFeatures = {
     assessments: "Assessments",
     sessions: "Sessions",
     students: "Students",
-    cAResults: "CA Results",
+    cAResults: "Cont. Ass. Results",
     cGPAComputation: "CGPA Computation",
     libraryMgt: "Library Mgt",
-    onlineLearning: "Online Learning",
+    onlineLearning: "Lesson Notes",
+    continuousAssessments: "Cont. Assessment",
     cBTPractice: "CBT Practice",
     quizGame: "Quiz Game",
     socialize: "Socialize",
@@ -159,6 +160,13 @@ export const menuList = [
         name: "showPage",
         title: torpaFeatures.onlineLearning, 
         description: "Setup online course programs",
+        image: "/statics/images/online_learning.jpg",
+        to: "online-learning-landing"
+    },
+    {
+        name: "showPage",
+        title: torpaFeatures.continuousAssessments, 
+        description: "Set home work, test, exams, etc",
         image: "/statics/images/online_learning.jpg",
         to: "online-learning-landing"
     },

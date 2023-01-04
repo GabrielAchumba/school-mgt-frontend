@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardList from "../../../components/Cards/CardList.vue";
+  import CardList from "../../../components/Cards/CardList3.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
 
     export default {
@@ -20,38 +20,24 @@
             cardList: [
               {
                 name: "showPage",
-                title: "Lesson Notes", 
-                description: "Create and upadte lesson note for any subject",
+                title: "Notes", 
+                description: "Initiate lesson note for any subject",
                 image: "/statics/images/single_student_result.jpg",
                 to: "lesson-note-landing"
               },
               {
                 name: "showPage",
-                title: "Continuous Assessments", 
-                description: "Create and update continuous assessments for any subject",
-                image: "/statics/images/results.jpg",
-                to: "ca-landing"
-              },
-              {
-                name: "showPage",
-                title: "Lesson Note Sections", 
-                description: "Create and upadte lesson sections for any lesson note",
+                title: "Note Sections", 
+                description: "Prepare sections for any lesson note",
                 image: "/statics/images/single_student_result.jpg",
                 to: "lesson-note-section-landing"
               },
               {
                 name: "showPage",
-                title: "Continuous Assessment Questions", 
-                description: "Create and upadte questions for a selected continuous assessment",
+                title: "Student Feedback", 
+                description: "Question or feedback from student",
                 image: "/statics/images/single_student_result.jpg",
                 to: "ca-question-landing"
-              },
-              {
-                name: "showPage",
-                title: "Continuous Assessment Answers", 
-                description: "Create and upadte answers of the continuous assessment questions created",
-                image: "/statics/images/single_student_result.jpg",
-                to: "ca-answer-landing"
               },
             ],
           }

@@ -167,8 +167,8 @@ export default {
                 url,
                 req: {
                     fileType: context.fileType,
-                    sectionTitle: context.form.qInputs[0].name,
-                    content: context.form.qInputs[1].name,
+                    sectionTitle: context.form.qEditors[0].name,
+                    content: context.form.qEditors[1].name,
                     schoolId: user.schoolId,
                     fileUrl: context.fileUrl,
                     fileName: context.fileName,
@@ -226,8 +226,8 @@ export default {
         context.VisionUrl = context.selectedLessonNoteSection.fileUrl;
         context.form.qFiles[0].showPreview = true;
         context.form.qFiles[0].imagePreview = context.selectedLessonNoteSection.fileUrl;
-        context.form.qInputs[0].name = context.selectedLessonNoteSection.sectionTitle;
-        context.form.qInputs[1].name = context.selectedLessonNoteSection.content;
+        context.form.qEditors[0].name = context.selectedLessonNoteSection.sectionTitle;
+        context.form.qEditors[1].name = context.selectedLessonNoteSection.content;
     }
 }
 </script>

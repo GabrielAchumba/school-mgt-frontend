@@ -9,7 +9,7 @@
 
                 <q-separator />
 
-                <q-card-section class="bg-primary text-accent">
+                <q-card-section>
                    <q-form class="q-pa-none">
 
                      <div
@@ -182,6 +182,102 @@
                     </div>
 
                     <div class="q-pa-sm"
+                      v-for="qEditor in formData.qEditors" 
+                      :key="qEditor.label">
+                      <span><p class="q-ma-none">{{ qEditor.label }}</p>
+                      <q-editor class="q-ma-none"
+                      min-height="5rem"
+                      v-model="qEditor.name"
+                      :dense="qEditor.dense"
+                      :toolbar="[
+                        [
+                          {
+                            label: $q.lang.editor.align,
+                            icon: $q.iconSet.editor.align,
+                            fixedLabel: true,
+                            list: 'only-icons',
+                            options: ['left', 'center', 'right', 'justify']
+                          },
+                          {
+                            label: $q.lang.editor.align,
+                            icon: $q.iconSet.editor.align,
+                            fixedLabel: true,
+                            options: ['left', 'center', 'right', 'justify']
+                          }
+                        ],
+                        ['bold', 'italic', 'strike', 'underline', 'subscript', 'superscript'],
+                        ['token', 'hr', 'link', 'custom_btn'],
+                        ['print', 'fullscreen'],
+                        [
+                          {
+                            label: $q.lang.editor.formatting,
+                            icon: $q.iconSet.editor.formatting,
+                            list: 'no-icons',
+                            options: [
+                              'p',
+                              'h1',
+                              'h2',
+                              'h3',
+                              'h4',
+                              'h5',
+                              'h6',
+                              'code'
+                            ]
+                          },
+                          {
+                            label: $q.lang.editor.fontSize,
+                            icon: $q.iconSet.editor.fontSize,
+                            fixedLabel: true,
+                            fixedIcon: true,
+                            list: 'no-icons',
+                            options: [
+                              'size-1',
+                              'size-2',
+                              'size-3',
+                              'size-4',
+                              'size-5',
+                              'size-6',
+                              'size-7'
+                            ]
+                          },
+                          {
+                            label: $q.lang.editor.defaultFont,
+                            icon: $q.iconSet.editor.font,
+                            fixedIcon: true,
+                            list: 'no-icons',
+                            options: [
+                              'default_font',
+                              'arial',
+                              'arial_black',
+                              'comic_sans',
+                              'courier_new',
+                              'impact',
+                              'lucida_grande',
+                              'times_new_roman',
+                              'verdana'
+                            ]
+                          },
+                          'removeFormat'
+                        ],
+                        ['quote', 'unordered', 'ordered', 'outdent', 'indent'],
+
+                        ['undo', 'redo'],
+                        ['viewsource']
+                      ]"
+                      :fonts="{
+                        arial: 'Arial',
+                        arial_black: 'Arial Black',
+                        comic_sans: 'Comic Sans MS',
+                        courier_new: 'Courier New',
+                        impact: 'Impact',
+                        lucida_grande: 'Lucida Grande',
+                        times_new_roman: 'Times New Roman',
+                        verdana: 'Verdana'
+                      }">
+                      </q-editor></span>
+                    </div>
+
+                    <div class="q-pa-sm"
                       v-for="qFile in formData.qFiles" 
                       :key="qFile.label">
                       <span>
@@ -290,31 +386,24 @@
                             </q-item-section>
 
                             <q-item-section>
-                              <q-item-label>{{ item.name }}</q-item-label>
-                              <q-item-label caption>{{ item.address }}</q-item-label>
+                              <q-item-label v-html="item.name"></q-item-label>
+                              <q-item-label caption v-html="item.address"></q-item-label>
                             </q-item-section>
 
                             <q-item-section side top>
                               <q-icon 
                               name="more_vert" 
-                              color="accent"
-                              @click="linkClick(item)">
+                              color="accent">
                               <q-menu fit>
                                 <q-list dense class="text-accent text-caption bg-primary">
                                     <q-item
+                                    v-for="qBtn in qList.qBtns" 
+                                    :key="qBtn.label"
                                     class="bg-primary text-accent"
                                     clickable
-                                    @click="updateListItemHandler(item)">
+                                    @click="ListItemHandler(qBtn.name, item)">
                                         <q-item-section>
-                                            Edit
-                                        </q-item-section>
-                                    </q-item>
-                                    <q-item
-                                    class="bg-primary text-accent"
-                                    clickable
-                                    @click="deleteListItemHandler(col)">
-                                        <q-item-section>
-                                            Delete
+                                            {{ qBtn.label }}
                                         </q-item-section>
                                     </q-item>
                                 </q-list>
@@ -522,11 +611,8 @@ import { getLineWidth } from 'plotly.js-dist';
           handleDeleteEditableTable(payload) {
             this.$emit(payload.tableVM.handleDeleteName, payload);
           },
-          updateListItemHandler(payload){
-            this.$emit("updateListItemHandler", payload);
-          },
-          deleteListItemHandler(payload){
-            this.$emit("deleteListItemHandler", payload);
+          ListItemHandler(actionName, qListItem){
+            this.$emit(actionName, qListItem);
           },
           disableRightclick(evt){
             var context = this;

@@ -1,8 +1,9 @@
 const form = {
     title: "Update Lesson Note Section",
     qSelects: [],
-    qInputs: [
-        { label: "Section Title", name: "", type: "text",
+    qEditors: [
+        { label: "Section Title", name: '<pre>Check out the two different types of dropdowns' +
+        ' in each of the "Align" buttons.</pre> ', type: "text",
         selectedFile: null,
         files: [],
         Template: {
@@ -10,7 +11,8 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Content", name: "", type: "textarea",
+        { label: "Content", name: '<pre>Check out the two different types of dropdowns' +
+        ' in each of the "Align" buttons.</pre> ', type: "textarea",
         selectedFile: null,
         files: [],
         Template: {
@@ -42,8 +44,8 @@ const form = {
     GroupedCheckBoxes: [],
     clearQInputs(){
         var i = 0;
-        for (i = 0; i < this.qInputs.length; i++){
-            this.qInputs[i].name = "";
+        for (i = 0; i < this.qEditors.length; i++){
+            this.qEditors[i].name = "";
         }
     },
     clearQFiles(){

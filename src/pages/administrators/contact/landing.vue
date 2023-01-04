@@ -3,6 +3,7 @@
     <Table
     v-if="!showSpinner"
     :table_VM="tableVM"
+    :tableRows="tableVM.rows"
     @createContact="createContact($event)"
     @updateContact="updateContact($event)"
     @deleteContact="deleteContact($event)"/>

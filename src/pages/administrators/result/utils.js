@@ -9,12 +9,12 @@ export const createResultSummaryReport = (result) => {
 }
 
 const getColumns = (result) =>  {
-
+    const style = ""; //width: auto; overflow-wrap: break-word"; //min-width: 5px; max-width: 50px
     const columns = [];
     const subjectKeys = Object.keys(result);
-    columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left", scoreMax: 100, type: "text" })
-    columns.push({ name: "totalScore", label: "TOTAL SCORE", field: "", align: "left", scoreMax: 100, type: "number" })
-    columns.push({ name: "grade", label: "GRADE", field: "", align: "left", scoreMax: 100, type: "text" })
+    columns.push({ name: "subject", label: "SUBJECT", field: "", align: "left", scoreMax: 100, type: "text"})
+    columns.push({ name: "totalScore", label: "TOTAL SCORE", field: "", align: "left", scoreMax: 100, type: "number"})
+    columns.push({ name: "grade", label: "GRADE", field: "", align: "left", scoreMax: 100, type: "text"})
 
     for(const subjectKey of subjectKeys){
         
