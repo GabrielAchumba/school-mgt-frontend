@@ -612,6 +612,8 @@ import { getLineWidth } from 'plotly.js-dist';
             this.$emit(payload.tableVM.handleDeleteName, payload);
           },
           ListItemHandler(actionName, qListItem){
+            console.log("actionName: ", actionName)
+            console.log("qListItem: ", qListItem)
             this.$emit(actionName, qListItem);
           },
           disableRightclick(evt){

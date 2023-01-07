@@ -9,9 +9,13 @@ const state = {
     subjectName: "",
     levelName: "",
     year: 0,
+    percentage: 0,
 }
 
 const getters = {
+    percentage(state){
+        return state.percentage;
+    },
     subjectName(state){
         return state.subjectName;
     },
@@ -45,6 +49,9 @@ const getters = {
 } 
 
 const mutations = {
+    setPercentage(state, payload){
+        state.percentage = payload;
+    },
     setScore(state, payload){
         state.score = payload
     },

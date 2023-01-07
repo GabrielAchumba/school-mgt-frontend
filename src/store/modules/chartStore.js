@@ -4,9 +4,13 @@ const state = {
   seriesCollection: [],
   layout: {},
   title: "",
+  isQbar: true,
 }
 
 const getters = {
+    isQbar(state){
+        return state.isQbar;
+    },
     variables(state){
         return state.variables;
     },
@@ -25,6 +29,9 @@ const getters = {
 }
 
 const mutations = {
+  setIsQbar(state, payload){
+    state.isQbar = payload;
+  },
     setTitle(state, payload){
       state.title = payload;
     },

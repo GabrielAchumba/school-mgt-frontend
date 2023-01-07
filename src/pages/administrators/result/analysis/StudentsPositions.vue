@@ -384,7 +384,7 @@ export default {
             })
 
             context.layout = { 
-                title: `${xListItem.type} VERSUS ${yListItem.type}`,
+                title: `${yListItem.type}`, //`${xListItem.type} VERSUS ${yListItem.type}`,
                 font: {
                     },
                     showlegend: true,

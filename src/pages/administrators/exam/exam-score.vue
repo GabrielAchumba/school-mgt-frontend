@@ -1,30 +1,17 @@
 <template>
     <div class="q-pa-md">
-        <div class="row">
-            <p class="col-6 q-pa-sm text-center text-h6">Subject: </p>
-            <p class="col-6 q-pa-sm text-center text-h6">{{ subjectName }}</p>
+        <div class="row q-pa-md flex flex-center">
+            <Chart/>
         </div>
         <div class="row">
-            <p class="col-6 q-pa-sm text-center text-h6">Level: </p>
-            <p class="col-6 q-pa-sm text-center text-h6">{{ levelName }}</p>
-        </div>
-        <div class="row">
-            <p class="col-6 q-pa-sm text-center text-h6">Year: </p>
-            <p class="col-6 q-pa-sm text-center text-h6">{{ year }}</p>
-        </div>
-        <div class="row">
-            <p class="col-6 q-pa-sm text-center text-h6">Score: </p>
-            <p class="col-6 q-pa-sm text-center text-h6">{{ score }} of {{ totalNumber  }}</p>
-        </div>
-        <div class="row">
-            <p class="col-6 q-pa-sm text-center text-h6">Percentage: </p>
-            <p class="col-6 q-pa-sm text-center text-h6">{{ calculatePercentage() }}</p>
+            <p class="col-12 q-pa-sm text-center text-h6">You scored {{ score }} of {{ totalNumber  }} Questions</p>
+            <p class="col-12 q-pa-sm text-center text-h6">The Assessment is on {{ subjectName }}, {{ levelName }} {{ year }} </p>
         </div>
     </div>
 </template>
 
 <script>
-
+import Chart from "../../../components/Charts/Chart.vue";
 export default {
     computed:{
         subjectName(){
@@ -41,17 +28,13 @@ export default {
         },
         totalNumber(){
           return this.$store.getters["examStore/totalNumber"];
-        }
+        },
+        percentage(){
+          return this.$store.getters["examStore/percentage"];
+        },
     },
-    methods:{
-        calculatePercentage(){
-            var context = this;
-            const dp = 0;
-            const score = this.$store.getters["examStore/score"];
-            const totalNumber = this.$store.getters["examStore/totalNumber"];
-            const percentage = ((score/totalNumber) * 100).toFixed(dp);
-            return percentage;
-        }
+    components:{
+        Chart
     },
     created(){
         this.$store.commit("authenticationStore/setIsError", false);

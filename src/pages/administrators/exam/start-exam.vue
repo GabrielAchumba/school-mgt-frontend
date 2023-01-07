@@ -6,7 +6,8 @@
     </div>
 
     <div>
-      <p class="q-pa-sm text-h6" style="white-space: pre-line">{{ selectedQuestion }}</p>
+      <!-- <p class="q-pa-sm text-h6" style="white-space: pre-line">{{ selectedQuestion }}</p> -->
+      <p class="q-pa-sm" v-html="selectedQuestion"></p>
     </div>
 
     <div 
@@ -232,6 +233,7 @@ export default {
         var user = this.$store.getters["authenticationStore/IdentityModel"];
         let answeredQuestions = [];
         let i = -1;
+
         const totalNumber = context.questions.length;
         let score = 0;
         for(const question of context.questions){
@@ -244,6 +246,68 @@ export default {
 
         this.$store.commit("examStore/setScore", score);
         this.$store.commit("examStore/setTotalNumber", totalNumber);
+
+       /*  var layout = { 
+            title: '',
+            height: 200,
+            width: 400,
+            margin: {"t": 0, "b": 0, "l": 0, "r": 0},
+            showlegend: false,
+            plot_bgcolor:"rgb(27, 25, 25)"
+            
+        }; */
+
+
+        var labels = ["Passed", "Failed"];
+        const dp = 0;
+        const percentage = ((score/totalNumber) * 100).toFixed(dp);
+        var passed = percentage;
+        var failed = 100 - passed;
+        var values = [passed, failed];
+
+        var layout = {
+          title: '',
+          height: 200,
+          width: 400,
+          margin: {"t": 0, "b": 0, "l": 0, "r": 0},
+          annotations: [
+            {
+              font: {
+                size: 25
+              },
+              showarrow: false,
+              text: `${percentage}%`,
+            },
+          ],
+          showlegend: true,
+          legend: {"orientation": "h"}
+        };
+
+        const valueDrists = {
+          values: values,
+          labels: labels,
+          name: 'Score',
+          hoverinfo: 'label+percent+name',
+          hole: .7,
+          automargin: true,
+          type: 'pie',
+          text: `${percentage}%`,
+          marker: {
+            colors: [
+              'rgb(5, 102, 8)',
+              'rgb(255, 0, 0)'
+            ]
+          },
+        }
+
+            
+            
+        var data = [valueDrists]
+        this.$store.commit("examStore/setPercentage", percentage);
+        this.$store.commit("chartStore/setSeriesCollection", data)
+        this.$store.commit("chartStore/setLayout", layout)
+        this.$store.commit("chartStore/setTitle", "")
+        this.$store.commit("chartStore/setIsQbar", false);
         this.$router.push('/exam-score')
       },
       onOptionSelected(selectedOption){

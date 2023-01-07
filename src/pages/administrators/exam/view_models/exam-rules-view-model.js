@@ -39,9 +39,23 @@ const questionsForms = {
     qLists:[],
 }
 
+const selectedQuestionsForms = {
+    title: "Questions",
+    qSelects: [],
+    qInputs: [],
+    qBtns: [],
+    qDates: [],
+    GroupedCheckBoxes: [],
+    qLists:[],
+    qBtns: [
+        {label: "Done", name: "isQuestionsAction", icon: "close", btnDisabled: false},
+    ],
+}
+
+
 const dialogs = [
     { title: "Start Examination", isVisible: false, message: "Do you want to start an examination. Once you start, there is no room for canceling the examination. Good luck!!!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
 ]
 
-export { form, dialogs, questionsForms }
+export { form, dialogs, questionsForms, selectedQuestionsForms }

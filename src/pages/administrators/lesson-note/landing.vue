@@ -386,6 +386,7 @@
                 console.log("response: ", response)
                 let noteSections = [];
                 noteSections.push({
+                    sn: 0,
                     title: selectedLessonNote.title, 
                     description: "", 
                     fileUrl: "", 
@@ -406,11 +407,12 @@
                     description =  item.content;
                     description=description.replace("<pre>","");
                     description=description.replace("</pre>","</p>");
-                    description=title + description;
+                    description=title + "<br>" + description;
 
                     console.log("description: ", description)
 
                     noteSections.push({
+                        sn: i,
                         title: "", 
                         description: description, 
                         fileUrl: item.fileUrl,
@@ -526,7 +528,8 @@
         },
         initializeSelectors(){
                 var context = this;
-                context.selectors_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
+                const qSelectSubject_list = this.$store.getters["subjectStore/subjects"];
+                context.selectors_vm.qSelectSubject.list = qSelectSubject_list
                 .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
                 .map((row) => {
                     return {
@@ -537,7 +540,8 @@
                 })
 
 
-                context.selectors_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
+                const qSelectLevel_list = this.$store.getters["levelStore/levels"];
+                context.selectors_vm.qSelectLevel.list = qSelectLevel_list
                 .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
                 .map((row) => {
                     return {

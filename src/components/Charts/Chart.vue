@@ -1,6 +1,8 @@
 <template>
 <div class="row">
-    <q-bar class="col-12 bg-accent text-primary">
+    <q-bar 
+    v-if="isQbar"
+    class="col-12 bg-accent text-primary">
         <q-btn  
             icon="arrow_back"
             flat
@@ -17,7 +19,7 @@
             @click="refreshPlot">
         </q-btn>
     </q-bar>
-    <div id="myDiv" class="col-12 q-pa-sm" style="height:80vh"></div>
+    <div id="myDiv" class="col-12 q-pa-sm"></div>
 </div>
 </template>
 
@@ -35,6 +37,9 @@ export default {
         title(){
             return this.$store.getters['chartStore/title'];
         },
+        isQbar(){
+            return this.$store.getters['chartStore/isQbar'];
+        },
         activeRoute(){
             const activeRoute = this.$store.getters["authenticationStore/activeRoute"];
             return  printableRoutes[activeRoute].route == undefined ? "/admin" : printableRoutes[activeRoute].route;
@@ -49,7 +54,10 @@ export default {
                 return {...row};
             })
             const layout = {...context.layout }
-            Plotly.newPlot('myDiv', seriesCollection, layout);
+            const config = {
+                displayModeBar: false, // this is the line that hides the bar.
+            };
+            Plotly.newPlot('myDiv', seriesCollection, layout, config);
         },
         goBack(){
             var context = this;

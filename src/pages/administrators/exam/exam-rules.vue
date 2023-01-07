@@ -1,77 +1,79 @@
 <template>
   <div class="q-pa-sm">
-    <div v-if="setIsResponsive">
-      <div 
-      class="row">
-          <LevelSelector class="col-12"
-          :qSelect="exam_vm.qSelectLevel"
-          @onLevelValueChange="onLevelValueChange($event)"/>
-          <SubjectSelector class="col-12"
-          :qSelect="exam_vm.qSelectSubject"
-          @onSubjectValueChange="onSubjectValueChange($event)"/>
-          <Form
-          class="col-12"
-            :formData="questionsForms"
-            @linkClick="selectPastQuestions($event)"
-            @qListTemplateAction="filterPastQuestions($event)"/>
-          <Form
+    <q-scroll-area style="height: 80vh; max-width: 100%;">
+        <div v-if="setIsResponsive">
+        <div 
+        class="row">
+            <LevelSelector class="col-12"
+            :qSelect="exam_vm.qSelectLevel"
+            @onLevelValueChange="onLevelValueChange($event)"/>
+            <SubjectSelector class="col-12"
+            :qSelect="exam_vm.qSelectSubject"
+            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            <Form
             class="col-12"
-            :formData="form"
-            @Cancel="Cancel($event)"/>
-      </div>
-    </div>
-    <div v-else>
-    <q-resize-observer @resize="onResize" :debounce="0" />
-
-    <q-splitter
-      id="photos"
-      v-model="splitterModel"
-      :limits="[0, 100]"
-      :style="splitterStyle"
-      before-class="overflow-hidden"
-      after-class="overflow-hidden"
-    >
-
-      <template v-slot:before>
-        <div class="row">
-          <LevelSelector class="col-12"
-          :qSelect="exam_vm.qSelectLevel"
-          @onLevelValueChange="onLevelValueChange($event)"/>
-          <SubjectSelector class="col-12"
-          :qSelect="exam_vm.qSelectSubject"
-          @onSubjectValueChange="onSubjectValueChange($event)"/>
-          <Form
-            class="col-12"
-            :formData="questionsForms"
-            @linkClick="selectPastQuestions($event)"
-            @qListTemplateAction="filterPastQuestions($event)"/>
+                :formData="questionsForms"
+                @selectPastQuestions="selectPastQuestions($event)"
+                @qListTemplateAction="filterPastQuestions($event)"/>
+            <Form
+                class="col-12"
+                :formData="form"
+                @Cancel="Cancel($event)"/>
         </div>
-      </template>
+        </div>
+        <div v-else>
+        <q-resize-observer @resize="onResize" :debounce="0" />
 
-      <template v-slot:after>
-        <Form
-        :formData="form"
-        @Start="Start($event)"
-        @Cancel="Cancel($event)"/>
-      </template>
+        <q-splitter
+        id="photos"
+        v-model="splitterModel"
+        :limits="[0, 100]"
+        :style="splitterStyle"
+        before-class="overflow-hidden"
+        after-class="overflow-hidden"
+        >
 
-    </q-splitter>
-    </div>
+        <template v-slot:before>
+            <div class="row">
+            <LevelSelector class="col-12"
+            :qSelect="exam_vm.qSelectLevel"
+            @onLevelValueChange="onLevelValueChange($event)"/>
+            <SubjectSelector class="col-12"
+            :qSelect="exam_vm.qSelectSubject"
+            @onSubjectValueChange="onSubjectValueChange($event)"/>
+            <Form
+                class="col-12"
+                :formData="questionsForms"
+                @selectPastQuestions="selectPastQuestions($event)"
+                @qListTemplateAction="filterPastQuestions($event)"/>
+            </div>
+        </template>
 
-        <q-dialog 
-            v-for="dialog in dialogs" 
-            :key="dialog.title"
-            v-model="dialog.isVisible">
-            <MessageBox
-            :title="dialog.title"
-            :message="dialog.message"
-            :okayEvent="dialog.okayEvent"
-            :cancelEvent="dialog.cancelEvent"
-            @cancelDialog="cancelDialog($event)"
-            @okDialog="okDialog($event)"
-            >
-            </MessageBox>
-        </q-dialog>
+        <template v-slot:after>
+            <Form
+            :formData="form"
+            @Start="Start($event)"
+            @Cancel="Cancel($event)"/>
+        </template>
+
+        </q-splitter>
+        </div>
+
+            <q-dialog 
+                v-for="dialog in dialogs" 
+                :key="dialog.title"
+                v-model="dialog.isVisible">
+                <MessageBox
+                :title="dialog.title"
+                :message="dialog.message"
+                :okayEvent="dialog.okayEvent"
+                :cancelEvent="dialog.cancelEvent"
+                @cancelDialog="cancelDialog($event)"
+                @okDialog="okDialog($event)"
+                >
+                </MessageBox>
+            </q-dialog>
+        </q-scroll-area>
   </div>
 </template>
 
@@ -175,6 +177,7 @@ export default {
                 i++;
                 if(dialog.title == "Start Examination"){
                     context.dialogs[i].isVisible = true;
+                    console.log("seen")
                     break;
                 }
             }
@@ -273,6 +276,9 @@ export default {
                         label: "Past Questions",
                         items: [...items],
                         originalItems: [...items],
+                        qBtns: [
+                            {label: "Start", name: "selectPastQuestions", icon: "view"},
+                        ]
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);

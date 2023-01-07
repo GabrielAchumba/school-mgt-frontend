@@ -174,6 +174,9 @@ export default {
         },
         selectedLogo(){
             return this.$store.getters['LogoStore/selectedLogo'];
+        },
+        pageTitle(){
+          return this.$store.getters['authenticationStore/pageTitle'];
         }
     },
     props:{

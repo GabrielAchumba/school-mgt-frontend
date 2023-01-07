@@ -328,7 +328,7 @@ export default {
                 req: {
                     subjectId: context.exam_vm.qSelectSubject.value,
                     levelId: context.exam_vm.qSelectLevel.value,
-                    question: context.exam_vm.examQuestionSessions[0].qInputs[0].name,
+                    question: context.exam_vm.examQuestionSessions[0].qEditors[0].name,
                     cloudImageUrl: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].url : "",
                     cloudImageName: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].fileName : "",
                     originalImageName: context.questionImageUrls.length > 0 ? context.questionImageUrls[0].originalFileName : "",
@@ -336,12 +336,12 @@ export default {
                     /* questionSession: context.exam_vm.examQuestionSessions.map((row, i) => {
 
                         const ans = row.isImage ? {
-                            question: row.qInputs[0].name,
+                            question: row.qEditors[0].name,
                             cloudImageUrl: questionImageUrls[i].url,
                             cloudImageName: questionImageUrls[i].fileName,
                             originalImageName: questionImageUrls[i].originalFileName,
                         }:{
-                            question: row.qInputs[0].name,
+                            question: row.qEditors[0].name,
                         }
                         return ans;
                     })[0], */
@@ -349,12 +349,12 @@ export default {
                     answerOptions: context.exam_vm.answerOptions.map((row, i) => {
 
                         const ans = row.isImage ? {
-                            answer: row.qInputs[0].name,
+                            answer: row.qEditors[0].name,
                             cloudImageUrl: "",  //context.answerOptionsImageUrls[i].url,
                             cloudImageName: "", //context.answerOptionsImageUrls[i].fileName,
                             originalImageName: "", //context.answerOptionsImageUrls[i].originalFileName,
                         }:{
-                            answer: row.qInputs[0].name,
+                            answer: row.qEditors[0].name,
                         }
                         return ans;
                     }),
@@ -500,7 +500,7 @@ export default {
                     title: "",
                     isImage: false,
                     qSelects: [],
-                    qInputs: [
+                    qEditors: [
                         { label: "Question", name: "", type: "textarea",
                         Template: {
                             sn: 0,
@@ -517,8 +517,8 @@ export default {
                     GroupedCheckBoxes: [],
                     clearQInputs(){
                         var i = 0;
-                        for (i = 0; i < this.qInputs.length; i++){
-                            this.qInputs[i].name = "";
+                        for (i = 0; i < this.qEditors.length; i++){
+                            this.qEditors[i].name = "";
                         }
                     },
                 }
@@ -529,7 +529,7 @@ export default {
                     title: "",
                     isImage: true,
                     qSelects: [],
-                    qInputs: [
+                    qEditors: [
                         { label: "Question", name: "", type: "textarea",
                         Template: {
                             sn: 0,
@@ -575,8 +575,8 @@ export default {
                     },
                     clearQInputs(){
                         var i = 0;
-                        for (i = 0; i < this.qInputs.length; i++){
-                            this.qInputs[i].name = "";
+                        for (i = 0; i < this.qEditors.length; i++){
+                            this.qEditors[i].name = "";
                         }
                     },
                 }
@@ -591,7 +591,7 @@ export default {
                     title: "",
                     isImage: false,
                     qSelects: [],
-                    qInputs: [
+                    qEditors: [
                         { label: "Answer", name: "", type: "text",
                         Template: {
                             sn: 0,
@@ -608,8 +608,8 @@ export default {
                     GroupedCheckBoxes: [],
                     clearQInputs(){
                         var i = 0;
-                        for (i = 0; i < this.qInputs.length; i++){
-                            this.qInputs[i].name = "";
+                        for (i = 0; i < this.qEditors.length; i++){
+                            this.qEditors[i].name = "";
                         }
                     },
                 }
@@ -620,7 +620,7 @@ export default {
                     title: "",
                     isImage: true,
                     qSelects: [],
-                    qInputs: [
+                    qEditors: [
                         { label: "Answer", name: "", type: "text",
                         Template: {
                             sn: 0,
@@ -666,8 +666,8 @@ export default {
                     },
                     clearQInputs(){
                         var i = 0;
-                        for (i = 0; i < this.qInputs.length; i++){
-                            this.qInputs[i].name = "";
+                        for (i = 0; i < this.qEditors.length; i++){
+                            this.qEditors[i].name = "";
                         }
                     },
                 }
@@ -804,7 +804,7 @@ export default {
             context.onAddExamQuestionSession();
             context.exam_vm.qSelectSubject.value = context.selectedExam.subjectId;
             context.exam_vm.qSelectLevel.value = context.selectedExam.levelId;
-            context.exam_vm.examQuestionSessions[0].qInputs[0].name = context.selectedExam.question;
+            context.exam_vm.examQuestionSessions[0].qEditors[0].name = context.selectedExam.question;
             let objQ = { url: "", fileName: "", originalFileName: "" }
             if(context.selectedExam.cloudImageUrl) objQ.url = context.selectedExam.cloudImageUrl;
             if(context.selectedExam.cloudImageName) objQ.fileName = context.selectedExam.cloudImageName;
@@ -821,7 +821,7 @@ export default {
                 context.exam_vm.qSelectAnswerOption.value == "Paragraph";
                 context.onAddAnswerOption();
                 i++;   
-                context.exam_vm.answerOptions[i].qInputs[0].name = answerOption.answer;
+                context.exam_vm.answerOptions[i].qEditors[0].name = answerOption.answer;
                 
 
                 let obj = { url: "", fileName: "", originalFileName: "" }

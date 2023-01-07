@@ -434,7 +434,7 @@
                 context.noteSection.description = selectedLessonNoteSection.content
                 context.noteSection.description=context.noteSection.description.replace("<pre>","");
                 context.noteSection.description=context.noteSection.description.replace("</pre>","</p>");
-                context.noteSection.description=title + context.noteSection.description;
+                context.noteSection.description=title + "<br>" +  context.noteSection.description;
                 
                 context.noteSection.fileUrl = selectedLessonNoteSection.fileUrl
                 context.noteSection.isVideo = false
@@ -540,7 +540,8 @@
         },
         initializeSelectors(){
                 var context = this;
-                context.selectors_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
+                const subjects = this.$store.getters["subjectStore/subjects"];
+                context.selectors_vm.qSelectSubject.list = subjects
                 .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
                 .map((row) => {
                     return {
@@ -550,8 +551,8 @@
                     }
                 })
 
-
-                context.selectors_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
+                const levels = this.$store.getters["levelStore/levels"];
+                context.selectors_vm.qSelectLevel.list = levels
                 .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
                 .map((row) => {
                     return {

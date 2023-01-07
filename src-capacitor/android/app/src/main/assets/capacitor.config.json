@@ -1,7 +1,0 @@
-{
-  "appId": "org.cordova.quasar.app",
-  "appName": "torpa",
-  "bundledWebRuntime": false,
-  "npmClient": "npm",
-  "webDir": "www"
-}

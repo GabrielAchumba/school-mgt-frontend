@@ -27,13 +27,13 @@
         <div 
         v-if="!showSpinner"
         class="row q-pa-sm">
-            <div class="col-12 text-center">RESULT OF {{ selectedSessionName }}</div>
-            <div class="col-6 text-left">NAME: {{ studentFullName }}</div>
-            <div class="col-6 text-right">Year: {{ resultYear }}</div>
-            <div class="col-6 text-left">LEVEL: {{ selectedLevelName }}</div>
-            <div class="col-6 text-right">CLASS: {{ selectedClassRoomName }}</div>
-            <div class="col-6 text-left">POSITION: {{ studentPosition }}</div>
-            <div class="col-6 text-right">Overall Score: {{ overallScore }}/{{overallScoreMax }}</div>
+            <div class="col-12 q-pa-sm text-center">RESULT OF {{ selectedSessionName }}</div>
+            <div class="col-6 q-pa-sm text-left">NAME: {{ studentFullName }}</div>
+            <div class="col-6 q-pa-sm text-right">Year: {{ resultYear }}</div>
+            <div class="col-6 q-pa-sm text-left">LEVEL: {{ selectedLevelName }}</div>
+            <div class="col-6 q-pa-sm text-right">CLASS: {{ selectedClassRoomName }}</div>
+            <div class="col-6 q-pa-sm text-left">POSITION: {{ studentPosition }}</div>
+            <div class="col-6 q-pa-sm text-right">Overall Score: {{ overallScore }}/{{overallScoreMax }}</div>
             <div class="col-12">
                 <Table
                 :table_VM="tableVM"

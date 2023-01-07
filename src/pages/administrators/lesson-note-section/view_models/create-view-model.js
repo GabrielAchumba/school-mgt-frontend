@@ -9,8 +9,7 @@ const form = {
          list: [], actionName: "lessonNoteAction", visible: true },
     ],
     qEditors: [
-        { label: "Section Title", name: '<pre>Check out the two different types of dropdowns' +
-        ' in each of the "Align" buttons.</pre> ', type: "text",
+        { label: "Section Title", name: "", title: "", type: "text",
         selectedFile: null,
         dense: false,
         files: [],
@@ -19,8 +18,7 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "Content", name: '<pre>Check out the two different types of dropdowns' +
-        ' in each of the "Align" buttons.</pre> ', type: "textarea",
+        { label: "Content", name: "", type: "textarea",
         selectedFile: null,
         dense: false,
         files: [],

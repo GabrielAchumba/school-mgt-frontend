@@ -1,26 +1,33 @@
 <template>
   <div class="q-pa-sm">
+      <q-scroll-area style="height: 80vh; max-width: 100%;">
     <div v-if="setIsResponsive">
       <div 
       class="row">
-          <LevelSelector class="col-12"
+          <LevelSelector 
+          v-show="!isQuestions"
+          class="col-12"
           :qSelect="exam_vm.qSelectLevel"
           @onLevelValueChange="onLevelValueChange($event)"/>
-          <SubjectSelector class="col-12"
+          <SubjectSelector 
+          v-show="!isQuestions"
+          class="col-12"
           :qSelect="exam_vm.qSelectSubject"
           @onSubjectValueChange="onSubjectValueChange($event)"/>
           <Form
+          v-show="!isQuestions"
           class="col-12"
             :formData="questionsForms"
-            @linkClick="viewQuestions($event)"
+            @viewQuestions="viewQuestions($event)"
             @qListTemplateAction="filterPastQuestions($event)"/>
-          <Table
-            class="col-12"
-            :table_VM="tableVM"
-            @createExam="createExam($event)"
+          <Form
+          v-show="isQuestions"
+          class="col-12"
+            :formData="selectedQuestionsForms"
             @updateExam="updateExam($event)"
             @deleteExam="deleteExam($event)"
-            @deleteAllItems="deleteQuestions($event)"/>
+            @qListAddItemAction="createExam($event)"
+            @isQuestionsAction="isQuestionsAction($event)"/>
       </div>
     </div>
     <div v-else>
@@ -46,8 +53,9 @@
           <Form
             class="col-12"
             :formData="questionsForms"
-            @linkClick="viewQuestions($event)"
-            @qListTemplateAction="filterPastQuestions($event)"/>
+            @viewQuestions="viewQuestions($event)"
+            @qListTemplateAction="filterPastQuestions($event)"
+            @qListAddItemAction="createExam($event)"/>
         </div>
       </template>
 
@@ -79,6 +87,7 @@
             >
             </MessageBox>
         </q-dialog>
+        </q-scroll-area>
   </div>
 </template>
 
@@ -89,7 +98,7 @@ import  MessageBox from "../../../components/dialogs/MessageBox.vue";
 import { qSelectLevel } from "./view_models/selectors-view-model";
 import LevelSelector from "./level-selector.vue";
 import SubjectSelector from "./subject-selector.vue";
-import  { form, dialogs, questionsForms } from "./view_models/exam-rules-view-model";
+import  { form, dialogs, questionsForms, selectedQuestionsForms } from "./view_models/exam-rules-view-model";
 import { post } from "../../../store/modules/gcp-services";
 import { exam_vm } from "./view_models/create-view-model";
 import { customFilter } from "../../../components/Utils/searchListUtil";
@@ -127,6 +136,7 @@ export default {
     },
     data(){
         return {
+            isQuestions: false,
             width: 400, 
             splitterModel: 30, // start at 30%,
             isMobile: false,
@@ -135,6 +145,7 @@ export default {
             selectedLevel: null,
             exam_vm: exam_vm,
             questionsForms: questionsForms,
+            selectedQuestionsForms: selectedQuestionsForms,
             selectedPastQuestions: {},
             selectedExam: {},
             tableVM: {
@@ -173,6 +184,11 @@ export default {
         }
     },
     methods:{
+        isQuestionsAction(){
+            var context = this;
+            context.isQuestions = context.isQuestions === true ? false : true;
+
+        },
         createExam(){
             var context = this;
             console.log(context.tableVM.createItemUrl)
@@ -311,7 +327,8 @@ export default {
             //objArray.sort((a, b) => a.DepartmentName.toLowerCase().localeCompare(b.DepartmentName.toLowerCase()))
             context.questionsForms.qLists = [];
 
-            context.exam_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
+            const subjects = this.$store.getters["subjectStore/subjects"];
+            context.exam_vm.qSelectSubject.list = subjects
             .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
             .map((row) => {
                 return {
@@ -322,8 +339,8 @@ export default {
             })
             context.exam_vm.qSelectSubject.value = "";
 
-
-            context.exam_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
+            const levels = this.$store.getters["levelStore/levels"];
+            context.exam_vm.qSelectLevel.list = levels
             .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
             .map((row) => {
                 return {
@@ -362,7 +379,7 @@ export default {
                     context.questionsForms.qLists = [];
                     const items = response.data.map((row) => {
                         return {
-                            name: `${context.selectedSubject.type}_${row.date}`,
+                            name: `${context.selectedSubject.type} ${row.examYear}`,
                             address: "",
                             route: "/exam-rules",
                             letter: `${row.examYear}`,   //context.selectedSubject.type.charAt(0),
@@ -383,9 +400,10 @@ export default {
                         label: "Past Questions",
                         items: [...items],
                         originalItems: [...items],
+                        qBtns: [
+                            {label: "View", name: "viewQuestions", icon: "view"},
+                        ]
                     })
-
-                    //this.$store.commit("authenticationStore/setShowSpinner", false);
                     
                 }catch{
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -395,13 +413,9 @@ export default {
         },
         filterPastQuestions(payload){
             var context = this;
-            //console.log("payload: ", payload)
             switch(payload.label){
                 case "Past Questions":
-                    //console.log("payload.originalItems: ", payload.originalItems)
-                    //console.log("payload.listBoxSearchModel: ", payload.listBoxSearchModel)
                     context.questionsForms.qLists[0].items = customFilter(payload.originalItems, payload.listBoxSearchModel);
-                    //console.log("context.questionsForms.qLists.items: ", context.questionsForms.qLists[0].items)
                     break;
             }
         },
@@ -440,14 +454,40 @@ export default {
                      }
                  })
 
-                 console.log("context.tableVM.rows: ", context.tableVM.rows)
+                 //console.log("context.tableVM.rows: ", context.tableVM.rows)
 
+                 context.selectedQuestionsForms.qLists = [];
+                 //style="overflow-wrap: break-word"
+                    const items = response.data.map((row, i) => {
+                        return {
+                            ...row,
+                            name: `<blockquote>${row.question}</blockquote>`,
+                            address: "",
+                            route: "",
+                            letter: `${i+1}`,
+                            label: i,
+
+                        }
+                    });
+
+                    console.log("items: ", items) 
+                    context.selectedQuestionsForms.title = context.tableVM.title;
+                    context.selectedQuestionsForms.qLists.push({
+                        label: context.tableVM.title,
+                        items: [...items],
+                        originalItems: [...items],
+                        qBtns: [
+                            {label: "Edit", name: "updateExam", icon: "update"},
+                            {label: "Delete", name: "deleteExam", icon: "delete"},
+                        ]
+                    })
                 
                 this.$store.commit('examStore/SetExams', context.tableVM.rows);
                 this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
                 this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
                 this.$store.commit("authenticationStore/setShowSpinner", false);
+                context.isQuestions = true;
                 
             }catch{
                 this.$store.commit("authenticationStore/setShowSpinner", false);

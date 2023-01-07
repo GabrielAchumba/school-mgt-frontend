@@ -98,9 +98,9 @@ const getColumnsStudentsPositions = (result) => {
     const columns = [];
     if(result.length <= 0) return columns
 
-    columns.push({ name: "fullName", label: "FULL NAME", 
-    field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "text" })
     columns.push({ name: "userName", label: "USER NAME", 
+    field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "text" })
+    columns.push({ name: "fullName", label: "FULL NAME", 
     field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "text" })
     columns.push({ name: "overallScore", label: "OVERALL SCORE", 
     field: "", align: "left", scoreMax: result[0].overallScoreMax, type: "number" })
