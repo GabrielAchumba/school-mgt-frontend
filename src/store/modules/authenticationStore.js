@@ -48,9 +48,17 @@ const state = {
     workSheetsData: [],
     isError: false,
     errorMessages: false,
+    pageTitle: "",
+    updateUserRoute: "/update-user",
   }
 
   const getters = {
+    updateUserRoute(state){
+      return state.updateUserRoute;
+    },
+    pageTitle(state){
+      return state.pageTitle;
+    },
     isError(state){
       return state.isError;
     },
@@ -156,6 +164,12 @@ const state = {
 }
 
 const mutations = {
+  setUpdateUserRoute(state, payload){
+    state.updateUserRoute = payload;
+  },
+  setPageTitle(state, payload){
+    state.pageTitle = payload;
+  },
   setBackRoute(state, payload){
     state.backRoute = payload;
   },
@@ -194,6 +208,9 @@ const mutations = {
   },
   AddUserPhoto(state, payload){
     state.IdentityModel.base64String = payload.base64String
+  },
+  setIdentityModel(state, payload){
+    state.IdentityModel = payload
   },
   GetAdmin(state, payload){
     state.Admin = payload;

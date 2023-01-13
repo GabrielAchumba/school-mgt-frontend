@@ -446,6 +446,7 @@ export default {
         this.$store.commit("authenticationStore/setActiveRoute", "studentspositionsanalysis");
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
+        this.$store.commit("authenticationStore/setPageTitle", "Results Computation-POS"); 
         
     }
 }

@@ -151,6 +151,7 @@ export default {
         var context =  this;
         context.selectedSubject = this.$store.getters["subjectStore/selectedSubject"];
         context.form.qInputs[0].name = context.selectedSubject.type;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Subject");  
     }
 }
 </script>

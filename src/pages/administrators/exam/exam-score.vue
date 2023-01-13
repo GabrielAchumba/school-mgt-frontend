@@ -39,6 +39,7 @@ export default {
     created(){
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
+        this.$store.commit("authenticationStore/setPageTitle", "Scores")
     }
 }
 </script>

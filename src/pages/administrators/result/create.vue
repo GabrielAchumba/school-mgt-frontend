@@ -234,6 +234,7 @@ export default {
                 label: row.type,
             }
         })
+        this.$store.commit("authenticationStore/setPageTitle", "Create Result");  
     }
 }
 </script>

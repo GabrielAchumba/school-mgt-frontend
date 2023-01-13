@@ -1,18 +1,19 @@
 <template>
-    <div class="q-pa-none bg-red text-accent">
-        <q-toolbar class="bg-primary text-accent">
+    <div class="q-pa-none text-accent">
+        <q-toolbar class="bg-accent text-accent">
             <img :src="selectedLogo.fileUrl"
                 style="height:50px; width:50px;">
          <q-space />
 
          <q-tabs v-model="selected_tab" shrink>
 
-        <div v-if="rightDrawerOpen">
+        <div>
+            <!-- <div v-if="rightDrawerOpen"> -->
           <q-btn
             :icon="rightMenuIcon"
             flat
             dense
-            class="text-accent bg-primary">
+            class="text-primary bg-accent">
             <q-menu fit>
               <q-list dense class="text-accent text-caption bg-primary" style="width:200px;">
                 <q-item
@@ -29,15 +30,18 @@
           </q-btn>
         </div>
 
-        <q-tab 
+        <!-- <q-tab 
         v-else
          v-for="(menuItem) in menuList" :key="menuItem.name"
         class="q-mr-sm q-py-xs text-accent" 
         @click="scrollToElement(menuItem.name);" 
-        :label="menuItem.label" />
+        :label="menuItem.label" /> -->
        </q-tabs>
         
       </q-toolbar>
+      <!-- <q-img
+      src="statics/images/banner1.jpg"
+      class="header-image absolute-top"/> -->
     </div>
 </template>
 
@@ -84,5 +88,10 @@ export default {
 <style scoped>
 img {
   border-radius: 50%;
+}
+.header-image {
+    height:100%;
+    z-index:-1;
+    opacity: 0.8; 
 }
 </style>

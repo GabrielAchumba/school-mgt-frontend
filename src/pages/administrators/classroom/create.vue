@@ -158,6 +158,7 @@ export default {
                 label: row.type,
             }
         })
+        this.$store.commit("authenticationStore/setPageTitle", "Create Class Rooms");  
     }
 }
 </script>

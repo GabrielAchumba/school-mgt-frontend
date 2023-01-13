@@ -47,7 +47,8 @@
                  v-else
                  class="bg-primary text-accent q-pa-sm">
                     <Table
-                    :table_VM="tableVM"/>
+                    :table_VM="tableVM"
+                    :tableRows="tableVM.rows"/>
                  </q-card-section>
 
                  <q-separator />

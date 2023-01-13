@@ -1,16 +1,20 @@
 <template>
-    <q-bar class="q-pa-none row bg-accent text-primary">
+    <q-toolbar class="q-pa-none row bg-accent text-primary">
         <div class="col-12">
           <div class="row">
             <q-btn flat icon="arrow_back" class="text-capitalize" @click="goBack"/>
             <q-space />
-            <q-btn flat dense round @click="create" avatar>
+            <!-- <q-btn flat dense round @click="create" avatar>
               <q-avatar 
                 class="bg-primary text-accent"
                 size="sm">
                 <img :src="selectedLogo.fileUrl === undefined ? '/statics/newway.jpg' : selectedLogo.fileUrl">
                 </q-avatar>
+            </q-btn> -->
+            <q-btn flat>
+              {{ pageTitle }}
             </q-btn>
+            
             
             <q-space />
              <!-- <PDFWriter/> -->
@@ -42,15 +46,9 @@
                 v-if="getIsUserPhoto()" 
                 class="bg-primary text-accent">
                 <q-img
-                      :src="IdentityModel.base64String"
+                      :src="IdentityModel.fileUrl"
                     />
               </q-avatar>
-            <!--  <q-avatar
-                v-else
-                class="bg-accent text-primary"
-                fit>
-                {{ IdentityModel.firstName.charAt(0) }}
-              </q-avatar> -->
               <q-btn v-else
               class="bg-accent text-primary"
               :dense="dense"
@@ -65,12 +63,13 @@
                                   <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
                                   <div 
                                   class="q-pa-md" style="font-family: Lato;" 
-                                  avatar>
+                                  avatar
+                                  @click="updateUserProfile">
                                     <q-avatar 
                                     v-if="getIsUserPhoto()" 
                                     class="bg-primary text-accent">
                                       <q-img
-                                          :src="IdentityModel.base64String"
+                                          :src="IdentityModel.fileUrl"
                                         />
                                       </q-avatar>
                                       <q-avatar 
@@ -137,7 +136,7 @@
           </MessageBox>
         </q-dialog>
         
-    </q-bar>
+    </q-toolbar>
      
 </template>
 
@@ -177,7 +176,10 @@ export default {
         },
         pageTitle(){
           return this.$store.getters['authenticationStore/pageTitle'];
-        }
+        },
+        updateUserRoute() {
+            return this.$store.getters['authenticationStore/updateUserRoute'];
+        },
     },
     props:{
         menuList: {
@@ -251,8 +253,8 @@ export default {
         },
         getIsUserPhoto(){
             var context = this;
-            if(context.IdentityModel.base64String != "" &&
-            context.IdentityModel.base64String != undefined){
+            if(context.IdentityModel.fileUrl != "" &&
+            context.IdentityModel.fileUrl != undefined){
                 return true
             }else{
                 return false
@@ -267,6 +269,10 @@ export default {
             console.log("context.backRoute: ", context.backRoute)
             this.$router.push(context.backRoute)
         },
+        updateUserProfile(){
+          var context = this;
+          this.$router.push(context.updateUserRoute)
+        }
     }
 }
 </script>

@@ -358,6 +358,7 @@ export default {
         context.initializeData()
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
+        this.$store.commit("authenticationStore/setPageTitle", "Take Exam")
     }
     
 }

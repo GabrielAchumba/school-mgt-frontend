@@ -22,7 +22,6 @@ const mutations = {
     },
     SetSelectedUser(state, payload){
         state.selectedUser = payload;
-        console.log("state.selectedUser: ", state.selectedUser)
     },
     SetTeachers(state, payload){
         state.teachers = payload;

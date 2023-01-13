@@ -327,6 +327,7 @@ export default {
         for(let i = 0; i < context.form.qSelects.length; i++){
             context.form.qSelects[i].value = "";
         }
+        this.$store.commit("authenticationStore/setPageTitle", "Create Note-Section")
     }
 }
 </script>

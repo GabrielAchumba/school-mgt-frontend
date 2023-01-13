@@ -621,6 +621,7 @@ export default {
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
         //await context.ShowResultConfiDialog();
+        this.$store.commit("authenticationStore/setPageTitle", "Results Computation-SSRA"); 
         
     }
 }

@@ -194,7 +194,7 @@
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             if(user.schoolId === "CEO"){
                 context.tableVM.createItemUrl = "/super-admin-create-logo";
-                context.tableVM.updateItemUrl = "/super-admin-create-logo";
+                context.tableVM.updateItemUrl = "/super-admin-update-logo";
             }
             await context._loadLogos()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);

@@ -64,6 +64,7 @@
             class="col-12"
             :table_VM="tableVM"
             :tableRows="tableVM.rows"
+            @dataImport="dataImport($event)"
             @createExam="createExam($event)"
             @updateExam="updateExam($event)"
             @deleteExam="deleteExam($event)"
@@ -159,6 +160,7 @@ export default {
                 ],
                 rows: [],
                 separator: "cell",
+                dataImport: "dataImport",
                 createItem: "createExam",
                 updateItem: "updateExam",
                 deleteItem: "deleteExam",
@@ -188,6 +190,11 @@ export default {
             var context = this;
             context.isQuestions = context.isQuestions === true ? false : true;
 
+        },
+        dataImport(){
+            var context = this;
+            console.log(context.tableVM.importURL)
+            this.$router.push(context.tableVM.importURL);
         },
         createExam(){
             var context = this;
@@ -524,6 +531,7 @@ export default {
         this.$store.commit("authenticationStore/setImportURL", context.tableVM.importURL);
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
+        this.$store.commit("authenticationStore/setPageTitle", "Past Questions")
     }
     
 }

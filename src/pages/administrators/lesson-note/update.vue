@@ -158,6 +158,7 @@ export default {
         context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
         context.form.qSelects[0].value = context.selectedLessonNote.levelId;
         context.form.qSelects[1].value = context.selectedLessonNote.subjectId;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Note")
     }
 }
 </script>

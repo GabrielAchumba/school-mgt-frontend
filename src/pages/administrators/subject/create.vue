@@ -149,6 +149,7 @@ export default {
     created(){
         var context = this;
         context.form.clearQInputs();
+        this.$store.commit("authenticationStore/setPageTitle", "Create Subject");  
     }
 }
 </script>

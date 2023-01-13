@@ -152,6 +152,7 @@ export default {
     created(){
         var context = this;
         context.form.clearQInputs();
+        this.$store.commit("authenticationStore/setPageTitle", "Creaye Grade");  
     }
 }
 </script>

@@ -183,6 +183,7 @@ export default {
                 type: row.type
             }
         }) 
+        this.$store.commit("authenticationStore/setPageTitle", "Create Student");  
     }
 }
 </script>

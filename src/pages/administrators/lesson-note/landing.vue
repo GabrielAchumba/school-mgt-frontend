@@ -29,7 +29,7 @@
             v-show="isLesson"
             class="col-12"
             v-for="noteSection in noteSections" 
-            :key="noteSection.title" >
+            :key="noteSection.sn" >
                 <TitleDescriptionImage 
                 v-if="isFileUrl(noteSection.fileUrl)"
                 :title="noteSection.title"
@@ -100,7 +100,7 @@
              <q-scroll-area style="height: 100vh; max-width: 100%;">
             <div
             v-for="noteSection in noteSections" 
-            :key="noteSection.title" >
+            :key="noteSection.sn" >
                 <TitleDescriptionImage 
                 :title="noteSection.title"
                 :description="noteSection.description"
@@ -468,6 +468,8 @@
             console.log("context.selectedLevel: ", context.selectedLevel);
 
             if(context.selectedSubject && context.selectedLevel){
+                const lessonNoteTitle = `${context.selectedSubject.type} ${context.selectedLevel.type}`
+                this.$store.commit("authenticationStore/setPageTitle", lessonNoteTitle)
 
                 const payload = {
                     url: "lessonnote/notes",
@@ -568,6 +570,7 @@
             this.$store.commit("authenticationStore/setActiveRoute", "lessonnotes");
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+            this.$store.commit("authenticationStore/setPageTitle", "Select Note")
       }
     }
 </script>

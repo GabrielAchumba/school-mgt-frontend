@@ -165,6 +165,7 @@ export default {
         context.form.qInputs[1].name = context.selectedAssessment.percentage;
         context.form.qSelects[0].list = this.$store.getters["subjectStore/subjects"];
         context.form.qSelects[0].value = context.selectedAssessment.subjectId;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Assessment");  
     }
 }
 </script>

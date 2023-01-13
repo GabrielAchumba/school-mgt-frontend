@@ -792,7 +792,8 @@ export default {
     },
     created(){
         var context = this;
-        context.initializeData();        
+        context.initializeData();
+        this.$store.commit("authenticationStore/setPageTitle", "Create Past Question")        
     }
 }
 </script>

@@ -464,6 +464,10 @@ export default {
       context.nextQuestion();
       this.$store.commit("authenticationStore/setIsError", false);
       this.$store.commit("authenticationStore/setErrorMessages", "");
+      const subjectName = this.$store.getters["examStore/subjectName"];
+      const levelName = this.$store.getters["examStore/levelName"];
+      const year =  this.$store.getters["examStore/year"];
+      this.$store.commit("authenticationStore/setPageTitle", `${subjectName} ${levelName} ${year}`)
     }
 }
 </script>

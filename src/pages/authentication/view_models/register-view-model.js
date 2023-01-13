@@ -7,27 +7,13 @@ const registrationForm = {
             list: [
                 {
                     sn: 1,
-                    id: "Referral",
-                    value: "Referral",
-                    label: "Referral",
-                    type: "Referral",
-                },
-                {
-                    sn: 2,
-                    id: "School Administrator",
-                    value: "School Administrator",
-                    label: "School Administrator",
-                    type: "School Administrator",
-                },
-                {
-                    sn: 3,
                     id: "Instructor",
                     value:  "Instructor",
                     label: "Instructor",
                     type: "Instructor",
                 },
                 {
-                    sn: 4,
+                    sn: 2,
                     id: "Student",
                     value: "Student",
                     label: "Student",

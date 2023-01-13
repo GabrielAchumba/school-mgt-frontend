@@ -202,7 +202,7 @@ export default {
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             
-            var url = `user/create-admin`;
+            var url = `user/create`;
             var schoolId = context.registrationForm.qSelects[1].value;
             if(context.registrationForm.qSelects[0].value === "Referral"){
               schoolId = "CEO";
@@ -218,6 +218,8 @@ export default {
                     userType: context.registrationForm.qSelects[0].value,
                     countryCode: context.phoneNumberForm.qSelects[0].value.code,
                     schoolId,
+                    createdBy: "me",
+                    confirmed: false,
                 }
             }
 

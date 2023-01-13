@@ -320,6 +320,7 @@ export default {
     created(){
         var context = this;
         context.setWorkSheetColumns();
+        this.$store.commit("authenticationStore/setPageTitle", "Import Results"); 
     }
 }
 </script>

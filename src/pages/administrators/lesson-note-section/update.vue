@@ -228,6 +228,7 @@ export default {
         context.form.qFiles[0].imagePreview = context.selectedLessonNoteSection.fileUrl;
         context.form.qEditors[0].name = context.selectedLessonNoteSection.sectionTitle;
         context.form.qEditors[1].name = context.selectedLessonNoteSection.content;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Note-Section")
     }
 }
 </script>

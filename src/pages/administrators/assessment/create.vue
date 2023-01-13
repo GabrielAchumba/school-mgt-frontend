@@ -157,6 +157,7 @@ export default {
         context.form.clearQInputs();
         context.form.clearQSelects();
         context.form.qSelects[0].list = this.$store.getters["subjectStore/subjects"];
+        this.$store.commit("authenticationStore/setPageTitle", "Create Assessment");  
     }
 }
 </script>

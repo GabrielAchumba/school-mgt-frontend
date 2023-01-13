@@ -1,6 +1,6 @@
 import axios from 'axios'
 //const axiosInstance = axios.create({ 
-  const processEnvNOEENV = "production";
+  const processEnvNOEENV = "development";
 
 
     const $http  = axios.create({ 

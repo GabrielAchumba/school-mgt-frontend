@@ -381,6 +381,8 @@
             //console.log("context.selectedLevel: ", context.selectedLevel);
 
             if(context.selectedSubject && context.selectedLevel){
+                const titlePage = `${context.selectedSubject.type} ${context.selectedLevel.type}`
+                this.$store.commit("authenticationStore/setPageTitle", titlePage)
 
                 const payload = {
                     url: "lessonnote/notes",
@@ -578,6 +580,7 @@
             this.$store.commit("authenticationStore/setNewRows", context.tableVM.rows);
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
+            this.$store.commit("authenticationStore/setPageTitle", "View Note-Section")
 
             //this.$store.commit("authenticationStore/setActiveRoute", "fileModels");
       }

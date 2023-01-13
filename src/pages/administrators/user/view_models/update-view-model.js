@@ -1,9 +1,9 @@
 const form = {
     title: "Update User",
-    qSelects: [
+    /* qSelects: [
          { label: "Designation *", value: "", type: "text", 
          list: [], actionName: "designationAction", visible: true },
-    ],
+    ], */
     qInputs: [
         { label: "First Name *", name: "", type: "text",
         Template: {
@@ -41,6 +41,18 @@ const form = {
             iconName: "",
             visible: false,
         }}, */
+    ],
+    qFiles: [
+        { label: "User Picture", name: "", type: "file",
+        selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
+        files: [],
+        Template: {
+            sn: 0,
+            iconName: "",
+            visible: false,
+        }}
     ],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close", btnDisabled: false},

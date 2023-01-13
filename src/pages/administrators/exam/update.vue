@@ -842,7 +842,8 @@ export default {
     created(){
         var context = this;
         context.initializeData();
-        context.setSelectedExam();        
+        context.setSelectedExam();  
+        this.$store.commit("authenticationStore/setPageTitle", "Update Past Question")      
     }
 }
 </script>

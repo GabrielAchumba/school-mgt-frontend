@@ -1,5 +1,5 @@
 <template>
-  <div class="row bg-primary" style="height: 95vh;">
+  <div class="row bg-primary">
     <div v-if="!isMobile"
           class="col-6 bg-primary">
           <TorpaLandingPage/>
@@ -13,6 +13,8 @@
 <script>
 import login from 'pages/authentication/login.vue'
 import TorpaLandingPage from "./landing.vue";
+// v-if="$q.platform.is.mobile"
+//v-if="!isMobile"
 
 export default {
   computed:{

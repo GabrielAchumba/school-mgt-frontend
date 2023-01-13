@@ -166,6 +166,7 @@ export default {
         context.form.qInputs[0].name = context.selectedlevel.type;
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
+        this.$store.commit("authenticationStore/setPageTitle", "Update Level");  
     }
 }
 </script>

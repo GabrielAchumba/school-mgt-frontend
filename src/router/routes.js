@@ -1221,6 +1221,11 @@ const routes = [
         
       },
       { 
+        path: '/student-update-user', 
+        component: () => import('pages/administrators/user/update.vue') 
+        
+      },
+      { 
         path: '/student-filemanagement-landing', 
         component: () => import('pages/administrators/filemanagement/student-landing.vue') 
         

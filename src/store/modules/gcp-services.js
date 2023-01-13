@@ -72,6 +72,25 @@ const put = (payload) => {
  })
 }
 
+const patch = (payload) => {
+
+  var token = validateSession();
+  gcphttp.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+  return new Promise((resolve, reject) => {
+      
+    gcphttp.patch(payload.url, payload.req)
+     .then(response => {             
+         resolve(response)
+         
+     })
+     .catch(error => {
+       reject(error)
+     })
+ })
+}
+
+
 const uploadFile = async (payload) => {
 
     var token = validateSession();
@@ -112,5 +131,6 @@ export {
   remove,
   post,
   put,
-  uploadFile
+  uploadFile,
+  patch
 }

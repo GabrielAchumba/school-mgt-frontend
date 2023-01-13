@@ -202,6 +202,7 @@ export default {
             }
         })
         context.form.qSelects[3].value = context.selectedStudent.sessionId;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Student");  
     }
 }
 </script>

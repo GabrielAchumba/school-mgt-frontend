@@ -60,6 +60,7 @@
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
             context.setBackRoute();
+            this.$store.commit("authenticationStore/setPageTitle", "CBT Practice")
         }
     }
 </script>

@@ -39,7 +39,7 @@
 
 import MessageBox from "../../../../components/dialogs/MessageBox.vue"
 import Form from "../../../../components/Forms/Form.vue";
-import { post, uploadLogo } from "../../../../store/modules/gcp-services";
+import { post, uploadLogo, put, patch } from "../../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
@@ -98,6 +98,7 @@ export default {
             }
         },
         onFileSelected(payload){
+            console.log("payload: ", payload)
             var context = this;
             context.form.qFiles[0].selectedFile = payload.selectedFile;
             let reader  = new FileReader();
@@ -105,6 +106,7 @@ export default {
             reader.addEventListener("load", function () {
             context.form.qFiles[0].showPreview = true;
             context.form.qFiles[0].imagePreview = reader.result;
+            console.log("context.form.qFiles[0].imagePreview: ", context.form.qFiles[0].imagePreview)
             }.bind(context), false);
 
             if(context.form.qFiles[0].selectedFile){
@@ -161,7 +163,7 @@ export default {
          async save(){
             var context = this;
             
-            var url = `logo/${context.selectedLogo.id}`;
+            var url = `logo/${context.selectedLogo._id}`;
             var user = this.$store.getters["authenticationStore/IdentityModel"];
             const payload = {
                 url,
@@ -178,7 +180,7 @@ export default {
             }
 
             console.log("payload: ", payload)
-            var response = await put(payload)
+            var response = await patch(payload)
 
 
             if(response.status === 201 || response.status == 200){
@@ -204,7 +206,7 @@ export default {
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Create Logo":
+                        case "Update Logo":
                             await context.uploadAndSaveLogoUr();
                             break;
                         case "Success":

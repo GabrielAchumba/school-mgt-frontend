@@ -5,7 +5,8 @@
         :formData="form"
         @Create="Create($event)"
         @Cancel="Cancel($event)"
-        @userTypeAction="userTypeAction($event)"/>
+        @userTypeAction="userTypeAction($event)"
+        @onFileSelected="onFileSelected($event)"/>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">
@@ -39,6 +40,7 @@
 
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
+import *  as gcpServices from "../../../store/modules/gcp-services";
 import { post } from "../../../store/modules/services";
 import { form, dialogs } from "./view_models/create-view-model";
 
@@ -62,6 +64,10 @@ export default {
         return {
             form: form,
             dialogs: dialogs,
+            fileUrl: "",
+            fileName: "",
+            originalFileName: "",
+            isNewPicture: false,
         }
     },
     methods:{
@@ -94,6 +100,73 @@ export default {
             }
             context.form.qBtns[0].btnDisabled = false;
             context.form.qBtns[1].btnDisabled = false;
+        },
+        onFileSelected(payload){
+            var context = this;
+            context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+            let fileType = "image";
+
+            reader.addEventListener("load", function () {
+
+                 context.form.qFiles[0].showPreview = false;
+                  context.form.qFiles[0].showVideoPreview = false;
+                  context.isNewPicture = true;
+
+                if(fileType === "video"){
+                     context.form.qFiles[0].showVideoPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }else{
+                    context.form.qFiles[0].showPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }
+
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else if (/\.(pdf|doc)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else if (/\.(ogg|mp4|webm)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "video";
+                    context.form.qFiles[0].fileType = fileType;
+                    reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else{
+                    alert("Wrong file format. Only supports .jpg, .jpeg, .png, .gif, .mp4, .ogg, .webm, .pdf or .doc")
+                }
+            }
+            
+            
+        },
+        async uploadFile(){
+            var context = this;
+            const formData = new FormData();
+            console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
+            formData.append('file', context.form.qFiles[0].selectedFile);
+            
+            var url = `logo/upload`;
+            const payload = {
+                url,
+                req: formData,
+            }
+
+            console.log("payload: ", payload)
+            //uploadFile
+            this.$store.commit("authenticationStore/setShowSpinner", true);
+            var response = await gcpServices.post(payload)
+            context.fileUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
+            this.$store.commit("authenticationStore/setShowSpinner", false);
+            console.log("fileUrl: ", context.fileUrl)
+
         },
         async save(){
             var context = this;
@@ -139,6 +212,13 @@ export default {
             }
 
         },
+        async uploadPicSave(){
+            var context = this;
+            if(context.isNewPicture){
+                await context.uploadFile();
+            }
+            await context.save();
+        },
         async okDialog(payload){
             console.log("payload: ", payload)
             const context = this;
@@ -148,7 +228,7 @@ export default {
                 if(dialog.title === payload){
                     switch(payload){
                         case "Create User":
-                            await context.save();
+                            await context.uploadPicSave();
                             context.form.qBtns[1].btnDisabled = false;
                             break;
                         case "Success":
@@ -173,7 +253,8 @@ export default {
                 ...row,
                 type: row.type
             }
-        })  
+        })
+        this.$store.commit("authenticationStore/setPageTitle", "Create User");  
     }
 }
 </script>

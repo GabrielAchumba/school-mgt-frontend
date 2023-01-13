@@ -154,6 +154,7 @@ export default {
         var context = this;
         context.form.clearQInputs();
         console.log("form: ", context.form);
+        this.$store.commit("authenticationStore/setPageTitle", "Create Designation");
     }
 }
 </script>

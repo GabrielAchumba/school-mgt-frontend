@@ -43,6 +43,18 @@ const form = {
         }}, */
         /* { label: "Email", name: "", type: "text"}, */
     ],
+    qFiles: [
+        { label: "User Picture", name: "", type: "file",
+        selectedFile: null,
+        showPreview: false,
+		imagePreview: '',
+        files: [],
+        Template: {
+            sn: 0,
+            iconName: "",
+            visible: false,
+        }}
+    ],
     qBtns: [
         {label: "Cancel", name: "Cancel", icon: "close", btnDisabled: false},
         {label: "Create", name: "Create", icon: "add", btnDisabled: false},

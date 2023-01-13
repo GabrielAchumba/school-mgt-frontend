@@ -184,6 +184,7 @@ export default {
         context.setWorkSheetColumns();
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
+        this.$store.commit("authenticationStore/setPageTitle", "Import Grades");  
     }
 }
 </script>

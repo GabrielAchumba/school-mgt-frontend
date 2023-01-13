@@ -155,6 +155,7 @@ export default {
         var context =  this;
         context.selectedStaff = this.$store.getters["staffStore/selectedStaff"];
         context.form.qInputs[0].name = context.selectedStaff.type;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Designation");
     }
 }
 </script>

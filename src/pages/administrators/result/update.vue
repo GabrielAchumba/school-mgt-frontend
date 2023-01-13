@@ -296,6 +296,7 @@ export default {
     async created(){
         var context =  this;
         await context.loadSelectedResult();
+        this.$store.commit("authenticationStore/setPageTitle", "Update Result"); 
     }
 }
 </script>

@@ -150,6 +150,7 @@ export default {
         context.form.clearQSelects();
         context.form.qSelects[0].list = this.$store.getters["levelStore/levels"];
         context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"];
+        this.$store.commit("authenticationStore/setPageTitle", "Create Note")
     }
 }
 </script>

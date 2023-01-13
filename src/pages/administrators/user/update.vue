@@ -4,7 +4,8 @@
         v-if="!showSpinner"
         :formData="form"
         @Update="Update($event)"
-        @Cancel="Cancel($event)"/>
+        @Cancel="Cancel($event)"
+        @onFileSelected="onFileSelected($event)"/>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">
@@ -39,6 +40,7 @@
 import MessageBox from "../../../components/dialogs/MessageBox.vue";
 import Form from "../../../components/Forms/Form.vue";
 import { put } from "../../../store/modules/services";
+import *  as gcpServices from "../../../store/modules/gcp-services";
 import { form, dialogs } from "./view_models/update-view-model";
 
 export default {
@@ -62,6 +64,11 @@ export default {
             selectedUser: {},
             form: form,
             dialogs: dialogs,
+            imageUrl: "",
+            fileName: "",
+            originalFileName: "",
+            fileUrl: "",
+            isNewPicture: false,
         }
     },
     methods:{
@@ -92,6 +99,74 @@ export default {
                 }
             }
         },
+        onFileSelected(payload){
+            var context = this;
+            context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+            let fileType = "image";
+
+            reader.addEventListener("load", function () {
+
+                 context.form.qFiles[0].showPreview = false;
+                  context.form.qFiles[0].showVideoPreview = false;
+                  context.isNewPicture = true;
+
+                if(fileType === "video"){
+                     context.form.qFiles[0].showVideoPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }else{
+                    context.form.qFiles[0].showPreview = true;
+                    context.form.qFiles[0].imagePreview = reader.result;
+                }
+
+            }.bind(context), false);
+
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else if (/\.(pdf|doc)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "image"
+                    context.form.qFiles[0].fileType = fileType;
+					reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else if (/\.(ogg|mp4|webm)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+                    fileType = "video";
+                    context.form.qFiles[0].fileType = fileType;
+                    reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+                }
+                else{
+                    alert("Wrong file format. Only supports .jpg, .jpeg, .png, .gif, .mp4, .ogg, .webm, .pdf or .doc")
+                }
+            }
+            
+            
+        },
+        async uploadFile(){
+            var context = this;
+            const formData = new FormData();
+            console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
+            formData.append('file', context.form.qFiles[0].selectedFile);
+            
+            var url = `logo/upload`;
+            const payload = {
+                url,
+                req: formData,
+            }
+
+            console.log("payload: ", payload)
+            //uploadFile
+            this.$store.commit("authenticationStore/setShowSpinner", true);
+            var response = await gcpServices.post(payload)
+            context.fileUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
+            if(context.fileUrl === "") context.isNewPicture = false;
+            this.$store.commit("authenticationStore/setShowSpinner", false);
+            console.log("fileUrl: ", context.fileUrl)
+
+        },
         async save(){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
@@ -102,11 +177,13 @@ export default {
             const payload = {
                 url,
                 req: {
+                    ...context.selectedUser,
                     firstName: context.form.qInputs[0].name,
                     lastName: context.form.qInputs[1].name,
                     userName: context.form.qInputs[2].name,
-                    designationId: context.form.qSelects[0].value,
-                    userType: "Member",
+                    fileUrl: context.fileUrl,
+                    fileName: context.fileName,
+                    originalFileName: context.originalFileName,
                     schoolId,
                 }
             }
@@ -123,12 +200,20 @@ export default {
                 }
             } = response
             if(success){
+                this.$store.commit("authenticationStore/setIdentityModel", payload.req);
                 context.dialogs[1].isVisible = true;
             }else{
                 context.dialogs[2].message = message;
                 context.dialogs[2].isVisible = true;
             }
 
+        },
+        async uploadPicSave(){
+            var context = this;
+            if(context.isNewPicture){
+                await context.uploadFile();
+            }
+            await context.save();
         },
         async okDialog(payload){
             console.log("payload: ", payload)
@@ -139,12 +224,10 @@ export default {
                 if(dialog.title === payload){
                     switch(payload){
                         case "Update User":
-                            await context.save();
+                            await context.uploadPicSave();
                             break;
                         case "Success":
-                            var user = this.$store.getters["authenticationStore/IdentityModel"];
-                            if(user.schoolId === "CEO")this.$router.push('/super-admin-user-landing')
-                            else  this.$router.push('/user-landing')
+                            context.setRoutes();
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -152,20 +235,42 @@ export default {
                 }
             }
         },
+        setRoutes(){
+              var user = this.$store.getters["authenticationStore/IdentityModel"];
+              let backRoute= "";
+              if(user.schoolId === "CEO"){
+                backRoute='/super-admin-user-landing';
+              }
+              else {
+                switch(user.userType){
+                  case "Admin":
+                    backRoute = '/user-landing';
+                    break;
+                  case "Student":
+                    backRoute = '/student';
+                    break;
+                  case "Teacher":
+                    backRoute = '/student';
+                    break;
+                }
+                
+              } 
+
+              this.$router.push(backRoute);
+          }
     },
     created(){
         var context =  this;
         context.selectedUser = this.$store.getters["userStore/selectedUser"];
+
         context.form.qInputs[0].name = context.selectedUser.firstName;
         context.form.qInputs[1].name = context.selectedUser.lastName;
         context.form.qInputs[2].name = context.selectedUser.userName;
+        context.fileUrl = context.selectedUser.fileUrl;
+        context.form.qFiles[0].showPreview = true;
+        context.form.qFiles[0].imagePreview = context.selectedUser.fileUrl;
 
-        context.form.qSelects[0].list = this.$store.getters["staffStore/staffs"].map((row) => {
-            return {
-                ...row,
-                type: row.type
-            }
-        }) 
+        this.$store.commit("authenticationStore/setPageTitle", "Update User");  
 
     }
 }

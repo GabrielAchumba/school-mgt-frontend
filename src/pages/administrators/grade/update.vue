@@ -155,6 +155,7 @@ export default {
         context.form.qInputs[1].name = context.selectedGrade.from;
         context.form.qInputs[2].name = context.selectedGrade.to;
         context.form.qInputs[3].name = context.selectedGrade.point;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Grade");  
     }
 }
 </script>

@@ -149,6 +149,7 @@ export default {
         var context =  this;
         context.selectedSession = this.$store.getters["sessionStore/selectedSession"];
         context.form.qInputs[0].name = context.selectedSession.type;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Session");  
     }
 }
 </script>

@@ -161,6 +161,7 @@ export default {
         })
         context.form.qInputs[0].name = context.selectedClassRoom.type;
         context.form.qSelects[0].value = context.selectedClassRoom.levelId;
+        this.$store.commit("authenticationStore/setPageTitle", "Update Class Room");  
     }
 }
 </script>
