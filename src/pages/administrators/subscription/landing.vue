@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import CardList from "../../../components/Cards/CardList.vue";
+  import CardList from "../../../components/Cards/CardList3.vue";
 
     export default {
         components:{
@@ -18,14 +18,14 @@
             cardList: [
               {
                 name: "showPage",
-                title: "Create Subscription", 
+                title: "Create", 
                 description: "Creat Subscription for plans for all Torpa's non-free features",
                 image: "/statics/images/staffs.jpg",
                 to: "/create-subscription"
               },
               {
                 name: "showPage",
-                title: "Uphdate Subscription", 
+                title: "Update", 
                 description: "Update Subscription for your existing plans or add new features",
                 image: "/statics/images/staffs.jpg",
                 to: "/update-subscription"

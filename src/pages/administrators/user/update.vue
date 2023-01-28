@@ -84,9 +84,11 @@ export default {
             }
         },
         Cancel(){
-            var user = this.$store.getters["authenticationStore/IdentityModel"];
+            var context = this;
+            context.setRoutes();
+            /* var user = this.$store.getters["authenticationStore/IdentityModel"];
             if(user.schoolId === "CEO")this.$router.push('/super-admin-user-landing')
-            else  this.$router.push('/user-landing')
+            else  this.$router.push('/user-landing') */
         },
         cancelDialog(payload){
             const context = this;
@@ -117,6 +119,7 @@ export default {
                 }else{
                     context.form.qFiles[0].showPreview = true;
                     context.form.qFiles[0].imagePreview = reader.result;
+                    console.log("context.form.qFiles[0].showPreview: ", context.form.qFiles[0].showPreview)
                 }
 
             }.bind(context), false);
@@ -244,13 +247,13 @@ export default {
               else {
                 switch(user.userType){
                   case "Admin":
-                    backRoute = '/user-landing';
+                    backRoute = '/admin';
                     break;
                   case "Student":
                     backRoute = '/student';
                     break;
                   case "Teacher":
-                    backRoute = '/student';
+                    backRoute = '/teacher';
                     break;
                 }
                 

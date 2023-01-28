@@ -2,6 +2,7 @@ const state = {
     users: [],
     selectedUser: {},
     teachers: [],
+    unComfirmedUsers: [],
 }
 
 const getters = {
@@ -13,10 +14,16 @@ const getters = {
     },
     teachers(state){
         return state.teachers;
-    }
+    },
+    unComfirmedUsers(state){
+        return state.unComfirmedUsers;
+    },
 } 
 
 const mutations = {
+    setUnComfirmedUsers(state, payload){
+        state.unComfirmedUsers = payload
+    },
     SetUsers(state, payload){
         state.users = payload
     },

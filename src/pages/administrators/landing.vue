@@ -25,6 +25,7 @@
           },
           setRoutes(){
               var user = this.$store.getters["authenticationStore/IdentityModel"];
+              this.$store.commit("userStore/SetSelectedUser", user);
               let backRoute= "";
               let updateUserRoute = "/update-user";
               if(user.schoolId === "CEO"){

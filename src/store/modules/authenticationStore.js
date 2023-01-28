@@ -50,9 +50,13 @@ const state = {
     errorMessages: false,
     pageTitle: "",
     updateUserRoute: "/update-user",
+    unComfirmedUsersRoute: "/unconfirmed-users",
   }
 
   const getters = {
+    unComfirmedUsersRoute(state){
+      return state.unComfirmedUsersRoute;
+    },
     updateUserRoute(state){
       return state.updateUserRoute;
     },
@@ -164,6 +168,9 @@ const state = {
 }
 
 const mutations = {
+  setUnComfirmedUsersRoute(state, payload){
+    state.unComfirmedUsersRoute = payload;
+  },
   setUpdateUserRoute(state, payload){
     state.updateUserRoute = payload;
   },

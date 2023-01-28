@@ -86,13 +86,13 @@ export const menuList = [
         image: "/statics/images/levels.jpg",
         to: "level-landing"
     },
-    /* {
+    {
         name: "showPage",
         title: torpaFeatures.subscription, 
         description: "The shool management subscription plans",
         image: "/statics/images/lesson.jpg",
         to: "subscription-landing"
-    }, */
+    },
     {
         name: "showPage",
         title: torpaFeatures.classRooms, 

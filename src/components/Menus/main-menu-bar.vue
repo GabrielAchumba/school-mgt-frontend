@@ -3,41 +3,7 @@
         <div class="col-12">
           <div class="row">
             <q-btn flat icon="arrow_back" class="text-capitalize" @click="goBack"/>
-            <q-space />
-            <!-- <q-btn flat dense round @click="create" avatar>
-              <q-avatar 
-                class="bg-primary text-accent"
-                size="sm">
-                <img :src="selectedLogo.fileUrl === undefined ? '/statics/newway.jpg' : selectedLogo.fileUrl">
-                </q-avatar>
-            </q-btn> -->
-            <q-btn flat>
-              {{ pageTitle }}
-            </q-btn>
-            
-            
-            <q-space />
-             <!-- <PDFWriter/> -->
-            <q-btn
-                icon="menu"
-                flat
-                dense
-                round>
-                <q-menu fit>
-                  <q-list dense class="text-accent text-caption bg-primary">
-                    <q-item
-                    v-for="(menuItem) in menuList" :key="menuItem.title" 
-                    class="bg-primary text-accent"
-                    clickable
-                      @click="scrollToElement(menuItem.to)">
-                          <q-item-section>
-                          {{ menuItem.title}}
-                          </q-item-section>
-                      </q-item>
-                  </q-list>
-                </q-menu>
-            </q-btn>
-          <!--  <q-btn dense flat icon="close" @click="logOut"/> -->
+
             <q-btn
             :dense="dense"
             flat
@@ -108,6 +74,53 @@
                           </q-list>
                 </q-menu>
             </q-btn>
+            <q-space />
+            <!-- <q-btn flat dense round @click="create" avatar>
+              <q-avatar 
+                class="bg-primary text-accent"
+                size="sm">
+                <img :src="selectedLogo.fileUrl === undefined ? '/statics/newway.jpg' : selectedLogo.fileUrl">
+                </q-avatar>
+            </q-btn> -->
+            <q-btn flat>
+              {{ pageTitle }}
+            </q-btn>
+            
+            
+            <q-space />
+             <!-- <PDFWriter/> -->
+
+          <q-btn 
+          v-if="unComfirmedUsers.length > 0"
+          dense 
+          round flat icon="groups"
+          @click="showUnComfirmedUsers">
+            <q-badge
+            color="secondary" floating>
+              {{ unComfirmedUsers.length }}
+            </q-badge>
+          </q-btn>
+
+            <q-btn
+                icon="menu"
+                flat
+                dense
+                round>
+                <q-menu fit>
+                  <q-list dense class="text-accent text-caption bg-primary">
+                    <q-item
+                    v-for="(menuItem) in menuList" :key="menuItem.title" 
+                    class="bg-primary text-accent"
+                    clickable
+                      @click="scrollToElement(menuItem.to)">
+                          <q-item-section>
+                          {{ menuItem.title}}
+                          </q-item-section>
+                      </q-item>
+                  </q-list>
+                </q-menu>
+            </q-btn>
+          <!--  <q-btn dense flat icon="close" @click="logOut"/> -->
           </div>
           <div
            v-if="isError"
@@ -149,6 +162,15 @@ export default {
       MessageBox,
     },
     computed:{
+        unComfirmedUsers(){
+          const unComfirmedUsers = this.$store.getters['userStore/unComfirmedUsers'];
+          console.log("unComfirmedUsers: ", unComfirmedUsers)
+          return unComfirmedUsers;
+        },
+        unComfirmedUsersRoute(){
+          const unComfirmedUsersRoute = this.$store.getters['authenticationStore/unComfirmedUsersRoute'];
+          return unComfirmedUsersRoute;
+        },
         isError(){
           const _isError = this.$store.getters['authenticationStore/isError']
           //console.log("isError: ", _isError)
@@ -272,6 +294,11 @@ export default {
         updateUserProfile(){
           var context = this;
           this.$router.push(context.updateUserRoute)
+        },
+        showUnComfirmedUsers(){
+          var context = this;
+          this.$router.push('/unconfirmed-users')
+
         }
     }
 }

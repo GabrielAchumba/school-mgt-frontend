@@ -1,7 +1,7 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-primary">
      <q-header>
-         <SocialMedia/>
+         <!-- <SocialMedia/> -->
          <MainNavbar/>
      </q-header>
 

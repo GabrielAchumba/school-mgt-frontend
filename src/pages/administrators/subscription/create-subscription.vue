@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-sm">
-    <div v-if="isMobile">
+    <div v-if="setIsResponsive">
       <div class="row">
           <ResultsSubscription class="col-12"
           @onResultScriptionValueChange="onResultScriptionValueChange($event)"
@@ -124,6 +124,11 @@ import MakePayment from "./make-payment.vue";
 
 export default {
   computed:{
+    setIsResponsive(){
+        const width = window.innerWidth;
+        if(width < 700) return true;
+        else return false;
+    },
     splitterStyle(){
         var context = this;
         return {
@@ -173,6 +178,7 @@ export default {
             var context = this;
             if(width < 700) context.isMobile = true;
             else context.isMobile = false;
+            console.log("context.isMobile: ", context.isMobile)
     },
     onStudentsSelected(payload){
       var context = this;

@@ -24,7 +24,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="onplatformpayment">
-          <OnPlatformPayment/>
+          <PaystackView/>
         </q-tab-panel>
 
       </q-tab-panels>
@@ -36,10 +36,12 @@
 <script>
 import OffPlatformPayment from "./offPlatformPayment.vue"
 import OnPlatformPayment from "./onPlatformPayment.vue"
+import PaystackView from "../payment-gateway/paystack-view.vue"
 export default {
     components: {
             OffPlatformPayment,
-            OnPlatformPayment
+            OnPlatformPayment,
+            PaystackView
         },
   data () {
     return {

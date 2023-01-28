@@ -7,9 +7,10 @@
                     <div class="text-h6 text-primary text-center">{{ formData.title }}</div>
                 </q-bar>
 
-                <q-separator />
+               <!--  <q-separator /> -->
 
-                <q-card-section>
+                <!-- <q-card-section> -->
+
                    <q-form class="q-pa-none">
 
                      <div
@@ -166,9 +167,8 @@
                       v-for="qInput in formData.qInputs" 
                       :key="qInput.label">
                       <span><p class="q-ma-none">{{ qInput.label }}</p>
-                      <q-input class="q-ma-none bg-primary text-accent"
-                      outlined 
-                      bordered
+                      <q-input class="q-ma-none bg-primary text-accent" 
+                      outlined
                       v-model="qInput.name" 
                       :type="qInput.type" >
                           <template 
@@ -416,11 +416,12 @@
 
                     </div>
                   </q-form>
-                </q-card-section>
 
-                 <q-separator />
+               <!--  </q-card-section> -->
 
-                 <q-card-actions align="right">
+                 <!-- <q-separator /> -->
+
+                 <!-- <q-card-actions align="right"> -->
                    <!-- <div 
                    v-if="setIsResponsive"
                    class="row q-pa-sm">
@@ -440,15 +441,15 @@
                    <div 
                    v-if="setIsResponsive"
                    class="row q-pa-sm">
-                      <q-space />
-                      <div class="text-right">
+                      <!-- <q-space /> -->
+                      <div class="col-12 text-center q-pa-sm">
                         <q-btn class="q-ma-sm bg-accent text-primary"
+                        style="width:95%"
                         v-for="qBtn in formData.qBtns" 
                         :key="qBtn.label"
                         :label="qBtn.label"
                         :disabled="qBtn.btnDisabled"
                         type="button"
-                        size="sm"
                         no-caps
                         @click="ClickAction(qBtn.name, formData)"
                       />
@@ -471,7 +472,7 @@
                       />
                       </div>
                   </div>
-                </q-card-actions>
+                <!-- </q-card-actions> -->
 
              </q-card>
         </div>
@@ -534,6 +535,7 @@ import { getLineWidth } from 'plotly.js-dist';
           return {
             show: true,
             listBoxSearchTemplate:{ sn: 0, iconName: "search", visible: true},
+            borderless: false,
           }
         },
         methods: {

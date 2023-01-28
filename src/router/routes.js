@@ -88,6 +88,11 @@ const routes = [
         
       },
       { 
+        path: '/super-admin-unconfirmed-users', 
+        component: () => import('src/pages/administrators/user/confirm-users.vue') 
+        
+      },
+      { 
         path: '/super-admin-staff-landing', 
         component: () => import('pages/administrators/staff/landing.vue') 
         
@@ -656,6 +661,11 @@ const routes = [
       { 
         path: '/import-users', 
         component: () => import('src/pages/administrators/user/import-users.vue') 
+        
+      },
+      { 
+        path: '/unconfirmed-users', 
+        component: () => import('src/pages/administrators/user/confirm-users.vue') 
         
       },
       { 

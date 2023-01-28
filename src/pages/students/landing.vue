@@ -26,8 +26,8 @@
               var user = this.$store.getters["authenticationStore/IdentityModel"];
               this.$store.commit("userStore/SetSelectedUser", user);
 
-              const selectedUser = this.$store.getters["userStore/selectedUser"];
-              console.log("selectedUser: ", selectedUser)
+              /* const selectedUser = this.$store.getters["userStore/selectedUser"];
+              console.log("selectedUser: ", selectedUser) */
         
               let backRoute= "";
               let updateUserRoute = "/update-user";
@@ -60,6 +60,7 @@
           var context = this;
           context.setRoutes();
           this.$store.commit("authenticationStore/setPageTitle", "TORPA - NSG School App");
+          this.$store.commit("userStore/setUnComfirmedUsers", ["Emeka", "Ada"]);
         }
     }
 </script>
