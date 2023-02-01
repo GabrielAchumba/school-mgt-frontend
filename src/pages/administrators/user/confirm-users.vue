@@ -2,6 +2,7 @@
   <div>
     <ComfirmUsers
     v-if="!showSpinner"
+    :formData="form"
     :unConfirmedCardList="unConfirmedCardList"
     :confirmedCardList="confirmedCardList"
     :pages="pages"
@@ -13,7 +14,9 @@
     @nextAction="nextAction($event)"
     @backAction="backAction($event)"
     @nextActionConfirmed="nextActionConfirmed($event)"
-    @backActionConfirmed="backActionConfirmed($event)"/>
+    @backActionConfirmed="backActionConfirmed($event)"
+    @filterUnConfirmedUsers="filterUnConfirmedUsers($event)"
+    @filterConfirmedUsers="filterConfirmedUsers($event)"/>
     <div 
       v-show="showSpinner"
       class="q-gutter-md row">
@@ -46,8 +49,9 @@
 <script>
   import ComfirmUsers from "../../../components/Cards/ComfirmUsers.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
-  import { remove } from "../../../store/modules/services";
-  import { loadPaginatedUsers, loadPaginatedConfirmedUsers } from "./utils";
+  import { remove, put } from "../../../store/modules/services";
+  import { loadPaginatedUsers, loadPaginatedConfirmedUsers, loadUnComfirmedUsers } from "./utils";
+  import { form } from "./view_models/confirm-users-view-model";
     export default {
       computed:{
           showSpinner(){
@@ -99,17 +103,110 @@
                 confirmedUsers: [],
                 unConfirmedUsers: [],
                 paginatedUsers: [],
+                selectedUser: {},
+                form: form,
             }
         },
         methods: {
+            async filterUnConfirmedUsers(filterUnConfirmedUser){
+                var context = this;
+                if(filterUnConfirmedUser === "") filterUnConfirmedUser = "@";
+                await context._loadPaginatedUsers(1, filterUnConfirmedUser);
+                
+            },
+            async filterConfirmedUsers(filterConfirmedUser){
+                var context = this;
+                if(filterConfirmedUser === "") filterConfirmedUser = "@";
+                await context._loadPaginatedConfirmedUsers(1, filterConfirmedUser);
+            },
           confirmUser(selectedUser){
-             var context = this;
-             console.log("confirmUser")
+            const context = this;
+            context.selectedUser = selectedUser;
+            var i = -1;
+            for(const dialog of context.dialogs){
+                i++;
+                if(dialog.title == "Confirm User"){
+                    context.dialogs[i].isVisible = true;
+                    break;
+                }
+            }
           },
-          blockUser(selectedUser){
-             var context = this;
-             console.log("blockUser")
-          },
+            async confirmUserAsync(){
+                var context = this;
+                var user = this.$store.getters["authenticationStore/IdentityModel"]
+
+                var url = `user/confirmuser/${context.selectedUser.id}`;
+                const payload = {
+                    url,
+                    req: {
+                        designationId: context.selectedUser.qSelect.value,
+                        confirmedBy: user.id,
+                    }
+                }
+
+                console.log("payload: ", payload)
+                this.$store.commit("authenticationStore/setShowSpinner", true);
+                var response = await put(payload)
+                this.$store.commit("authenticationStore/setShowSpinner", false);
+
+                const { 
+                    data : {
+                        message,
+                        success,
+                    }
+                } = response
+                if(success){
+                    context.dialogs[1].isVisible = true;
+                }else{
+                    context.dialogs[2].message = message;
+                    context.dialogs[2].isVisible = true;
+                }
+
+            },
+            blockUser(selectedUser){
+                const context = this;
+                context.selectedUser = selectedUser;
+                var i = -1;
+                for(const dialog of context.dialogs){
+                    i++;
+                    if(dialog.title == "Block User"){
+                        context.dialogs[i].isVisible = true;
+                        break;
+                    }
+                }
+            },
+            async blockUserAsync(){
+                var context = this;
+                var user = this.$store.getters["authenticationStore/IdentityModel"]
+
+                var url = `user/blockuser/${context.selectedUser.id}`;
+                const payload = {
+                    url,
+                    req: {
+                        designationId: context.selectedUser.qSelect.value,
+                        blockedBy: user.id,
+                    }
+                }
+
+                console.log("payload: ", payload)
+                this.$store.commit("authenticationStore/setShowSpinner", true);
+                var response = await put(payload)
+                this.$store.commit("authenticationStore/setShowSpinner", false);
+
+                const { 
+                    data : {
+                        message,
+                        success,
+                    }
+                } = response
+                if(success){
+                    context.dialogs[1].isVisible = true;
+                }else{
+                    context.dialogs[2].message = message;
+                    context.dialogs[2].isVisible = true;
+                }
+
+            },
           cancelDialog(payload){
             const context = this;
             var i = -1;
@@ -121,56 +218,43 @@
                 }
             }
         },
-        async delete(){
-            var context = this;
-            
-            var user = this.$store.getters["authenticationStore/IdentityModel"];
-            var url = `user/${context.selectedUser.id}/${user.schoolId}`;
-            const payload = {
-                url,
-            }
-
-            console.log("payload: ", payload)
-            var response = await remove(payload)
-
-            const { 
-                data : {
-                    message,
-                    success,
-                }
-            } = response
-            if(success){
-                context.dialogs[1].isVisible = true;
-            }else{
-                context.dialogs[2].message = message;
-                context.dialogs[2].isVisible = true;
-            }
-
-        },
         async okDialog(payload){
             console.log("payload: ", payload)
             const context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
             var i = -1;
+            let unConfirmedUsers = []
             for(const dialog of context.dialogs){
                 i++;
                 if(dialog.title === payload){
                     switch(payload){
-                        case "Delete User":
-                            await context.delete();
+                        case "Confirm User":
+                            await context.confirmUserAsync()
+                            break;
+                        case "Block User":
+                            await context.blockUserAsync()
                             break;
                         case "Confirm User Success":
-                            await context._loadPaginatedUsers()
+                            await context._loadPaginatedUsers(context.page, context.form.filterUnConfirmedUser)
+                            await context._loadPaginatedConfirmedUsers(context.pageConfirmed, context.form.filterConfirmedUser)
+                            unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, "@");
+                            this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
                             break;
                         case "Block User Success":
-                            await context._loadPaginatedConfirmedUsers()
+                            await context._loadPaginatedUsers(context.page, context.form.filterUnConfirmedUser)
+                            await context._loadPaginatedConfirmedUsers(context.pageConfirmed, context.form.filterConfirmedUser)
+                            unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, "@");
+                            this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
                             break;
                     }
                     context.dialogs[i].isVisible = false;
+                    if(payload.filter === "") payload.filter = "@"
+                    context.form.filterUnConfirmedUser = payload.filter;
                     break;
                 }
             }
         },
-        async nextAction(){
+        async nextAction(payload){
             var context = this;
             let counter =  context.pages[0].sn;
             const firstSN = context.pages[0].sn;
@@ -186,11 +270,15 @@
                 }
                 context.pages.push({
                     sn: counter,
+                    isActive: false
                 })
             }
-            await context._loadUpdatedPaginatedUsers(context.pages[0]);
+            context.pages[0].isActive = true;
+            if(payload.filter === "") payload.filter = "@"
+            context.form.filterUnConfirmedUser = payload.filter;
+            await context._loadUpdatedPaginatedUsers(context.pages[0], payload.filter);
         },
-        async nextActionConfirmed(){
+        async nextActionConfirmed(payload){
             var context = this;
             let counter =  context.pagesConfirmed[0].sn;
             const firstSN = context.pagesConfirmed[0].sn;
@@ -206,12 +294,16 @@
                 }
                 context.pagesConfirmed.push({
                     sn: counter,
+                    isActive: false,
                 })
             }
-            await context._loadUpdatedPaginatedConfirmedUsers(context.pagesConfirmed[0]);
+            context.pagesConfirmed[0].isActive = true;
+            if(payload.filter === "") payload.filter = "@"
+            context.form.filterConfirmedUser = payload.filter;
+            await context._loadUpdatedPaginatedConfirmedUsers(context.pagesConfirmed[0], payload.filter);
 
         },
-        async backAction(){
+        async backAction(payload){
 
             var context = this;
             let counter = context.pages[0].sn - 2;
@@ -231,11 +323,15 @@
                 }
                 context.pages.push({
                     sn: counter,
+                    isActive: false,
                 })
             }
-            await context._loadUpdatedPaginatedUsers(context.pages[0]);
+            context.pages[0].isActive = true;
+            if(payload.filter === "") payload.filter = "@"
+            context.form.filterUnConfirmedUser = payload.filter;
+            await context._loadUpdatedPaginatedUsers(context.pages[0], payload.filter);
         },
-        async backActionConfirmed(){
+        async backActionConfirmed(payload){
 
             var context = this;
             let counter = context.pagesConfirmed[0].sn - 2;
@@ -255,29 +351,38 @@
                 }
                 context.pagesConfirmed.push({
                     sn: counter,
+                    isActive: false,
                 })
             }
-            await context._loadUpdatedPaginatedConfirmedUsers(context.pagesConfirmed[0]);
+            context.pagesConfirmed[0].isActive = true;
+            if(payload.filter === "") payload.filter = "@"
+            context.form.filterConfirmedUser = payload.filter;
+            await context._loadUpdatedPaginatedConfirmedUsers(context.pagesConfirmed[0], payload.filter);
         },
-        async paginationAction(page){
+        async paginationAction(payload){
             var context = this;
-            context.page = page.sn;
-            await context._loadPaginatedUsers(page.sn);
+            context.page = payload.page.sn;
+            const filter = payload.filter;
+            await context._loadPaginatedUsers(context.page, filter);
         },
-        async paginationActionConfirmed(page){
+        async paginationActionConfirmed(payload){
             var context = this;
-            context.pageConfirmed = page.sn;
-            await context._loadPaginatedConfirmedUsers(page.sn);
+            context.pageConfirmed = payload.page.sn;
+            const filter = payload.filter;
+            await context._loadPaginatedConfirmedUsers(context.pageConfirmed, filter);
         },
-        async _loadUpdatedPaginatedUsers(page){
+        async _loadUpdatedPaginatedUsers(page, filter){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
             context.page = page.sn;
-            const { result, message } = await loadPaginatedUsers(user.schoolId, context.page);
+            if(filter === "" || filter === undefined) filter = "@"
+            const unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, filter);
+            this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
+            const { result, message } = await loadPaginatedUsers(user.schoolId, context.page, filter);
             const { paginatedUsers } = result
             this.$store.commit("authenticationStore/setShowSpinner", false);
-            this.$store.commit('userStore/SetUsers', paginatedUsers)
+            //this.$store.commit('userStore/SetUsers', paginatedUsers)
             context.unConfirmedUsers = [...paginatedUsers];
 
             context.unConfirmedCardList = context.unConfirmedUsers.map((row, i) => {
@@ -292,7 +397,8 @@
                     ],
                     qSelect:  { 
                         label: "Designation *", 
-                        value: "", type: "text", 
+                        value: row.designationId, 
+                        type: "text", 
                         list: this.$store.getters["staffStore/staffs"].map((row) => {
                             return {
                                 ...row,
@@ -305,15 +411,18 @@
             })
 
         },
-        async _loadUpdatedPaginatedConfirmedUsers(page){
+        async _loadUpdatedPaginatedConfirmedUsers(page, filter){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
             context.page = page.sn;
-            const { result, message } = await loadPaginatedUsers(user.schoolId, context.page);
+            if(filter === "" || filter === undefined) filter = "@"
+            const unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, filter);
+            this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
+            const { result, message } = await loadPaginatedUsers(user.schoolId, context.page, filter);
             const { paginatedUsers } = result
             this.$store.commit("authenticationStore/setShowSpinner", false);
-            this.$store.commit('userStore/SetUsers', paginatedUsers)
+            //this.$store.commit('userStore/SetUsers', paginatedUsers)
             context.confirmedUsers = [...paginatedUsers];
 
             context.unConfirmedCardList = context.confirmedUsers.map((row, i) => {
@@ -328,7 +437,8 @@
                     ],
                     qSelect:  { 
                         label: "Designation *", 
-                        value: "", type: "text", 
+                        value: row.designationId, 
+                        type: "text", 
                         list: this.$store.getters["staffStore/staffs"].map((row) => {
                             return {
                                 ...row,
@@ -341,18 +451,20 @@
             })
 
         },
-        async _loadPaginatedUsers(selectedPage){
+        async _loadPaginatedUsers(selectedPage, filter){
             var context = this;
+            if(filter === "" || filter === undefined) filter = "@"
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
-            const { result, message } = await loadPaginatedUsers(user.schoolId, selectedPage);
+            const { result, message } = await loadPaginatedUsers(user.schoolId, selectedPage, filter);
             const { paginatedUsers, totalNumberOfUsers, limit } = result
             this.$store.commit("authenticationStore/setShowSpinner", false);
-            this.$store.commit('userStore/SetUsers', paginatedUsers)
+            //this.$store.commit('userStore/setUnComfirmedUsers', paginatedUsers)
             let counter = 0;
             context.pages = [];
             context.totalNumberOfUsers = totalNumberOfUsers;
             context.limit = limit;
+            let isActive = false;
             for(let j = 0; j < totalNumberOfUsers; j=j+limit){
                 counter++;
                 if(context.isMobile){
@@ -360,8 +472,11 @@
                 }else{
                     if(counter > context.webAppStepper) break;
                 }
+                if(counter === selectedPage) isActive = true
+                else isActive = false;
                 context.pages.push({
                     sn: counter,
+                    isActive,
                 })
             }
 
@@ -378,7 +493,8 @@
                     ],
                     qSelect:  { 
                         label: "Designation *", 
-                        value: "", type: "text", 
+                        value: row.designationId, 
+                        type: "text", 
                         list: this.$store.getters["staffStore/staffs"].map((row) => {
                             return {
                                 ...row,
@@ -391,18 +507,20 @@
             })
 
         },
-        async _loadPaginatedConfirmedUsers(selectedPage){
+        async _loadPaginatedConfirmedUsers(selectedPage, filter){
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             this.$store.commit("authenticationStore/setShowSpinner", true);
-            const { result, message } = await loadPaginatedConfirmedUsers(user.schoolId, selectedPage);
+            if(filter === "" || filter === undefined) filter = "@"
+            const { result, message } = await loadPaginatedConfirmedUsers(user.schoolId, selectedPage, filter);
             const { paginatedUsers, totalNumberOfUsers, limit } = result
             this.$store.commit("authenticationStore/setShowSpinner", false);
-            this.$store.commit('userStore/SetUsers', paginatedUsers)
+            //this.$store.commit('userStore/SetUsers', paginatedUsers)
             let counter = 0;
             context.pagesConfirmed = [];
             context.totalNumberOfConfirmedUsers = totalNumberOfUsers;
             context.limit = limit;
+            let isActive = false;
             for(let j = 0; j < totalNumberOfUsers; j=j+limit){
                 counter++;
                 if(context.isMobile){
@@ -410,8 +528,11 @@
                 }else{
                     if(counter > context.webAppStepper) break;
                 }
+                if(selectedPage === counter) isActive = true;
+                else isActive = false;
                 context.pagesConfirmed.push({
                     sn: counter,
+                    isActive,
                 })
             }
 
@@ -428,7 +549,8 @@
                     ],
                     qSelect:  { 
                         label: "Designation *", 
-                        value: "", type: "text", 
+                        value: row.designationId, 
+                        type: "text", 
                         list: this.$store.getters["staffStore/staffs"].map((row) => {
                             return {
                                 ...row,
@@ -451,8 +573,14 @@
         },
         async created() {
             var context = this;
-            await context._loadPaginatedUsers(1);
-            await context._loadPaginatedConfirmedUsers(1);
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            context.form.filterUnConfirmedUser = "@";
+            context.form.filterConfirmedUser = "@";
+            await context._loadPaginatedUsers(1, context.form.filterUnConfirmedUser);
+            await context._loadPaginatedConfirmedUsers(1, context.form.filterConfirmedUser);
+            const unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, "@");
+            console.log("unConfirmedUsers.result: ", unConfirmedUsers.result)
+            this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
             this.$store.commit("authenticationStore/setActiveRoute", "unconfirmed-users");
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");

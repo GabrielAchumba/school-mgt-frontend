@@ -43,7 +43,7 @@ import { loadAssessments } from "../pages/administrators/assessment/utils";
 import { loadSchools } from "../pages/administrators/school/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
-import { checkResultsAnalysisSubscription, menuList } from "../pages/administrators/utils";
+import { checkResultsAnalysisSubscription, menuListForStudents, torpaFeatures } from "../pages/administrators/utils";
 import { loadLogos } from "../pages/administrators/branding/logo/utils";
 
 export default {
@@ -82,7 +82,7 @@ export default {
       rightMenuIcon: "menu",
       navs: [],
       rightDrawerOpen: window.innerWidth < 700 ? true : false,
-      menuList: menuList,
+      menuList: menuListForStudents,
       contextMenuList: [],
       landingMenu: [],
       checkSubscription: {},
@@ -130,13 +130,15 @@ export default {
       this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
     },
     verifyResultsAnalysisSubscription(){
-       var context = this;
-       context.checkSubscription.isResultsAnalysis = true;
-      if(context.checkSubscription.isResultsAnalysis == false){
+      var context = this;
+      context.checkSubscription.isResultsAnalysis = true;
+      var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(context.checkSubscription.isResultsAnalysis == false ||
+        user.confirmed == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Results Analysis"){
+          if(context.landingMenu[i].title == torpaFeatures.cGPAComputation){
             index = i;
             break;
           }
@@ -147,7 +149,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Results Analysis"){
+          if(context.contextMenuList[i].title == torpaFeatures.cGPAComputation){
             index = i;
             break;
           }
@@ -159,11 +161,14 @@ export default {
     },
     verifyFileManagementSubscription(){
        var context = this;
-      if(context.checkSubscription.isFileManagement == false){
+       context.checkSubscription.isFileManagement = true;
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(context.checkSubscription.isFileManagement == false ||
+        user.confirmed == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "File Management"){
+          if(context.landingMenu[i].title == torpaFeatures.directories){
             index = i;
             break;
           }
@@ -174,7 +179,7 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "File Management"){
+          if(context.contextMenuList[i].title == torpaFeatures.directories){
             index = i;
             break;
           }
@@ -186,11 +191,14 @@ export default {
     },
     verifyAdevertizementSubscription(){
        var context = this;
-      if(context.checkSubscription.isAdvertizement == false){
+       context.checkSubscription.isAdvertizement = true;
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(context.checkSubscription.isAdvertizement == false ||
+        user.confirmed == false){
         let index = -1;
         let i = 0;
         for(i = 0; i < context.landingMenu.length; i++){
-          if(context.landingMenu[i].title == "Branding & Advertisement"){
+          if(context.landingMenu[i].title == torpaFeatures.ads){
             index = i;
             break;
           }
@@ -201,7 +209,123 @@ export default {
 
         index = -1;
         for(i = 0; i < context.contextMenuList.length; i++){
-          if(context.contextMenuList[i].title == "Branding & Advertisement"){
+          if(context.contextMenuList[i].title == torpaFeatures.ads){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyExamQuizSubscription(){
+       var context = this;
+       context.checkSubscription.isExamQuiz = true;
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(context.checkSubscription.isExamQuiz == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.cBTPractice){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.cBTPractice){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyLibraryManagementSubscription(){
+       var context = this;
+       context.checkSubscription.isLibraryManagement = true;
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(context.checkSubscription.isLibraryManagement == false ||
+        user.confirmed == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.libraryMgt){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.libraryMgt){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifyOnlineLearningSubscription(){
+       var context = this;
+       context.checkSubscription.isOnlineLearning = true;
+       var user = this.$store.getters["authenticationStore/IdentityModel"]
+      if(context.checkSubscription.isOnlineLearning == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.onlineLearning){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.onlineLearning){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.contextMenuList.splice(index, 1);
+        }
+      }
+    },
+    verifySocialize(){
+       var context = this;
+       context.checkSubscription.isSocialize = true;
+      if(context.checkSubscription.isSocialize == false){
+        let index = -1;
+        let i = 0;
+        for(i = 0; i < context.landingMenu.length; i++){
+          if(context.landingMenu[i].title == torpaFeatures.socialize){
+            index = i;
+            break;
+          }
+        }
+        if(index != -1){
+          context.landingMenu.splice(index, 1);
+        }
+
+        index = -1;
+        for(i = 0; i < context.contextMenuList.length; i++){
+          if(context.contextMenuList[i].title == torpaFeatures.socialize){
             index = i;
             break;
           }
@@ -213,15 +337,15 @@ export default {
     },
     async checkSubscritpion(){
       var context = this;
-      var mList = ["Home", "Results Analysis", "Library Management", "Online Learning",
-       "Subscription", "File Management", "Socialize", "Examination & Quiz"];
+      var mList = [torpaFeatures.home, torpaFeatures.cGPAComputation, torpaFeatures.libraryMgt, torpaFeatures.onlineLearning,
+       torpaFeatures.subscription, torpaFeatures.directories, torpaFeatures.socialize, torpaFeatures.cBTPractice];
 
       var user = this.$store.getters["authenticationStore/IdentityModel"]
       const { result } = await checkResultsAnalysisSubscription(user.schoolId);
       context.checkSubscription = {...result}
       this.$store.commit("administratorStore/SetIsSubscription", result)
 
-      console.log("context.menuList: ", context.menuList)
+      console.log("context.menuList: ", context.menuList)    
       var listOfMenuItems = [];
       for(const mItem of mList){
         let foundItem = context.menuList.find(o => o.title === mItem);
@@ -232,11 +356,20 @@ export default {
           }else{
             to = `/student-${foundItem.to}`
           }
-          //foundItem.to = to;
-          listOfMenuItems.push({
-            ...foundItem,
-            to: to,
-          })
+
+           if(foundItem.isFree){
+            listOfMenuItems.push({
+              ...foundItem,
+              to: to,
+            })
+
+          }else if(user.confirmed == true){
+            listOfMenuItems.push({
+              ...foundItem,
+              to: to,
+            })
+
+          }
         }
       }
 
@@ -257,6 +390,10 @@ export default {
       context.verifyResultsAnalysisSubscription();
       context.verifyFileManagementSubscription();
       context.verifyAdevertizementSubscription();
+      context.verifyExamQuizSubscription();
+      context.verifyLibraryManagementSubscription();
+      context.verifyOnlineLearningSubscription();
+      context.verifySocialize();
 
       /* context.menuList = context.contextMenuList.map((row) => {
         return {
@@ -317,6 +454,7 @@ export default {
           this.$store.commit('subjectStore/SetSubjects', subjects.result);
           const assessments = await loadAssessments(user.schoolId);
           this.$store.commit('assessmentStore/SetAssessments', assessments.result);
+          this.$store.commit('userStore/setUnComfirmedUsers', [])
           context.checkSubscritpion();
        }
 

@@ -229,6 +229,8 @@
                 label: "Schools",
                 items: [...items],
                 originalItems: [...items],
+                isAddVisible: false,
+                isMenuListVisible: false,
             })
 
             console.log("context.form: ", context.form)

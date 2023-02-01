@@ -39,6 +39,13 @@
                 image: "/statics/images/single_student_result.jpg",
                 to: "ca-question-landing"
               },
+              {
+                name: "showPage",
+                title: "Torpa Lesson Notes", 
+                description: "Initiate lesson note for any subject",
+                image: "/statics/images/single_student_result.jpg",
+                to: "lesson-note-landing"
+              },
             ],
           }
         },

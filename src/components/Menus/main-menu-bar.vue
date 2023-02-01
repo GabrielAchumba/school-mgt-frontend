@@ -15,10 +15,11 @@
                       :src="IdentityModel.fileUrl"
                     />
               </q-avatar>
-              <q-btn v-else
-              class="bg-accent text-primary"
-              :dense="dense"
-              flat>{{ IdentityModel.firstName }}</q-btn>
+              <q-avatar 
+                v-else
+                class="bg-primary text-accent">
+                  {{ getFirstLetters(IdentityModel) }}
+                </q-avatar>
               <q-menu
                 fit>
                           <q-list dense class="text-accent text-caption bg-primary flex flex-center">
@@ -41,7 +42,7 @@
                                       <q-avatar 
                                       v-else
                                       class="bg-accent text-primary">
-                                        {{ IdentityModel.firstName.charAt(0) }}
+                                        {{ getFirstLetters(IdentityModel) }}
                                       </q-avatar>
                                   </div>
                                   <div 
@@ -164,7 +165,6 @@ export default {
     computed:{
         unComfirmedUsers(){
           const unComfirmedUsers = this.$store.getters['userStore/unComfirmedUsers'];
-          console.log("unComfirmedUsers: ", unComfirmedUsers)
           return unComfirmedUsers;
         },
         unComfirmedUsersRoute(){
@@ -223,6 +223,13 @@ export default {
         }
     },
     methods:{
+        getFirstLetters(IdentityModel){
+          let f = "";
+          let l = "";
+          if(IdentityModel.firstName !== undefined && IdentityModel.firstName !== "") f = IdentityModel.firstName.charAt(0);
+          if(IdentityModel.lastName !== undefined && IdentityModel.lastName !== "") l = IdentityModel.lastName.charAt(0);
+          return `${f}${l}`;
+        },
         cancelDialog(payload){
             const context = this;
             var i = -1;

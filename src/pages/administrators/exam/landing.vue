@@ -15,26 +15,38 @@
         },
         data () {
           return {
+            cardListCopy:[],
             cardList: [
               {
                 name: "showPage",
                 title: "Questions & Answers", 
                 description: "Create questions and anwser options for any subject",
                 image: "/statics/images/examination.jpg",
-                to: "exam-question-landing"
+                to: "exam-question-landing",
+                isTorpa: false,
               },
               {
                 name: "showPage",
                 title: "Take Cont. Ass.", 
                 description: "Access your readiness",
                 image: "/statics/images/examinations2.jpg",
-                to: "take-exam-question"
+                to: "take-exam-question",
+                isTorpa: false,
+              },
+              {
+                name: "showPage",
+                title: "Torpa CBT.", 
+                description: "Access your readiness",
+                image: "/statics/images/examinations2.jpg",
+                to: "take-exam-question",
+                isTorpa: true,
               },
             ],
           }
         },
         methods:{
             showPage(payload){
+                this.$store.commit("authenticationStore/setIsTorpa", payload.isTorpa)
                 this.$router.push(payload.to)
             },
           setBackRoute(){
@@ -49,13 +61,23 @@
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             if(user.schoolId === "CEO"){
-                for(let i = 0; i < context.cardList.length; i++){
-                  context.cardList[i].to = `/super-admin-${context.cardList[i].to}`
+                context.cardListCopy = [...context.cardList]
+                for(let i = 0; i < context.cardListCopy.length; i++){
+                  context.cardListCopy[i].to = `/super-admin-${context.cardListCopy[i].to}`
                 }
             }else{
-              for(let i = 0; i < context.cardList.length; i++){
-                  context.cardList[i].to = `/${context.cardList[i].to}`
-                }
+              if(user.confirmed){
+                context.cardListCopy = [...context.cardList]
+                for(let i = 0; i < context.cardListCopy.length; i++){
+                    context.cardListCopy[i].to = `/${context.cardListCopy[i].to}`
+                }        
+              }else{
+
+                context.cardListCopy = [context.cardList[2]]
+                for(let i = 0; i < context.cardListCopy.length; i++){
+                    context.cardListCopy[i].to = `/${context.cardListCopy[i].to}`
+                }        
+              }
             }
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");

@@ -43,6 +43,7 @@ import { loadGrades } from "../pages/administrators/grade/utils";
 import { loadLevels } from "../pages/administrators/level/utils";
 import { loadSessions } from "../pages/administrators/session/utils";
 import { loadSchools } from "../pages/administrators/school/utils";
+import { loadUnComfirmedUsers } from "../pages/administrators/user/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
 import { checkResultsAnalysisSubscription, menuList, torpaFeatures } from "../pages/administrators/utils";
@@ -416,22 +417,34 @@ export default {
         }
 
        if(user.userType == "Admin" && user.designationId !== "CEO"){
+         
           const classRooms = await loadClassRooms(user.schoolId);
           this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
+          console.log("classRooms stored")
           const staffs = await loadStaffs(user.schoolId);
           this.$store.commit('staffStore/SetStaffs', staffs.result);
+          console.log("staffs stored")
           const students = await loadStudents(user.schoolId);
           this.$store.commit('studentStore/SetStudents', students.result);
+          console.log("students stored")
           const subjects = await loadSubjects(user.schoolId);
           this.$store.commit('subjectStore/SetSubjects', subjects.result);
+          console.log("subjects stored")
           const assessments = await loadAssessments(user.schoolId);
           this.$store.commit('assessmentStore/SetAssessments', assessments.result);
+          console.log("assessments stored")
           const grades = await loadGrades(user.schoolId);
           this.$store.commit('gradeStore/SetGrades', grades.result);
+          console.log("grades stored")
           const levels = await loadLevels(user.schoolId);
           this.$store.commit('levelStore/SetLevels', levels.result);
+          console.log("levels stored")
           const sessions = await loadSessions(user.schoolId);
           this.$store.commit('sessionStore/SetSessions', sessions.result);
+          console.log("sessions stored")
+          const unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, "@");
+          this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
+          console.log("unConfirmedUsers stored")
           context.checkSubscritpion();
        }
 

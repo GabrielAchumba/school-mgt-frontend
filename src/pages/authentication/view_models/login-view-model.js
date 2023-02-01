@@ -6,13 +6,13 @@ const loginForm = {
         { label: "Log in student", name: "Disagreed", visible: true}
     ], */
     qInputs: [
-        { label: "User Name *", name: "", type: "text", 
+        { label: "User Name", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
-        { label: "Password *", name: "", type: "password", 
+        { label: "Password", name: "", type: "password", 
         Template: {
             sn: 1,
             iconName: "visibility_off",
@@ -38,17 +38,17 @@ const loginForm = {
 const forgotPasswordForm = {
     title: "Forgot User Password",
     qSelects: [
-            { label: "Country *", value: "", type: "text", 
+            { label: "Country", value: "", type: "text", 
             list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
-        { label: "User Name *", name: "", type: "text", 
+        { label: "User Name", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
-        { label: "Phone Number *", name: "", type: "phoneNumber",
+        { label: "Phone Number", name: "", type: "phoneNumber",
         Template: {
             sn: 1,
             iconName: "phone",
@@ -81,7 +81,7 @@ const forgotPasswordForm = {
 const verifyOTPForm = {
     title: "Verfiy OTP",
     qInputs: [
-        { label: "otp *", name: "", type: "text", 
+        { label: "otp", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",
@@ -106,13 +106,13 @@ const verifyOTPForm = {
 const resetPasswordForm = {
     title: "Reset Password",
     qInputs: [
-        { label: "Password *", name: "", type: "password",
+        { label: "Password", name: "", type: "password",
         Template: {
             sn: 0,
             iconName: "visibility_off",
             visible: true,
         }},
-        { label: "Password Confirm *", name: "", type: "password",
+        { label: "Password Confirm", name: "", type: "password",
         Template: {
             sn: 1,
             iconName: "visibility_off",
@@ -141,7 +141,7 @@ const loginFormWithToken = {
         { label: "Log in non-student", name: "Disagreed", visible: true}
     ],
     qInputs: [
-        { label: "Token *", name: "", type: "text", 
+        { label: "Token", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",

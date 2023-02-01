@@ -1,47 +1,45 @@
 import { countryCodes } from "./country-codes";
+const userTypes = ["Instructor", "Student", "Teacher", "Lecturer", "Proprietor", "Principal",
+"Vice Principal", "Headmaster", "Headmistress", "Vice Chancellor", "Member", "Staff"]
 
 const registrationForm = {
     title: "Create User",
     qSelects: [
-            { label: "User Type *", value: "", type: "text", 
-            list: [
-                {
-                    sn: 1,
-                    id: "Instructor",
-                    value:  "Instructor",
-                    label: "Instructor",
-                    type: "Instructor",
-                },
-                {
-                    sn: 2,
-                    id: "Student",
-                    value: "Student",
-                    label: "Student",
-                    type: "Student",
-                }], actionName: "userTypeAction", visible: true },
+            { label: "User Type", value: "", type: "text", 
+            list: userTypes.map((row, i) => {
+              return {
+                    sn: i+1,
+                    id: row,
+                    value:  row,
+                    label: row,
+                    type: row,
+                }  
+            }), 
+            /* list: [], */
+            actionName: "userTypeAction", visible: true },
             { label: "School Name *", value: "", type: "text", 
             list: [], actionName: "schoolNameAction", visible: true },
     ],
     qInputs: [
-        { label: "First Name *", name: "", type: "text", 
+        { label: "First Name", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
-        { label: "Last Name *", name: "", type: "text",
+        { label: "Last Name", name: "", type: "text",
         Template: {
             sn: 1,
             iconName: "",
             visible: false,
         }},
-        { label: "User Name *", name: "", type: "text",
+        { label: "User Name", name: "", type: "text",
         Template: {
             sn: 2,
             iconName: "",
             visible: false,
         }},
-        { label: "Password *", name: "", type: "password",
+        { label: "Password", name: "", type: "password",
         Template: {
             sn: 3,
             iconName: "visibility_off",
@@ -75,11 +73,11 @@ const registrationForm = {
 const phoneNumberForm = {
     title: "Send Code SMS",
     qSelects: [
-            { label: "Country *", value: "", type: "text", 
+            { label: "Country", value: "", type: "text", 
             list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
-        { label: "Phone Number *", name: "", type: "text",
+        { label: "Phone Number", name: "", type: "text",
         Template: {
             sn: 0,
             iconName: "send",
@@ -110,7 +108,7 @@ const phoneNumberForm = {
 const otpForm = {
     title: "Verify Code",
     qInputs: [
-        { label: "Enter SMS Code *", name: "", type: "text", 
+        { label: "Enter SMS Code", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",

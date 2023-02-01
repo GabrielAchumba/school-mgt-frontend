@@ -87,6 +87,8 @@ import  { form, dialogs, questionsForms } from "./view_models/exam-rules-view-mo
 import { post } from "../../../store/modules/gcp-services";
 import { exam_vm } from "./view_models/create-view-model";
 import { customFilter } from "../../../components/Utils/searchListUtil";
+import { loadSubjects } from "../subject/utils"
+import { loadLevels } from "../level/utils";
 
 export default {
     computed:{
@@ -110,6 +112,9 @@ export default {
             const width = window.innerWidth;
             if(width < 700) return true;
             else return false;
+        },
+        isTorpa(){
+            return this.$store.getters["authenticationStore/isTorpa"];
         }
     },
     components:{
@@ -198,14 +203,22 @@ export default {
                 }
             }
         },
-        initializeData(){
+        async initializeData(){
 
             var context = this;
 
             //objArray.sort((a, b) => a.DepartmentName.toLowerCase().localeCompare(b.DepartmentName.toLowerCase()))
             context.questionsForms.qLists = [];
+            let subjects = this.$store.getters["subjectStore/subjects"];
+            let levels = this.$store.getters["levelStore/levels"];
+            if(context.isTorpa){
+                const resultSubjects = await loadSubjects("63ac0d2f67833dd07a2509d4");
+                subjects = resultSubjects.result;
+                const resultLevels = await loadLevels("63ac0d2f67833dd07a2509d4");
+                levels = resultLevels.result;
+            }
 
-            context.exam_vm.qSelectSubject.list = this.$store.getters["subjectStore/subjects"]
+            context.exam_vm.qSelectSubject.list = subjects
             .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
             .map((row) => {
                 return {
@@ -217,7 +230,7 @@ export default {
             context.exam_vm.qSelectSubject.value = "";
 
 
-            context.exam_vm.qSelectLevel.list = this.$store.getters["levelStore/levels"]
+            context.exam_vm.qSelectLevel.list = levels
             .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
             .map((row) => {
                 return {
@@ -352,10 +365,10 @@ export default {
                 else context.isMobile = false;
         },
     },
-    created(){
+    async created(){
         var context = this;
         window.addEventListener("resize", context.onResizePage);
-        context.initializeData()
+        await context.initializeData()
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
         this.$store.commit("authenticationStore/setPageTitle", "Take Exam")

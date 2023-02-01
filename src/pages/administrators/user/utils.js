@@ -23,9 +23,9 @@ export const loadUsers = async (schoolId) => {
     }
 }
 
-export const loadPaginatedUsers = async (schoolId, page) => {
+export const loadPaginatedUsers = async (schoolId, page, filter) => {
 
-    var url = `user/paginatedusers/${schoolId}/${page}`;
+    var url = `user/paginatedusers/${schoolId}/${page}/${filter}`;
     console.log("url: ", url)
     var response = await get({
     url
@@ -53,9 +53,9 @@ export const loadPaginatedUsers = async (schoolId, page) => {
 
 
 
-export const loadPaginatedConfirmedUsers = async (schoolId, page) => {
+export const loadPaginatedConfirmedUsers = async (schoolId, page, filter) => {
 
-    var url = `user/paginatedconfirmesusers/${schoolId}/${page}`;
+    var url = `user/paginatedconfirmesusers/${schoolId}/${page}/${filter}`;
     console.log("url: ", url)
     var response = await get({
     url
@@ -85,6 +85,29 @@ export const loadPaginatedConfirmedUsers = async (schoolId, page) => {
 export const loadUsersByCategory = async (category, schoolId) => {
 
     var url = `user/category/${category}/${schoolId}`;
+    var response = await get({
+    url
+    })
+
+    const { 
+        data : {
+            data: result,
+            success,
+            message,
+        }
+    } = response
+
+
+    if(success){
+        return { result, message: "" }
+    }else{
+        return { result: [], message }
+    }
+}
+
+export const loadUnComfirmedUsers = async (schoolId, filter) => {
+
+    var url = `user/unconfirmedusers/${schoolId}/${filter}`;
     var response = await get({
     url
     })

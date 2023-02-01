@@ -119,7 +119,6 @@ export default {
                 }else{
                     context.form.qFiles[0].showPreview = true;
                     context.form.qFiles[0].imagePreview = reader.result;
-                    console.log("context.form.qFiles[0].showPreview: ", context.form.qFiles[0].showPreview)
                 }
 
             }.bind(context), false);
@@ -252,8 +251,8 @@ export default {
                   case "Student":
                     backRoute = '/student';
                     break;
-                  case "Teacher":
-                    backRoute = '/teacher';
+                  case "Member":
+                    backRoute = '/member';
                     break;
                 }
                 

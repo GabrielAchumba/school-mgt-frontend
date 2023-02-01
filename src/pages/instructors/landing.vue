@@ -1,53 +1,42 @@
 <template>
   <div class="bg-primary">
        <CardList 
+       v-if="cardList.length > 0"
        :cardList="cardList"
        @showPage="showPage($event)"/>
+       <div
+       v-else
+       class="flex flex-center text-h4 text-accent">
+        {{ notConfirmed }}
+       </div>
   </div>
 </template>
 
 <script>
   import CardList from "../../components/Cards/CardList3.vue";
+  
 
     export default {
-        components:{
-          CardList,
-        },
-        data () {
-          return {
-            cardList: [
-             {
-                name: "showPage",
-                title: "User Profile", 
-                description: "Modify your profile data",
-                image: "/statics/images/subjects.jpg",
-                to: "/instructor"
-              },
-              {
-                name: "showPage",
-                title: "Student", 
-                description: "Students in the school",
-                image: "/statics/images/students.jpg",
-                to: "/student-landing"
-              },
-              {
-                name: "showPage",
-                title: "Student Results", 
-                description: "Student's results in the school",
-                image: "/statics/images/results.jpg",
-                to: "/result-landing"
-              },
-            ],
-          }
-        },
-        methods:{
+      computed:{
+        cardList(){
+          return this.$store.getters["administratorStore/mainMenuList"]
+        }
+      },
+      components:{
+        CardList,
+      },
+      data(){
+        return {
+          notConfirmed: "No Confirmed. Contact your administrator"
+        }
+      },
+      methods:{
           showPage(payload){
-                this.$router.push(payload.to)
+              this.$router.push(payload.to)
           },
           setRoutes(){
               var user = this.$store.getters["authenticationStore/IdentityModel"];
               this.$store.commit("userStore/SetSelectedUser", user);
-        
               let backRoute= "";
               let updateUserRoute = "/update-user";
               if(user.schoolId === "CEO"){
@@ -58,15 +47,15 @@
                 switch(user.userType){
                   case "Admin":
                     backRoute = '/admin';
-                    updateUserRoute = '/admin';
+                    updateUserRoute = '/update-user';
                     break;
                   case "Student":
                     backRoute = '/student';
                     updateUserRoute = '/student-update-user';
                     break;
-                  case "Teacher":
-                    backRoute = '/teacher';
-                    updateUserRoute = '/teacher-update-user';
+                  case "Member":
+                    backRoute = '/member';
+                    updateUserRoute = '/member-update-user';
                     break;
                 }
                 
@@ -74,12 +63,14 @@
               this.$store.commit("authenticationStore/setBackRoute", backRoute);
               this.$store.commit("authenticationStore/setUpdateUserRoute", updateUserRoute);
           }
-        },
-        created(){
-          var context = this;
-          context.setRoutes();
-          this.$store.commit("authenticationStore/setPageTitle", "TORPA - NSG School App");
-        }
+      },
+      created(){
+        var context = this;
+        this.$store.commit("authenticationStore/setIsError", false);
+        this.$store.commit("authenticationStore/setErrorMessages", "");
+        context.setRoutes();
+        this.$store.commit("authenticationStore/setPageTitle", "TORPA - NSG School App");
+      }
     }
 </script>
 

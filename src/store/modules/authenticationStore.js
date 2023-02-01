@@ -51,9 +51,13 @@ const state = {
     pageTitle: "",
     updateUserRoute: "/update-user",
     unComfirmedUsersRoute: "/unconfirmed-users",
+    isTorpa: false,
   }
 
   const getters = {
+    isTorpa(state){
+      return state.isTorpa;
+    },
     unComfirmedUsersRoute(state){
       return state.unComfirmedUsersRoute;
     },
@@ -168,6 +172,9 @@ const state = {
 }
 
 const mutations = {
+  setIsTorpa(state, payload){
+    state.isTorpa = payload;
+  },
   setUnComfirmedUsersRoute(state, payload){
     state.unComfirmedUsersRoute = payload;
   },

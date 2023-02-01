@@ -293,14 +293,14 @@
                       <div class="row">
                          <embed 
                          class="q-pa-sm col-12"
-                           v-show="qFile.showPreview"
+                           v-show="qFile.showDocumentPreview"
                           :src="qFile.imagePreview"
                           />
-                          <!-- <q-img 
+                          <q-img 
                               v-bind:src="qFile.imagePreview" 
                               v-show="qFile.showPreview"
                               spinner-color="accent"
-                              class="rounded-borders"/> -->
+                              class="rounded-borders q-pa-sm col-12"/>
                         <div class="col-12 q-pa-sm">
                           <video 
                           id="video-preview" 
@@ -358,7 +358,9 @@
                         v-model="qList.listBoxSearchModel" 
                         type="text" >
                         <template v-slot:prepend>
-                          <q-icon name="add" 
+                          <q-icon 
+                          v-if="qList.isAddVisible"
+                          name="add" 
                           @click="qListAddItemAction(qList)"/>
                         </template>
                             <template  
@@ -392,6 +394,7 @@
 
                             <q-item-section side top>
                               <q-icon 
+                              v-if="qList.isMenuListVisible"
                               name="more_vert" 
                               color="accent">
                               <q-menu fit>

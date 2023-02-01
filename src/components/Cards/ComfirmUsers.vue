@@ -1,7 +1,7 @@
 <template>
      <div>
          <q-tabs
-        v-model="tab"
+        v-model="formData.tab"
         dense
         class="text-accent"
         active-color="primary"
@@ -15,7 +15,7 @@
 
       <q-separator />
 
-      <q-tab-panels v-model="tab" animated>
+      <q-tab-panels v-model="formData.tab" animated>
         
         <q-tab-panel name="unconfirmed">
           
@@ -24,20 +24,35 @@
                  <div class="col-12 pagination">
                     <a href="#"
                     @click="backAction">&laquo;</a>
-                    <a href="#"
+                    <div
                     v-for="page in pages" 
-                    :key="page.sn"
-                    @click="paginationAction(page)">{{ page.sn }}
-                    </a>
-                   <!--  <a href="#" class="active">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a> -->
+                    :key="page.sn">
+                        <a v-if="page.isActive"
+                            href="#"
+                            class="bg-accent text-primary"
+                            @click="paginationAction(page)">{{ page.sn }}
+                        </a>
+                        <a v-else
+                            href="#"
+                            @click="paginationAction(page)">{{ page.sn }}
+                        </a>
+                    </div>
                     <a href="#"
                      @click="nextAction">&raquo;</a>
                 </div>
              </div>
+             <q-input class="q-ma-none bg-primary text-accent"
+                outlined 
+                bordered
+                v-model="formData.filterUnConfirmedUser" 
+                type="text" >
+                <template  
+                    v-slot:append>
+                    <q-icon name="search" 
+                    class="bg-primary text-accent"
+                    @click="filterUnConfirmedUsers"/>
+                </template>
+            </q-input>
         <q-list
         bordered>
             <q-item  
@@ -86,7 +101,6 @@
                             </div>
                         </span>
                     </div>
-                    <hr class="col-12">
                 </div>
             </q-item-section>
             </q-item>
@@ -98,22 +112,39 @@
           <span>
              <div class="row">
                  <div class="col-12 pagination">
-                    <a href="#"
-                    @click="backActionConfirmed">&laquo;</a>
-                    <a href="#"
-                    v-for="page in pagesConfirmed" 
-                    :key="page.sn"
-                    @click="paginationActionConfirmed(page)">{{ page.sn }}
+                     <a href="#"
+                        @click="backActionConfirmed">&laquo;
                     </a>
-                   <!--  <a href="#" class="active">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a> -->
+                    <div
+                    v-for="page in pagesConfirmed" 
+                    :key="page.sn">
+                        <a v-if="page.isActive"
+                            href="#"
+                            class="bg-accent text-primary"
+                            @click="paginationActionConfirmed(page)">{{ page.sn }}
+                        </a>
+                        <a v-else
+                            href="#"
+                            @click="paginationActionConfirmed(page)">{{ page.sn }}
+                        </a>
+                    </div>
                     <a href="#"
-                     @click="nextActionConfirmed">&raquo;</a>
+                     @click="nextActionConfirmed">&raquo;
+                    </a>
                 </div>
              </div>
+             <q-input class="q-ma-none bg-primary text-accent"
+                outlined 
+                bordered
+                v-model="formData.filterConfirmedUser" 
+                type="text" >
+                <template  
+                    v-slot:append>
+                    <q-icon name="search" 
+                    class="bg-primary text-accent"
+                    @click="filterConfirmedUsers"/>
+                </template>
+            </q-input>
         <q-list
         bordered>
             <q-item  
@@ -162,7 +193,6 @@
                             </div>
                         </span>
                     </div>
-                    <hr class="col-12">
                 </div>
             </q-item-section>
             </q-item>
@@ -193,13 +223,26 @@
             pagesConfirmed:{
                 type: Array,
                 default: [],
-            }
-        },
+            },
+            formData: {
+              type: Object,
+              default: {
+                tab: 'unconfirmed',
+                filterConfirmedUser: "",
+                filterUnConfirmedUser: "",
+                activeLinkStyle: {
+                backgroundColor: "yellow"
+                }
+              },
+            },
+        },/* 
         data(){
             return {
                 tab: 'unconfirmed',
+                filterConfirmedUser: "",
+                filterUnConfirmedUser: "",
             }
-        },
+        }, */
         methods:{
             BtnClickAction(btnName, card) {
                 this.$emit(btnName, card); 
@@ -213,22 +256,49 @@
                 }
             },
             paginationAction(page){
-                this.$emit("paginationAction", page);
+                var context = this;
+                this.$emit("paginationAction", {
+                    page,
+                    filter:context.formData.filterUnConfirmedUser
+                });
             },
             paginationActionConfirmed(page){
-                this.$emit("paginationActionConfirmed", page);
+                var context = this;
+                this.$emit("paginationActionConfirmed", {
+                    page,
+                    filter:context.formData.filterConfirmedUser
+                });
             },
             backAction(){
-               this.$emit("backAction"); 
+                var context = this;
+               this.$emit("backAction", {
+                    filter:context.formData.filterUnConfirmedUser
+                }); 
             },
             nextAction(){
-               this.$emit("nextAction"); 
+                var context = this;
+               this.$emit("nextAction", {
+                    filter:context.formData.filterUnConfirmedUser
+                }); 
             },
             nextActionConfirmed(){
-               this.$emit("nextActionConfirmed"); 
+                var context = this;
+               this.$emit("nextActionConfirmed", {
+                    filter:context.formData.filterConfirmedUser
+                }); 
             },
             backActionConfirmed(){
-               this.$emit("backActionConfirmed"); 
+               this.$emit("backActionConfirmed", {
+                    filter:context.formData.filterConfirmedUser
+                }); 
+            },
+            filterUnConfirmedUsers(){
+                var context = this;
+                this.$emit("filterUnConfirmedUsers", context.formData.filterUnConfirmedUser);
+            },
+            filterConfirmedUsers(){
+                var context = this;
+                this.$emit("filterConfirmedUsers", context.formData.filterConfirmedUser);
             },
         }
     }

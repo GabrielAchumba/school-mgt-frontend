@@ -60,7 +60,6 @@
           var context = this;
           context.setRoutes();
           this.$store.commit("authenticationStore/setPageTitle", "TORPA - NSG School App");
-          this.$store.commit("userStore/setUnComfirmedUsers", ["Emeka", "Ada"]);
         }
     }
 </script>

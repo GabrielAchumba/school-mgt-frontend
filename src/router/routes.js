@@ -1219,6 +1219,11 @@ const routes = [
         component: () => import('pages/instructors/landing.vue') 
         
       },
+      { 
+        path: '/member-update-user', 
+        component: () => import('pages/administrators/user/update.vue') 
+        
+      },
     ]
   },
   {
