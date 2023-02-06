@@ -1315,6 +1315,16 @@ const routes = [
         component: () => import('components/Charts/Chart.vue') 
         
       },
+      { 
+        path: '/student-online-learning-landing', 
+        component: () => import('pages/administrators/online-learning/landing.vue') 
+        
+      },
+      { 
+        path: '/student-lesson-note-landing', 
+        component: () => import('pages/administrators/lesson-note/landing.vue') 
+        
+      },
     ]
   },
   {

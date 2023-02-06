@@ -350,12 +350,12 @@ export default {
       for(const mItem of mList){
         let foundItem = context.menuList.find(o => o.title === mItem);
         if(foundItem){
-          let to = "";
-          if(mItem === "Home") {
+          const to = `/${foundItem.to}`;
+          /* if(mItem === "Home") {
             to = `/student`
           }else{
-            to = `/student-${foundItem.to}`
-          }
+            to = `/${foundItem.to}`
+          } */
 
            if(foundItem.isFree){
             listOfMenuItems.push({

@@ -167,6 +167,9 @@
   import { post, remove, get } from "../../../store/modules/gcp-services"
   import { lessonNotesForm, selectors_vm, selectedLessonNoteForm } from "./view_models/landing-view-model";
   import { splitAssessment } from "./utils";
+import { loadSubjects } from "../subject/utils"
+import { loadLevels } from "../level/utils";
+
     export default {
      computed:{
           showSpinner(){
@@ -189,6 +192,9 @@
             const width = window.innerWidth;
             if(width < 700) return true;
             else return false;
+        },
+        isTorpa(){
+            return this.$store.getters["authenticationStore/isTorpa"];
         }
       },
       components:{
@@ -372,11 +378,16 @@
 
             try{
 
+                let schoolId = user.schoolId;
+                if(context.isTorpa){
+                    schoolId ="63ac0d2f67833dd07a2509d4";
+                }
+
                 const payload = {
                     url: `lessonnotesection/findAll`,
                     req: {
                         lessonNoteId: selectedLessonNote._id,
-                        schoolId: user.schoolId,              
+                        schoolId,              
                     }
                 }
                 
@@ -469,14 +480,20 @@
 
             if(context.selectedSubject && context.selectedLevel){
                 const lessonNoteTitle = `${context.selectedSubject.type} ${context.selectedLevel.type}`
-                this.$store.commit("authenticationStore/setPageTitle", lessonNoteTitle)
+                if(context.isTorpa)this.$store.commit("authenticationStore/setPageTitle", `Torpa ${lessonNoteTitle}`)
+                else this.$store.commit("authenticationStore/setPageTitle", lessonNoteTitle)
+
+                let schoolId = user.schoolId;
+                if(context.isTorpa){
+                    schoolId ="63ac0d2f67833dd07a2509d4";
+                }
 
                 const payload = {
                     url: "lessonnote/notes",
                     req: {
                         subjectId: context.selectedSubject.value,
                         levelId: context.selectedLevel.value,
-                        schoolId: user.schoolId,
+                        schoolId,
                     }
                 }
 
@@ -496,16 +513,24 @@
                     });
 
                     console.log("items: ", items) 
+                    let qBtns = [
+                        {label: "Read", name: "readNote", icon: "view"},
+                        {label: "Edit", name: "editNote", icon: "update"},
+                        {label: "Delete", name: "deleteNote", icon: "delete"},
+                    ]
+
+                    if(context.isTorpa){
+                        qBtns = [
+                            {label: "Read", name: "readNote", icon: "view"},
+                        ]
+                    }
 
                     context.lessonNotesForm.qLists.push({
                         label: "Notes",
                         items: [...items],
                         originalItems: [...items],
-                        qBtns: [
-                            {label: "Read", name: "readNote", icon: "view"},
-                            {label: "Edit", name: "editNote", icon: "update"},
-                            {label: "Delete", name: "deleteNote", icon: "delete"},
-                        ]
+                        isMenuListVisible: true,
+                        qBtns
                     })
 
                     //this.$store.commit("authenticationStore/setShowSpinner", false);
@@ -528,10 +553,18 @@
                     break;
             }
         },
-        initializeSelectors(){
-                var context = this;
-                const qSelectSubject_list = this.$store.getters["subjectStore/subjects"];
-                context.selectors_vm.qSelectSubject.list = qSelectSubject_list
+        async initializeSelectors(){
+            var context = this;
+            let subjects = this.$store.getters["subjectStore/subjects"];
+            let levels = this.$store.getters["levelStore/levels"];
+            if(context.isTorpa){
+                const resultSubjects = await loadSubjects("63ac0d2f67833dd07a2509d4");
+                subjects = resultSubjects.result;
+                const resultLevels = await loadLevels("63ac0d2f67833dd07a2509d4");
+                levels = resultLevels.result;
+            }
+
+                context.selectors_vm.qSelectSubject.list = subjects
                 .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
                 .map((row) => {
                     return {
@@ -542,8 +575,7 @@
                 })
 
 
-                const qSelectLevel_list = this.$store.getters["levelStore/levels"];
-                context.selectors_vm.qSelectLevel.list = qSelectLevel_list
+                context.selectors_vm.qSelectLevel.list = levels
                 .sort((a, b) => a.type.toLowerCase().localeCompare(b.type.toLowerCase()))
                 .map((row) => {
                     return {
@@ -555,14 +587,14 @@
                 context.noteSections = []
             } 
         },
-        created() {
+        async created() {
             var context = this;
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             if(user.schoolId === "CEO"){
                 context.tableVM.createItemUrl = "/super-admin-create-lesson-note";
                 context.tableVM.updateItemUrl = "/super-admin-update-lesson-note";
             }
-            context.initializeSelectors();
+            await context.initializeSelectors();
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);
             this.$store.commit("authenticationStore/setActiveColumns", context.tableVM.columns);
             this.$store.commit("authenticationStore/setActiveRows", context.tableVM.rows);
@@ -570,7 +602,9 @@
             this.$store.commit("authenticationStore/setActiveRoute", "lessonnotes");
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
-            this.$store.commit("authenticationStore/setPageTitle", "Select Note")
+            if(context.isTorpa)this.$store.commit("authenticationStore/setPageTitle", "Torpa Lesson Notes")
+            else this.$store.commit("authenticationStore/setPageTitle", "Lesson Notes")
+            
       }
     }
 </script>
