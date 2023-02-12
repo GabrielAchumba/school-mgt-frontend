@@ -54,7 +54,8 @@ export const torpaFeatures = {
     socialize: "Socialize",
     directories: "Directories",
     ads: "Ads",
-    payments: "Payments"
+    payments: "Payments",
+    schools: "Schools",
 }
 
 export const menuList = [
@@ -65,6 +66,15 @@ export const menuList = [
         image: "/statics/images/staffs.jpg",
         to: "admin",
         isFree: true,
+    },
+    {
+        name: "showPage",
+        title: torpaFeatures.home, 
+        description: "Organization",
+        image: "/statics/images/staffs.jpg",
+        to: "admin",
+        isFree: true,
+        isAdmin: true,
     },
     {
         name: "showPage",

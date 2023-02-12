@@ -208,6 +208,16 @@ const routes = [
         
       },
       { 
+        path: '/super-admin-school-landing', 
+        component: () => import('pages/administrators/school/landing.vue') 
+        
+      },
+      { 
+        path: '/super-admin-create-school', 
+        component: () => import('pages/administrators/school/create.vue') 
+        
+      },
+      { 
         path: '/super-admin-update-school', 
         component: () => import('pages/administrators/school/update.vue') 
         

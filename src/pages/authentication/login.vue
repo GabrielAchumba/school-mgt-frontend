@@ -58,7 +58,7 @@
     </div>
 
 
-     <div 
+    <div 
       v-show="showSpinner"
       class="q-gutter-md row">
             <div class="col-12 q-pa-sm absolute-center flex flex-center">
@@ -68,7 +68,7 @@
                     :thickness="10"
                 />
             </div>
-        </div>
+    </div>
   </div>
 </template>
 
