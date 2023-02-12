@@ -25,6 +25,7 @@
             <video 
             v-bind:src="imageUrl" 
             controls 
+            autoplay controlsList="nodownload" oncontextmenu="return false;"
             v-show="isVideo"/>
         </div>
 
@@ -34,6 +35,7 @@
             <video 
             v-bind:src="imageUrl" 
             controls 
+            autoplay controlsList="nodownload" oncontextmenu="return false;"
             v-show="isAudio"/>
         </div>
 
@@ -50,6 +52,7 @@
 
 <script>
 export default {
+  //Gab*012022
   props:{
     title: {
       type: String,

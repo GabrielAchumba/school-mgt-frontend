@@ -306,6 +306,7 @@
                           id="video-preview" 
                           v-bind:src="qFile.imagePreview" 
                           controls 
+                          autoplay controlsList="nodownload" oncontextmenu="return false;"
                           v-show="qFile.showVideoPreview"/>
                         </div>
                       </div>
