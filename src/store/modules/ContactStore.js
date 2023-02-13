@@ -3,6 +3,12 @@ const state = {
     selectedContact: {},
     officialEmail: "",
     officialPhoneNumber1: "",
+    address: {
+        location: "",
+        officeAddress: "",
+        email: "",
+        emailAddress: "",
+    }
 
 }
 
@@ -19,6 +25,9 @@ const getters = {
     officialPhoneNumber1(state){
         return state.officialPhoneNumber1;
     },
+    address(state){
+        return state.address;
+    },
 }
 
 const mutations = {
@@ -33,7 +42,10 @@ const mutations = {
     },
     SetOfficialPhoneNumber1(state, payload){
         state.officialPhoneNumber1 = payload;
-    }
+    },
+    SetAddress(state, payload){
+        state.address = payload;
+    },
 }
 
 const actions = {}

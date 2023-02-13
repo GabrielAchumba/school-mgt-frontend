@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-sm">
-        <TorpaLanding/>
+        <!-- <TorpaLanding/> -->
         <TitleDescription
             :title="aboutUs.title"
             :description="aboutUs.description"/>
@@ -12,7 +12,7 @@
 <script>
 import Cards from "../../components/Cards/Cards.vue"
 import TorpaLanding from "./landing2.vue";
-import TitleDescription from "../../components/Common/title-description.vue";
+import TitleDescription from "../../components/Common/title-description2.vue";
 
 export default {
     computed:{

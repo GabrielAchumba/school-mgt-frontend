@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-sm">
-        <TorpaLanding/>
+        <!-- <TorpaLanding/> -->
         <TitleDescription
             :title="contact.title"
             :description="contact.description"/>

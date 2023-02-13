@@ -7,7 +7,7 @@
             v-for="(card) in cardList" :key="card.title">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
               @click="cardClickHandler(card)"
-              style="border: none; width: 400px;" 
+              style="border: none; width: 400px; height: 250px;" 
               class="my-card text-center box-shadow" square bordered>
                 <q-icon
                 class="q-pa-md text-accent"

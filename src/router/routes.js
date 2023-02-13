@@ -6,7 +6,7 @@ const routes = [
     children: [
       { 
         path: '/', 
-        component: () => import('pages/authentication/loginregister.vue') 
+        component: () => import('pages/authentication/landing.vue') 
         
       },
       { 
@@ -47,6 +47,11 @@ const routes = [
       { 
         path: '/create-school', 
         component: () => import('pages/administrators/school/create.vue') 
+        
+      },
+      { 
+        path: '/product/:product', 
+        component: () => import('pages/authentication/product.vue') 
         
       },
     ]

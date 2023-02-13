@@ -1,19 +1,18 @@
 <template>
     <div class="q-pa-none text-accent">
-        <q-toolbar class="bg-accent text-accent">
+        <q-toolbar class="bg-primary text-accent">
             <img :src="selectedLogo.fileUrl"
                 style="height:50px; width:50px;">
          <q-space />
 
          <q-tabs v-model="selected_tab" shrink>
 
-        <div>
-            <!-- <div v-if="rightDrawerOpen"> -->
+        <div v-if="rightDrawerOpen">
           <q-btn
             :icon="rightMenuIcon"
             flat
             dense
-            class="text-primary bg-accent">
+            class="text-accent bg-primary">
             <q-menu fit>
               <q-list dense class="text-accent text-caption bg-primary" style="width:200px;">
                 <q-item
@@ -30,18 +29,54 @@
           </q-btn>
         </div>
 
-        <!-- <q-tab 
+        <q-tab 
         v-else
          v-for="(menuItem) in menuList" :key="menuItem.name"
         class="q-mr-sm q-py-xs text-accent" 
-        @click="scrollToElement(menuItem.name);" 
-        :label="menuItem.label" /> -->
+        :label="menuItem.label"
+        no-caps>
+            <q-menu 
+            v-if="isProducts(menuItem.tabIndex)"
+            fit>
+              <q-list 
+              v-for="(productItem) in productGroups" :key="productItem.title" 
+              dense class="text-accent text-caption bg-primary" style="width:200px;">
+                    <q-item-label header>{{ productItem.title }} </q-item-label>
+                    <q-item
+                    v-for="(product) in productItem.products" :key="product.title" 
+                    class="bg-primary text-accent"
+                    clickable
+                    @click="showProduct(product.name)">
+                        <q-item-section>
+                        {{ product.title}}
+                        </q-item-section>
+                    </q-item>
+                    <q-separator spaced />
+              </q-list>
+            </q-menu>
+            <q-menu 
+            v-if="isServices(menuItem.tabIndex)"
+            fit>
+              <q-list 
+              v-for="(serviceItem) in serviceGroups" :key="serviceItem.title" 
+              dense class="text-accent text-caption bg-primary" style="width:200px;">
+                    <q-item-label header>{{ serviceItem.title }} </q-item-label>
+                    <q-item
+                    v-for="(service) in serviceItem.services" :key="service.title" 
+                    class="bg-primary text-accent"
+                    clickable
+                    @click="showProduct(service.name)">
+                        <q-item-section>
+                        {{ service.title}}
+                        </q-item-section>
+                    </q-item>
+                    <q-separator spaced />
+              </q-list>
+            </q-menu>
+        </q-tab>
        </q-tabs>
         
       </q-toolbar>
-      <!-- <q-img
-      src="statics/images/banner1.jpg"
-      class="header-image absolute-top"/> -->
     </div>
 </template>
 
@@ -49,7 +84,7 @@
 import IconLabel from "./icon-label.vue";
 export default {
     computed:{
-        menuList() {
+        menuList(){
             return this.$store.getters['authenticationStore/menuList'];
         },
         selectedLogo(){
@@ -59,12 +94,92 @@ export default {
     components:{
         IconLabel
     },
-    /* props:{
-        logoImageUrl:{
-            type: String,
-            default: "/statics/newway.jpg"
+    props:{
+        productGroups:{
+            type: Array,
+            default: [
+                {
+                    title: "Apps",
+                    products: [
+                    {
+                        title: "Torpa",
+                        name: "/product/torpa",
+                    },
+                    {
+                        title: "Interiors",
+                        name: "/product/interiors",
+                    },
+                    {
+                        title: "Foods",
+                        name: "/product/foods",
+                    }
+                    ]
+                },
+                {
+                    title: "Interiors",
+                    products: [
+                    {
+                        title: "Bedsheets"
+                    },
+                    {
+                        title: "Doveut"
+                    },
+                    {
+                        title: "Throw Pillows"
+                    },
+                    {
+                        title: "Curtains"
+                    }
+                    ]
+                },
+            ]
         },
-    }, */
+        serviceGroups:{
+            type: Array,
+            default: [
+                {
+                    title: "Technology",
+                    services: [
+                        {
+                            title: "Mobile App Development",
+                            name: "",
+                        },
+                        {
+                            title: "Web App Development",
+                            name: "",
+                        },
+                        {
+                            title: "Desktop App Development",
+                            name: "",
+                        },
+                        {
+                            title: "Big Data Analysis",
+                            name: "",
+                        },
+                        {
+                            title: "Crytography",
+                            name: "",
+                        },
+                        {
+                            title: "Machine Learning",
+                            name: "",
+                        }
+                    ]
+                },
+                {
+                    title: "Interior Decorations",
+                    services: [
+                        {
+                            title: "House Decorations"
+                        },
+                        {
+                            title: "Event Decoration"
+                        },
+                    ]
+                },
+            ]
+        },
+    },
     data(){
         return {
             rightDrawerOpen: window.innerWidth < 700 ? true : false,
@@ -80,7 +195,20 @@ export default {
             var isSchoolRoute = this.$router.history.current.fullPath=='/school-landing';
             console.log("isSchoolRoute: ", isSchoolRoute);
             this.$store.commit("authenticationStore/setIsSchoolRoute", isSchoolRoute)
-        }
+        },
+        isProducts(tabIndex){
+            const ans = tabIndex === "products" ? true : false;
+            return ans;
+        },
+        isServices(tabIndex){
+            const ans = tabIndex === "services" ? true : false;
+            return ans;
+
+        },
+        showProduct(routename){
+            var context = this;
+            this.$router.push(`${routename}`);
+        },
     }
 }
 </script>

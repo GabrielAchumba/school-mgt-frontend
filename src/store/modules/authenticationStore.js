@@ -25,14 +25,11 @@ const state = {
     newRows: [],
     activeRoute: "",
     backRoute: "",
-    menuList: [],
-    torpa_menuList: [
+    menuList: [
       { name: "/", tabIndex: "home", label: "Home" },
-      { name: "/login_register", tabIndex: "login_register", label: "Sign In"},
-      { name: "/school-landing", tabIndex: "schools", label: "Schools" },
-      { name: "/news", tabIndex: "news", label: "News"},
-      { name: "/about_us", tabIndex: "about_us", label: "About Us" },
-      { name: "/contact", tabIndex: "contact", label: "Contact" },
+      { name: "/login_register", tabIndex: "products", label: "Products"},
+      { name: "/school-landing", tabIndex: "services", label: "Services" },
+      { name: "/news", tabIndex: "mentoring", label: "Mentoring"}
     ],
     client_menuList: [
       { name: "/", tabIndex: "home", label: "Home" },
@@ -52,9 +49,65 @@ const state = {
     updateUserRoute: "/update-user",
     unComfirmedUsersRoute: "/unconfirmed-users",
     isTorpa: false,
+    productGroups: [
+      {
+        title: "Apps",
+        products: [
+          {
+            title: "Torpa",
+            name: "",
+          },
+          {
+            title: "Classic",
+            name: "",
+          },
+          {
+            title: "NewFood",
+            name: "",
+          }
+        ]
+      },
+      {
+        title: "Interiors",
+        products: [
+          {
+            title: "Bedsheets"
+          },
+          {
+            title: "Doveut"
+          },
+          {
+            title: "Throw Pillows"
+          },
+          {
+            title: "Curtains"
+          }
+        ]
+      },
+      {
+        title: "Foods",
+        products: [
+          {
+            title: "Bedsheets1"
+          },
+          {
+            title: "Doveut1"
+          },
+          {
+            title: "Throw Pillows1"
+          },
+          {
+            title: "Curtains1"
+          }
+        ]
+      }
+    ]
   }
 
   const getters = {
+    productGroups(state){
+      return state.productGroups;
+    },
     isTorpa(state){
       return state.isTorpa;
     },
@@ -168,7 +221,7 @@ const state = {
   },
   backRoute(state){
     return state.backRoute;
-  }
+  },
 }
 
 const mutations = {
@@ -206,10 +259,20 @@ const mutations = {
     state.showSpinner = payload;
   },
   setMenuList(state, payload){
+    const torpa_menuList = [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/login_register", tabIndex: "products", label: "Products"},
+      { name: "/school-landing", tabIndex: "services", label: "Services" },
+      { name: "/mentoring", tabIndex: "mentoring", label: "Mentoring"},
+      { name: "/courses", tabIndex: "courses", label: "Courses"},
+      { name: "/clients", tabIndex: "clients", label: "Clients"},
+      /* { name: "/about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "/contact", tabIndex: "contact", label: "Contact" }, */
+    ]
+    console.log("payload: ", payload)
+    console.log("torpa_menuList: ", torpa_menuList)
     if(payload === true){
-      state.menuList = state.torpa_menuList.map((row) => {
-        return { ...row }
-      })
+      state.menuList = [...torpa_menuList]
     }else{
       state.menuList = state.client_menuList.map((row) => {
         return { ...row }

@@ -1,8 +1,15 @@
 <template>
   <q-layout view="hHh lpR fFf" class="bg-primary">
      <q-header>
+        <Address
+        :location="address.location"
+        :officeAddress="address.officeAddress"
+        :email="address.email"
+        :emailAddress="address.emailAddress"/>
+        <q-separator/>
          <!-- <SocialMedia/> -->
          <MainNavbar/>
+         <q-separator/>
      </q-header>
 
      <q-page-container style="height: 100vh;">
@@ -31,6 +38,7 @@ import { colors } from 'quasar'
 const { getBrand, setBrand } = colors
 import SocialMedia from "../components/Common/social-medial.vue";
 import MainNavbar from "../components/Common/main-navbar.vue";
+import Address from "../components/Home/Address.vue";
 import { loadLogos } from "../pages/administrators/branding/logo/utils";
 import { loadNewses } from "../pages/administrators/branding/news/utils";
 import { loadMissions } from "../pages/administrators/branding/mission/utils";
@@ -40,9 +48,15 @@ import { loadAboutUses } from "../pages/administrators/about-us/utils";
 import { loadContacts } from "../pages/administrators/contact/utils";
 import { loadCoreValues } from "../pages/administrators/branding/core-value/utils";
 export default {
+    computed:{
+        address(){
+        return this.$store.getters["ContactStore/address"];
+        }
+    },
     components:{
         SocialMedia,
         MainNavbar,
+        Address,
     },
     data(){
         return {
@@ -159,8 +173,8 @@ export default {
                     })
                 }
                 const contact = { 
-                    title: contactCommon.result[0].title,
-                    description: contactCommon.result[0].description,
+                    title: "",
+                    description: `<h5 style="text-align: center;"><span style="font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;"><b>${contactCommon.result[0].title}</b></span></h5><h6 style="text-align: center;">${contactCommon.result[0].description}</h6>`,
                     list: [
                     {
                         title: "Visit us on",
@@ -181,9 +195,17 @@ export default {
                 ]
                 }
 
+                const address =  {
+                    location: contact.list[0].icon,
+                    officeAddress: contact.list[0].description,
+                    email: contact.list[2].icon,
+                    emailAddress: contact.list[2].description,
+                }
+
                 this.$store.commit('ContactStore/SetOfficialEmail', contactCommon.result[0].officialEmail);
                 this.$store.commit('ContactStore/SetOfficialPhoneNumber1', `(${countryCode})${contactCommon.result[0].officialPhoneNumber1}`);
                 this.$store.commit('ContactStore/SetSelectedContact', contact);
+                this.$store.commit('ContactStore/SetAddress', address);
 
                 const corevalue = await loadCoreValues(schoolId);
                 if(corevalue.result.length === 0){
@@ -211,7 +233,9 @@ export default {
                     })
                 }
                 const aboutUs = {
-                    ...aboutusCommon.result[0],
+                    title: "",
+                   /*  ...aboutusCommon.result[0], */
+                    description: `<h5 style="text-align: center;"><span style="font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;"><b>${aboutusCommon.result[0].title}</b></span></h5><p style="text-align: left;">${aboutusCommon.result[0].description}</p>`,
                     list: [{...mission.result[0]}, {...vision.result[0]}, {...corevalue.result[0]}],
                 }
                 this.$store.commit('AboutUsStore/SetSelectedAboutUs', aboutUs);
