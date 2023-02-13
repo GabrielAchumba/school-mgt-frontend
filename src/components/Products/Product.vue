@@ -1,7 +1,8 @@
 <template>
     <div>
         <Logo/>
-        <Install/>
+        <Install
+        @login="login($event)"/>
         <Gallery/>
         <AboutProduct/>
     </div>
@@ -19,6 +20,11 @@ export default {
         Gallery,
         Install,
         AboutProduct
+    },
+    methods:{
+        login(){
+            this.$router.push(`/login_register`);
+        }
     }
 }
 </script>

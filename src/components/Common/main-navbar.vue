@@ -19,9 +19,47 @@
                 v-for="(menuItem) in menuList" :key="menuItem.name" 
                 class="bg-primary text-accent"
                 clickable
-                  @click="scrollToElement(menuItem.name)">
+                @click="scrollToElement(menuItem.name)">
                       <q-item-section>
-                      {{ menuItem.label}}
+                        {{ menuItem.label}}
+                        <q-menu 
+                        v-if="isProducts(menuItem.tabIndex)"
+                        fit>
+                        <q-list 
+                        v-for="(productItem) in productGroups" :key="productItem.title" 
+                        dense class="text-accent text-caption bg-primary" style="width:200px;">
+                                <q-item-label header>{{ productItem.title }} </q-item-label>
+                                <q-item
+                                v-for="(product) in productItem.products" :key="product.title" 
+                                class="bg-primary text-accent"
+                                clickable
+                                @click="showProduct(product.name)">
+                                    <q-item-section>
+                                    {{ product.title}}
+                                    </q-item-section>
+                                </q-item>
+                                <q-separator spaced />
+                        </q-list>
+                        </q-menu>
+                        <q-menu 
+                        v-if="isServices(menuItem.tabIndex)"
+                        fit>
+                        <q-list 
+                        v-for="(serviceItem) in serviceGroups" :key="serviceItem.title" 
+                        dense class="text-accent text-caption bg-primary" style="width:200px;">
+                                <q-item-label header>{{ serviceItem.title }} </q-item-label>
+                                <q-item
+                                v-for="(service) in serviceItem.services" :key="service.title" 
+                                class="bg-primary text-accent"
+                                clickable
+                                @click="showProduct(service.name)">
+                                    <q-item-section>
+                                    {{ service.title}}
+                                    </q-item-section>
+                                </q-item>
+                                <q-separator spaced />
+                        </q-list>
+                        </q-menu>
                       </q-item-section>
                   </q-item>
               </q-list>
@@ -34,7 +72,8 @@
          v-for="(menuItem) in menuList" :key="menuItem.name"
         class="q-mr-sm q-py-xs text-accent" 
         :label="menuItem.label"
-        no-caps>
+        no-caps
+        @click="scrollToElement(menuItem.name)">
             <q-menu 
             v-if="isProducts(menuItem.tabIndex)"
             fit>
@@ -191,7 +230,12 @@ export default {
         scrollToElement(routename){
             var context = this;
             context.selected_tab =  routename;
-            this.$router.push(`${routename}`);
+            switch(routename){
+                case "/":
+                    this.$router.push(`${routename}`);
+                    break;
+            }
+            
             var isSchoolRoute = this.$router.history.current.fullPath=='/school-landing';
             console.log("isSchoolRoute: ", isSchoolRoute);
             this.$store.commit("authenticationStore/setIsSchoolRoute", isSchoolRoute)

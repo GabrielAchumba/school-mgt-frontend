@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div class="q-pa-md"> 
         <div 
         v-if="setIsResponsive"
         class="row q-pa-sm">
@@ -20,9 +20,8 @@
         <div 
         v-else
         class="row q-pa-sm">
-            <q-space />
-            <div class="text-right">
-            <q-btn class="q-ma-sm bg-accent text-primary"
+            <div class="text-left">
+            <q-btn class="q-ma-sm qa-pa-sm bg-accent text-primary"
             v-for="qBtn in qBtns" 
             :key="qBtn.label"
             :label="qBtn.label"
@@ -33,6 +32,7 @@
             @click="ClickAction(qBtn.name)"
             />
             </div>
+            <q-space />
         </div>
     </div>
 </template>
@@ -47,10 +47,12 @@ export default {
                 {
                     label: "Mobile App",
                     btnDisabled: false,
+                    name: "installApp",
                 },
                 {
                     label: "Login/Register",
                     btnDisabled: false,
+                    name: "login",
                 }
             ]
         }
@@ -64,7 +66,6 @@ export default {
     },
     methods:{
           ClickAction(actionName){
-              var context = this;
               this.$emit(actionName);
           },
     }

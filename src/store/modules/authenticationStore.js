@@ -261,8 +261,8 @@ const mutations = {
   setMenuList(state, payload){
     const torpa_menuList = [
       { name: "/", tabIndex: "home", label: "Home" },
-      { name: "/login_register", tabIndex: "products", label: "Products"},
-      { name: "/school-landing", tabIndex: "services", label: "Services" },
+      { name: "/products", tabIndex: "products", label: "Products"},
+      { name: "/services", tabIndex: "services", label: "Services" },
       { name: "/mentoring", tabIndex: "mentoring", label: "Mentoring"},
       { name: "/courses", tabIndex: "courses", label: "Courses"},
       { name: "/clients", tabIndex: "clients", label: "Clients"},

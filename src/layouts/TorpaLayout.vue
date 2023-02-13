@@ -2,6 +2,7 @@
   <q-layout view="hHh lpR fFf" class="bg-primary">
      <q-header>
         <Address
+        v-if="!setIsResponsive"
         :location="address.location"
         :officeAddress="address.officeAddress"
         :email="address.email"
@@ -51,7 +52,12 @@ export default {
     computed:{
         address(){
         return this.$store.getters["ContactStore/address"];
-        }
+        },
+        setIsResponsive(){
+            const width = window.innerWidth;
+            if(width < 700) return true;
+            else return false;
+        },
     },
     components:{
         SocialMedia,
