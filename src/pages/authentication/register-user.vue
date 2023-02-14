@@ -12,7 +12,7 @@
 
 <script>
 import register from 'pages/authentication/register.vue' 
-import TorpaLandingPage from "./landing.vue";
+import TorpaLandingPage from "./landing3.vue";
 
 export default {
   computed:{

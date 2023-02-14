@@ -136,87 +136,91 @@ export default {
     props:{
         productGroups:{
             type: Array,
-            default: [
-                {
-                    title: "Apps",
-                    products: [
+            default: () => {
+                return [
                     {
-                        title: "Torpa",
-                        name: "/product/torpa",
+                        title: "Apps",
+                        products: [
+                        {
+                            title: "Torpa",
+                            name: "/product/torpa",
+                        },
+                        {
+                            title: "Interiors",
+                            name: "/product/interiors",
+                        },
+                        {
+                            title: "Foods",
+                            name: "/product/foods",
+                        }
+                        ]
                     },
                     {
                         title: "Interiors",
-                        name: "/product/interiors",
+                        products: [
+                        {
+                            title: "Bedsheets"
+                        },
+                        {
+                            title: "Doveut"
+                        },
+                        {
+                            title: "Throw Pillows"
+                        },
+                        {
+                            title: "Curtains"
+                        }
+                        ]
                     },
-                    {
-                        title: "Foods",
-                        name: "/product/foods",
-                    }
-                    ]
-                },
-                {
-                    title: "Interiors",
-                    products: [
-                    {
-                        title: "Bedsheets"
-                    },
-                    {
-                        title: "Doveut"
-                    },
-                    {
-                        title: "Throw Pillows"
-                    },
-                    {
-                        title: "Curtains"
-                    }
-                    ]
-                },
-            ]
+                ]
+            }
         },
         serviceGroups:{
             type: Array,
-            default: [
+            default: () => {
+                return [
                 {
                     title: "Technology",
                     services: [
-                        {
-                            title: "Mobile App Development",
-                            name: "",
-                        },
-                        {
-                            title: "Web App Development",
-                            name: "",
-                        },
-                        {
-                            title: "Desktop App Development",
-                            name: "",
-                        },
-                        {
-                            title: "Big Data Analysis",
-                            name: "",
-                        },
-                        {
-                            title: "Crytography",
-                            name: "",
-                        },
-                        {
-                            title: "Machine Learning",
-                            name: "",
-                        }
-                    ]
-                },
-                {
-                    title: "Interior Decorations",
-                    services: [
-                        {
-                            title: "House Decorations"
-                        },
-                        {
-                            title: "Event Decoration"
-                        },
-                    ]
-                },
-            ]
+                            {
+                                title: "Mobile App Development",
+                                name: "",
+                            },
+                            {
+                                title: "Web App Development",
+                                name: "",
+                            },
+                            {
+                                title: "Desktop App Development",
+                                name: "",
+                            },
+                            {
+                                title: "Big Data Analysis",
+                                name: "",
+                            },
+                            {
+                                title: "Crytography",
+                                name: "",
+                            },
+                            {
+                                title: "Machine Learning",
+                                name: "",
+                            }
+                        ]
+                    },
+                    {
+                        title: "Interior Decorations",
+                        services: [
+                            {
+                                title: "House Decorations"
+                            },
+                            {
+                                title: "Event Decoration"
+                            },
+                        ]
+                    },
+                ]
+            }
         },
     },
     data(){

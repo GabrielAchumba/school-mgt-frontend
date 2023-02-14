@@ -13,7 +13,7 @@
          <q-separator/>
      </q-header>
 
-     <q-page-container style="height: 100vh;">
+     <q-page-container>
       <router-view
       class="bg-primary"
       v-if="!showSpinner"

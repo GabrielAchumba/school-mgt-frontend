@@ -1,26 +1,23 @@
 <template>
   <div>
-        <div class="row bg-primary wrap">
-          <div class="col-12 q-mt-auto q-mb-auto flex flex-center"> 
-            <div 
-            class="q-pa-sm"
-            v-for="(card) in cardList" :key="card.title">
-              <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
-              @click="cardClickHandler(card)"
-              style="border: none; width: 400px;" 
-              class="my-card text-center box-shadow" square bordered>
-                <q-img
-                  :src="card.fileUrl"
-                  height="500px"
-                >
-                  <div class="absolute-bottom">
-                    <div class="text-h6">{{ card.title }}</div>
-                    <div class="text-subtitle2">{{ card.description }}</div>
-                  </div>
-                </q-img>
-              </q-card>
-            </div>
-
+        <div class="row bg-primary">
+          <div 
+          class="col-xl-4 col-lg-4  col-md-4 col-xs-12 col-sm-12 q-pa-sm"
+          v-for="(card) in cardList" :key="card.title">
+            <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
+            @click="cardClickHandler(card)"
+            class="my-card text-center box-shadow" square bordered>
+              <q-img
+                :src="card.fileUrl"
+                height="100%"
+                width="100%"
+              >
+                <div class="absolute-bottom">
+                  <div class="text-h6">{{ card.title }}</div>
+                  <div class="text-subtitle2">{{ card.description }}</div>
+                </div>
+              </q-img>
+            </q-card>
           </div>
         </div>
   </div>
@@ -62,4 +59,10 @@
 </script>
 
 <style>
+   .my-card {
+       width: 100%;
+       max-width: 400px;
+       height: 500px;
+       border: none;
+   }
 </style>

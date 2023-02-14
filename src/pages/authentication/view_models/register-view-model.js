@@ -17,7 +17,7 @@ const registrationForm = {
             }), 
             /* list: [], */
             actionName: "userTypeAction", visible: true },
-            { label: "School Name *", value: "", type: "text", 
+            { label: "School Name", value: "", type: "text", 
             list: [], actionName: "schoolNameAction", visible: true },
     ],
     qInputs: [
@@ -33,7 +33,7 @@ const registrationForm = {
             iconName: "",
             visible: false,
         }},
-        { label: "User Name", name: "", type: "text",
+        { label: "Username", name: "", type: "text",
         Template: {
             sn: 2,
             iconName: "",

@@ -6,7 +6,7 @@ const loginForm = {
         { label: "Log in student", name: "Disagreed", visible: true}
     ], */
     qInputs: [
-        { label: "User Name", name: "", type: "text", 
+        { label: "Username", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",
@@ -42,7 +42,7 @@ const forgotPasswordForm = {
             list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
-        { label: "User Name", name: "", type: "text", 
+        { label: "Username", name: "", type: "text", 
         Template: {
             sn: 0,
             iconName: "",

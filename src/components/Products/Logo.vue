@@ -23,10 +23,12 @@ export default {
     props:{
         productLogo: {
             type: Object,
-            default: {
-                fileUrl: "/statics/images/logo.jpg",
-                title: "Torpa",
-                description: "School Management App",
+            default: () => {
+                return {
+                    fileUrl: "/statics/images/logo.jpg",
+                    title: "Torpa",
+                    description: "School Management App",
+                }
             }
         }
     }

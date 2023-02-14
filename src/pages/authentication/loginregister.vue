@@ -12,7 +12,7 @@
 
 <script>
 import login from 'pages/authentication/login.vue'
-import TorpaLandingPage from "./landing.vue";
+import TorpaLandingPage from "./landing3.vue";
 // v-if="$q.platform.is.mobile"
 //v-if="!isMobile"
 

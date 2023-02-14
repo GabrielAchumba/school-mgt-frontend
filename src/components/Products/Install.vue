@@ -43,18 +43,20 @@ export default {
     props:{
         qBtns:{
             type: Array,
-            default: [
-                {
-                    label: "Mobile App",
-                    btnDisabled: false,
-                    name: "installApp",
-                },
-                {
-                    label: "Login/Register",
-                    btnDisabled: false,
-                    name: "login",
-                }
-            ]
+            default: () => {
+                return [
+                    {
+                        label: "Mobile App",
+                        btnDisabled: false,
+                        name: "installApp",
+                    },
+                    {
+                        label: "Login/Register",
+                        btnDisabled: false,
+                        name: "login",
+                    }
+                ]
+            }
         }
     },
     computed:{
