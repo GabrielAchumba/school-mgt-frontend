@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Developed By Newway Standard Global",
   "productName": "Torpa",
-  "cordovaId": "org.cordova.quasar.app",
+  "cordovaId": "org.torpa.app",
   "capacitorId": "",
   "author": "GabrielAchumba <36473816+GabrielAchumba@users.noreply.github.com>",
   "private": true,

@@ -1,0 +1,20 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "./torpa-release-key.keystore",
+            "storePassword": "123456",
+            "alias": "mytorpa",
+            "password": "123456",
+            "keystoreType": "",
+            "packageType": "bundle"
+        },
+        "release": {
+            "keystore": "./torpa-release-key.keystore",
+            "storePassword": "123456",
+            "alias": "mytorpa",
+            "password": "123456",
+            "keystoreType": "",
+            "packageType": "bundle"
+        }
+    }
+}

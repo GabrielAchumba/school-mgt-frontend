@@ -1,5 +1,5 @@
 {
-  "name": "org.cordova.quasar.app",
+  "name": "org.torpa.app",
   "displayName": "Torpa",
   "version": "1.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
@@ -13,8 +13,8 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "cordova-android": "^10.1.2",
-    "cordova-plugin-splashscreen": "^6.0.2"
+    "cordova-android": "^11.0.0",
+    "cordova-plugin-splashscreen": "^6.0.1"
   },
   "cordova": {
     "platforms": [

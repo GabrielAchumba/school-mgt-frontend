@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.cordova.quasar.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.torpa.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Torpa</name>
     <description>Developed By Newway Standard Global</description>
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
@@ -8,28 +8,31 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <allow-navigation href="about:*" />
-    <preference name="SplashMaintainAspectRatio" value="true" />
     <platform name="android">
+        <preference name="android-minSdkVersion" value="28" />
+        <preference name="android-targetSdkVersion" value="33" />
+        <preference name="android-compileSdkVersion" value="33" />
         <icon density="ldpi" src="res/android/ldpi.png" />
         <icon density="mdpi" src="res/android/mdpi.png" />
         <icon density="hdpi" src="res/android/hdpi.png" />
         <icon density="xhdpi" src="res/android/xhdpi.png" />
         <icon density="xxhdpi" src="res/android/xxhdpi.png" />
         <icon density="xxxhdpi" src="res/android/xxxhdpi.png" />
-        <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png" />
-        <splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png" />
-        <splash density="land-mdpi" src="res/screen/android/splash-land-mdpi.png" />
-        <splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png" />
-        <splash density="land-hdpi" src="res/screen/android/splash-land-hdpi.png" />
-        <splash density="port-hdpi" src="res/screen/android/splash-port-hdpi.png" />
-        <splash density="land-xhdpi" src="res/screen/android/splash-land-xhdpi.png" />
-        <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png" />
-        <splash density="land-xxhdpi" src="res/screen/android/splash-land-xxhdpi.png" />
-        <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png" />
-        <splash density="land-xxxhdpi" src="res/screen/android/splash-land-xxxhdpi.png" />
-        <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png" />
+        <preference density="land-ldpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-land-ldpi.png" />
+        <preference density="port-ldpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-port-ldpi.png" />
+        <preference density="land-mdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-land-mdpi.png" />
+        <preference density="port-mdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-port-mdpi.png" />
+        <preference density="land-hdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-land-hdpi.png" />
+        <preference density="port-hdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-port-hdpi.png" />
+        <preference density="land-xhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-land-xhdpi.png" />
+        <preference density="port-xhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-port-xhdpi.png" />
+        <preference density="land-xxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-land-xxhdpi.png" />
+        <preference density="port-xxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-port-xxhdpi.png" />
+        <preference density="land-xxxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-land-xxxhdpi.png" />
+        <preference density="port-xxxhdpi" name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splash-port-xxxhdpi.png" />
     </platform>
+    <allow-navigation href="about:*" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
     <platform name="ios">
         <icon height="57" src="res/ios/icon.png" width="57" />
         <icon height="114" src="res/ios/icon@2x.png" width="114" />
@@ -38,7 +41,7 @@
         <icon height="29" src="res/ios/icon-29.png" width="29" />
         <icon height="58" src="res/ios/icon-29@2x.png" width="58" />
         <icon height="87" src="res/ios/icon-29@3x.png" width="87" />
-        <icon height="80" src="res/ios/icon-40@2x.png" width="80" />
+        <icon height="80" valsrcue="res/ios/icon-40@2x.png" width="80" />
         <icon height="120" src="res/ios/icon-60@2x.png" width="120" />
         <icon height="180" src="res/ios/icon-60@3x.png" width="180" />
         <icon height="20" src="res/ios/icon-20.png" width="20" />
@@ -56,13 +59,13 @@
         <icon height="88" src="res/ios/icon-44@2x.png" width="88" />
         <icon height="172" src="res/ios/icon-86@2x.png" width="172" />
         <icon height="196" src="res/ios/icon-98@2x.png" width="196" />
-        <splash src="res/screen/ios/Default@2x~iphone~anyany.png" />
-        <splash src="res/screen/ios/Default@2x~iphone~comany.png" />
-        <splash src="res/screen/ios/Default@2x~iphone~comcom.png" />
-        <splash src="res/screen/ios/Default@3x~iphone~anyany.png" />
-        <splash src="res/screen/ios/Default@3x~iphone~anycom.png" />
-        <splash src="res/screen/ios/Default@3x~iphone~comany.png" />
-        <splash src="res/screen/ios/Default@2x~ipad~anyany.png" />
-        <splash src="res/screen/ios/Default@2x~ipad~comany.png" />
+        <preference value="res/screen/ios/Default@2x~iphone~anyany.png" />
+        <preference value="res/screen/ios/Default@2x~iphone~comany.png" />
+        <preference value="res/screen/ios/Default@2x~iphone~comcom.png" />
+        <preference value="res/screen/ios/Default@3x~iphone~anyany.png" />
+        <preference value="res/screen/ios/Default@3x~iphone~anycom.png" />
+        <preference value="res/screen/ios/Default@3x~iphone~comany.png" />
+        <preference value="res/screen/ios/Default@2x~ipad~anyany.png" />
+        <preference value="res/screen/ios/Default@2x~ipad~comany.png" />
     </platform>
 </widget>
