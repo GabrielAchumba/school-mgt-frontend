@@ -25,7 +25,7 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    fileUrl: "/statics/images/logo.jpg",
+                    fileUrl: "/statics/images/TorpaLogo.png",
                     title: "Torpa",
                     description: "School Management App",
                 }

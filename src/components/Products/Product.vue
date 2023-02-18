@@ -5,6 +5,7 @@
         @login="login($event)"/>
         <Gallery/>
         <AboutProduct/>
+        <PrivacyPolicy/>
     </div>
 </template>
 
@@ -14,12 +15,14 @@ import Logo from "./Logo.vue"
 import Gallery from "./Gallery.vue";
 import Install from "./Install.vue";
 import AboutProduct from "./AboutProduct.vue"
+import PrivacyPolicy from "./PrivacyPolicy.vue";
 export default {
     components:{
         Logo,
         Gallery,
         Install,
-        AboutProduct
+        AboutProduct,
+        PrivacyPolicy
     },
     methods:{
         login(){

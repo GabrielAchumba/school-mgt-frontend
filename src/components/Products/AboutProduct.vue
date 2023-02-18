@@ -19,11 +19,21 @@ export default {
         },
         description: {
             type: String,
-            default:  `<h5 style="text-align: left;"><span style="font-family: Roboto, -apple-system, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;"><b>About this app</b></span></h5><p style="text-align: left;">We are Beyond Banking
-- OPay is licensed by CBN, insured by the NDIC and trusted by over 18 million users
-- Easy and instant account opening with your phone number, NIN, BVN or other national means of verification, and enjoy an amazing welcome bonuses
-- Manage all payments from one app and enjoy free transfers and transaction bonuses
-- Free debit cards with bonuses</p>`,
+            default:  `<h5 style="text-align: left;">
+                            <span>
+                                <b>
+                                    About this app
+                                </b>
+                            </span>
+                        </h5>
+                        <p style="text-align: left;">
+                            Torpa is Newway Standard Global flagship software for digitization of school day to day activities. 
+                            Presently it can be used in about two hundred and forty countries. Torap is a web and mobile app product 
+                            and possesses cut-clear analytic presentation and diagrams for simple and complex results, 
+                            and also allows sessional analysis at different class level, students, subjects, 
+                            and others within the database of the school.The product can be used by any school 
+                            ranging from pre-nursery school to high institution, including non-conventional training institutes.
+                        </p>`,
         }
     }
 }
