@@ -1,22 +1,30 @@
 <template>
-  <div>
-      <div v-for="card in cardList"
-        :key="card.id">
-          <Story v-if="!showSpinner"
-          class="bg-primary q-pa-sm"
-          :story="card"/>
-      </div>
-    <div 
-      v-show="showSpinner"
-      class="q-gutter-md row">
-        <div class="col-12 q-pa-sm absolute-center flex flex-center">
-            <q-spinner
-                color="accent"
-                :size="spinnerSize"
-                :thickness="spinnerThickness"
-            />
+    <div>
+        <q-list 
+        v-if="!showSpinner"
+        bordered separator
+        class="bg-primary q-pa-none q-ma-none">
+            <q-item clickable v-ripple
+             v-for="card in cardList"
+            :key="card.id"
+            class="q-pa-none q-ma-none">
+                <RecentChat
+                :fileUrl="card.friendImage"
+                :title="card.content"
+                :description="card.createdDate"/>
+            </q-item>
+        </q-list>
+        <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
         </div>
-    </div>
 
         <q-dialog 
             v-for="dialog in dialogs" 
@@ -32,14 +40,13 @@
             >
             </MessageBox>
         </q-dialog>
-  </div>
+    </div>
 </template>
 
 <script>
-  import Story from "../../../components/Story/Story.vue";
+  import RecentChat from "../../../components/Chat/RecentChat.vue";
   import MessageBox from "../../../components/dialogs/MessageBox.vue";
   import { get, remove } from "../../../store/modules/gcp-services";
-  import { loadStories } from "./utils";
 
     export default {
       computed:{
@@ -54,7 +61,7 @@
         }
       },
       components:{
-        Story,
+        RecentChat,
         MessageBox
       },
         data () {
@@ -72,8 +79,8 @@
                 createItem: "createStory",
                 updateItem: "updateItem",
                 deleteItem: "deleteStory",
-                createItemUrl: "/create-story",
-                updateItemUrl: "/update-story",
+                createItemUrl: "/create-chat",
+                updateItemUrl: "/update-chat",
                 },
                 dialogs:[
                 { title: "Delete Story", isVisible: false, message: "Do you want to delete a story",
@@ -83,30 +90,15 @@
                 { title: "Failure", isVisible: false, message: "",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },
             ],
-            stories: [
+            recentChats: [
             {
                 friendImage: "/statics/images/levels.jpg",
                 friendFullName: "John Williams",
                 fromId: "",
                 toId: "",
-                groupName: "Story",
+                groupName: "Chat",
                 message: "Who do you think will emerge the president of Nigeria in the forthcoming 2023 election",
                 meetingId: "",
-                files:[
-                    {
-                        /* fileUrl: "/statics/images/users.jpg", */
-                        fileUrl: "https://storage.googleapis.com/lemongatetech.appspot.com/1672176209010No%205%20Create_Staff.mp4?GoogleAccessId=firebase-adminsdk-3ko44%40lemongatetech.iam.gserviceaccount.com&Expires=1754953200&Signature=Q8ld2jIrLYdOwx%2FNPqvs0nXKHnNR1fpxkFMDoDqNd552xFbEJGhsesCGR33uTtza9zAiOvIyrPLSlbQioFG1ps%2FzXVMTPnkjajOZ1hHAwYda%2FeHiQC8hh62JUZd6mwPf8o8HGXO3PCcJKmMpppxu4jS8KUXdevwxDFzYPziCG9SnmN%2FhspjHGEsRvtWnUQIKLxgkecLRCYU0XUXRbqpH5LK4eEnLmMzNDgNOUihtGMDbOIrD7MBAkXq4kWt6N396tQJXL7azfVr6VbsM4TkLQDEXR4iibkA8gJUYRhf5IH27%2BIAyOMZ6CEx%2FVqRtRCuOZHak4b9XsyiLBCXSuf4hSw%3D%3D",
-                        fileName: "",
-                        originalFileName: "",
-                        groupName: "Story",
-                        isImage: false,
-                        isVideo: true,
-                        isAudio: false,
-                    }
-                ],
-                likes: [],
-                shares: [],
-                createdBy: "",
                 schoolId: "",
                 createdAt: Date.now()
             },
@@ -118,29 +110,6 @@
                 groupName: "Story",
                 message: "In my own statistics, Peter Obi will emerge as the president of Nigeria",
                 meetingId: "",
-                files:[
-                    {
-                        fileUrl: "/statics/images/parallax.jpg",
-                        fileName: "",
-                        originalFileName: "",
-                        groupName: "Story",
-                        isImage: true,
-                        isVideo: false,
-                        isAudio: false,
-                    },
-                    {
-                        fileUrl: "/statics/images/news.jpg",
-                        fileName: "",
-                        originalFileName: "",
-                        groupName: "Story",
-                        isImage: true,
-                        isVideo: false,
-                        isAudio: false,
-                    }
-                ],
-                likes: [],
-                shares: [],
-                createdBy: "",
                 schoolId: "",
                 createdAt: Date.now()
             }
@@ -221,7 +190,7 @@
                             await context.delete();
                             break;
                         case "Success":
-                            await context._loadStories()
+                            await context._loadRecentChats()
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -229,46 +198,37 @@
                 }
             }
         },
-        async _loadStories(){
+        async _loadRecentChats(){
 
                 var context = this;
                 var user = this.$store.getters["authenticationStore/IdentityModel"]
                 //this.$store.commit("authenticationStore/setShowSpinner", true);
                 //const { result, message } = await loadStories(user.schoolId)
-                const result = context.stories;
+                const result = context.recentChats;
                 //this.$store.commit("authenticationStore/setShowSpinner", false);
                 //this.$store.commit('storyStore/SetStories', result)
                 context.tableVM.rows = result;
                 console.log("result: ", result)
                 context.cardList = result.map((row, i) => {
-                    const  description = row.message;
-                    /* if(description.length > 300){
-                        description = row.message.substr(1, 3000);
-                    } */
+                    let  description = row.message;
+                    if(description.length > 50){
+                        description = row.message.substr(0, 50);
+                    }
 
-                return {
-                    id: i+1,
-                    ...row,
-                    name: "showPage",
-                    createdDate: (new Date(row.createdAt)).toDateString(),
-                    qBtns: [
-                            {label: "View", name: "View"},
-                        ],
-                    galleries: row.files.map((fileRow, j) => {
-                        return {
-                            sn: j,
-                            ...fileRow,
-                        }
-                    }),
-                    content: `<p style="text-align: left;">
-                                ${description}
-                            </p>`
-                }
-            })
-
-            console.log("context.cardList: ", context.cardList);
-            this.$store.commit('resultStore/SetResults', result)
-            this.$store.commit('componentsStore/setCardItems', context.cardList)
+                    return {
+                        id: i+1,
+                        ...row,
+                        name: "showPage",
+                        createdDate: (new Date(row.createdAt)).toDateString(),
+                        qBtns: [
+                                {label: "View", name: "View"},
+                            ],
+                        content: description + "..."
+                        /* `<p style="text-align: left;">
+                                    ${description}
+                                </p>` */
+                    }
+                })
 
             }
         },
@@ -279,11 +239,11 @@
                 context.tableVM.createItemUrl = "/socialize-create-story";
                 context.tableVM.updateItemUrl = "/socialize-update-story";
             }
-            await context._loadStories()
+            await context._loadRecentChats()
             this.$store.commit("authenticationStore/setCreateURL", context.tableVM.createItemUrl);;
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");
-            this.$store.commit("authenticationStore/setPageTitle", "Stories"); 
+            this.$store.commit("authenticationStore/setPageTitle", "Chats"); 
       }
     }
 </script>

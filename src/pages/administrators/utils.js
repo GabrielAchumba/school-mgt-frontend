@@ -67,7 +67,7 @@ export const menuList = [
         to: "admin",
         isFree: true,
     },
-    {
+    /* {
         name: "showPage",
         title: torpaFeatures.home, 
         description: "Organization",
@@ -75,7 +75,7 @@ export const menuList = [
         to: "admin",
         isFree: true,
         isAdmin: true,
-    },
+    }, */
     {
         name: "showPage",
         title: torpaFeatures.designations, 
@@ -217,7 +217,7 @@ export const menuList = [
         title: torpaFeatures.socialize, 
         description: "Chat and interact with friends from same or differnet school",
         image: "/statics/images/socialize.jpg",
-        to: "filemanagement-landing",
+        to: "socialize-landing",
         isFree: true,
     },
     {

@@ -14,8 +14,9 @@
                   <div class="text-primary text-left q-pa-sm">{{ card.title }}</div>
                 </q-bar>
 
-                <q-img
-                    class="q-pa-sm absolute-center"
+                <!-- class="q-pa-sm absolute-center" -->
+                <img
+                  class="my-img"
                   :src="card.image"
                   height="50%"
                   width="50%"
@@ -115,4 +116,9 @@
       border: 1px  rgba(255,255,255, 1) solid;
       /* max-width: 250px; */
   }
+
+
+   .my-img {
+       object-fit:fill;
+   }
 </style>

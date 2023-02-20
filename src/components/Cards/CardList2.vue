@@ -119,4 +119,10 @@
 </script>
 
 <style>
+.my-card{
+      width: 100%;
+      height: 500px;
+      border: 1px  rgba(255,255,255, 1) solid;
+      /* max-width: 250px; */
+  }
 </style>

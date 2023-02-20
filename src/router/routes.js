@@ -1217,7 +1217,22 @@ const routes = [
         path: '/online-learning-landing', 
         component: () => import('pages/administrators/online-learning/landing.vue') 
         
-      }
+      },
+      { 
+        path: '/socialize-landing', 
+        component: () => import('pages/administrators/socialize/landing-socialize.vue') 
+        
+      },
+      { 
+        path: '/stories-landing', 
+        component: () => import('pages/administrators/socialize/landing.vue') 
+        
+      },
+      { 
+        path: '/chats-landing', 
+        component: () => import('pages/administrators/chat/landing.vue') 
+        
+      },
     ]
   },
   {
@@ -1232,6 +1247,21 @@ const routes = [
       { 
         path: '/member-update-user', 
         component: () => import('pages/administrators/user/update.vue') 
+        
+      },
+      { 
+        path: '/member-socialize-landing', 
+        component: () => import('pages/administrators/socialize/landing-socialize.vue') 
+        
+      },
+      { 
+        path: '/member-stories-landing', 
+        component: () => import('pages/administrators/socialize/landing.vue') 
+        
+      },
+      { 
+        path: '/member-chats-landing', 
+        component: () => import('pages/administrators/chat/landing.vue') 
         
       },
     ]
