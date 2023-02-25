@@ -38,17 +38,17 @@ INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/pla
 INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:1-13:12
 INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:1-13:12
 	package
-		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:98-121
+		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:94-117
 		INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 		INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 	android:versionName
-		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:70-97
+		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:70-93
 		INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 		INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
 	android:hardwareAccelerated
 		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:11-45
 	xmlns:android
-		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:122-180
+		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:118-176
 	android:versionCode
 		ADDED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml:2:46-69
 		INJECTED from /home/user/Documents/SchoolApp/school-mgt-frontend/src-cordova/platforms/android/app/src/main/AndroidManifest.xml
