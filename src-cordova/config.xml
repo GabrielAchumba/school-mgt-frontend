@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.torpa.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="2" id="org.torpa.app" version="2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Torpa</name>
     <description>Developed By Newway Standard Global</description>
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
@@ -9,9 +9,9 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <platform name="android">
-        <preference name="android-minSdkVersion" value="28" />
-        <preference name="android-targetSdkVersion" value="33" />
-        <preference name="android-compileSdkVersion" value="33" />
+        <preference name="android-minSdkVersion" value="23" />
+        <preference name="android-targetSdkVersion" value="32" />
+        <preference name="android-compileSdkVersion" value="32" />
         <icon density="ldpi" src="res/android/ldpi.png" />
         <icon density="mdpi" src="res/android/mdpi.png" />
         <icon density="hdpi" src="res/android/hdpi.png" />
@@ -41,7 +41,7 @@
         <icon height="29" src="res/ios/icon-29.png" width="29" />
         <icon height="58" src="res/ios/icon-29@2x.png" width="58" />
         <icon height="87" src="res/ios/icon-29@3x.png" width="87" />
-        <icon height="80" valsrcue="res/ios/icon-40@2x.png" width="80" />
+        <icon height="80" src="res/ios/icon-40@2x.png" width="80" />
         <icon height="120" src="res/ios/icon-60@2x.png" width="120" />
         <icon height="180" src="res/ios/icon-60@3x.png" width="180" />
         <icon height="20" src="res/ios/icon-20.png" width="20" />
