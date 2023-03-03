@@ -1,0 +1,60 @@
+<template>
+  <div>
+    <PersonalDataCategories
+    :personalDataList="personalDataList"
+    :columns="columns"
+    :isFetchTableDialog="isFetchTableDialog"
+    :message="message"
+    :createCategoryUrl="createCategoryUrl"/>
+  </div>
+</template>
+
+<script>
+    import PersonalDataCategories from "../../../components/CategoryAdmin/PersonalDataCategories.vue"
+    import { categoryn5000Controller } from '../../../store/modules/backendRoutes'
+    export default {
+        computed: {
+        personalDataList(){
+            return this.$store.getters['categoryStore/personalDataList'];
+        }
+      },
+      components:{
+        PersonalDataCategories
+      },
+        data () {
+    return {
+            columns: [
+              { name: "firstName", label: "First Name", field: "", align: "left" },
+              { name: "lastName", label: "Last Name", field: "", align: "left" },
+              { name: "actions", label: "Actions", field: "actions", align: "left" },
+            ],
+            isFetchTableDialog: false,
+            message: "",
+            createCategoryUrl: "createCategoryN5000",
+            }
+        },
+        async created() {
+          var url = `${categoryn5000Controller}/getpersonaldataList`
+        var response = await this.$store.dispatch('categoryStore/GetPersonalDataList', {
+          url
+        })
+
+         const { 
+              data : {
+                data: result,
+                message,
+                success,
+              }
+        } = response
+
+        if(success){
+          this.$store.commit('categoryStore/GetPersonalDataList', result)
+        }else{
+            var context = this;
+            context.isFetchTableDialog = true;
+            context.message = message;
+        }
+
+      }
+    }
+</script>

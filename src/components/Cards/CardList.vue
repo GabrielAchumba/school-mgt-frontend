@@ -1,17 +1,17 @@
 <template>
-  <div>
-        <div class="row bg-primary">
-          <div class="col-12 q-pa-sm flex flex-center"> 
+  <div class="bg-primary">
+
+        <div class="row text-center bg-primary flex flex-center">
+          <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-md flex flex-center">
+            
             <div 
-            class="q-pa-sm"
-            v-for="(card) in cardList" :key="card.title">
+            v-for="(card) in cardList" :key="card.title"
+            class="col-md-4 col-lg-4 col-sx-12 col-sm-12">
               <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
-              @click="cardClickHandler(card)"
-              style="border: none; width: 400px;" 
-              class="my-card text-center box-shadow" round bordered>
+              @click="cardClickHandler(card.name)"
+              style="border: none;" class="my-card text-center box-shadow" square bordered>
                 <q-img
                   :src="card.image"
-                  height="100px"
                 />
                 <q-card-section class="bg-primary">
                   <div class="about_heading_1 text-h6 text-accent q-mt-sm q-mb-xs">{{ card.title }}</div>
@@ -55,8 +55,9 @@
                 this['about_heading_' + index] = [];                
               }, 1000);              
             },
-            cardClickHandler(card) {
-                 this.$emit(card.name, card); 
+            cardClickHandler(payload) {
+                var context = this;
+                 this.$emit(context.cardClickEvent, payload); 
             }
         }
     }

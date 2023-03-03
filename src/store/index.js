@@ -1,40 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from "vuex-persistedstate";
 
-import authenticationStore from './modules/authenticationStore';
-import administratorStore from './modules/administratorStore';
-import staffStore from './modules/staffStore';
-import classRoomStore from './modules/classRoomStore';
-import studentStore from './modules/studentStore';
-import subjectStore from './modules/subjectStore';
-import assessmentStore from './modules/assessmentStore';
-import lessonStore from './modules/lessonStore';
-import resultStore from './modules/resultStore';
-import userStore from './modules/userStore';
-import chartStore from './modules/chartStore';
-import componentsStore from './modules/componentsStore';
-import schoolStore from './modules/schoolStore';
-import subscriptionStore from './modules/subscriptionStore';
-import FileModelStore from './modules/FileModelStore';
-import LogoStore from './modules/LogoStore';
-import VisionStore from './modules/VisionStore';
-import MissionStore from './modules/MissionStore';
-import NewsStore from './modules/NewsStore';
-import CarouselStore from './modules/CarouselStore';
-import AboutUsStore from './modules/AboutUsStore';
-import ContactStore from './modules/ContactStore';
-import CoreValueStore from './modules/CoreValueStore';
-import gradeStore from './modules/gradeStore';
-import levelStore from './modules/levelStore';
-import sessionStore from './modules/sessionStore';
-import examStore from './modules/examStore';
-import storyStore from './modules/storyStore';
-import lessonNoteStore from './modules/lessonNoteStore'
-import lessonNoteSectionStore from './modules/lessonNoteSectionStore';
-import cAStore from './modules/cAStore';
-import cAQuestionStore from './modules/cAQuestionStore';
-import cAAnswerStore from './modules/cAAnswerStore';
+import authenticationStore from './modules/authenticationStore'
+import clientStore from './modules/clientStore'
+import administratorStore from './modules/administratorStore'
+import accountStore from './modules/accountStore'
+import dashboardStore from './modules/dashboardStore'
+import cashOutStore from './modules/cashOutStore'
+import categoryStore from './modules/categoryStore'
 
 
 Vue.use(Vuex)
@@ -52,40 +25,13 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       authenticationStore,
+      clientStore,
       administratorStore,
-      staffStore,
-      classRoomStore,
-      studentStore,
-      subjectStore,
-      assessmentStore,
-      lessonStore,
-      resultStore,
-      userStore,
-      chartStore,
-      componentsStore,
-      schoolStore,
-      subscriptionStore,
-      FileModelStore,
-      LogoStore,
-      VisionStore,
-      MissionStore,
-      NewsStore,
-      CarouselStore,
-      AboutUsStore,
-      ContactStore,
-      CoreValueStore,
-      gradeStore,
-      levelStore,
-      sessionStore,
-      examStore,
-      storyStore,
-      lessonNoteStore,
-      lessonNoteSectionStore,
-      cAStore,
-      cAQuestionStore,
-      cAAnswerStore,
+      accountStore,
+      dashboardStore,
+      cashOutStore,
+      categoryStore,
     },
-    plugins: [createPersistedState()],
 
     // enable strict mode (adds overhead!)
     // for dev mode only

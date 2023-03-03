@@ -1,360 +1,241 @@
 <template>
-  <div class="q-pa-md bg-primary">
-    <div 
-     v-if="!showSpinner"
-     class="q-pa-md">
-          <Form
-          v-if="isForgotPassword"
-          :formData="forgotPasswordForm"
-          @SendOTP="SendOTP($event)"
-          @resetRecaptcha="resetRecaptcha($event)"
-          @CancelForgotPassword="CancelForgotPassword($event)"/>
-          <div 
-          v-show="isForgotPassword"
-          id="recaptcha-container"></div><br>
+  <q-layout>
+    <q-page-container>
+      <q-page class="flex flex-center bg-primary text-accent">
+        <q-card
+           class="login-form"
+          v-bind:style="
+          $q.platform.is.mobile ? { width: '90%', height: '95%' } : { width: '90%' , height: '95%' }
+          "
+        >
 
-          <Form
-          v-if="isVerifyOTP"
-          :formData="verifyOTPForm"
-          @VerifyOTP="VerifyOTP($event)"
-          @CancelVerifyOTP="CancelVerifyOTP($event)"/>
-
-          <Form
-          v-if="isResetPassword"
-          :formData="resetPasswordForm"
-          @ResetPassword="ResetPassword($event)"
-          @CancelResetPassword="CancelResetPassword($event)"
-          @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
-
-          <Form
-          v-if="isLoginForm"
-          :formData="loginForm"
-          @SignIn="SignIn($event)"
-          @ForgotPassword="ForgotPassword($event)"
-          @SignUp="SignUp($event)"
-          @qInputTemplateAction="LoginQInputTemplateAction($event)"
-          @onToggle="onToggleLoginForm($event)"/>
-
-           <Form
-          v-if="isLoginFormWithToken"
-          :formData="loginFormWithToken"
-          @SignInWithToken="SignInWithToken($event)"
-          @onToggle="onToggleLoginFormWithToken($event)"/>
-
-        <q-dialog 
-            v-for="dialog in dialogs" 
-            :key="dialog.title"
-            v-model="dialog.isVisible">
-            <MessageBox
-            :title="dialog.title"
-            :message="dialog.message"
-            :okayEvent="dialog.okayEvent"
-            :cancelEvent="dialog.cancelEvent"
-            @cancelDialog="cancelDialog($event)"
-            @okDialog="okDialog($event)"
-            >
-            </MessageBox>
-        </q-dialog>
-    </div>
-
-
-    <div 
-      v-show="showSpinner"
-      class="q-gutter-md row">
-            <div class="col-12 q-pa-sm absolute-center flex flex-center">
-                <q-spinner
-                    color="accent"
-                    size="3em"
-                    :thickness="10"
-                />
+          <q-card-section>
+            <div class="row no-wrap items-center">
+              <div class="col text-h6 ellipsis">
+                {{ title }}
+              </div>
             </div>
-    </div>
-  </div>
+          </q-card-section>
+
+          <q-card-section 
+          v-if="isForgotPasswordComponent">
+            <ForgotPassword 
+            forgotPasswordEvent="forgotPasswordEvent"
+            forgotPasswordEvent2="forgotPasswordEvent2"
+            @forgotPasswordEvent="forgotPasswordEvent($event)"
+            @forgotPasswordEvent2="forgotPasswordEvent2($event)"/>
+          </q-card-section>
+
+           <q-card-section
+          v-else-if="isResetPassword">
+            <ResetPassword
+            ResetPasswordEvent="ResetPasswordEvent"
+            ResetPasswordEvent2="ResetPasswordEvent2"
+            @ResetPasswordEvent="ResetPasswordEvent($event)"
+            @ResetPasswordEvent2="ResetPasswordEvent2($event)"/>
+          </q-card-section>
+
+          <q-card-section v-else>
+            <q-form class="q-gutter-md">
+              <q-input outlined v-model="username" label="Username" lazy-rules />
+
+              <q-input
+                :type="passwordType"
+                outlined
+                v-model="password"
+                label="Password"
+                lazy-rules
+              >
+              	<template 
+                v-if="isVisible"
+                v-slot:append>
+                <q-icon name="visibility" 
+                class="bg-primary text-accent"
+                @click="togglePasswordVisibility" />
+              </template>
+              	<template 
+                v-else
+                v-slot:append>
+                <q-icon name="visibility_off" 
+                class="bg-primary text-accent"
+                 @click="togglePasswordVisibility" />
+              </template>
+              </q-input>
+
+              <div 
+                   v-if="rightDrawerOpen"
+                   class="row q-pa-sm">
+                      <!-- <q-space /> -->
+                      <div class="col-12 text-center q-pa-sm">
+                        <q-btn
+                        label="Forgot Password"
+                        style="width:95%"
+                        type="button"
+                        size="md"
+                        no-caps
+                        class="q-ma-sm bg-accent text-primary"
+                        @click="forgotPasswordAction"
+                        />
+                      </div>
+
+                      <div class="col-12 text-center q-pa-sm">
+                        <q-btn
+                          label="Login"
+                          style="width:95%"
+                          type="button"
+                          size="md"
+                          no-caps
+                          class="q-ma-sm bg-accent text-primary"
+                          @click="loginAction"
+                        />
+                      </div>
+              </div>
+              <div 
+                v-else
+                class="row q-pa-sm">
+                  <q-space />
+
+                  <div class="col-12 text-right q-pa-sm">
+                  <q-btn
+                    label="Forgot Password"
+                    type="button"
+                    size="md"
+                    no-caps
+                    class="q-ma-sm bg-accent text-primary"
+                    @click="forgotPasswordAction"
+                    />
+                  </div>
+
+                  <div class="col-12 text-center q-pa-sm">
+                    <q-btn
+                      label="Login"
+                      type="button"
+                      size="md"
+                      no-caps
+                      class="q-ma-sm bg-accent text-primary"
+                      @click="loginAction"
+                    />
+                  </div>
+              </div>
+
+            </q-form>
+          </q-card-section>
+        </q-card>
+      </q-page>
+    </q-page-container>
+
+<q-dialog v-model="isLoginActionMessage">
+  <MessageBox
+  title="Log In"
+  message="Do you want to log in?"
+  okayEvent="login"
+  cancelEvent="cancelLogin"
+  @cancelLogin="cancelLogin($event)"
+  @login="login($event)"
+  >
+  </MessageBox>
+</q-dialog>
+
+<q-dialog v-model="isLoginSuccessMessage">
+  <MessageBox
+  title="Log Success"
+  message="You have successfully logged in!"
+  okayEvent="logInSuccessOkay"
+  cancelEvent="logInSuccessCancel"
+  @logInSuccessCancel="logInSuccessCancel($event)"
+  @logInSuccessOkay="logInSuccessOkay($event)"
+  >
+  </MessageBox>
+</q-dialog>
+
+<q-dialog v-model="isLoginFailureMessage">
+  <MessageBox
+  title="Login Error"
+  :message="`${message}. Please check your login credentials.`"
+  okayEvent="logInFailureOkay"
+  cancelEvent="logInFailureCancel"
+  @logInFailureCancel="logInFailureCancel($event)"
+  @logInFailureOkay="logInFailureOkay($event)"
+  >
+  </MessageBox>
+</q-dialog>
+
+<q-dialog v-model="isForgotPassword">
+  <MessageBox
+  title="Log In"
+  message="Did you forget your password?"
+  okayEvent="forgotPassword"
+  cancelEvent="cancelForgotPassword"
+  @forgotPassword="forgotPassword($event)"
+  @cancelForgotPassword="cancelForgotPassword($event)"
+  >
+  </MessageBox>
+</q-dialog>
+
+   </q-layout>
 </template>
 
 <script>
-  import MessageBox from "../../components/dialogs/MessageBox.vue";
-  import Form from "../../components/Forms/Form.vue";
-  import { post, get } from "../../store/modules/services";
-  import { loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm, dialogs,
-  loginFormWithToken } from "./view_models/login-view-model";
-  import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
-import { getAuth } from 'firebase/auth'
-import { initializeApp } from "firebase/app";
-import { loadSchools } from "../administrators/school/utils";
-import { BIconFileEasel } from 'bootstrap-vue';
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB9VzN87QcRpEbSegBYjZBTqigdJLkiBAc",
-  authDomain: "lemongatetech.firebaseapp.com",
-  databaseURL: "https://lemongatetech.firebaseio.com",
-  projectId: "lemongatetech",
-  storageBucket: "lemongatetech.appspot.com",
-  messagingSenderId: "391787476785",
-  appId: "1:391787476785:web:48fc551307c092ff8ae210"
-};
-
-const app = initializeApp(firebaseConfig)
-const auth = getAuth()
-
-
+  import MessageBox from "../../components/dialogs/MessageBox.vue"
+  import ForgotPassword from "./ForgotPassword.vue"
+  import ResetPassword from "./ResetPassword.vue"
     export default {
        computed: {
-        showSpinner(){
-            return this.$store.getters["authenticationStore/showSpinner"];
+        visible(){
+          return this.$store.getters['authenticationStore/visible'];
+        },
+        showSimulatedReturnData(){
+          return this.$store.getters['authenticationStore/showSimulatedReturnData'];
+        },
+        rightDrawerOpen(){
+          return this.$store.getters['authenticationStore/rightDrawerOpen'];
         }
       },
       components:{
         MessageBox,
-        Form,
+        ForgotPassword,
+        ResetPassword,
       },
-      data () {
+        data () {
           return {
-            disableSendOTPButton: false,
-            isForgotPassword: false,
-            isVerifyOTP: false,
-            isResetPassword: false,
-            isLoginForm: true,
-            isLoginFormWithToken: false,
-            loginForm: loginForm,
-            forgotPasswordForm: forgotPasswordForm,
-            verifyOTPForm: verifyOTPForm,
-            resetPasswordForm: resetPasswordForm,
-            loginFormWithToken: loginFormWithToken,
-            dialogs: dialogs,
+            passwordType: "password",
+            isVisible: false,
+            username: "",
+            password: "",
+            isLoginActionMessage: false,
+            isLoginSuccessMessage: false,
+            isLoginFailureMessage: false,
+            message: '',
             token: "",
             user: {},
-            test: 1,
+            isForgotPassword: false,
+            isResetPassword: false,
+            isForgotPasswordComponent: false,
+            title: "Log In"
             }
         },
         methods: {
-          onToggleLoginForm(payload){
+          togglePasswordVisibility(){
             var context = this;
-            context.isForgotPassword = false;
-            context.isResetPassword = false;
-            context.isVerifyOTP = false;
-
-            if(payload === "Disagreed"){
-              context.isLoginForm = true;
-              context.isLoginFormWithToken = false;
-            }else{
-              context.isLoginForm = false;
-              context.isLoginFormWithToken = true;
+            if(context.isVisible) {
+              context.isVisible=false
+              context.passwordType = "password";
+            }else {
+              context.isVisible= true;
+              context.passwordType = "text";
             }
           },
-          onToggleLoginFormWithToken(payload){
+          loginAction(){
             var context = this;
-            context.isForgotPassword = false;
-            context.isResetPassword = false;
-            context.isVerifyOTP = false;
-
-            if(payload === "Disagreed"){
-              context.isLoginForm = false;
-              context.isLoginFormWithToken = true;
-            }else{
-              context.isLoginForm = true;
-              context.isLoginFormWithToken = false;
-            } 
+            context.isLoginActionMessage = true;
           },
-          SignUp(){
-            this.$router.push("/register");
-          },
-          LoginQInputTemplateAction(payload){
-            var context = this;
-            const sn = payload.sn
-            if(context.loginForm.qInputs[sn].Template.iconName === "visibility_off"){
-              context.loginForm.qInputs[sn].Template.iconName = "visibility";
-              context.loginForm.qInputs[sn].type = "text";
-            }else{
-              context.loginForm.qInputs[sn].Template.iconName = "visibility_off";
-              context.loginForm.qInputs[sn].type = "password";
-            }
-          },
-          ResetPasswordQInputTemplateAction(payload){
-            console.log(payload)
-            var context = this;
-            const sn = payload.sn
-            if(context.resetPasswordForm.qInputs[sn].Template.iconName === "visibility_off"){
-              context.resetPasswordForm.qInputs[sn].Template.iconName = "visibility";
-              context.resetPasswordForm.qInputs[sn].type = "text";
-            }else{
-              context.resetPasswordForm.qInputs[sn].Template.iconName = "visibility_off";
-              context.resetPasswordForm.qInputs[sn].type = "password";
-            }
-          },
-          CancelForgotPassword(){
-            var context = this;
-            context.isLoginForm = true;
-            context.isForgotPassword = false;
-            context.isResetPassword = false;
-            context.isVerifyOTP = false;
-            context.isLoginFormWithToken = false;
-            context.forgotPasswordForm.qBtns[2].btnDisabled = false;
-          },
-          CancelVerifyOTP(){
-            var context = this;
-            context.isLoginForm = false;
-            context.isForgotPassword = true;
-            context.isResetPassword = false;
-            context.isVerifyOTP = false;
-            context.isLoginFormWithToken = false;
-            context.verifyOTPForm.qBtns[1].btnDisabled = false;
-          },
-          CancelResetPassword(){
-            var context = this;
-            context.isLoginForm = false;
-            context.isForgotPassword = false;
-            context.isResetPassword = false;
-            context.isVerifyOTP = true;
-            context.isLoginFormWithToken = false;
-            context.resetPasswordForm.qBtns[1].btnDisabled = false;
-          },
-          SendOTP(){
-            const context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title == "Send OTP"){
-                    context.dialogs[i].isVisible = true;
-                    context.forgotPasswordForm.qBtns[0].btnDisabled = false;
-                    break;
-                }
-            }
-        },
-        SignIn(){
-            const context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title == "Sign In"){
-                    context.dialogs[i].isVisible = true;
-                    context.loginForm.qBtns[1].btnDisabled = true;
-                    break;
-                }
-            }
-        },
-        SignInWithToken(){
-            const context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title == "Sign In Student"){
-                    context.dialogs[i].isVisible = true;
-                    break;
-                }
-            }
-        },
-        ForgotPassword(){
-            var context = this;
-            context.isForgotPassword = true;
-            context.isResetPassword = false;
-            context.isLoginForm = false;
-            context.isVerifyOTP = false;
-            context.isLoginFormWithToken = false;
-        },
-        ResetPassword(){
-
-          var context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title == "Reset Password"){
-                    context.dialogs[i].isVisible = true;
-                    context.resetPasswordForm.qBtns[0].btnDisabled = false;
-                    break;
-                }
-            }
-        },
-        async ChangePassword(){
-          var context = this;
-            
-            var url = `user/resetpassword`;
-            const payload = {
-                url,
-                req: {
-                    userName: context.forgotPasswordForm.qInputs[0].name,
-                    password: context.resetPasswordForm.qInputs[0].name,
-                    passwordConfirm: context.resetPasswordForm.qInputs[1].name,
-                }
-            }
-
-            this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await post(payload)
-            this.$store.commit("authenticationStore/setShowSpinner", false);
-
-            const { 
-                data : {
-                    success,
-                }
-            } = response
-
-            if(success){
-              context.dialogFailureOrScuess("Reset Password Success", true);
-            }else{
-              context.dialogFailureOrScuess("Reset Password Failure", true)
-            }
-        },
-        dialogFailureOrScuess(dialogTitle, isVisible){
-          const context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title == dialogTitle){
-                    context.dialogs[i].isVisible = isVisible;
-                    break;
-                }
-            }
-        },
-        cancelDialog(payload){
-            console.log("payload: ", payload)
-            const context = this;
-            const FALSE = false;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title === payload){
-                    context.dialogs[i].isVisible = FALSE;
-                    switch(payload){
-                      case "Send OTP":
-                        context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
-                        break;
-                      case "Reset":
-                        context.forgotPasswordForm.qBtns[1].btnDisabled = FALSE;
-                        break;
-                      case "Forgot Password":
-                        context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
-                        break;
-                      case "Sign In":
-                        context.loginForm.qBtns[1].btnDisabled = FALSE;
-                        break;
-                      case  "Sign Up":
-                        context.loginForm.qBtns[2].btnDisabled = FALSE;
-                        break;
-                      case  "Verify OTP":
-                        context.verifyOTPForm.qBtns[0].btnDisabled = FALSE;
-                        break;
-                      case  "Reset Password":
-                        context.loginForm.qBtns[1].btnDisabled = FALSE;
-                        break;
-                    }
-                    break;
-                }
-            }
-        },
-        async login(){
+          async login(){
             var context = this;
 
-            this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await post({
-             url: "user/login",
-             req: {
-               username: context.loginForm.qInputs[0].name,
-               password: context.loginForm.qInputs[1].name
-             },
+            var response = await this.$store.dispatch('authenticationStore/Login', {
+             username: context.username,
+             password: context.password
             });
-            context.test = 100;
-            this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const { 
               data : {
@@ -363,309 +244,89 @@ const auth = getAuth()
                 success,
               }
               } = response
-
             
-            context.dialogFailureOrScuess("Sign In", false);
+            context.message = message;
+            context.isLoginActionMessage = false;
             if(success){
+              context.isLoginSuccessMessage = true;
               context.token = result.token;
               context.user = result.user;
-              console.log("context.user: ", context.user);
-              this.$store.commit('authenticationStore/Login',{
-                token: context.token,
-                user: context.user,
-              })
-              context.dialogFailureOrScuess("Sign In Success", true);
             }else{
-              context.dialogFailureOrScuess( "Sign In Failure", true);
+              context.isLoginFailureMessage = true;
             }
-        },
-        async loginWithToken(){
-            var context = this;
-
-            const schoolId = context.loginFormWithToken.qSelects[0].value;
-            const token = context.loginFormWithToken.qInputs[0].name;
-            this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await get({
-             url: `student/loginstudent/${token}/${schoolId}`,
-            });
-            this.$store.commit("authenticationStore/setShowSpinner", false);
-
-            const { 
-              data : {
-                data: result,
-                message,
-                success,
-              }
-              } = response
-
-            
-            context.dialogFailureOrScuess("Sign In Student", false);
-            if(success){
-              context.token = result.token;
-              context.user = result.user;
-              console.log("context.user: ", context.user);
-              this.$store.commit('studentStore/SetSelectedStudent', context.user)
-              this.$store.commit('authenticationStore/Login', {
-                token: context.token,
-                user: context.user,
-              })
-              context.dialogFailureOrScuess("Sign In Student Success", true);
-            }else{
-              context.dialogFailureOrScuess( "Sign In Student Failure", true);
-            }
-        },
-        async userIsExist(){
-           console.log("userIsExist called")
-            var context = this;
-            context.forgotPasswordForm.qBtns[0].disabled = true;
-            
-            var url = `user/user-is-exist2`;
-            const payload = {
-                url,
-                req: {
-                    userName: context.forgotPasswordForm.qInputs[0].name,
-                    phoneNumber: context.forgotPasswordForm.qInputs[1].name,
-                    countryCode: context.forgotPasswordForm.qSelects[0].value.code,
-                }
-            }
-
-            console.log("payload: ", payload)
-            //this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await post(payload)
-
-            const { 
-                data : {
-                    data: userExists,
-                    message,
-                    success,
-                }
-            } = response
-
-            if(!success){
-                alert("Failed")
-            }else{
-              context.forgotPasswordForm.qBtns[0].btnDisabled = false;
-            }
-
-            console.log("context.userExists: ", userExists);
-            if(userExists){
-              context.SendVerificationCode();
-            }else{
-              alert("user does not exist")
-            }
-
-            context.forgotPasswordForm.qBtns[0].disabled = false;
-            //this.$store.commit("authenticationStore/setShowSpinner", false);
-
-        },
-        logInSuccessOkay(){
-            var context = this;
-            console.log("context.user: ", context.user);
-            console.log("context.test: ", context.test);
-           if (context.user.designationId === "CEO"){
-             this.$router.push('/super-admin');
-           }else{
-              switch(context.user.userType.toLowerCase()){
-                case "admin":
-                this.$router.push(`/admin`)
-                break;
-                case "referal":
-                this.$router.push('/referal');
-                break;
-                case "student":
-                this.$router.push('/student');
-                break;
-              case "member":
-                this.$router.push('/member');
-                break;
-            }
-           }
-           
           },
-        async okDialog(payload){
-            console.log("payload: ", payload)
-            const context = this;
-            var i = -1;
-            for(const dialog of context.dialogs){
-                i++;
-                if(dialog.title === payload){
-                    switch(payload){
-                        case "Sign In":
-                            await context.login();
-                            context.loginForm.qBtns[1].btnDisabled = false;
-                            break;
-                        case "Sign In Success":
-                            context.logInSuccessOkay();
-                            break;
-                        case "Send OTP":
-                          await context.userIsExist();
-                          break;
-                        case "Verify OTP Success":
-                          context.isForgotPassword = false;
-                          context.isVerifyOTP = false
-                          context.isResetPassword = true;
-                          context.isLoginForm = false;
-                          context.isLoginFormWithToken = false;
-                          break;
-                        case "Reset Password":
-                            context.ChangePassword();
-                            context.resetPasswordForm.qBtns[0].btnDisabled = true;
-                        case "Reset Password Success":
-                          context.isForgotPassword = false;
-                          context.isVerifyOTP = false
-                          context.isResetPassword = false;
-                          context.isLoginForm = true;
-                          context.isLoginFormWithToken = false;
-                          break;
-                        case "Sign In Student":
-                            await context.loginWithToken();
-                            break;
-                        case "Sign In Student Success":
-                          this.$router.push('/student');
-                          break;
-                    }
-                    context.dialogs[i].isVisible = false;
-                    break;
-                }
-            }
-        },
-        SendVerificationCode(){
-          var context = this;
-          const qInput = context.forgotPasswordForm.qInputs[1];
-          const qSelect = context.forgotPasswordForm.qSelects[0];
-          if(qInput.name.length < 10){
-                alert("Phone number can not be less than 10 digits")
-                return;
-            }
-
-            let phone = qInput.name;
-            if(qInput.name > 10){
-                const diff = qInput.name.length - 10;
-                phone = qInput.name.slice(diff);
-            }
+          cancelLogin(){
+            var context = this;
+            context.isLoginActionMessage = false;
+          },
+          logInFailureOkay(){
+            var context = this;
+            context.isLoginFailureMessage = false;
+          },
+          logInFailureCancel(){
+            var context = this;
+            context.isLoginFailureMessage = false;
+          },
+          logInSuccessOkay(){
             
-            console.log("phone: ", phone);
-            console.log("Template: ", qInput.Template);
-            if(qInput.Template.iconName === "phone"){
-               console.log("code: ", qSelect.value.code);
-                context.sendOtp(phone,
-                qSelect.value.code);
-            }
-        },
-        sendOtp(phNo, countryCode){
-          var context = this;
-          let phoneNumber = countryCode + phNo;
-          let appVerifier = context.appVerifier;
-          console.log("phoneNumber: ", phoneNumber)
-          console.log("appVerifier: ", appVerifier)
-           signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-            .then(function (confirmationResult) {
-              // SMS sent. Prompt user to type the code from the message, then sign the
-              // user in with confirmationResult.confirm(code).
+            var context = this;
+            context.isLoginSuccessMessage = false;
+            this.$store.commit('authenticationStore/Login',{
+              token: context.token,
+              user: context.user,
+            })
+          },
+          logInSuccessCancel(){
+            var context = this;
+            context.isLoginSuccessMessage = false;
+          },
+          forgotPasswordEvent(){
+            var context = this
+            context.isForgotPassword = false
+            context.isForgotPasswordComponent = false;
+            context.isResetPassword = true
+          },
+          forgotPasswordEvent2(){
+            var context = this
+            context.isForgotPassword = false
+            context.isForgotPasswordComponent = false;
+            context.isResetPassword = false
+            context.title = "Log In"
+          },
+          ResetPasswordEvent2(){
+            var context = this
+            context.isForgotPassword = false
+            context.isForgotPasswordComponent = false;
+            context.isResetPassword = false
+            context.title = "Log In"
+          },
+          ResetPasswordEvent(){
+            var context = this
+            context.isForgotPassword = false
+            context.isForgotPasswordComponent = false;
+            context.isResetPassword = false
+          },
+          forgotPasswordAction(){
+            var context = this;
+            context.isForgotPassword = true;
+            context.title = "Log In"
+          },
+          forgotPassword(){
+            var context = this;
+            context.isForgotPasswordComponent = true;
+            context.title = "Forgot Password"
+            context.isForgotPassword = false
+            context.isResetPassword = false
+          },
+          cancelForgotPassword(){
+            var context = this;
+            context.isForgotPasswordComponent = false;
+            context.isForgotPassword = false
+            context.isResetPassword = false
+            context.title = "Log In"
+          }
 
-              //alert('SMS sent')
-              //context.$store.commit("authenticationStore/setShowSpinner", false);
-              context.isForgotPassword = false;
-              context.isVerifyOTP = true
-              context.isResetPassword = false;
-              context.isLoginForm = false;
-              context.isLoginFormWithToken = false;
-              window.confirmationResult = confirmationResult;
-              
-
-              //
-            }).catch(function (error) {
-              console.log("error: ", error);
-            // Error; SMS not sent
-            // ...
-            //context.$store.commit("authenticationStore/setShowSpinner", false);
-            alert('Error ! SMS not sent')
-          });
-        //}
-      },
-      async VerifyOTP(){
-          var context = this;
-         this.$store.commit("authenticationStore/setShowSpinner", true);
-         context.verifyOTPForm.qBtns[0].btnDisabled = true;
-        await context.VerifyCode();
-        this.$store.commit("authenticationStore/setShowSpinner", false);
-      },
-      async VerifyCode(){
-        /* if(this.phNo.length != 10 || this.otp.length != 6){
-          alert('Invalid Phone Number/OTP Format !');
-        }else{ */
-          //
-          var context = this
-          let code = context.verifyOTPForm.qInputs[0].name;
-          console.log("verification code: ", code);
-          //
-          window.confirmationResult.confirm(code).then(function (result) {
-            // User signed in successfully.
-            var user = result.user;
-            console.log("user: ", user);
-            context.isForgotPassword = false;
-            context.isVerifyOTP = false;
-            context.isResetPassword = true;
-            context.isLoginForm = false;
-            context.isLoginFormWithToken = false;
-            context.verifyOTPForm.qBtns[0].btnDisabled = false;
-          }).catch(function (error) {
-              alert("User couldn't sign in (bad verification code?)")
-          });
-        //}
-      },
-      initReCaptcha(){
-        setTimeout(()=>{
-          let context = this
-          window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-            size: 'normal',
-            callback: function(response) {
-                console.log("response: ", response);
-              // reCAPTCHA solved, allow signInWithPhoneNumber.
-                //context.sendOtp(); 
-              // ...
-            },
-            /* 'expired-callback': function() {
-              // Response expired. Ask user to solve reCAPTCHA again.
-              // ...
-            } */
-          }, auth);
-          //
-          context.appVerifier =  window.recaptchaVerifier
-          console.log("appVerifier: ", context.appVerifier)
-        },1000)
-
-        //window.recaptchaVerifier.clear()
-      },
-      resetRecaptcha(){
-        var context = this;
-        context.forgotPasswordForm.qBtns[1].btnDisabled = true;
-         window.recaptchaVerifier.clear()
-         context.appVerifier =  window.recaptchaVerifier
-         context.forgotPasswordForm.qBtns[1].btnDisabled = false;
-      }
-      },
-      async created(){
-       var context = this;
-       //loginForm, forgotPasswordForm, verifyOTPForm, resetPasswordForm
-       this.$store.commit("authenticationStore/setShowSpinner", true);
-       context.loginForm.clearQInputs();
-       context.forgotPasswordForm.clearQInputs();
-       context.forgotPasswordForm.clearQSelects();
-       context.verifyOTPForm.clearQInputs();
-       context.resetPasswordForm.clearQInputs();
-       context.loginFormWithToken.clearQInputs();
-       const schools = await loadSchools();
-       this.$store.commit('schoolStore/SetSchools', schools.result);
-       context.loginFormWithToken.qSelects[0].list = schools.result.map((row) => {
-           return {
-               ...row,
-               type: row.schoolName
-           }
-       })
-       context.initReCaptcha();
-       this.$store.commit("authenticationStore/setShowSpinner", false);
-    }
+        }
     }
 </script>
 

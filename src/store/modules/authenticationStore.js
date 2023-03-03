@@ -1,4 +1,5 @@
 import { $http } from 'boot/axios';
+import { userController } from './backendRoutes';
 
 const state = {
 
@@ -8,92 +9,17 @@ const state = {
     LoginDialog: false,
     Loginstatus: "Log in",
     Departments: [],
-    theme_color: '#056608',
+    theme_color: '#00498D',
     contributor: {},
     administrator: {},
     DoesNotHaveMoneyAccount: true,
     paystackkey: "",
     visible: false,
     showSimulatedReturnData: true,
-    tab: "login",
-    isMobile: false,
-    createURL: "",
-    importURL: "",
-    activeColumns: [],
-    globalSearchDialog: false,
-    activeRows: [],
-    newRows: [],
-    activeRoute: "",
-    backRoute: "",
-    menuList: [],
-    torpa_menuList: [
-      { name: "/", tabIndex: "home", label: "Home" },
-      { name: "/login_register", tabIndex: "login_register", label: "Sign In"},
-      { name: "/school-landing", tabIndex: "schools", label: "Schools" },
-      { name: "/news", tabIndex: "news", label: "News"},
-      { name: "/about_us", tabIndex: "about_us", label: "About Us" },
-      { name: "/contact", tabIndex: "contact", label: "Contact" },
-    ],
-    client_menuList: [
-      { name: "/", tabIndex: "home", label: "Home" },
-      { name: "/news", tabIndex: "news", label: "News"},
-      { name: "/about_us", tabIndex: "about_us", label: "About Us" },
-      { name: "/contact", tabIndex: "contact", label: "Contact" },
-    ],
-    showSpinner: false,
-    isSchoolRoute: false,
-    spinnerSize: "8em",
-    spinnerThickness: 10,
-    workSheetsNames: [],
-    workSheetsData: [],
-    isError: false,
-    errorMessages: false,
-    pageTitle: "",
-    updateUserRoute: "/update-user",
-    unComfirmedUsersRoute: "/unconfirmed-users",
-    isTorpa: false,
+    rightDrawerOpen: true
   }
 
   const getters = {
-    isTorpa(state){
-      return state.isTorpa;
-    },
-    unComfirmedUsersRoute(state){
-      return state.unComfirmedUsersRoute;
-    },
-    updateUserRoute(state){
-      return state.updateUserRoute;
-    },
-    pageTitle(state){
-      return state.pageTitle;
-    },
-    isError(state){
-      return state.isError;
-    },
-    errorMessages(state){
-      return state.errorMessages;
-    },
-    workSheetsNames(state){
-      return state.workSheetsNames;
-    },
-    workSheetsData(state){
-      return state.workSheetsData;
-    },
-    dataImportMainForm(state){
-      return state.dataImportMainForm;
-    },
-    spinnerSize(state){
-      return state.spinnerSize;
-    },
-    spinnerThickness(state){
-      return state.spinnerThickness;
-    },
-    isSchoolRoute(state){
-      return state.isSchoolRoute;
-    },
-    tab(state){
-      return state.tab;
-    },
     DoesNotHaveMoneyAccount(state){
       return state.DoesNotHaveMoneyAccount;
     },
@@ -136,113 +62,34 @@ const state = {
   Admin(state){
     return state.Admin;
   },
-  isMobile(state){
-    return state.isMobile;
-  },
-  createURL(state){
-    return state.createURL;
-  },
-  activeColumns(state){
-    return state.activeColumns;
-  },
-  globalSearchDialog(state){
-    return state.globalSearchDialog;
-  },
-  activeRows(state){
-    return state.activeRows;
-  },
-  newRows(state){
-    return state.newRows;
-  },
-  activeRoute(state){
-    return state.activeRoute;
-  },
-  menuList(state){
-    return state.menuList;
-  },
-  showSpinner(state){
-    return state.showSpinner;
-  },
-  importURL(state){
-    return state.importURL;
-  },
-  backRoute(state){
-    return state.backRoute;
+  rightDrawerOpen(state){
+    return state.rightDrawerOpen;
   }
 }
 
 const mutations = {
-  setIsTorpa(state, payload){
-    state.isTorpa = payload;
-  },
-  setUnComfirmedUsersRoute(state, payload){
-    state.unComfirmedUsersRoute = payload;
-  },
-  setUpdateUserRoute(state, payload){
-    state.updateUserRoute = payload;
-  },
-  setPageTitle(state, payload){
-    state.pageTitle = payload;
-  },
-  setBackRoute(state, payload){
-    state.backRoute = payload;
-  },
-  setIsError(state, payload){
-    state.isError = payload;
-    console.log("state.isError: ", state.isError)
-  },
-  setErrorMessages(state, payload){
-    state.errorMessages = payload;
-    console.log("state.errorMessages: ", state.errorMessages)
-  },
-  setImportedData(state, payload){
-    state.workSheetsNames = payload.workSheetsNames;
-    state.workSheetsData = payload.workSheetsData;
-  },
-  setIsSchoolRoute(state, payload){
-    state.isSchoolRoute = payload;
-  },
-  setShowSpinner(state, payload){
-    state.showSpinner = payload;
-  },
-  setMenuList(state, payload){
-    if(payload === true){
-      state.menuList = state.torpa_menuList.map((row) => {
-        return { ...row }
-      })
-    }else{
-      state.menuList = state.client_menuList.map((row) => {
-        return { ...row }
-      })
-    }
-    console.log(state.menuList)
-  },
-  changeTab(state, payload){
-    state.tab = payload;
+  setRightDrawerOpen(state, payload){
+    state.rightDrawerOpen = payload
   },
   AddUserPhoto(state, payload){
     state.IdentityModel.base64String = payload.base64String
-  },
-  setIdentityModel(state, payload){
-    state.IdentityModel = payload
   },
   GetAdmin(state, payload){
     state.Admin = payload;
   },
   Login(state, payload){
    const { token, user } = payload;
-
-    const inMin = 24 * 60;
-    let expiredAt = new Date(new Date().getTime() + (60000 * inMin));
-    let obj = {
-      value: token,
-      expiredAt: expiredAt.toISOString()
-    }
-    sessionStorage.setItem('seassionObj', JSON.stringify(obj));
+    sessionStorage.setItem("token", token); 
 
     state.Loginstatus= "Log out";
     state.IdentityModel = user;
     
+    if(state.IdentityModel.userType == "Admin"){
+      this.$router.push('/admin');
+    }
+    else{
+      this.$router.push('/user-home');
+    }
 
     state.visible = false
     state.showSimulatedReturnData = true
@@ -272,51 +119,47 @@ const mutations = {
           state.Departments.push(state.AuthDTO.departmentsObj[i].nameOfDepartment);
         }
     }
-  },
-  setIsMobile(state, payload){
-    state.isMobile = payload;
-  },
-  setCreateURL(state, payload){
-    state.createURL = payload;
-  },
-  setActiveColumns(state, payload){
-    state.activeColumns = payload;
-  },
-  setGlobalSearchDialog(state, payload){
-    state.globalSearchDialog = payload;
-    console.log("state.globalSearchDialog: ", state.globalSearchDialog);
-  },
-  setActiveRows(state, payload){
-    state.activeRows = payload;
-  },
-  setNewRows(state, payload){
-    state.newRows = payload;
-  },
-  setActiveRoute(state, payload){
-    state.activeRoute = payload;
-  },
-  setImportURL(state, payload){
-    state.importURL = payload;
   }
+
 }
 
 const actions = {
-  sendOTP(context, payload){
-
-    const number =
-        `+${payload.code}${payload.phone.startsWith("0") ? payload.phone.substring(1) : payload.phone}`;
-
-    /* firebaseAuth.verifyPhoneNumber(
-      number,
-      timeout,
-      verificationCompleted,
-      verificationFailed,
-      codeSent,
-      codeAutoRetrievalTimeout
-    ); */
-  },
   veryifyPhoneNumberAndRegisterUser(){
 
+  },
+  Login(context, payload)
+  {
+
+    return new Promise((resolve, reject) => {
+      console.log("seen")
+       $http.post(`${userController}/login`, payload)
+        .then(response => {
+
+          //context.commit('Login', response.data)             
+            resolve(response)
+            
+        })
+        .catch(error => {
+          if (error.response) {
+            // Request made and server responded
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            alert(error.response.data)
+            alert(error.response.status)
+            alert(error.response.headers)
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.log(error.request);
+            alert(error.request)
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            alert(error.message)
+          }
+          reject(error)
+        })
+    })
   },
   Logout(context)
   {
@@ -327,7 +170,7 @@ const actions = {
   {
 
     return new Promise((resolve, reject) => {
-       $http.post('users/forgotpassword', payload)
+       $http.post(`${userController}/forgotpassword`, payload)
         .then(response => {           
             resolve(response)
             
@@ -351,7 +194,7 @@ const actions = {
   {
 
     return new Promise((resolve, reject) => {
-       $http.post('users/resetpassword', payload)
+       $http.post(`${userController}/resetpassword`, payload)
         .then(response => {           
             resolve(response)
             

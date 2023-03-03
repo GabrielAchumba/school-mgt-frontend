@@ -10,7 +10,11 @@
  * Boot files are your "main.js"
  **/
 
+import 'quasar/dist/quasar.ie.polyfills.js'
 
+
+
+import '@quasar/extras/fontawesome-v5/fontawesome-v5.css'
 
 import '@quasar/extras/roboto-font/roboto-font.css'
 
@@ -29,6 +33,8 @@ import 'src/css/app.sass'
 
 import '@quasar/quasar-app-extension-qpdfviewer/src/component/pdfviewer.sass'
 
+import '@quasar/quasar-ui-qflashcard/src/index.sass'
+
 
 import Vue from 'vue'
 import createApp from './app.js'
@@ -42,12 +48,20 @@ import qboot_Bootaxios from 'boot/axios'
 
 import qboot_Quasarquasarappextensionqpdfviewersrcbootqpdfviewerjs from '@quasar/quasar-app-extension-qpdfviewer/src/boot/qpdfviewer.js'
 
+import qboot_Quasarquasarappextensionqflashcardsrcbootregisterjs from '@quasar/quasar-app-extension-qflashcard/src/boot/register.js'
 
 
 
 
 
 
+
+Vue.config.devtools = true
+Vue.config.productionTip = false
+
+
+
+console.info('[Quasar] Running SPA.')
 
 
 
@@ -66,7 +80,7 @@ async function start () {
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Booti18n,qboot_Bootaxios,qboot_Quasarquasarappextensionqpdfviewersrcbootqpdfviewerjs]
+  const bootFiles = [qboot_Booti18n,qboot_Bootaxios,qboot_Quasarquasarappextensionqpdfviewersrcbootqpdfviewerjs,qboot_Quasarquasarappextensionqflashcardsrcbootregisterjs]
 
   for (let i = 0; routeUnchanged === true && i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {
@@ -105,16 +119,11 @@ async function start () {
     
 
     
-    document.addEventListener('deviceready', () => {
-    Vue.prototype.$q.cordova = window.cordova
-    
 
     
       new Vue(app)
     
 
-    
-    }, false) // on deviceready
     
 
     

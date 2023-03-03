@@ -1,7 +1,7 @@
 <template>
-    <div  :style="dialogStyle">
-        <div class="row q-pa-none bg-primary">
-             <q-card class="col-12 bg-primary">
+    <div>
+        <div class="row q-pa-none">
+             <q-card class="col-12">
                 <q-bar class="bg-accent text-primary">
                     <div class="text-h6 text-primary">{{ title }}</div>
 
@@ -23,7 +23,7 @@
                  <q-separator />
 
                  <q-card-actions align="right">
-                    <q-btn flat label="Cancel" class="bg-secondary text-primary"
+                    <q-btn flat label="Cancel" class="bg-secondary text-accent"
                     size="sm"
                     no-caps
                     @click="cancelMessageBox" />
@@ -42,14 +42,6 @@
 
 export default {
     name: 'savingImportDataDialog',
-    computed:{
-        dialogStyle(){
-            return {
-                maxHeight: `500px`,
-                maxWidth: `500px`,
-            }
-        },
-    },
     props: {
     title: {
       type: String,
@@ -76,11 +68,11 @@ export default {
     methods:{
          cancelMessageBox(){
              var context  =  this;
-             this.$emit(context.cancelEvent, context.title);    
+             this.$emit(context.cancelEvent);    
         },
         oKMessageBox(){
             var context  =  this;
-            this.$emit(context.okayEvent, context.title); 
+            this.$emit(context.okayEvent); 
         }
     }
 };

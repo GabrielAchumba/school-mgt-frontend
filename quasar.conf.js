@@ -15,7 +15,7 @@ module.exports = function (/* ctx */) {
     boot: [
 
       'i18n',
-      'axios'
+      'axios',
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -27,7 +27,7 @@ module.exports = function (/* ctx */) {
     extras: [
       // 'ionicons-v4',
       // 'mdi-v5',
-      // 'fontawesome-v5',
+       'fontawesome-v5',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
@@ -83,7 +83,7 @@ module.exports = function (/* ctx */) {
         'QForm',
         'QBtnDropdown',
         'QIcon',
-        'QTooltip',        
+        'QTooltip'
       ],
       directives: [],
 
@@ -92,7 +92,7 @@ module.exports = function (/* ctx */) {
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: false,
+    supportIE: true,
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ts
     supportTS: false,
@@ -102,7 +102,7 @@ module.exports = function (/* ctx */) {
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // modern: true, // https://quasar.dev/quasar-cli/modern-build
       // rtl: false, // https://quasar.dev/options/rtl-support
@@ -145,8 +145,8 @@ module.exports = function (/* ctx */) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'torpa',
-        short_name: 'torpa',
+        name: 'lhdi',
+        short_name: 'lhdi',
         description: 'Developed By Newway Standard Global',
         display: 'standalone',
         orientation: 'portrait',
@@ -154,28 +154,18 @@ module.exports = function (/* ctx */) {
         theme_color: '#027be3',
         icons: [
           {
-            src: 'statics/icons/icon-128x128.png',
-            sizes: '128x128',
+            src: 'statics/newicons/favicon-96x96.png',
+            sizes: '96x96',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-192x192.png',
-            sizes: '192x192',
+            src: 'statics/newicons/favicon-32x32.png',
+            sizes: '32x22',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-256x256.png',
-            sizes: '256x256',
-            type: 'image/png'
-          },
-          {
-            src: 'statics/icons/icon-384x384.png',
-            sizes: '384x384',
-            type: 'image/png'
-          },
-          {
-            src: 'statics/icons/icon-512x512.png',
-            sizes: '512x512',
+            src: 'statics/newicons/favicon-16x16.png',
+            sizes: '16x16',
             type: 'image/png'
           }
         ]
@@ -185,10 +175,10 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
-      id: 'org.torpa.app',
-      version: '2', 
+      id: 'org.launchpad.app',
+      version: '1', 
       description: "Developed By Newway Standard Global",
-      androidVersionCode: '2'
+      androidVersionCode: '1'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
@@ -216,7 +206,7 @@ module.exports = function (/* ctx */) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'torpa'
+        appId: 'lhdi'
       },
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration

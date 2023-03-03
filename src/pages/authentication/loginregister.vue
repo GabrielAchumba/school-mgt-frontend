@@ -1,38 +1,68 @@
 <template>
-  <div class="row bg-primary">
-    <div v-if="!isMobile"
-          class="col-6 bg-primary">
-          <TorpaLandingPage/>
-    </div>
-    <div class="col bg-primary">
-        <login/>
+  <div class="q-pa-md">
+    <div class="q-gutter-y-md">
+      <q-card>
+        <q-tabs
+          v-model="tab"
+          dense
+          class="bg-accent text-primary"
+          active-color="primary"
+          indicator-color="secondary"
+          align="justify"
+          narrow-indicator
+          
+        >
+          <q-tab @click="changeTab('login')"
+          name="login" label="Login" />
+          <q-tab @click="changeTab('register')"
+          name="personalData" label="Register" />
+        </q-tabs>
+
+        <!-- <q-separator /> -->
+
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="login" class="bg-primary">
+            <login-app></login-app>
+
+          </q-tab-panel>
+
+          <q-tab-panel name="register" class="bg-primary">
+            <personalData-app></personalData-app>
+          </q-tab-panel>
+        </q-tab-panels>
+
+      </q-card>
+
     </div>
   </div>
 </template>
 
 <script>
 import login from 'pages/authentication/login.vue'
-import TorpaLandingPage from "./landing.vue";
-// v-if="$q.platform.is.mobile"
-//v-if="!isMobile"
-
+import personalData from 'pages/authentication/personalData.vue' 
 export default {
-  computed:{
-    isMobile(){
-    const width = window.innerWidth;
-      if(width < 700) return true;
-      else return false;
+    computed: {
+          tab(){
+              return this.$store.getters['clientStore/tab'];
+          }
     },
-  },
-  components: {
-          login,
-          TorpaLandingPage
-  },
-  data(){
+    components: {
+            'login-app': login,
+            'personalData-app': personalData
+        },
+  data () {
     return {
-      previewImage: '/statics/newway.jpg',
-      //:style="{ 'background-image': `url(${previewImage})` }"
+      
     }
+  },
+  methods: {
+    changeTab(tabname){
+      console.log(tabname)
+      this.$store.commit('clientStore/commitTab', tabname)
+    }
+  },
+  created(){
+    //this.$store.commit('clientStore/commitTab')
   }
 }
 </script>
