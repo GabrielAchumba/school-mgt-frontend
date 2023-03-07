@@ -83,7 +83,7 @@
                                   <q-avatar 
                                   v-else
                                   class="bg-primary text-accent">
-                                    {{ IdentityModel.firstName.charAt(0) }}
+                                    {{ IdentityModel.firstName }}
                                   </q-avatar>
                               </div>
                               <div 

@@ -13,10 +13,7 @@
   import confirmLevelPayment from "../../../components/AccountAdmin/confirmLevelPayment.vue"
   import { cashoutn500Controller } from '../../../store/modules/backendRoutes'
     export default {
-        computed: {
-        Cycles(){
-            return this.$store.getters['dashboardStore/Cycles'];
-        },
+      computed: {
         categoryLevelXQualifiedNotComfirmed(){
             return this.$store.getters['cashOutStore/categoryLevelXQualifiedNotComfirmed'];
         },
@@ -26,6 +23,7 @@
       },
       data () {
     return {
+            Cycles:[],
             url: `${cashoutn500Controller}/getcompletedlevelxcategories`,
             SelectedLevelUrl: "SelectedLevelN500",
             Contribution: "500",
@@ -44,22 +42,29 @@
             }
         },
         async created() {
-        var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
+          var context = this;
+          var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
 
-        const { 
-              data : {
-                data: result,
-                message,
-                success,
+          const { 
+                data : {
+                  data: result,
+                  message,
+                  success,
+                }
+          } = response
+
+          if(success){
+            context.Cycles = result[0].children.map((row) => {
+              return {
+                ...row,
+                type: row.label,
+                name: row.label,
               }
-        } = response
-
-        if(success){
-          this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result)
-        }else{
-            var context = this;
-            context.message = message;
-        }
+            })
+            //this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result)
+          }else{
+              context.message = message;
+          }
       }
     }
 </script>

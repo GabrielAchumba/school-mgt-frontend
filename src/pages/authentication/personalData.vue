@@ -1,5 +1,4 @@
 <template>
-
  <q-layout>
    <q-page-container>
      <q-page class="flex flex-center bg-primary text-accent">
@@ -42,45 +41,18 @@
               </template>
       </q-input>
 
-     <!-- <div class="text-left">
-        <q-badge color="primary">
-            Date of Birth: {{ date }}
-        </q-badge>
-        
-
-        <q-btn icon="event" round color="primary">
-        <q-popup-proxy @before-show="updateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="proxyDate">
-            <div class="row items-center justify-end q-gutter-sm">
-                <q-btn label="Cancel" color="primary" flat v-close-popup />
-                <q-btn label="OK" color="primary" flat @click="save" v-close-popup />
-            </div>
-            </q-date>
-        </q-popup-proxy>
-        </q-btn>
-    </div>   -->
-
-      <div class="row">
-        <div class="col-6 text-left">
-          <!-- <q-btn
-            label="Cancel"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="cancel"
-          /> -->
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Register"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="register"
-          />
-        </div>
+      <div class="row q-pa-sm">
+              <div class="col-12 text-center q-pa-sm">
+                <q-btn
+                label="Register"
+                style="width:95%"
+                type="button"
+                size="md"
+                no-caps
+                class="q-ma-sm bg-accent text-primary"
+                @click="register"
+                />
+              </div>
       </div>
     </q-form>
    </q-card-section>

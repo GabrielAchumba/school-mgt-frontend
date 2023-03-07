@@ -1,156 +1,56 @@
 <template>
-  <q-layout>
-   <q-page-container>
-     <q-page class="flex flex-center bg-primary">
-       <q-card
-          class="personal-data-form"
-          v-bind:style="
-          $q.platform.is.mobile ? { width: '90%', height: '95%' } : { width: '90%' , height: '100%' }
-          "
-        >
+  <div class="row">
 
-   <q-card-section class="bg-accent text-primary">
-    <div class="row no-wrap items-center">
-      <div class="col text-h6 ellipsis">
+    <div class="col-12 q-pa-sm text-center">
+      <div class="col text-h6 text-center">
         Contact Data
       </div>
     </div>
-  </q-card-section>
 
-   <q-card-section>
-      <q-form class="q-gutter-md">
+    <Form
+    v-if="!isAdmin"
+    class="col-12 q-pa-sm"
+    :formData="form"
+    @onFileSelected="onFileSelected($event)"/>
 
-        <div class="row text-center flex flex-center q-pb-lg">
-          <div 
-          v-if="!isAdmin"
-          class="col-md-6 col-lg-16 col-sx-6 col-sm-6 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-            <input type="file" @change="onFileSelected" class="bg-primary text-accent"/>
-          </div>
-          <div 
-          v-if="!isAdmin"
-          class="col-md-6 col-lg-6 col-sx-6 col-sm-6 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-            <q-btn class="text-capitalize bg-primary text-accent" 
-            exact
-            size="sm" style="width:75px" dense label="Upload Photo"
-            type="button"
-            @click="UploadAction" />
-          </div>
-        </div>
+    <div class="col-12 q-pa-sm text-center">
+      <q-input class="q-pa-sm" outlined v-model="ContactDTO.phoneNumber" label="Phone Number *" lazy-rules />
+      <q-input class="q-pa-sm" outlined v-model="ContactDTO.email" label="Email Address " lazy-rules />
+      <q-input class="q-pa-sm" outlined v-model="ContactDTO.residentialCity" label="Residential City" lazy-rules />
+      <q-input class="q-pa-sm" outlined v-model="ContactDTO.residentialState" label="Residential State" lazy-rules />
+      <q-input class="q-pa-sm" outlined type="textarea" v-model="ContactDTO.address" label="Address" lazy-rules />
+    </div>
 
-      <q-input outlined v-model="ContactDTO.phoneNumber" label="Phone Number *" lazy-rules />
-      <q-input outlined v-model="ContactDTO.email" label="Email Address " lazy-rules />
-      <q-input outlined v-model="ContactDTO.residentialCity" label="Residential City" lazy-rules />
-      <q-input outlined v-model="ContactDTO.residentialState" label="Residential State" lazy-rules />
-      <q-input outlined type="textarea" v-model="ContactDTO.address" label="Address" lazy-rules />
+    <div class="col-12 text-center q-pa-sm">
+      <q-btn
+      label="Cancel"
+      style="width:95%"
+      type="button"
+      size="md"
+      no-caps
+      class="q-ma-sm bg-accent text-primary"
+      @click="cancel"
+      />
+    </div>
 
-      <div class="row">
-        <div class="col-6 text-left">
-          <q-btn
-            label="Cancel"
-            type="button"
-            size="sm"
-            no-caps
-            class="text-primary bg-accent"
-            @click="cancel"
-          />
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Update"
-            type="button"
-            size="sm"
-            no-caps
-            class="text-primary bg-accent"
-            @click="updateData"
-          />
-        </div>
-      </div>
-    </q-form>
-   </q-card-section>
-        
-  </q-card>
-
-<q-dialog v-model="isUploadFileDialog">
-  <MessageBox
-  title="Upload Photo"
-  :message="`Do you want to upload photo?`"
-  okayEvent="okayUploadFile"
-  cancelEvent="cancelUploadFile"
-  @okayUploadFile="okayUploadFile($event)"
-  @cancelUploadFile="cancelUploadFile($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isUploadFileSuccessDialog">
-  <MessageBox
-  title="Success"
-  :message="`Photo uploaded successfully.`"
-  okayEvent="okayUploadFileSucess"
-  cancelEvent="cancelUploadFileSuccess"
-  @okayUploadFileSucess="okayUploadFileSucess($event)"
-  @cancelUploadFileSuccess="cancelUploadFileSuccess($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isUploadFileFailureDialog">
-  <MessageBox
-  title="Failure"
-  :message="`${message}.`"
-  okayEvent="okayUploadFileFailure"
-  cancelEvent="cancelUploadFileFailure"
-  @okayUploadFileFailure="okayUploadFileFailure($event)"
-  @cancelUploadFileFailure="cancelUploadFileFailure($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-
-<q-dialog v-model="isUpdateDialog">
-  <MessageBox
-  title="Update"
-  message="Do you want to contacts?"
-  okayEvent="update"
-  cancelEvent="cancelUpdate"
-  @cancelUpdate="cancelUpdate($event)"
-  @update="update($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-<q-dialog v-model="isUpdateSuccessDialog">
-  <MessageBox
-  title="Success"
-  message="Contacts updated successfully!"
-  okayEvent="UpdateSuccessOkay"
-  cancelEvent="UpdateSuccessCancel"
-  @UpdateSuccessCancel="UpdateSuccessCancel($event)"
-  @UpdateSuccessOkay="UpdateSuccessOkay($event)"
-  >
-  </MessageBox>
-</q-dialog>
-
-  <q-dialog v-model="isUpdateFailureDialog">
-    <MessageBox
-    title="Error"
-    :message="`${message}.`"
-    okayEvent="UpdateFailureOkay"
-    cancelEvent="UpdateFailureCancel"
-    @UpdateFailureCancel="UpdateFailureCancel($event)"
-    @UpdateFailureOkay="UpdateFailureOkay($event)"
-    >
-    </MessageBox>
-  </q-dialog>
-
-     </q-page>
-   </q-page-container>
- </q-layout>
+    <div class="col-12 text-center q-pa-sm">
+      <q-btn
+        label="Update"
+        style="width:95%"
+        type="button"
+        size="md"
+        no-caps
+        class="q-ma-sm bg-accent text-primary"
+        @click="uploadAndUpdate"
+      />
+    </div>
+ </div>
 </template>
 
 <script>
   import MessageBox from "../../components/dialogs/MessageBox.vue"
-  import { userController } from '../../store/modules/backendRoutes'
+  import Form from "../../components/Form/Form.vue";
+  import *  as gcphttp from "../../store/modules/gcp-services";
     export default {
       computed: {
         selectedContact(){
@@ -168,9 +68,13 @@
       },
       components:{
         MessageBox,
+        Form
       },
       data () {
     return {
+        fileUrl: "",
+        fileName: "",
+        originalFileName: "",
           ContactDTO:{
             phoneNumber:"",
             email:"",
@@ -187,6 +91,39 @@
           isUploadFileDialog: false,
           isUploadFileSuccessDialog: false,
           isUploadFileFailureDialog: false,
+          form: {
+                title: "User Photo",
+                qSelects: [],
+                qInputs: [],
+                qFiles: [
+                    { label: "Picture (1MB Maximum)", name: "", type: "file",
+                    selectedFile: null,
+                    showPreview: false,
+                imagePreview: '',
+                    files: [],
+                    Template: {
+                        sn: 0,
+                        iconName: "",
+                        visible: false,
+                    }}
+                ],
+                qColors: [],
+                qBtns: [],
+                qDates: [],
+                GroupedCheckBoxes: [],
+                clearQInputs(){
+                    var i = 0;
+                    for (i = 0; i < this.qInputs.length; i++){
+                        this.qInputs[i].name = "";
+                    }
+                },
+                clearQFiles(){
+                    var i = 0;
+                    for (i = 0; i < this.qFiles.length; i++){
+                        this.qFiles[i].name = "";
+                    }
+                },
+            }
           }
         },
         props: {
@@ -196,10 +133,23 @@
             }
         },
         methods: {
-          onFileSelected(event){
+      onFileSelected(payload){
             var context = this;
-            context.files = event.target.files;
-            context.SelectedFile = event.target.files[0];
+            context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+            reader.addEventListener("load", function () {
+            context.form.qFiles[0].showPreview = true;
+            context.form.qFiles[0].imagePreview = reader.result;
+            }.bind(context), false);
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+						reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+          }else{
+                      alert("Wrong image format. Only supports .jpg, .jpeg, .png and .gif")
+                  }
+              }
+              
+              
           },
           UploadAction(){
             var context =  this;
@@ -209,36 +159,36 @@
             var context =  this;
             context.isUploadFileDialog = false;
           },
-          async okayUploadFile(){
+        async uploadPicture(){
             var context = this;
-                const formData = new FormData();
-                for (var i in context.files) {
-                  formData.append('images[]', context.files[i]);
-                }
-              
-              var url = `${userController}/uploadphoto`;
-
-              var response = await this.$store.dispatch('clientStore/UploadPhoto', {
-                request: formData,
-                url
-                }); 
-
-            const { 
-                  data : {
-                    data: result,
-                    message,
-                    success,
-                  }
-            } = response
-            context.isUploadFileDialog = false;
-            if(success){
-              this.$store.commit('clientStore/UploadFile', result);
-              context.isUploadFileSuccessDialog = true;
-            }else{
-                context.isUploadFileFailureDialog = true;
-                context.message = message;
+            const formData = new FormData();
+            console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
+            formData.append('file', context.form.qFiles[0].selectedFile);
+            
+            var url = `gcp/upload`;
+            const payload = {
+                url,
+                req: formData,
             }
-          },
+            console.log("payload: ", payload)
+            //uploadLogo
+            var response = await gcphttp.post(payload)
+            context.fileUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
+            context.fileUploadError = response.data.error;
+            console.log("fileUrl: ", context.fileUrl)
+        },
+        async uploadAndUpdate(){
+            var context = this;
+            await context.uploadPicture();
+            if(context.fileUploadError === "No Error") {
+              await context.update();
+            }else{
+              alert("File upload error. Please try again")
+            }
+            
+        },
           cancelUploadFileSuccess(){
             var context = this;
             context.isUploadFileSuccessDialog = false;
@@ -269,7 +219,7 @@
                 this.$router.push('/user-home');
               }
             },
-          async update(){
+    async update(){
         var context = this;
 
         if(context.isAdmin == false){
@@ -291,9 +241,9 @@
           return;
         }
 
-        if(context.PhotoDto.base64String != "" && 
-        context.PhotoDto.base64String != undefined){
-          context.ContactDTO.base64String = context.PhotoDto.base64String
+        if(context.fileUrl != "" && 
+        context.fileUrl != undefined){
+          context.ContactDTO.base64String = context.fileUrl
         }
 
 
@@ -351,6 +301,7 @@
       context.ContactDTO = {...context.selectedContact}
     }else{
       var response = await this.$store.dispatch('clientStore/GetContributor', context.IdentityModel.id)
+      console.log("response: ", response)
       const { 
               data : {
                 data: contributor,
@@ -359,6 +310,8 @@
               } = response
         if(success){
           context.ContactDTO = {...contributor}
+          context.form.qFiles[0].showPreview = true;
+          context.form.qFiles[0].imagePreview = context.ContactDTO.base64String;
         }
 
       

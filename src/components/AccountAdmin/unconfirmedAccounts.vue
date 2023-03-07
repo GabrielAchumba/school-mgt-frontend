@@ -1,63 +1,42 @@
 <template>
-  <div>
-      <div class=" bg-primary">
+  <div class="row bg-primary">
 
-<div class="row text-center flex flex-center q-pb-lg">
+   <div class="col-12 q-ma-none bg-accent text-primary text-center" style="height: 50px;">
+      <div class="text-center text-h6">Un-comfirmed Accounts</div>
+   </div>
 
-<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
- <div class="q-pa-md" style="font-family: Lato;">
-  
-  <q-card class="q-pa-sm q-gutter-sm"> 
+    <div class="col-12 q-pa-sm bg-primary text-center">
+      <q-table 
+              title="Payments" 
+              :data="uncomfirmedAccounts" 
+              :columns="columns"
+              row-key="name" 
+              binary-state-sort
+              :separator="separator"
+              :loading="loading"
+              :wrap-cells="autoWidth"
+              bordered>
 
-          <q-card-section class="bg-accent text-primary">
-            <div class="row">
-              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                <div class="text-subtitle2">Un-comfirmed Accounts</div>
-              </div>
-            </div>
-          </q-card-section>
+        <template v-slot:body="props">
+            <q-tr 
+            :props="props">
+              
+              <q-td 
+              v-for="column in removekeys(columns)" :key="column.name"
+              :props="props">{{ props.row[column.name] }}</q-td>
+              <q-td key="comfirmPayment" :props="props">
 
-           <q-card-section>
-             <q-table 
-             title="Payments" 
-             :data="uncomfirmedAccounts" 
-             :columns="columns"
-             row-key="name" 
-             binary-state-sort
-             :separator="separator"
-             >
+                <q-btn 
+                class="bg-accent text-primary"
+                label="Comfirm Payment" 
+                @click="comfirmpayment(props.row)" 
+                size=sm no-caps></q-btn>
+              </q-td>
+            </q-tr>
+          </template>
+      </q-table>
+    </div>
 
-
-      <template v-slot:body="props">
-          <q-tr 
-          :props="props">
-            
-            <q-td 
-            v-for="column in removekeys(columns)" :key="column.name"
-            :props="props">{{ props.row[column.name] }}</q-td>
-            <q-td key="comfirmPayment" :props="props">
-
-              <q-btn 
-               class="bg-accent text-primary"
-               label="Comfirm Payment" 
-               @click="comfirmpayment(props.row)" 
-               size=sm no-caps></q-btn>
-            </q-td>
-          </q-tr>
-        </template>
-    </q-table>
-
-    </q-card-section>
-
-      </q-card>
-      
-  </div>
-
-
-</div>
-</div>
-
-</div>
    <q-dialog v-model="isFetchTableDialog">
     <MessageBox
     title="Error"
@@ -74,6 +53,7 @@
 
 <script>
   import MessageBox from "../dialogs/MessageBox.vue"
+
     export default {
       components:{
         MessageBox
@@ -100,6 +80,8 @@
     return {
             isFetchTableDialog: false,
             message: "",
+            autoWidth: true,
+            loading: false,
             }
         },
         methods: {

@@ -51,8 +51,9 @@
           >
       </q-select>
 
-      <div class="text-right">
+      <div class="col-12">
         <q-btn
+          style="width:95%"
           label="Update"
           type="button"
           size="sm"

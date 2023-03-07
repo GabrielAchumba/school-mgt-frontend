@@ -1,0 +1,20 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "./launchpad-release-key.keystore",
+            "storePassword": "123456",
+            "alias": "mylaunchpad",
+            "password": "123456",
+            "keystoreType": "",
+            "packageType": "apk"
+        },
+        "release": {
+            "keystore": "./launchpad-release-key.keystore",
+            "storePassword": "123456",
+            "alias": "mylaunchpad",
+            "password": "123456",
+            "keystoreType": "",
+            "packageType": "apk"
+        }
+    }
+}

@@ -17,3 +17,5 @@ export const cashoutn1000Controller = "cashoutn1000"
 export const cashoutn2000Controller = "cashoutn2000"
 export const cashoutn5000Controller = "cashoutn5000"
 export const cashoutn10000Controller = "cashoutn10000"
+
+export const paymentGatewayController = "paymentgateway"

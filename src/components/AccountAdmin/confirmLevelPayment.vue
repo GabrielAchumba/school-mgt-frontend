@@ -1,78 +1,62 @@
 <template>
-  <div>
-      <div class="bg-primary">
+  <div class="row bg-primary">
 
-<div class="row text-center flex flex-center q-pb-lg">
+    <div class="col-12 q-pa-sm text-center">
+      <q-select
+          class="q-ma-none"
+          color="accent" 
+          outlined label-color="accent"
+          option-disable="inactive"
+          v-model="selected"
+          :options="Cycles"
+          option-value="name"
+          :option-label="'type'"
+          name="type"
+          emit-value
+          map-options
+          @input="selectNode(selected)"
+          >
+      </q-select>
+    </div>
 
-<div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-
-    <q-tree
-      :nodes="Cycles"
-      node-key="label"
-      @update:selected="selectNode"
-      :selected="selected"
-    />
-</div>
-
-<div class="col-md-9 col-lg-9 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
- <div class="q-pa-md" style="font-family: Lato;">
-  
-  <q-card class="q-pa-sm q-gutter-sm"> 
-
-          <q-card-section class="bg-accent text-primary">
-            <div class="row">
-              <div class="col-12">
-                <div class="text-subtitle2">Qualified {{ levelX }}, Category NGN{{Contribution}}.00 Members (Please Pay and Comfirm Them)</div>
-              </div>
-            </div>
-          </q-card-section>
-
-           <q-card-section>
-             <q-table 
-             title="Contributors" 
-             :data="categoryLevelXQualifiedNotComfirmed" 
-             :columns="columns" 
-             row-key="name" 
-             binary-state-sort
-             :separator="separator"
-             >
+    <div class="col-12 q-pa-sm bg-primary text-center">
+      <q-table 
+        title="Contributors" 
+        :data="categoryLevelXQualifiedNotComfirmed" 
+        :columns="columns" 
+        row-key="name" 
+        binary-state-sort
+        :separator="separator"
+        :loading="loading"
+        :wrap-cells="autoWidth"
+        class="q-pa-sm bg-primary"
+        bordered>
 
 
-      <template v-slot:body="props">
-          <q-tr
-          :props="props">
-            <q-td 
-            v-for="column in removekeys(columns)" :key="column.name"
-            :props="props">{{ props.row[column.name] }}</q-td>
+        <template v-slot:body="props">
+            <q-tr
+            :props="props">
+              <q-td 
+              v-for="column in removekeys(columns)" :key="column.name"
+              :props="props">{{ props.row[column.name] }}</q-td>
 
-            <q-td key="confirmLevel" :props="props">
+              <q-td key="confirmLevel" :props="props">
 
-             <q-btn 
-              icon="update"
-              class="bg-accent text-primary"
-              no-shadows
-              @click="updateLevel(props.row)" 
-              size=sm no-caps>
-              <q-tooltip>
-                Update Level
-              </q-tooltip>
-              </q-btn>
-            </q-td>
-          </q-tr>
-        </template>
-    </q-table>
-
-    </q-card-section>
-
-      </q-card>
-      
-  </div>
-
-
-</div>
-</div>
-
-</div>
+              <q-btn 
+                icon="update"
+                class="bg-accent text-primary"
+                no-shadows
+                @click="updateLevel(props.row)" 
+                size=sm no-caps>
+                <q-tooltip>
+                  Update Level
+                </q-tooltip>
+                </q-btn>
+              </q-td>
+            </q-tr>
+          </template>
+      </q-table>
+    </div>
 
   <q-dialog v-model="isFetchTreeViewDialog">
     <MessageBox
@@ -130,6 +114,8 @@
             selected: null,
             isFetchTreeViewDialog: false,
             message: "",
+            autoWidth: true,
+            loading: false,
             }
         },
         methods: {

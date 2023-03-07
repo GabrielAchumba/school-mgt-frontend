@@ -1,75 +1,45 @@
 <template>
-  <div class="bg-primary">
+  <div class="row bg-primary">
+    <div class="col-12 q-pa-none bg-accent text-primary text-center" style="height: 50px;">
+      <div class="text-center text-h6">Contributors' Next of Kin</div>
+    </div>
 
-  <div class="row">
-      <div class="col-12" style="height:10px">     
-      </div>  
-  </div>
-
-<div class="row text-center flex flex-center q-pb-lg">
-
-<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
- <div class="q-pa-md" style="font-family: Lato;">
-  
-  <q-card class="q-pa-sm q-gutter-sm"
-  :style="'width:' + cardWidth"> 
-
-          <q-card-section class="bg-accent text-primary">
-            <div class="row">
-              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                <div class="text-subtitle2">Registered Contributors</div>
-              </div>
-            </div>
-          </q-card-section>
-
-           <q-card-section
-           :style="'width:' + cardWidth">
-             <q-table 
-             :style="'width:' + tableWidth"
-             title="Contributors' Next of Kin" 
+    <div class="col-12 q-pa-sm bg-primary text-center">
+      <q-table 
              :data="nextOfKins"
              :columns="columns" 
              row-key="name" 
              binary-state-sort
-             :separator="separator"
-             virtual-scroll
-             >
+            :separator="separator"
+            :loading="loading"
+            :wrap-cells="autoWidth"
+            bordered>
+        <template v-slot:body="props">
+            <q-tr 
+            v-if ="!props.row.isPaid"
+            :props="props">
+              <q-td key="fullname" :props="props">{{ props.row.fullname }}</q-td>
+              <q-td key="nOKNames" :props="props">{{ props.row.nOKNames }}</q-td>
+              <q-td key="nOKAddress" :props="props">{{ props.row.nOKAddress }}</q-td>
+              <q-td key="nOKPhoneNumber" :props="props">{{ props.row.nOKPhoneNumber }}</q-td>
+              <q-td key="nOKRelationship" :props="props">{{ props.row.nOKRelationship }}</q-td>
+              <q-td key="actions" :props="props">
+              <q-btn 
+                icon="update"
+                class="bg-accent text-primary"
+                no-shadows
+                @click="update(props.row)" 
+                size=sm no-caps>
+                <q-tooltip>
+                  Update Next of Kin
+                </q-tooltip>
+                </q-btn>
+              </q-td>
+            </q-tr>
+          </template>
+      </q-table>
+    </div>
 
-
-      <template v-slot:body="props">
-          <q-tr 
-          v-if ="!props.row.isPaid"
-          :props="props">
-            <q-td key="fullname" :props="props">{{ props.row.fullname }}</q-td>
-            <q-td key="nOKNames" :props="props">{{ props.row.nOKNames }}</q-td>
-            <q-td key="nOKAddress" :props="props">{{ props.row.nOKAddress }}</q-td>
-            <q-td key="nOKPhoneNumber" :props="props">{{ props.row.nOKPhoneNumber }}</q-td>
-            <q-td key="nOKRelationship" :props="props">{{ props.row.nOKRelationship }}</q-td>
-             <q-td key="actions" :props="props">
-             <q-btn 
-              icon="update"
-              class="bg-accent text-primary"
-              no-shadows
-              @click="update(props.row)" 
-              size=sm no-caps>
-              <q-tooltip>
-                Update Next of Kin
-              </q-tooltip>
-              </q-btn>
-            </q-td>
-          </q-tr>
-        </template>
-    </q-table>
-
-    </q-card-section>
-
-      </q-card>
-      
-  </div>
-
-
-</div>
-</div>
 
   <q-dialog v-model="isFetchContributorsDialog">
   <MessageBox
@@ -106,6 +76,8 @@
             cardWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.7}px`: "auto",
             selected: null,
             loading1: false,
+            autoWidth: true,
+            loading: false,
             columns: [
               { name: "fullname", label: "Full Name", field: "", align: "left" },
               { name: "nOKNames", label: "NOK Full Name", field: "", align: "left" },

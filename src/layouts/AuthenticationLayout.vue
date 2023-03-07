@@ -82,7 +82,7 @@ export default {
       content.rightDrawerOpen = false
       if(width < 700) {
         content.rightDrawerOpen = true;
-        this.$store.dispatch('authenticationStore/setRightDrawerOpen', content.rightDrawerOpen)
+        this.$store.commit('authenticationStore/setRightDrawerOpen', content.rightDrawerOpen)
       }
     },
     toggleMobilePhoneMenu(){

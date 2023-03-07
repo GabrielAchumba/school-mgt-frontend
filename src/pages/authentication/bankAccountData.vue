@@ -19,32 +19,55 @@
 
    <q-card-section>
       <q-form class="q-gutter-md">
-      <q-input outlined v-model="BankAccountDTO.bankName" label="Bank Name *" lazy-rules />
+
+      <div class="col-12 q-pa-sm">
+        <span>
+          <p class="q-ma-none">Bank Name</p>
+          <q-select
+              class="q-ma-none"
+              color="accent" 
+              outlined label-color="accent"
+              option-disable="inactive"
+              v-model="BankAccountDTO.bankName"
+              :options="banks"
+              option-value="name"
+              :option-label="'type'"
+              name="type"
+              emit-value
+              map-options>
+            </q-select>
+        </span>
+      </div>
       <q-input outlined v-model="BankAccountDTO.accountName" label="Account Name *" lazy-rules />
       <q-input outlined v-model="BankAccountDTO.accountNumber" label="Account Number *" lazy-rules />
 
-      <div class="row">
-        <div class="col-6 text-left">
-          <q-btn
-            label="Cancel"
-            type="button"
-            size="sm"
-            no-caps
-            class="text-primary bg-accent"
-            @click="cancel"
-          />
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Update"
-            type="button"
-            size="sm"
-            no-caps
-            class="text-primary bg-accent"
-            @click="updateData"
-          />
-        </div>
+      <div 
+            class="row q-pa-sm">
+              <div class="col-12 text-center q-pa-sm">
+                <q-btn
+                label="Cancel"
+                style="width:95%"
+                type="button"
+                size="md"
+                no-caps
+                class="q-ma-sm bg-accent text-primary"
+                @click="cancel"
+                />
+              </div>
+
+              <div class="col-12 text-center q-pa-sm">
+                <q-btn
+                  label="Update"
+                  style="width:95%"
+                  type="button"
+                  size="md"
+                  no-caps
+                  class="q-ma-sm bg-accent text-primary"
+                  @click="updateData"
+                />
+              </div>
       </div>
+
     </q-form>
    </q-card-section>
         
@@ -94,6 +117,8 @@
 
 <script>
     import MessageBox from "../../components/dialogs/MessageBox.vue"
+    import { get } from "../../store/modules/services" 
+    import { paymentGatewayController } from "../../store/modules/backendRoutes"
     export default {
       computed: {
         selectedBankDetail(){
@@ -121,6 +146,7 @@
         isUpdateSuccessDialog: false,
         isUpdateFailureDialog: false,
         message: "",
+        banks: [],
       }
     },
     props: {
@@ -209,10 +235,37 @@
       UpdateFailureCancel(){
         var context = this;
         context.isUpdateFailureDialog = false;
-      }
+      },
+      async getBanks(){
+       
+        var context = this;
+        const payload = {
+          url: `${paymentGatewayController}/getbanks`
+        }
+
+        var response = await get(payload)
+            const { 
+            data : {
+                data: result,
+                success,
+                message,
+            }
+        } = response
+
+        if(success){
+          context.banks = result.map((row) => {
+            return {
+              ...row,
+              type: row.name
+            }
+          })
+        }
+
+      },
     },
     async created(){
         var context = this;
+        await context.getBanks();
         if(context.isAdmin == true){
           context.BankAccountDTO = {...context.selectedBankDetail}
         }else{

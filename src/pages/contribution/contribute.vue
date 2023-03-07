@@ -1,8 +1,6 @@
 <template>
-  <div class="q-pa-md">
-    <div class="q-gutter-y-md">
-      <q-card>
-
+  <div class="q-pa-sm">
+      <div>
         <q-select 
           color="accent" 
           outlined label-color="accent"
@@ -12,43 +10,39 @@
           label="Category">
       </q-select>
       <q-separator />
-
         <q-tabs
           v-model="tab"
           dense
-          class="text-grey"
+          class="bg-accent text-primary"
           active-color="primary"
-          indicator-color="primary"
+          indicator-color="secondary"
           align="justify"
           narrow-indicator
         >
-          <q-tab name="offplatformpayment" label="Off-Platform Payment" />
-         <!--  <q-tab name="onplatformpayment" label="On-Platform Payment" /> -->
+          <q-tab name="offplatformpayment" label="Off-Platform" />
+          <q-tab name="onplatformpayment" label="On-Platform" />
         </q-tabs>
 
-        <q-separator />
-
         <q-tab-panels v-model="tab" animated>
-          
-          <q-tab-panel name="offplatformpayment">
-            <offPlatformPayment-app
+          <q-tab-panel name="offplatformpayment" class="bg-primary">
+          <OffPlatformPayment
             :category="category"
             :amount="amount"
             :categoryBankName="selectedCategoryBankDetails.categoryBankName"
             :categoryAccountName="selectedCategoryBankDetails.categoryAccountName"
-            :categoryAccountNumber="selectedCategoryBankDetails.categoryAccountNumber"></offPlatformPayment-app>
+            :categoryAccountNumber="selectedCategoryBankDetails.categoryAccountNumber"/>
           </q-tab-panel>
 
-          <!-- <q-tab-panel name="onplatformpayment">
-            <onPlatformPayment-app></onPlatformPayment-app>
-
-          </q-tab-panel> -->
-
+          <q-tab-panel name="onplatformpayment" class="bg-primary">
+            <OnPlatformPayment
+            :category="category"
+            :amount="amount"
+            :categoryBankName="selectedCategoryBankDetails.categoryBankName"
+            :categoryAccountName="selectedCategoryBankDetails.categoryAccountName"
+            :categoryAccountNumber="selectedCategoryBankDetails.categoryAccountNumber"/>
+          </q-tab-panel>
         </q-tab-panels>
-
-      </q-card>
-
-    </div>
+      </div>
     <q-dialog v-model="isBankDetailsFaliureDialog">
     <MessageBox
     title="Failure"
@@ -64,8 +58,8 @@
 </template>
 
 <script>
-import offPlatformPayment from 'pages/contribution/offPlatformPayment.vue'
-import onPlatformPayment from 'pages/contribution/onPlatformPayment.vue' 
+import OffPlatformPayment from 'pages/contribution/offPlatformPayment.vue'
+import OnPlatformPayment from 'pages/contribution/onPlatformPayment.vue' 
 import { cashoutn500Controller } from "../../store/modules/backendRoutes"
 import { cashoutn1000Controller } from "../../store/modules/backendRoutes"
 import { cashoutn2000Controller } from "../../store/modules/backendRoutes"
@@ -81,8 +75,8 @@ export default {
         },
     },
     components: {
-            'offPlatformPayment-app': offPlatformPayment,
-            'onPlatformPayment-app': onPlatformPayment
+            OffPlatformPayment,
+            OnPlatformPayment,
         },
   data () {
     return {
@@ -129,19 +123,19 @@ export default {
       var url = "";
       switch(context.category){
         case "CategoryN500":
-          url = `${cashoutn500Controller}/getcategorybankdetails`;
+          url = `${cashoutn500Controller}/getcategorybankdetails/1`;
           break;
         case "CategoryN1000":
-          url = `${cashoutn1000Controller}/getcategorybankdetails`;
+          url = `${cashoutn1000Controller}/getcategorybankdetails/2`;
           break;
         case "CategoryN2000":
-          url = `${cashoutn2000Controller}/getcategorybankdetails`;
+          url = `${cashoutn2000Controller}/getcategorybankdetails/3`;
           break;
         case "CategoryN5000":
-          url = `${cashoutn5000Controller}/getcategorybankdetails`;
+          url = `${cashoutn5000Controller}/getcategorybankdetails/4`;
           break;
         case "CategoryN10000":
-          url = `${cashoutn10000Controller}/getcategorybankdetails`;
+          url = `${cashoutn10000Controller}/getcategorybankdetails/5`;
           break;
       }
 

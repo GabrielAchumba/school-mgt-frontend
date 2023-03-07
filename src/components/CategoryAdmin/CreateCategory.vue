@@ -27,29 +27,33 @@
         <q-input outlined v-model="selectedPersonalData.firstName" label="First Name *" lazy-rules readonly />
         <q-input outlined v-model="selectedPersonalData.lastName" label="Last Name *" lazy-rules readonly />
         <q-input outlined v-model="parentUserName" label="Referal Username *" lazy-rules />
-        
-        <div class="row">
-        <div class="col-6 text-left">
-          <q-btn
-            label="Cancel"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="cancel"
-          />
+
+        <div class="row q-pa-sm">
+                <div class="col-12 text-center q-pa-sm">
+                  <q-btn
+                  label="Cancel"
+                  style="width:95%"
+                  type="button"
+                  size="md"
+                  no-caps
+                  class="q-ma-sm bg-accent text-primary"
+                  @click="cancel"
+                  />
+                </div>
+
+                <div class="col-12 text-center q-pa-sm">
+                  <q-btn
+                    label="Update"
+                    style="width:95%"
+                    type="button"
+                    size="md"
+                    no-caps
+                    class="q-ma-sm bg-accent text-primary"
+                    @click="create"
+                  />
+                </div>
         </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Update"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="create"
-          />
-        </div>
-      </div>
+
       </q-form>
   </q-card-section>
 
@@ -63,29 +67,32 @@
         <q-input 
         v-else
         outlined v-model="parentUserName" label="Referal Username *" lazy-rules />
-        
-        <div class="row">
-        <div class="col-6 text-left">
-          <q-btn
-            label="Cancel"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="cancel"
-          />
+
+        <div class="row q-pa-sm">
+                <div class="col-12 text-center q-pa-sm">
+                  <q-btn
+                  label="Cancel"
+                  style="width:95%"
+                  type="button"
+                  size="md"
+                  no-caps
+                  class="q-ma-sm bg-accent text-primary"
+                  @click="cancel"
+                  />
+                </div>
+
+                <div class="col-12 text-center q-pa-sm">
+                  <q-btn
+                    label="Update"
+                    style="width:95%"
+                    type="button"
+                    size="md"
+                    no-caps
+                    class="q-ma-sm bg-accent text-primary"
+                    @click="create"
+                  />
+                </div>
         </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Update"
-            type="button"
-            size="sm"
-            no-caps
-            class="bg-accent text-primary"
-            @click="create"
-          />
-        </div>
-      </div>
       </q-form>
   </q-card-section>
 

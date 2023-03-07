@@ -3,14 +3,12 @@
     <div class="bg-primary">
 
       <div class="row text-center flex flex-center q-pb-lg">
-        <div class="text-h6 text-green-8 text-weight-bolder q-mt-sm">Contributor's Full Name:</div>
-        <br>
-        <div class="text-h6 text-weight-bolder q-mt-sm"> {{SelectedAccount.fullName}}</div>
+         <div class="text-h6 text-weight-bolder q-pa-sm col-12"> {{SelectedAccount.fullName}}</div>
       </div>
 
-    <div class="row bg-accent q-mt-sm">
-      <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-        <div class="q-pa-md">
+    <div class="row bg-primary">
+      <div class="col-12">
+        <div class="q-pa-sm">
          <q-img 
             :src=SelectedAccount.base64String
             spinner-color="accent"
@@ -18,7 +16,7 @@
 
         </div>
       </div>
-      <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+      <div class="col-12">
         <div class="row">
           <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12" :class="$q.platform.is.desktop ? '' : 'q-px-md'">
 
@@ -34,10 +32,10 @@
           </div>
         </div>
 
-        <div class="row text-center flex flex-center q-pb-lg">
+        <div class="row text-left q-pa-sm">
 
                 
-              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
+              <div class="col-12 q-ma-none">
 
                   <span class="text-h6">Account Name: {{ SelectedAccount.accountNamePaidFrom }}</span>
                   <br>

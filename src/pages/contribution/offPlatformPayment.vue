@@ -1,128 +1,90 @@
 <template>
 <div>
 
-<div class="row text-center flex flex-center q-pb-lg">
+<q-scroll-area style="height: 100vh; max-width: 100%;">
+<div class="row">
 
+  <div class="col-12 q-pa-sm bg-primary text-accent">
 
-<div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
- <div class="q-pa-md" style="font-family: Lato;">
-  
-  <q-card class="q-pa-sm q-gutter-sm"> 
-
-            <q-card-section class="bg-accent text-primary">
-            <div class="row text-center flex flex-center q-pb-lg">
-              <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-              </div>
-               <div class="col-md-6 col-lg-6 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                 <p>Off-Platform Payment</p>
-               </div>
-                
-                <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                </div>
-                
-            </div>
-
-          </q-card-section>
-
-          <q-card-section>
-            <div class="row text-center flex flex-center q-pb-lg bg-primary text-accent">
-
-                
-              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-
-                  <span class="text-h6">Account Name: {{ categoryAccountName }} </span>
-                  <br>
-                  <span class="text-h6">Bank Name: {{ categoryBankName }} </span>
-                  <br>
-                  <span class="text-h6">Account Number: {{ categoryAccountNumber }} </span>
-                  <br>
-                  <br>
-                  
-              </div>
-
-            </div>
-
-          </q-card-section>
-
-          <q-card-section>
-            <div class="row text-center flex flex-center q-pb-lg">
-
-                
-              <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-
-                  <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-md">
-                    <q-input outlined label="Bank Name Paid From "
-                    v-model="bankNamePaidFrom">
-                  </q-input>
-                  </div>
-
-                  <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-md">
-                    <q-input outlined label="Account Name Paid From "
-                    v-model="accountNamePaidFrom">
-                  </q-input>
-                  </div>
-
-                  <div class="col-md-12 col-lg-12 col-sx-12 col-sm-12 q-gutter-md">
-                    <q-input outlined label="Account Number Paid From "
-                    v-model="accountNumberPaidFrom">
-                  </q-input>
-                  </div>
-                  
-              </div>
-
-            </div>
-
-          </q-card-section>
-
-
-          <q-card-section>
-            <div class="row text-center flex flex-center q-pb-lg">
-
-               <div class="col-md-5 col-lg-5 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">           
-
-                <div>
-                  <div class="text-caption text-accent text-weight-bolder q-mt-sm">Investment</div>
-                  <span class="text-h6 text-accent">₦{{ amount }}</span>
-                </div>
-               </div>
-                
-                <div class="col-md-2 col-lg-2 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-                </div>
-
-                
-              <div 
-              class="col-md-5 col-lg-5 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-
-                  <input 
-                  type="file" @change="onFileSelected" class="bg-accent text-primary"/>
-
-                  <br>
-                  <br>
-                  <q-btn 
-                  class="text-capitalize bg-accent text-primary" 
-                            exact
-                            size="sm" style="width:75px" dense label="Upload Paycheck"
-                                type="button"
-                                    @click="UploadAction" />
-
-                    <q-btn 
-                    class="text-capitalize bg-accent text-primary" 
-                            exact
-                            size="sm" style="width:75px" dense label="Click to Complete Payment"
-                                type="button"
-                                    @click="OffPlatformPayment" />
-                    <br>
-                    <br>
-              </div>
-
-            </div>
-
-          </q-card-section>
-
-      </q-card>
+      <span class="text-h6">Account Name: {{ categoryAccountName }} </span>
+      <br>
+      <span class="text-h6">Bank Name: {{ categoryBankName }} </span>
+      <br>
+      <span class="text-h6">Account Number: {{ categoryAccountNumber }} </span>
+      <br>
+      <br>
       
   </div>
-</div>
+
+  <div class="col-12 q-pa-sm">
+
+      <div v-if="!isOTP" class="col-12 q-pa-sm">
+        <span>
+          <p class="q-ma-none">Bank Name</p>
+          <q-select
+              class="q-ma-none"
+              color="accent" 
+              outlined label-color="accent"
+              option-disable="inactive"
+              v-model="bankNamePaidFrom"
+              :options="banks"
+              option-value="name"
+              :option-label="'type'"
+              name="type"
+              emit-value
+              map-options
+              @input="onQSelectItemValueChanged(bankNamePaidFrom)"
+              >
+            </q-select>
+        </span>
+      </div>
+
+      <div v-if="!isOTP" class="col-12 q-pa-sm">
+        <q-input outlined label="Account Name "
+        v-model="accountNamePaidFrom">
+      </q-input>
+      </div>
+
+      <div v-if="!isOTP" class="col-12 q-pa-sm">
+        <q-input outlined label="Account Number "
+        v-model="accountNumberPaidFrom">
+      </q-input>
+      </div>
+      
+  </div>
+
+  <Form
+    class="col-12 q-pa-sm"
+    :formData="form"
+    @onFileSelected="onFileSelected($event)"/>
+
+
+  <div class="col-12 q-ma-none">
+        
+    <div class="row">
+
+      <div class="col-5 q-pa-sm">           
+
+        <div>
+          <div class="text-caption text-accent text-weight-bolder q-mt-sm">Investment</div>
+          <span class="text-h6 text-accent">₦{{ amount }}</span>
+        </div>
+      </div>
+
+       <div class="col-2 q-pa-sm"> </div>
+        
+      <div 
+      class="col-5 q-pa-sm text-center">
+            <q-btn 
+            class="text-capitalize bg-accent text-primary" 
+            exact
+            size="md" style="width:95%" dense label="Submit"
+            type="button"
+            @click="uploadAndSavePayment" />
+      </div>
+
+    </div>
+  </div>
 
 </div>
 
@@ -197,17 +159,23 @@
   >
   </MessageBox>
 </q-dialog>
+</q-scroll-area>
   </div>
 </template>
 
 <script>
   import MessageBox from "../../components/dialogs/MessageBox.vue"
+  import Form from "../../components/Form/Form.vue";
 
 import { accountn500Controller } from "../../store/modules/backendRoutes"
 import { accountn1000Controller } from "../../store/modules/backendRoutes"
 import { accountn2000Controller } from "../../store/modules/backendRoutes"
 import { accountn5000Controller } from "../../store/modules/backendRoutes"
 import { accountn10000Controller } from "../../store/modules/backendRoutes"
+import { post, get } from "../../store/modules/services" 
+import *  as gcphttp from "../../store/modules/gcp-services";
+import { paymentGatewayController } from "../../store/modules/backendRoutes"
+
   export default {
       computed: {
         IdentityModel(){
@@ -230,7 +198,8 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
         }
       },
       components:{
-        MessageBox
+        MessageBox,
+        Form
       },
       props: {
           category: {
@@ -256,6 +225,8 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
       },
     data() {
       return {
+        isOTP: false,
+        oTP: "",
         SelectedFile: null,
         files: null,
         responseMessage: "",
@@ -271,14 +242,63 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
         isOffPlatformPaymentSuccessDialog: false,
         isOffPlatformPaymentFailureDialog: false,
         messageOffPlatformPayment: "",
+        banks: [],
+        paymentLabel: "Initiate Payment",
+        transferCode: "",
+        fileUrl: "",
+        fileName: "",
+        originalFileName: "",
+        fileUploadError: "No Error",
+        form: {
+            title: "Payment Details",
+            qSelects: [],
+            qInputs: [
+                { label: "Details SMS or Email Alert", name: "", type: "textarea",
+                selectedFile: null,
+                files: [],
+                Template: {
+                    sn: 0,
+                    iconName: "",
+                    visible: false,
+                }},
+            ],
+            qFiles: [
+                { label: "Picture (1MB Maximum)", name: "", type: "file",
+                selectedFile: null,
+                showPreview: false,
+            imagePreview: '',
+                files: [],
+                Template: {
+                    sn: 0,
+                    iconName: "",
+                    visible: false,
+                }}
+            ],
+            qColors: [],
+            qBtns: [],
+            qDates: [],
+            GroupedCheckBoxes: [],
+            clearQInputs(){
+                var i = 0;
+                for (i = 0; i < this.qInputs.length; i++){
+                    this.qInputs[i].name = "";
+                }
+            },
+            clearQFiles(){
+                var i = 0;
+                for (i = 0; i < this.qFiles.length; i++){
+                    this.qFiles[i].name = "";
+                }
+            },
+        }
 
       }
     },
     methods: {
-      onFileSelected(event){
-            var context = this;
-            context.files = event.target.files;
-            context.SelectedFile = event.target.files[0];
+      refreshPayment(){
+        var context = this;
+        if(context.isOTP == true) context.isOTP = false;
+        else context.isOTP = true
       },
       UploadAction(){
         var context =  this;
@@ -360,6 +380,82 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
         var context = this;
         context.isOffPlatformPaymentDialog = false;
       },
+      async getBanks(){
+        var context = this;
+        const payload = {
+          url: `${paymentGatewayController}/getbanks`
+        }
+
+        var response = await get(payload)
+            const { 
+            data : {
+                data: result,
+                success,
+                message,
+            }
+        } = response
+
+        if(success){
+          context.banks = result.map((row) => {
+            return {
+              ...row,
+              type: row.name
+            }
+          })
+        }
+
+      },
+      onQSelectItemValueChanged(qSelect){
+        console.log("qSelect: ", qSelect)
+      },
+      onFileSelected(payload){
+            var context = this;
+            context.form.qFiles[0].selectedFile = payload.selectedFile;
+            let reader  = new FileReader();
+            reader.addEventListener("load", function () {
+            context.form.qFiles[0].showPreview = true;
+            context.form.qFiles[0].imagePreview = reader.result;
+            }.bind(context), false);
+            if(context.form.qFiles[0].selectedFile){
+                if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
+						reader.readAsDataURL(context.form.qFiles[0].selectedFile);
+				}else{
+                    alert("Wrong image format. Only supports .jpg, .jpeg, .png and .gif")
+                }
+            }
+            
+            
+        },
+        async uploadPicture(){
+            var context = this;
+            const formData = new FormData();
+            console.log("selectedFile: ", context.form.qFiles[0].selectedFile)
+            formData.append('file', context.form.qFiles[0].selectedFile);
+            
+            var url = `gcp/upload`;
+            const payload = {
+                url,
+                req: formData,
+            }
+            console.log("payload: ", payload)
+            //uploadLogo
+            var response = await gcphttp.post(payload)
+            context.fileUrl = response.data.url;
+            context.fileName = response.data.fileName;
+            context.originalFileName = response.data.originalFileName;
+            context.fileUploadError = response.data.error;
+            console.log("fileUrl: ", context.fileUrl)
+        },
+        async uploadAndSavePayment(){
+            var context = this;
+            await context.uploadPicture();
+            if(context.fileUploadError === "No Error") {
+              await context.okayOffPlatformPayment();
+            }else{
+              alert("File upload error. Please try again")
+            }
+            
+        },
       async okayOffPlatformPayment(){
           var context = this;
           var id
@@ -381,12 +477,19 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
             accountNamePaidFrom: context.accountNamePaidFrom,
             accountNumberPaidFrom: context.accountNumberPaidFrom,
             contributorId: id,
-            base64String: context.Account.base64String,
-            fileName: context.Account.fileName,
+            base64String: context.fileUrl,
+            fileName: context.originalFileName,
             createdYear: todayDate.getFullYear(),
             createdMonth: todayDate.getMonth() + 1,
             createdDay: todayDate.getDate(),
-            username
+            username,
+            reference: "",
+            status: "pending",
+            transfer_code: "",
+            transferId: "",
+            integration: "",
+            recipient: context.form.qInputs[0].name,
+            categoryIndex: 1,
             },
             url: "",
           }
@@ -395,23 +498,29 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
 
           switch(context.category){
             case "CategoryN500":
-              payload.url = `${accountn500Controller}/offplatformpayment`,
+              payload.url = `${accountn500Controller}/offplatformpayment`
+              payload.request.categoryIndex = 1
+              console.log("payload: ", payload)
               response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
             break;
             case "CategoryN1000":
-              payload.url = `${accountn1000Controller}/offplatformpayment`,
+              payload.url = `${accountn1000Controller}/offplatformpayment`
+              payload.request.categoryIndex = 2
               response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
             break;
             case "CategoryN2000":
-              payload.url = `${accountn2000Controller}/offplatformpayment`,
+              payload.url = `${accountn2000Controller}/offplatformpayment`
+              payload.request.categoryIndex = 3
               response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
             break;
             case "CategoryN5000":
-              payload.url = `${accountn5000Controller}/offplatformpayment`,
+              payload.url = `${accountn5000Controller}/offplatformpayment`
+              payload.request.categoryIndex = 4
               response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
             break;
             case "CategoryN10000":
-              payload.url = `${accountn10000Controller}/offplatformpayment`,
+              payload.url = `${accountn10000Controller}/offplatformpayment`
+              payload.request.categoryIndex = 5
               response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
             break;
           }
@@ -483,8 +592,9 @@ import { accountn10000Controller } from "../../store/modules/backendRoutes"
         context.isOffPlatformPaymentFailureDialog = false;
       }
     },
-    created() {
-
+    async created() {
+      var context = this;
+      await context.getBanks();
     }
   }
 </script>

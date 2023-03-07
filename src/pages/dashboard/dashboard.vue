@@ -1,6 +1,6 @@
 <template>
-  <div class="q-pa-md">
-    <div class="q-gutter-y-md">
+  <div class="row">
+    <div class="q-pa-sm col-12 text-center">
       <q-select 
           color="accent" 
           outlined label-color="accent"
@@ -10,117 +10,120 @@
           label="Category"
           >
       </q-select>
-      <q-separator />
+    </div>
+    <q-separator />
 
-      <div class="row text-center flex flex-center q-pb-lg">
+    <div class="col-12 q-pa-sm text-center">
+      <q-select
+          class="q-ma-none"
+          color="accent" 
+          outlined label-color="accent"
+          option-disable="inactive"
+          v-model="selected"
+          :options="cycles"
+          option-value="name"
+          :option-label="'type'"
+          name="type"
+          emit-value
+          map-options
+          @input="selectNode(selected)"
+          >
+      </q-select>
+    </div>
 
-        <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-gutter-lg q-pa-md">
-            <q-tree
-              :nodes="Cycles"
-              node-key="label"
-              @update:selected="selectNode"
-              :selected="selected"
-              
-            />
-        </div>
+    <div class="col-12 q-pa-sm text-center">
+      
+      <q-card class="q-pa-none"> 
 
-        <div class="col-md-9 col-lg-9 col-sx-12 col-sm-12 q-gutter-lg q-pa-md flex flex-center">
-       <!--  <div class="q-pa-md" style="font-family: Lato;"> -->
+              <q-card-section class="bg-accent text-primary">
+                <div class="row">
+                <div class="col-4 text-left">Level Name: {{ cashOutStatus.level }}</div>
+                <div class="col-4 text-left"></div>
+                <div class="col-4 text-left">Investment Status: {{ cashOutStatus.investmentStatus }}</div>
+                </div>
+                <div class="row">
+                <div class="col-4 text-left">Cash-Out Status: {{ cashOutStatus.paymentStatus }}</div>
+                <div class="col-4 text-left"></div>
+                <div class="col-4 text-left">Amount Paid: ₦{{ cashOutStatus.amount }}</div>
+                </div>
+
+              </q-card-section>
+
+              <q-card-section>
+                <div class="col-12 q-pa-sm bg-primary text-center"> 
+                <q-table 
+                title="Downliners" 
+                :data="DescendantDTO" 
+                :columns="columns" 
+                row-key="name" 
+                binary-state-sort
+                :separator="separator"
+                :loading="loading"
+                :wrap-cells="autoWidth"
+                bordered>
+
+
+          <template v-slot:body="props">
+              <q-tr 
+              v-if ="!props.row.isPaid"
+              :props="props">
+                <q-td key="fullName" :props="props">{{ props.row.fullName }}</q-td>
+                <q-td key="username" :props="props">{{ props.row.username }}</q-td>
+                <q-td key="phoneNumber" :props="props">{{ props.row.phoneNumber }}</q-td>
+                <q-td key="nLevelXRoomOneChildren" :props="props">{{ props.row.nLevelXRoomOneChildren }}</q-td>
+                <q-td key="hasPaid" :props="props">
+                  <q-btn 
+                    v-if="props.row.hasPaid" 
+                    icon="done"
+                    class="bg-primary text-accent"
+                    no-shadows
+                    size=sm no-caps
+                    flat
+                    dense>
+                  </q-btn>
+                  <q-btn 
+                    v-else
+                    icon="close"
+                    class="bg-primary text-red"
+                    no-shadows
+                    size=sm no-caps
+                    flat
+                    dense>
+                  </q-btn>
+                </q-td>
+                <q-td key="help" :props="props">
+                    <q-btn 
+                      v-if="isLevelOneEqualsThree(props.row.nLevelXRoomOneChildren)" 
+                      class="bg-accent text-primary"
+                      flat
+                      label="complete"
+                      no-shadows
+                      size=sm no-caps>
+                    </q-btn>
+                    <q-btn 
+                      v-else
+                      class="bg-red text-primary"
+                      label="incomplete"
+                      no-shadows
+                      size=sm no-caps
+                      @click="helpDownliner(props.row)">
+                      <q-tooltip>
+                        Help Downliner
+                      </q-tooltip>
+                    </q-btn>
+                  </q-td>
+              </q-tr>
+            </template>
+                </q-table>
+
+                </div>
+        </q-card-section>
+
+      </q-card>
           
-          <q-card class="q-pa-sm q-gutter-sm"
-          :style="'width:' + cardWidth"> 
-
-                  <q-card-section class="bg-accent text-primary">
-                    <div class="row">
-                    <div class="col-4 text-left">Level Name: {{ cashOutStatus.level }}</div>
-                    <div class="col-4 text-left"></div>
-                    <div class="col-4 text-left">Investment Status: {{ cashOutStatus.investmentStatus }}</div>
-                    </div>
-                    <div class="row">
-                    <div class="col-4 text-left">Cash-Out Status: {{ cashOutStatus.paymentStatus }}</div>
-                    <div class="col-4 text-left"></div>
-                    <div class="col-4 text-left">Amount Paid: ₦{{ cashOutStatus.amount }}</div>
-                    </div>
-
-                  </q-card-section>
-
-                  <q-card-section
-                  :style="'width:' + cardWidth">
-                    <div class="q-pa-md"> 
-                    <q-table 
-                    :style="'width:' + tableWidth"
-                    title="Downliners" 
-                    :data="DescendantDTO" 
-                    :columns="columns" 
-                    row-key="name" 
-                    binary-state-sort
-                    :separator="separator"
-                    >
+      <!-- </div> -->
 
 
-              <template v-slot:body="props">
-                  <q-tr 
-                  v-if ="!props.row.isPaid"
-                  :props="props">
-                    <q-td key="fullName" :props="props">{{ props.row.fullName }}</q-td>
-                    <q-td key="username" :props="props">{{ props.row.username }}</q-td>
-                    <q-td key="phoneNumber" :props="props">{{ props.row.phoneNumber }}</q-td>
-                    <q-td key="nLevelXRoomOneChildren" :props="props">{{ props.row.nLevelXRoomOneChildren }}</q-td>
-                    <q-td key="hasPaid" :props="props">
-                      <q-btn 
-                        v-if="props.row.hasPaid" 
-                        icon="done"
-                        class="bg-primary text-accent"
-                        no-shadows
-                        size=sm no-caps
-                        flat
-                        dense>
-                      </q-btn>
-                      <q-btn 
-                        v-else
-                        icon="close"
-                        class="bg-primary text-red"
-                        no-shadows
-                        size=sm no-caps
-                        flat
-                        dense>
-                      </q-btn>
-                    </q-td>
-                    <q-td key="help" :props="props">
-                        <q-btn 
-                          v-if="isLevelOneEqualsThree(props.row.nLevelXRoomOneChildren)" 
-                          class="bg-accent text-primary"
-                          flat
-                          label="complete"
-                          no-shadows
-                          size=sm no-caps>
-                        </q-btn>
-                        <q-btn 
-                          v-else
-                          class="bg-red text-primary"
-                          label="incomplete"
-                          no-shadows
-                          size=sm no-caps
-                          @click="helpDownliner(props.row)">
-                          <q-tooltip>
-                            Help Downliner
-                          </q-tooltip>
-                        </q-btn>
-                      </q-td>
-                  </q-tr>
-                </template>
-                    </q-table>
-
-                    </div>
-            </q-card-section>
-
-          </q-card>
-              
-          <!-- </div> -->
-
-
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -143,15 +146,15 @@
           IdentityModel(){
             return this.$store.getters['authenticationStore/IdentityModel'];
         },
-        Cycles(){
-            return this.$store.getters['dashboardStore/Cycles'];
-        },
         DescendantDTO(){
             return this.$store.getters['dashboardStore/DescendantDTO'];
         }
       },
       data () {
     return {
+            cycles:[],
+            autoWidth: true,
+            loading: false,
             tableWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.6}px`: "auto",
             cardWidth: window.innerWidth < 700 ? `${window.innerWidth * 0.8}px`: "auto",
             selected: null,
@@ -306,7 +309,6 @@
       
           },
           isLevelOneEqualsThree(selectedRow){
-            console.log()
             if(selectedRow >= 3) return true;
             else return false;
           },
@@ -317,7 +319,6 @@
           async getCashOut (levelIndex, categoryId) {
             var context = this;
             var url = "";
-            console.log("categoryId: ", categoryId)
 
             var response = {}
             switch(context.category){
@@ -376,6 +377,7 @@
           },
         },
         async created() {
+          var context = this;
         var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
 
         const { 
@@ -386,7 +388,20 @@
         } = response
 
         if(success){
-          this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result)
+          context.cycles = result[0].children.map((row) => {
+            return {
+              ...row,
+              type: row.label,
+              name: row.label,
+            }
+          })
+          /* this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result[0].children.map((row) => {
+            return {
+              ...row,
+              type: row.label,
+              name: row.label,
+            }
+          })) */
         }
 
       },

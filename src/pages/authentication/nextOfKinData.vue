@@ -24,28 +24,33 @@
       <q-input outlined v-model="NextOfKinDTO.nOKRelationship" label="Relationship *" lazy-rules />
       <q-input outlined type="textarea" v-model="NextOfKinDTO.nOKAddress" label="Address" lazy-rules />
 
-      <div class="row">
-        <div class="col-6 text-left">
-          <q-btn
-            label="Cancel"
-            type="button"
-            size="sm"
-            no-caps
-            class="text-primary bg-accent"
-            @click="cancel"
-          />
-        </div>
-        <div class="col-6 text-right">
-          <q-btn
-            label="Update"
-            type="button"
-            size="sm"
-            no-caps
-            class="text-primary bg-accent"
-            @click="updateData"
-          />
-        </div>
+      <div 
+            class="row q-pa-sm">
+              <div class="col-12 text-center q-pa-sm">
+                <q-btn
+                label="Cancel"
+                style="width:95%"
+                type="button"
+                size="md"
+                no-caps
+                class="q-ma-sm bg-accent text-primary"
+                @click="cancel"
+                />
+              </div>
+
+              <div class="col-12 text-center q-pa-sm">
+                <q-btn
+                  label="Update"
+                  style="width:95%"
+                  type="button"
+                  size="md"
+                  no-caps
+                  class="q-ma-sm bg-accent text-primary"
+                  @click="updateData"
+                />
+              </div>
       </div>
+      
     </q-form>
    </q-card-section>
         

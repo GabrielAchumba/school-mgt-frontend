@@ -21,7 +21,7 @@
    <q-card-section>
       <q-form class="q-gutter-md">
           
-        <div class="row text-center flex flex-center q-pb-lg">
+        <!-- <div class="row text-center flex flex-center q-pb-lg">
           <div 
           v-if="!isSuperAdmin"
           class="col-md-6 col-lg-16 col-sx-6 col-sm-6 q-gutter-lg q-px-xl q-pb-none q-ma-none">
@@ -36,7 +36,7 @@
             type="button"
             @click="UploadAction" />
           </div>
-        </div>
+        </div> -->
       <q-input outlined v-model="AdminDTO.firstName" label="First Name *" lazy-rules />
       <q-input outlined v-model="AdminDTO.lastName" label="Last Name *" lazy-rules />
       <q-input outlined v-model="AdminDTO.username" label="Username *" lazy-rules />
@@ -69,8 +69,9 @@
           >
       </q-select>
 
-      <div class="text-right">
+      <div class="col-12">
         <q-btn
+          style="width:95%"
           label="Register"
           type="button"
           class="text-primary bg-accent"

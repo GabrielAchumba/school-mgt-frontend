@@ -14,9 +14,6 @@
   import { cashoutn5000Controller } from '../../../store/modules/backendRoutes'
     export default {
         computed: {
-        Cycles(){
-            return this.$store.getters['dashboardStore/Cycles'];
-        },
         categoryLevelXQualifiedNotComfirmed(){
             return this.$store.getters['cashOutStore/categoryLevelXQualifiedNotComfirmed'];
         },
@@ -26,6 +23,7 @@
       },
       data () {
     return {
+            Cycles:[],
             url: `${cashoutn5000Controller}/getcompletedlevelxcategories`,
             SelectedLevelUrl: "SelectedLevelN5000",
             Contribution: "5000",
@@ -44,6 +42,7 @@
             }
         },
         async created() {
+          var context = this;
         var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
 
         const { 
@@ -55,9 +54,14 @@
         } = response
 
         if(success){
-          this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result)
+          context.Cycles = result[0].children.map((row) => {
+            return {
+              ...row,
+              type: row.label,
+              name: row.label,
+            }
+          })
         }else{
-            var context = this;
             context.message = message;
         }
       }

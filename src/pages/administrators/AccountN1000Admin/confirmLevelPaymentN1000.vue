@@ -13,10 +13,7 @@
   import confirmLevelPayment from "../../../components/AccountAdmin/confirmLevelPayment.vue"
   import { cashoutn1000Controller } from '../../../store/modules/backendRoutes'
     export default {
-        computed: {
-        Cycles(){
-            return this.$store.getters['dashboardStore/Cycles'];
-        },
+      computed: {
         categoryLevelXQualifiedNotComfirmed(){
             return this.$store.getters['cashOutStore/categoryLevelXQualifiedNotComfirmed'];
         },
@@ -26,6 +23,7 @@
       },
       data () {
     return {
+            Cycles: [],
             url: `${cashoutn1000Controller}/getcompletedlevelxcategories`,
             SelectedLevelUrl: "SelectedLevelN1000",
             Contribution: "1000",
@@ -44,6 +42,7 @@
             }
         },
         async created() {
+          var context = this;
         var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
 
         const { 
@@ -55,9 +54,14 @@
         } = response
 
         if(success){
-          this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result)
+          context.Cycles = result[0].children.map((row) => {
+            return {
+              ...row,
+              type: row.label,
+              name: row.label,
+            }
+          })
         }else{
-            var context = this;
             context.message = message;
         }
       }
