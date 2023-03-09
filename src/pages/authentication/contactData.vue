@@ -181,7 +181,9 @@
         },
         async uploadAndUpdate(){
             var context = this;
-            await context.uploadPicture();
+            if(context.form.qFiles[0].imagePreview){
+              await context.uploadPicture();
+            }
             if(context.fileUploadError === "No Error") {
               await context.update();
             }else{

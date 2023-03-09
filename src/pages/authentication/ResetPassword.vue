@@ -3,32 +3,30 @@
     <q-form class="q-gutter-md">
         <q-input outlined v-model="resetPasswordPayload.userName" label="Username" lazy-rules />
         <q-input type="password" outlined v-model="resetPasswordPayload.password" label="Password" lazy-rules />
-        <q-input type="password" outlined v-model="resetPasswordPayload.passwordConfirm" label="Password Confirm" lazy-rules />
-
-        <div class="row">
-            <div class="col-3 text-left">
+        <q-input type="password" outlined v-model="resetPasswordPayload.passwordConfirm" label="Password Confirm" lazy-rules /><div class="row">
+              <div class="col-12 text-center q-pa-sm">
                 <q-btn
-                    label="Cancel"
-                    type="button"
-                    size="sm"
-                    no-caps
-                    class="bg-accent text-primary"
-                    @click="canceResetPasswordAction"
+                label="Reset Password"
+                style="width:100%"
+                type="button"
+                size="md"
+                no-caps
+                class="bg-accent text-primary"
+                @click="ResetPasswordAction"
                 />
-            </div>
-            <div class="col-6"></div>
-            <div class="col-3 text-right">
+              </div>
+              <div class="col-12 text-center q-pa-sm">
                 <q-btn
-                    label="Reser Password"
-                    type="button"
-                    size="sm"
-                    no-caps
-                    class="bg-accent text-primary"
-                    @click="resetPasswordAction"
+                label="Cancel"
+                style="width:100%"
+                type="button"
+                size="md"
+                no-caps
+                class="bg-accent text-primary"
+                @click="canceResetPasswordAction"
                 />
-            </div>
-        </div>
-
+              </div>
+      </div>
     </q-form>
 
 <q-dialog v-model="isResetPasswordDialog">
@@ -128,9 +126,9 @@
           },
           async ResetPassword(){
             var context = this;
-
+            console.log("context.ResetPasswordPayload: ", context.resetPasswordPayload)
             var response = await this.$store.dispatch('authenticationStore/ResetPassword', 
-            context.ResetPasswordPayload);
+            context.resetPasswordPayload);
 
             const { 
               data : {

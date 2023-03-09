@@ -99,9 +99,6 @@ export default {
         },
         BankAccountDTO(){
           return this.$store.getters['clientStore/BankAccountDTO'];
-        },
-        tab(){
-              return this.$store.getters['clientStore/tab'];
         }
       },
     components: {

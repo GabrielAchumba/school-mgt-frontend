@@ -21,7 +21,6 @@
 
     <div class="col-12 q-pa-sm bg-primary text-center">
       <q-table 
-        title="Contributors" 
         :data="categoryLevelXQualifiedNotComfirmed" 
         :columns="columns" 
         row-key="name" 

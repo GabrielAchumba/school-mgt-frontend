@@ -12,22 +12,21 @@
           narrow-indicator
           
         >
-          <q-tab @click="changeTab('login')"
-          name="login" label="Login" />
-          <q-tab @click="changeTab('register')"
-          name="personalData" label="Register" />
+          <q-tab name="login" label="Login" />
+          <q-tab name="register" label="Register" />
         </q-tabs>
 
         <!-- <q-separator /> -->
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="login" class="bg-primary">
-            <login-app></login-app>
+            <Login/>
 
           </q-tab-panel>
 
           <q-tab-panel name="register" class="bg-primary">
-            <personalData-app></personalData-app>
+            <PersonalData
+            @showLoginPage="showLoginPage($event)"/>
           </q-tab-panel>
         </q-tab-panels>
 
@@ -38,31 +37,24 @@
 </template>
 
 <script>
-import login from 'pages/authentication/login.vue'
-import personalData from 'pages/authentication/personalData.vue' 
+import Login from 'pages/authentication/login.vue'
+import PersonalData from 'pages/authentication/personalData.vue' 
 export default {
-    computed: {
-          tab(){
-              return this.$store.getters['clientStore/tab'];
-          }
-    },
     components: {
-            'login-app': login,
-            'personalData-app': personalData
+            Login,
+            PersonalData,
         },
   data () {
     return {
-      
+      tab: "login",
     }
   },
-  methods: {
-    changeTab(tabname){
-      console.log(tabname)
-      this.$store.commit('clientStore/commitTab', tabname)
+  methods:{
+    showLoginPage(){
+      var context = this
+      context.tab = "login"
+
     }
-  },
-  created(){
-    //this.$store.commit('clientStore/commitTab')
   }
 }
 </script>

@@ -6,7 +6,6 @@
 
     <div class="col-12 q-pa-sm bg-primary text-center">
       <q-table 
-      title="Payments" 
       :data="contributorsHavNotCoontriuted" 
       :columns="columns"
       row-key="name" 

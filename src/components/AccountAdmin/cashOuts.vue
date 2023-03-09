@@ -7,7 +7,6 @@
 
     <div class="col-12 q-pa-sm bg-primary text-center">
       <q-table 
-              title="Cash-Out" 
               :data="cashOuts" 
               :columns="columns" 
               row-key="name" 

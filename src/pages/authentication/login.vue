@@ -9,14 +9,6 @@
           "
         >
 
-          <q-card-section>
-            <div class="row no-wrap items-center">
-              <div class="col text-h6 ellipsis">
-                {{ title }}
-              </div>
-            </div>
-          </q-card-section>
-
           <q-card-section 
           v-if="isForgotPasswordComponent">
             <ForgotPassword 
@@ -63,61 +55,31 @@
               </q-input>
 
               <div 
-                   v-if="rightDrawerOpen"
                    class="row q-pa-sm">
-                      <!-- <q-space /> -->
                       <div class="col-12 text-center q-pa-sm">
                         <q-btn
-                        label="Forgot Password"
-                        style="width:95%"
+                        label="Login"
+                        style="width:100%"
                         type="button"
                         size="md"
                         no-caps
                         class="q-ma-sm bg-accent text-primary"
-                        @click="forgotPasswordAction"
+                        @click="loginAction"
                         />
                       </div>
 
                       <div class="col-12 text-center q-pa-sm">
                         <q-btn
-                          label="Login"
-                          style="width:95%"
+                          label="Forgot Password"
+                          style="width:100%"
                           type="button"
                           size="md"
                           no-caps
                           class="q-ma-sm bg-accent text-primary"
-                          @click="loginAction"
+                          @click="forgotPasswordAction"
                         />
                       </div>
               </div>
-              <div 
-                v-else
-                class="row q-pa-sm">
-                  <q-space />
-
-                  <div class="col-12 text-right q-pa-sm">
-                  <q-btn
-                    label="Forgot Password"
-                    type="button"
-                    size="md"
-                    no-caps
-                    class="q-ma-sm bg-accent text-primary"
-                    @click="forgotPasswordAction"
-                    />
-                  </div>
-
-                  <div class="col-12 text-center q-pa-sm">
-                    <q-btn
-                      label="Login"
-                      type="button"
-                      size="md"
-                      no-caps
-                      class="q-ma-sm bg-accent text-primary"
-                      @click="loginAction"
-                    />
-                  </div>
-              </div>
-
             </q-form>
           </q-card-section>
         </q-card>
