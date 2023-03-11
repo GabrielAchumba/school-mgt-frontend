@@ -258,6 +258,16 @@ const mutations = {
   setShowSpinner(state, payload){
     state.showSpinner = payload;
   },
+  setReservoirSimulationList(state, payload){
+    const olasim_menuList = [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/input", tabIndex: "products", label: "Input"},
+      { name: "/output", tabIndex: "services", label: "Output" },
+    ]
+    state.menuList = olasim_menuList.map((row) => {
+      return { ...row }
+    })
+  },
   setMenuList(state, payload){
     const torpa_menuList = [
       { name: "/", tabIndex: "home", label: "Home" },

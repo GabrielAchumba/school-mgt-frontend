@@ -2,10 +2,61 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/TorpaLayout.vue'),
+    component: () => import('layouts/ReservoirSimulationLayout.vue'),
     children: [
       { 
         path: '/', 
+        component: () => import('pages/reservoir_simulation/landing.vue') 
+        
+      },
+      {
+        path: '/olasim', 
+        component: () => import('pages/reservoir_simulation/landing.vue') 
+      
+      },
+      {
+        path: '/input/dimensions', 
+        component: () => import('pages/reservoir_simulation/input/geometry/dimensions.vue') 
+      
+      },
+      {
+        path: '/input/gridding', 
+        component: () => import('pages/reservoir_simulation/input/geometry/gridding.vue') 
+      
+      },
+      {
+        path: '/input/rock/porosity', 
+        component: () => import('pages/reservoir_simulation/input/rock/porosity.vue') 
+      
+      },
+      {
+        path: '/input/rock/permeability', 
+        component: () => import('pages/reservoir_simulation/input/rock/permeability.vue') 
+      
+      },
+      {
+        path: '/input/pvt', 
+        component: () => import('pages/reservoir_simulation/input/pvt/pvt.vue') 
+      
+      },
+      {
+        path: '/input/initialization', 
+        component: () => import('pages/reservoir_simulation/input/initialization/initialization.vue') 
+      
+      },
+      {
+        path: '/input/schedule', 
+        component: () => import('pages/reservoir_simulation/input/schedule/schedule.vue') 
+      
+      },
+    ]
+  },
+  {
+    path: '/home',
+    component: () => import('layouts/TorpaLayout.vue'),
+    children: [
+      { 
+        path: '/home', 
         component: () => import('pages/authentication/landing.vue') 
         
       },

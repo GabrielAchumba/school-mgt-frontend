@@ -1,9 +1,11 @@
 <template>
     <div>
-        <q-scroll-area style="height: 80vh; max-width: 100%;">
+        <!-- <q-scroll-area style="height: 80vh; max-width: 100%;"> -->
         <div class="row q-pa-none flex flex-center">
              <q-card class="col-12 bg-primary">
-                <q-bar class="bg-accent text-primary">
+                <q-bar 
+                v-if="isFormTitle"
+                class="bg-accent text-primary">
                     <div class="text-h6 text-primary text-center">{{ formData.title }}</div>
                 </q-bar>
 
@@ -82,12 +84,8 @@
                       class="q-pa-sm"
                       v-for="table in formData.tables" 
                       :key="table.id">
-                      <EditableTable
-                      :tableVM="table"
-                      @handleAddEditableTable="handleAddEditableTable($event)"
-                      @handleSubmitEditableTable="handleSubmitEditableTable($event)"
-                      @handleEditEditableTable="handleEditEditableTable($event)"
-                      @handleDeleteEditableTable="handleDeleteEditableTable($event)"/>
+                      <TableEditable
+                      :table_VM="table"/>
                     </div>
 
                     <div class="q-pa-sm"
@@ -480,7 +478,7 @@
 
              </q-card>
         </div>
-        </q-scroll-area>
+        <!-- </q-scroll-area> -->
     </div>
 </template>
 
@@ -497,9 +495,10 @@
     }; */
 
     import form from "./FormVM.js";
-    import EditableTable from "../Tables/EditableTable.vue";
+    //import EditableTable from "../Tables/EditableTable.vue";
     import ContextMenu from "../Menus/context-menu.vue";
     import ContextMenuItem from "../Menus/context-menu-item.vue";
+    import TableEditable from "../Tables/TableEditable.vue";
 import { getLineWidth } from 'plotly.js-dist';
     export default {
         computed:{
@@ -517,11 +516,16 @@ import { getLineWidth } from 'plotly.js-dist';
           },
         },
         components:{
-          EditableTable,
+          //EditableTable,
           ContextMenu,
-          ContextMenuItem
+          ContextMenuItem,
+          TableEditable
         },
         props: {
+            isFormTitle:{
+              type: Boolean,
+              default: true
+            },
             isResponsive:{
               type: Boolean,
               default: false

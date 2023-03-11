@@ -67,7 +67,7 @@ export default {
     data(){
         return {
             showSpinner: true,
-            image: "/statics/images/Neway_Logo.jpg"
+            image: "/statics/images/Neway_Logo.png"
             
         }
     },
@@ -294,7 +294,7 @@ export default {
 </script>
 <style>
 #layout {
- background-image: url("/statics/images/Neway_Logo.jpg");
+ background-image: url("/statics/images/Neway_Logo.png");
  background-color: #cccccc;
 }
 

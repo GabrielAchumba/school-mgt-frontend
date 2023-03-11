@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary">
+  <div>
 
     <q-table 
       :data="table_VM.rows"
@@ -7,60 +7,15 @@
       :columns="table_VM.columns" 
       row-key="name" 
       binary-state-sort
+      :rows-per-page-options="[]"
       :separator="table_VM.separator"
       :filter="filter"
       :filter-method="customFilter"  
       :loading="loading"
       :wrap-cells="autoWidth"
-      class="screenwide q-ma-sm bg-primary"
+      class="screenwide q-ma-sm"
       bordered
       >
-
-         <template v-slot:top-left>
-            <q-input borderless dense debounce="300" v-model="search" placeholder="Search" class="col">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-        </template>
-
-        <template v-slot:top-right>
-            <q-icon 
-              class="col"
-              name="delete" 
-              @click="deleteAllItems"
-              size="20px">
-              <q-tooltip>
-                Delete Selected Rows
-              </q-tooltip>
-            </q-icon>
-             <q-icon 
-              class="col"
-              name="add" 
-              @click="createItem"
-              size="20px">
-              <q-tooltip>
-                Add Row Item
-              </q-tooltip>
-            </q-icon>
-            <q-icon 
-              class="col"
-              name="import_contacts" 
-              @click="dataImport"
-              size="20px">
-              <q-tooltip>
-                Import Rows
-              </q-tooltip>
-            </q-icon>
-              <q-toggle
-                v-model="qToggleModel"
-                color="accent"
-                false-value="Disagreed"
-                true-value="Agreed"
-                @input="onToggleAllTableRows"
-              />
-        </template>
-
           <template v-slot:header="props">
             <q-tr :props="props">
               <q-th
@@ -75,75 +30,22 @@
           </template>
 
           <template v-slot:body="props">
-
               <q-tr 
-              v-if="props.row.isActive"
               :props="props">
-                <q-td key="sn" :props="props">
-                   {{ props.row.sn}}
-                </q-td>
-
-                <q-td key="actions" :props="props">
-                    <div class="row q-pa-md text-center">
-                       <q-toggle
-                          v-model="checkBoxModels[props.row.sn-1]"
-                          color="accent"
-                          false-value="Disagreed"
-                          true-value="Agreed"
-                        />
-                        <q-icon 
-                        name="edit"
-                        @click="updateItem(props.row)"
-                        size="sm"/>
-                        <q-icon 
-                        name="delete" 
-                        @click="deleteItem(props.row)"
-                        size="sm" />
-                    </div>
-                </q-td>
-
-                <!-- <q-td key="route" :props="props">
-                    <a href="#" @click="linkClick(props.row)">{{ props.row['route']}}</a>
-                </q-td> -->
-
                 <q-td 
-                class="bg-accent text-primary"
-                v-for="column in removekeys()" :key="column.name"
-                :props="props">{{ props.row[column.name] }}</q-td>
-              </q-tr>
-
-              <q-tr 
-              v-else
-              :props="props">
-                <q-td key="sn" :props="props">
-                   {{ props.row.sn}}
+                v-for="column in fixedkeys()" :key="column.name"
+                :props="props">
+                   {{ props.row[column.name]}}
                 </q-td>
-                <q-td key="actions" :props="props">
-                    <div class="row q-pa-sm text-center">
-                        <q-toggle
-                          v-model="checkBoxModels[props.row.sn-1]"
-                          color="accent"
-                          false-value="Disagreed"
-                          true-value="Agreed"
-                        />
-                        <q-icon 
-                        name="edit"
-                        @click="updateItem(props.row)"
-                        size="sm"/>
-                        <q-icon 
-                        name="delete" 
-                        @click="deleteItem(props.row)"
-                        size="sm" />
-                    </div>
-                </q-td>
-
-                <!-- <q-td key="route" :props="props">
-                    <a href="#" @click="linkClick(props.row)">{{ props.row['route']}}</a>
-                </q-td> -->
 
                 <q-td 
                 v-for="column in removekeys()" :key="column.name"
-                :props="props">{{ props.row[column.name] }}</q-td>
+                :props="props">
+                {{ props.row[column.name] }}
+                 <q-popup-edit v-model="props.row[column.name]" auto-save buttons v-slot="scope">
+                    <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
+                </q-popup-edit>
+                </q-td>
               </q-tr>
           </template>
     </q-table>
@@ -189,7 +91,9 @@
             },
             table_VM:{
                 type: Object,
-                default: tableVM,
+                default: () => {
+                    return []
+                },
             },
             isHeader:{
               type:Boolean,
@@ -197,7 +101,9 @@
             },
             tableRows:{
               type: Array,
-              default: []
+              default: () => {
+                  return []
+              }
             }
         },
         data(){
@@ -256,17 +162,31 @@
             linkClick(row){
               this.$emit("linkClick", row)
             },
+            fixedkeys(){
+              var context = this;
+              var columnsNew = []
+              for(const column of context.table_VM.columns){
+                  if(column.name === "actions" 
+                  || column.name === "route"  
+                  || column.name === "sn"
+                  || column.name === "ij"){
+                      columnsNew.push(column);
+                  }
+              }
+
+              return columnsNew;
+          },
             removekeys(){
               var context = this;
               var columnsNew = []
               for(const column of context.table_VM.columns){
                   if(column.name != "actions" 
                   && column.name != "route"  
-                  && column.name != "sn"){
+                  && column.name != "sn"
+                  && column.name != "ij"){
                       columnsNew.push(column);
                   }
               }
-
               return columnsNew;
           },
           okayEvent(){

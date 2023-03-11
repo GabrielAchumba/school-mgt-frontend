@@ -63,7 +63,7 @@
     return {
             form:form,
             cssProps: {
-            backgroundImage: `url(${require('../../../statics/images/Neway_Logo.jpg')})`
+            backgroundImage: `url(${require('../../../statics/images/Neway_Logo.png')})`
             },
             tableVM: {
                 selectedSchool: {},

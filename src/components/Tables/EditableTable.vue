@@ -1,8 +1,8 @@
 <template>
   <div class="table-container">
-    <b-button variant="success" @click="handleAddEditableTable()">Add</b-button>
+    <!-- <b-button variant="success" @click="handleAddEditableTable()">Add</b-button> -->
     <b-editable-table
-      disableDefaultEdit
+      :disableDefaultEdit="false"
       :rowUpdate="tableVM.rowUpdate"
       :editMode="'row'"
       bordered
