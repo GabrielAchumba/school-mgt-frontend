@@ -75,6 +75,7 @@
         fileUrl: "",
         fileName: "",
         originalFileName: "",
+        fileUploadError: "No Error",
           ContactDTO:{
             phoneNumber:"",
             email:"",

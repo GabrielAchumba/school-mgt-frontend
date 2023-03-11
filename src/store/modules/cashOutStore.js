@@ -134,7 +134,7 @@ const actions = {
 
     return new Promise((resolve, reject) => {
       
-        $http.get(`${payload.url}/${payload.levelIndex}`)
+        $http.get(`${payload.url}/${payload.levelIndex}/${payload.categoryIndex}`)
             .then(response => {
                         
                 resolve(response)

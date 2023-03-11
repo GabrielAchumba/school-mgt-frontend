@@ -5,17 +5,18 @@
       :categoryLevelXQualifiedNotComfirmed="categoryLevelXQualifiedNotComfirmed"
       :columns="columns"
       :SelectedLevelUrl="SelectedLevelUrl"
-      :url="url"/>
+      :url="url"
+      :categoryIndex="categoryIndex"/>
   </div>
 </template>
 
 <script>
   import confirmLevelPayment from "../../../components/AccountAdmin/confirmLevelPayment.vue"
-  import { cashoutn2000Controller } from '../../../store/modules/backendRoutes'
+  import { categoryn2000Controller } from '../../../store/modules/backendRoutes'
     export default {
         computed: {
         categoryLevelXQualifiedNotComfirmed(){
-            return this.$store.getters['cashOutStore/categoryLevelXQualifiedNotComfirmed'];
+            return this.$store.getters['categoryStore/categoryLevelXQualifiedNotComfirmed'];
         },
       },
       components:{
@@ -24,7 +25,7 @@
       data () {
     return {
             Cycles:[],
-            url: `${cashoutn2000Controller}/getcompletedlevelxcategories`,
+            url: `${categoryn2000Controller}/getcompletedlevelxcategories`,
             SelectedLevelUrl: "SelectedLevelN2000",
             Contribution: "2000",
             levelX: "",
@@ -39,6 +40,7 @@
               { name: "confirmLevel", label: "Comfirm Level Payment", field: "actions", align: "left" }
             ],
             message: "",
+            categoryIndex: 3,
             }
         },
         async created() {

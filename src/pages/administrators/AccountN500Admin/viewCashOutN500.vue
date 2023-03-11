@@ -22,7 +22,7 @@
     data() {
       return {
         categoryTitle: "Category N500",
-        cashOutsUrl: `${cashoutn500Controller}`
+        cashOutsUrl: `/cashOutsN500`
       }
     },
   }

@@ -103,9 +103,13 @@
                 default: [],
             },
             separator: {
-            type: String,
-            default: "cell",
-          },
+              type: String,
+              default: "cell",
+            },
+            categoryIndex:{
+              type: Number,
+              default: 1,
+            }
         },
       data () {
     return {
@@ -174,9 +178,12 @@
                   context.levelX = "Level-Seven";
                   break;
               }
-              var response = await this.$store.dispatch('cashOutStore/GetCompletedLevelXCategory', {
+              console.log("levelIndex: ", levelIndex)
+              console.log("context.categoryIndex: ", context.categoryIndex)
+              var response = await this.$store.dispatch('categoryStore/GetCompletedLevelXCategory', {
                   url: context.url,
-                  levelIndex
+                  levelIndex,
+                  categoryIndex: context.categoryIndex,
                   }) 
               
               const { 
@@ -187,8 +194,9 @@
                     }
               } = response
               
+              console.log("result: ", result)
               if(success){
-                this.$store.commit('cashOutStore/GetCompletedLevelXCategory', {
+                this.$store.commit('categoryStore/GetCompletedLevelXCategory', {
                 table: result,
                 levelIndex
                 })

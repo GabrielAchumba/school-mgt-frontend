@@ -222,6 +222,7 @@
             break;
           }
               var response = await this.$store.dispatch('dashboardStore/GetDesendantsPerLevel', url)
+              console.log("account response: ", response)
 
             const categoriesDTO = []
              const { 
@@ -240,60 +241,17 @@
               if(hasPaid) context.cashOutStatus.investmentStatus = "Yes";
 
               if(success){
-                switch(context.category){
-                  case "CategoryN500":
-                    const { 
-                            data : {
-                              data: {
-                                categoryN500sDTO,
-                              },
-                            }
-                    } = response;
-                    this.$store.commit('dashboardStore/GetDesendantsPerLevel', categoryN500sDTO);
-                  break;
-                  case "CategoryN1000":
-                    const { 
-                            data : {
-                              data: {
-                                categoryN1000sDTO,
-                              },
-                            }
-                    } = response;
-                    this.$store.commit('dashboardStore/GetDesendantsPerLevel', categoryN1000sDTO);
-                  break;
-                  case "CategoryN2000":
-                    const { 
-                            data : {
-                              data: {
-                                categoryN2000sDTO,
-                              },
-                            }
-                    } = response;
-                    this.$store.commit('dashboardStore/GetDesendantsPerLevel', categoryN2000sDTO);
-                  break;
-                  case "CategoryN5000":
-                    const { 
-                            data : {
-                              data: {
-                                categoryN5000sDTO,
-                              },
-                            }
-                    } = response;
-                    this.$store.commit('dashboardStore/GetDesendantsPerLevel', categoryN5000sDTO);
-                  break;
-                  case "CategoryN10000":
-                    const { 
-                            data : {
-                              data: {
-                                categoryN10000sDTO,
-                              },
-                            }
-                    } = response;
-                    this.$store.commit('dashboardStore/GetDesendantsPerLevel', categoryN10000sDTO);
-                  break;
-                }
-                
-                await context.getCashOut(levelIndex, categoryId)
+                 const { 
+                        data : {
+                          data: {
+                            categorysDTO,
+                          },
+                        }
+                  } = response;
+                  this.$store.commit('dashboardStore/GetDesendantsPerLevel', categorysDTO);
+                  if(categorysDTO){
+                    await context.getCashOut(levelIndex, categoryId)
+                  }
 
               }else{
                 this.$store.commit('dashboardStore/GetDesendantsPerLevel', [])
@@ -301,7 +259,9 @@
             }
           },
           onItemValueChanged() {
-            //var context = this;
+            var context = this;
+            context.selected = null;
+            this.$store.commit('dashboardStore/GetDesendantsPerLevel', [])
             /* context.amount = context.amounts[context.category];
             var payload = {
               category: context.category,
@@ -323,25 +283,28 @@
             var response = {}
             switch(context.category){
             case "CategoryN500":
-              url = `${cashoutn500Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}`;
+              url = `${cashoutn500Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}/1`;
             break;
             case "CategoryN1000":
-              url = `${cashoutn1000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}`;
+              url = `${cashoutn1000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}/2`;
             break;
             case "CategoryN2000":
-              url = `${cashoutn2000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}`;
+              url = `${cashoutn2000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}/3`;
             break;
             case "CategoryN5000":
-              url = `${cashoutn5000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}`;
+              url = `${cashoutn5000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}/4`;
             break;
             case "CategoryN10000":
-              url = `${cashoutn10000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}`;
+              url = `${cashoutn10000Controller}/getcashoutbycategoryid/${levelIndex}/${categoryId}/5`;
             break;
           }
 
+          console.log("url: ", url)
           response = await this.$store.dispatch('cashOutStore/GetCashOutByCategoryId', {
                 url
           })
+
+          console.log("cashout response: ", response)
 
                const { 
                     data : {

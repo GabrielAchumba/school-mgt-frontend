@@ -31,9 +31,9 @@
               { name: "bankName", label: "Bank Name", field: "", align: "left" },
               { name: "accountName", label: "AccountName", field: "", align: "left" },
               { name: "accountNumber", label: "Account Number", field: "", align: "left" },
-              { name: "categoryN5000BankName", label: "CategoryN5000 Bank Name", field: "", align: "left" },
+              /* { name: "categoryN5000BankName", label: "CategoryN5000 Bank Name", field: "", align: "left" },
               { name: "categoryN5000AccountName", label: "CategoryN5000 Account Name", field: "", align: "left" },
-              { name: "categoryN5000AccountNumber", label: "CategoryN5000 Account Number", field: "", align: "left" },
+              { name: "categoryN5000AccountNumber", label: "CategoryN5000 Account Number", field: "", align: "left" }, */
               { name: "actions", label: "Action", field: "actions", align: "left" }
             ],
             title: "",
@@ -42,7 +42,7 @@
         },
         async created() {
           var context = this;
-          var url = `${cashoutn5000Controller}/getcashouts`;
+          var url = `${cashoutn5000Controller}/getcashouts/4`;
           context.title = "Paid Category N5000 Levels";
           context.viewCashOutUrl = "viewCashOutN5000";
 

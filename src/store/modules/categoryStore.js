@@ -6,11 +6,15 @@ const state = {
     selectedPersonalData: {},
     CategoryN500s: [],
     personalDataList: [],
+    categoryLevelXQualifiedNotComfirmed: [],
 
 
   }
 
   const getters = {
+    categoryLevelXQualifiedNotComfirmed(state){
+        return state.categoryLevelXQualifiedNotComfirmed;
+    },
     personalDataList(state){
       return state.personalDataList;
     },
@@ -43,6 +47,32 @@ const mutations = {
   },
   GetPersonalDataList(state, payload){
     state.personalDataList = payload
+  },
+  GetCompletedLevelXCategory(state, payload){
+      state.categoryLevelXQualifiedNotComfirmed = [];
+      switch(payload.levelIndex){
+        case 1:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+        case 2:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+        case 3:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+        case 4:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+        case 5:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+        case 6:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+        case 7:
+          state.categoryLevelXQualifiedNotComfirmed =  payload.table;
+        break;
+      }
   },
 }
 
@@ -109,6 +139,26 @@ const actions = {
         })
     })
   },
+
+  GetCompletedLevelXCategory(context, payload)
+  {
+
+    var token = sessionStorage.getItem("token") 
+    $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+
+    return new Promise((resolve, reject) => {
+      
+        $http.get(`${payload.url}/${payload.levelIndex}/${payload.categoryIndex}`)
+            .then(response => {
+                        
+                resolve(response)
+                
+            })
+            .catch(error => {
+            reject(error)
+            })
+        })
+    },
 
 }
 

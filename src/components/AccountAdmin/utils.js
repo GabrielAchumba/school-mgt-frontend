@@ -1,11 +1,11 @@
 export const CreateCashOutPayload = (selectedQualifiedLevel,
-    selectedCategoryBankDetails, IdentityModel, todayDate, CashOut, category,
+    selectedCategoryBankDetails, IdentityModel, todayDate, fileUrl, originalFileName, category,
     levelIndex, returnOnInvestment) => {
 
     let payload = {
         contributorId: selectedQualifiedLevel.contributorId,
-        base64String: CashOut.base64String,
-        fileName: CashOut.fileName,
+        base64String: fileUrl,
+        fileName: originalFileName,
         createdYear: todayDate.getFullYear(),
         createdMonth: todayDate.getMonth() + 1,
         createdDay: todayDate.getDate(),
@@ -19,12 +19,17 @@ export const CreateCashOutPayload = (selectedQualifiedLevel,
         returnOnInvestment,
       }
 
-      switch (category){
+      payload.categoryId = selectedQualifiedLevel.categoryId;
+      payload.categoryBankName = selectedCategoryBankDetails.categoryBankName;
+      payload.categoryAccountName = selectedCategoryBankDetails.categoryAccountName;
+      payload.categoryAccountNumber = selectedCategoryBankDetails.categoryAccountNumber
+
+      /* switch (category){
         case "CategoryN500":
-        payload.categoryN500Id = selectedQualifiedLevel.categoryN500Id;
-        payload.categoryN500BankName = selectedCategoryBankDetails.categoryBankName;
-        payload.categoryN500AccountName = selectedCategoryBankDetails.categoryAccountName;
-        payload.categoryN500AccountNumber = selectedCategoryBankDetails.categoryAccountNumber;
+        payload.categoryId = selectedQualifiedLevel.categoryId;
+        payload.categoryBankName = selectedCategoryBankDetails.categoryBankName;
+        payload.categoryAccountName = selectedCategoryBankDetails.categoryAccountName;
+        payload.categoryAccountNumber = selectedCategoryBankDetails.categoryAccountNumber;
         break;
         case "CategoryN1000":
         payload.categoryN1000Id = selectedQualifiedLevel.categoryN1000Id;
@@ -50,7 +55,7 @@ export const CreateCashOutPayload = (selectedQualifiedLevel,
         payload.categoryN10000AccountName = selectedCategoryBankDetails.categoryAccountName;
         payload.categoryN10000AccountNumber = selectedCategoryBankDetails.categoryAccountNumber;
         break;
-      }
+      } */
 
       return payload;
 }

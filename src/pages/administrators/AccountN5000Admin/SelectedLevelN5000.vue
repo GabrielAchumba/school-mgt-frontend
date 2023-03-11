@@ -56,6 +56,7 @@
         confirmCategoryLevelPaymentUrl: "confirmCategoryN5000LevelPayment",
         amount: "5000.00",
         url: `${cashoutn5000Controller}/getcategorybankdetails`,
+        categoryIndex: 4,
 
       }
     },
@@ -68,7 +69,7 @@
         this.$store.commit('accountStore/onCategoryValueChanged', payload);
         this.$store.commit('cashOutStore/onCategoryValueChanged', payload);
         var response = await this.$store.dispatch('cashOutStore/GetCategoryBankDetails', {
-          url: context.url,
+          url: `${context.url}/${context.categoryIndex}`,
         });
 
         const { 
