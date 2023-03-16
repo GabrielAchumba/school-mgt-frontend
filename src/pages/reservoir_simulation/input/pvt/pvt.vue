@@ -177,22 +177,22 @@ export default {
         context.gasPVTArray = []
         const colsOil = []
         colsOil.push({ name: "sn", label: "SN", field: "", align: "left", type: "" })
-        colsOil.push({ name: "pressure", label: "Pressure (psia)", field: "", align: "left", type: "" })
-        colsOil.push({ name: "solutionGOR", label: "Solution GOR", field: "", align: "left", type: "" })
-        colsOil.push({ name: "oilFVF", label: "Oil FVF (rb/stb)", field: "", align: "left", type: "" })
-        colsOil.push({ name: "oilViscosity", label: "Oil Viscosity (cp)", field: "", align: "left", type: "" })
+        colsOil.push({ name: "pressure", label: "Pressure (psia)", field: "", align: "left", type: "", isText: true })
+        colsOil.push({ name: "solutionGOR", label: "Solution GOR", field: "", align: "left", type: "", isText: true })
+        colsOil.push({ name: "oilFVF", label: "Oil FVF (rb/stb)", field: "", align: "left", type: "", isText: true })
+        colsOil.push({ name: "oilViscosity", label: "Oil Viscosity (cp)", field: "", align: "left", type: "", isText: true })
 
         const colsWater = []
         colsWater.push({ name: "sn", label: "SN", field: "", align: "left", type: "" })
-        colsWater.push({ name: "pressure", label: "Pressure (psia)", field: "", align: "left", type: "" })
-        colsWater.push({ name: "wterFVF", label: "Water FVF (rb/stb)", field: "", align: "left", type: "" })
-        colsWater.push({ name: "waterViscosity", label: "Water Viscosity (cp)", field: "", align: "left", type: "" })
+        colsWater.push({ name: "pressure", label: "Pressure (psia)", field: "", align: "left", type: "", isText: true })
+        colsWater.push({ name: "wterFVF", label: "Water FVF (rb/stb)", field: "", align: "left", type: "", isText: true })
+        colsWater.push({ name: "waterViscosity", label: "Water Viscosity (cp)", field: "", align: "left", type: "", isText: true })
 
         const colsGas = []
         colsGas.push({ name: "sn", label: "SN", field: "", align: "left", type: "" })
-        colsGas.push({ name: "pressure", label: "Pressure (psia)", field: "", align: "left", type: "" })
-        colsGas.push({ name: "gasFVF", label: "Gas FVF (rb/scf)", field: "", align: "left", type: "" })
-        colsGas.push({ name: "gasViscosity", label: "Gas Viscosity (cp)", field: "", align: "left", type: "" })
+        colsGas.push({ name: "pressure", label: "Pressure (psia)", field: "", align: "left", type: "", isText: true })
+        colsGas.push({ name: "gasFVF", label: "Gas FVF (rb/scf)", field: "", align: "left", type: "", isText: true })
+        colsGas.push({ name: "gasViscosity", label: "Gas Viscosity (cp)", field: "", align: "left", type: "", isText: true })
         
         
         for(let j = 0; j < 20; j++){
@@ -238,10 +238,10 @@ export default {
             separator: "cell",
         })
 
-        context.typeOfPVTProfileForm.qSelects[0].value = 0
+       /*  context.typeOfPVTProfileForm.qSelects[0].value = 0
         context.selectTypeOfPVTProfile({value: 0})
         context.typeOfPVTProfileForm.qSelects[1].value = 0
-        context.selectTypeOfFluidAction({value: 0})
+        context.selectTypeOfFluidAction({value: 0}) */
 
         switch(pvt.typeOfPVT){
             case "Constant":

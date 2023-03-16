@@ -190,7 +190,7 @@ export default {
             title: "",
             columns: [
                 { name: "sn", label: "SN", field: "", align: "left", type: "" },
-                { name: "dx", label: "Dx (ft)", field: "", align: "left", type: "text" },
+                { name: "dx", label: "Dx (ft)", field: "", align: "left", type: "text", isText: true },
             ],
             rows: [...context.dxArray],
             separator: "cell",
@@ -200,7 +200,7 @@ export default {
             title: "",
             columns: [
                 { name: "sn", label: "SN", field: "", align: "left", type: "" },
-                { name: "dy", label: "Dy (ft)", field: "", align: "left", type: "text" },
+                { name: "dy", label: "Dy (ft)", field: "", align: "left", type: "text", isText: true },
             ],
             rows: [...context.dyArray],
             separator: "cell",
@@ -210,7 +210,7 @@ export default {
             title: "",
             columns: [
                 { name: "sn", label: "SN", field: "", align: "left", type: "" },
-                { name: "dz", label: "Dz (ft)", field: "", align: "left", type: "text" },
+                { name: "dz", label: "Dz (ft)", field: "", align: "left", type: "text", isText: true },
             ],
             rows: [...context.dzArray],
             separator: "cell",

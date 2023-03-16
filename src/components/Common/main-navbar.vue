@@ -23,6 +23,25 @@
                       <q-item-section>
                         {{ menuItem.label}}
                         <q-menu 
+                        v-if="isItem3(menuItem.tabIndex)"
+                        fit>
+                        <q-list 
+                        v-for="(item3Row) in item3Groups" :key="item3Row.title" 
+                        dense class="text-accent text-caption bg-primary" style="width:200px;">
+                                <q-item-label header>{{ item3Row.title }} </q-item-label>
+                                <q-item
+                                v-for="(example) in item3Row.examples" :key="example.title" 
+                                class="bg-primary text-accent"
+                                clickable
+                                @click="loadSelectedExample(example.title)">
+                                    <q-item-section>
+                                    {{ example.title}}
+                                    </q-item-section>
+                                </q-item>
+                                <q-separator spaced />
+                        </q-list>
+                        </q-menu>
+                        <q-menu 
                         v-if="isProducts(menuItem.tabIndex)"
                         fit>
                         <q-list 
@@ -74,6 +93,25 @@
         :label="menuItem.label"
         no-caps
         @click="scrollToElement(menuItem.name)">
+            <q-menu 
+                v-if="isItem3(menuItem.tabIndex)"
+                fit>
+                <q-list 
+                v-for="(item3Row) in item3Groups" :key="item3Row.title" 
+                dense class="text-accent text-caption bg-primary" style="width:200px;">
+                        <q-item-label header>{{ item3Row.title }} </q-item-label>
+                        <q-item
+                        v-for="(example) in item3Row.examples" :key="example.title" 
+                        class="bg-primary text-accent"
+                        clickable
+                        @click="loadSelectedExample(example.title)">
+                            <q-item-section>
+                            {{ example.title}}
+                            </q-item-section>
+                        </q-item>
+                        <q-separator spaced />
+                </q-list>
+            </q-menu>
             <q-menu 
             v-if="isProducts(menuItem.tabIndex)"
             fit>
@@ -222,6 +260,12 @@ export default {
                 ]
             }
         },
+        item3Groups:{
+            type: Array,
+            default: () => {
+                return []
+            }
+        }
     },
     data(){
         return {
@@ -244,6 +288,10 @@ export default {
             console.log("isSchoolRoute: ", isSchoolRoute);
             this.$store.commit("authenticationStore/setIsSchoolRoute", isSchoolRoute)
         },
+        isItem3(tabIndex){
+            const ans = tabIndex === "item3" ? true : false;
+            return ans;
+        },
         isProducts(tabIndex){
             const ans = tabIndex === "products" ? true : false;
             return ans;
@@ -253,10 +301,21 @@ export default {
             return ans;
 
         },
+        isItem3(tabIndex){
+            const ans = tabIndex === "item3" ? true : false;
+            return ans;
+
+        },
         showProduct(routename){
             var context = this;
             this.$router.push(`${routename}`);
         },
+        loadSelectedExample(title){
+            console.log("title: ", title)
+            this.$store.commit("simulationStore/setIsSelectedExample", true)
+            this.$store.commit("simulationStore/loadSelectedExample", title)
+            this.$router.push("/")
+        }
     }
 }
 </script>

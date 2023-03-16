@@ -79,7 +79,7 @@ export default {
             var context = this;
             const payload = {
                typeOfPermeability: context.selectedPermeabiliting.type,
-               permeabilityX2D: [...context.arrayXPermeabilityDistributionForm.tables[0].rows],
+               permeabilityXArray: [...context.arrayXPermeabilityDistributionForm.tables[0].rows],
             }
 
             console.log("payload: ", payload)
@@ -90,7 +90,7 @@ export default {
             var context = this;
             const payload = {
                typeOfPermeability: context.selectedPermeabiliting.type,
-               permeabilityY2D: [...context.arrayYPermeabilityDistributionForm.tables[0].rows],
+               permeabilityYArray: [...context.arrayYPermeabilityDistributionForm.tables[0].rows],
             }
 
             console.log("payload: ", payload)
@@ -101,7 +101,7 @@ export default {
             var context = this;
             const payload = {
                typeOfPermeability: context.selectedPermeabiliting.type,
-               permeabilityZ2D: [...context.arrayZPermeabilityDistributionForm.tables[0].rows],
+               permeabilityZArray: [...context.arrayZPermeabilityDistributionForm.tables[0].rows],
             }
 
             console.log("payload: ", payload)
@@ -131,29 +131,28 @@ export default {
             context.isXArray = false;
             context.isYArray = false;
             context.isZArray = false;
+            console.log("rock.permeability.permeabilityXArray: ", rock.permeability.permeabilityXArray)
             switch(payload.value){
                 case 0:
                     context.isXArray = true;
-                    if(rock.permeability.permeabilityX2D.length > 0){
-                        console.log("seen")
-                        context.arrayXPermeabilityDistributionForm.tables[0].rows = rock.permeability.permeabilityX2D.map((row) => {
+                    if(rock.permeability.permeabilityXArray.length > 0){
+                        context.arrayXPermeabilityDistributionForm.tables[0].rows = rock.permeability.permeabilityXArray.map((row) => {
                             return {...row}
                         })
-                        console.log("seen 2")
                     }
                     break;
                 case 1:
                     context.isYArray = true;
-                    if(rock.permeability.permeabilityY2D.length > 0){
-                        context.arrayYPermeabilityDistributionForm.tables[0].rows = rock.permeability.permeabilityY2D.map((row) => {
+                    if(rock.permeability.permeabilityYArray.length > 0){
+                        context.arrayYPermeabilityDistributionForm.tables[0].rows = rock.permeability.permeabilityYArray.map((row) => {
                             return {...row}
                         })
                     }
                     break;
                 case 2:
                     context.isZArray = true;
-                    if(rock.permeability.permeabilityZ2D.length > 0){
-                        context.arrayZPermeabilityDistributionForm.tables[0].rows = rock.permeability.permeabilityZ2D.map((row) => {
+                    if(rock.permeability.permeabilityZArray.length > 0){
+                        context.arrayZPermeabilityDistributionForm.tables[0].rows = rock.permeability.permeabilityZArray.map((row) => {
                             return {...row}
                         })
                     }
@@ -176,16 +175,16 @@ export default {
         context.permeabilityYArray = []
         context.permeabilityZArray = []
         const cols = []
-        cols.push({ name: "ij", label: "(i,j)", field: "", align: "left", type: "", width: "10px" })
-        for(let j = 0; j < ny; j++){
+        cols.push({ name: "ji", label: "(j,i)", field: "", align: "left", type: "" })
+        for(let i = 0; i < nx; i++){
             cols.push({
-                name: `${j+1}`, label: `${j+1}`, field: "", align: "left", type: ""
+                name: `${i+1}`, label: `${i+1}`, field: "", align: "left", type: "", isText: true
             })
         }
-        for(let j = 0; j < nx; j++){
+        for(let j = 0; j < ny; j++){
             const row = {}
-            row["ij"] = j+1
-            for(let i = 0; i < ny; i++){
+            row["ji"] = j+1
+            for(let i = 0; i < nx; i++){
                 row[`${i+1}`] = ""
             }
             context.permeabilityXArray.push({...row})
@@ -214,11 +213,13 @@ export default {
             separator: "cell",
         })
 
-        context.typeOfPermeabilityDistributionForm.qSelects[0].value = 0
+
+/*         context.typeOfPermeabilityDistributionForm.qSelects[0].value = 0
         context.selectTypeOfPermeabilityDistribution({value: 0})
         context.typeOfPermeabilityDistributionForm.qSelects[1].value = 0
-        context.selectTypeOfDirectionAction({value: 0})
+        context.selectTypeOfDirectionAction({value: 0}) */
 
+        console.log("rock.permeability.typeOfPermeability: ", rock.permeability.typeOfPermeability)
         switch(rock.permeability.typeOfPermeability){
             case "Constant":
                 context.isConstant = true;

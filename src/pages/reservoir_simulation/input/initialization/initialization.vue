@@ -204,10 +204,10 @@ export default {
         context.waterSaturationArray = []
         context.gasSaturationArray = []
         const cols = []
-        cols.push({ name: "ij", label: "(i,j)", field: "", align: "left", type: "" })
+        cols.push({ name: "ij", label: "(i,j)", field: "", align: "left", type: "", isText: true })
         for(let j = 0; j < ny; j++){
             cols.push({
-                name: `${j+1}`, label: `${j+1}`, field: "", align: "left", type: ""
+                name: `${j+1}`, label: `${j+1}`, field: "", align: "left", type: "", isText: true
             })
         }
         for(let j = 0; j < nx; j++){
@@ -250,10 +250,10 @@ export default {
             separator: "cell",
         })
 
-        context.typeOfInitializationForm.qSelects[0].value = 0
+        /*context.typeOfInitializationForm.qSelects[0].value = 0
         context.selectInitializationForm({value: 0})
         context.typeOfInitializationForm.qSelects[1].value = 0
-        context.selectVariableAction({value: 0})
+        context.selectVariableAction({value: 0}) */
 
         switch(initialization.typeOfInitialization){
             case "Constant":

@@ -3,7 +3,9 @@
         <Form
         :formData="typeOfPorosityDistributionForm"
         :isFormTitle="isTypeOfPorosityDistributionFormTitle"
-        @selectTypeOfPorosityDistribution="selectTypeOfPorosityDistribution($event)"/>
+        @selectTypeOfPorosityDistribution="selectTypeOfPorosityDistribution($event)"
+        @showTableCellDialog="showTableCellDialog($event)"
+        />
         <Form
         v-if="isConstant"
         :formData="constantPorosityForm"
@@ -41,6 +43,9 @@ export default {
         Cancel(){
             this.$router.push('/olasim')
         },
+        showTableCellDialog(payload){
+            console.log("payload: ", payload)
+        },
         ApplyConstantPorosity(){
             var context = this;
             const payload = {
@@ -56,7 +61,7 @@ export default {
             var context = this;
             const payload = {
                typeOfPorositing: context.selectedPorositing.type,
-               porosity2D: [...context.arrayPorosityDistributionForm.tables[0].rows],
+               porosityArray: [...context.arrayPorosityDistributionForm.tables[0].rows],
             }
 
             console.log("payload: ", payload)
@@ -91,17 +96,18 @@ export default {
         context.arrayPorosityDistributionForm.tables = []
         context.porosityArray = []
         const cols = []
-        cols.push({ name: "ij", label: "(i,j)", field: "", align: "left", type: "", width: "10px" })
-        for(let j = 0; j < ny; j++){
+        cols.push({ name: "ji", label: "(j,i)", field: "", align: "left", isText: true })
+        for(let i = 0; i < nx; i++){
             cols.push({
-                name: `${j+1}`, label: `${j+1}`, field: "", align: "left", type: ""
+                name: `${i+1}`, label: `${i+1}`, field: "", align: "left", 
+                isText: true, actionName: "showTableCellDialog"
             })
         }
         console.log("cols: ", cols)
-        for(let j = 0; j < nx; j++){
+        for(let j = 0; j < ny; j++){
             const row = {}
-            row["ij"] = j+1
-            for(let i = 0; i < ny; i++){
+            row["ji"] = j+1
+            for(let i = 0; i < nx; i++){
                 row[`${i+1}`] = ""
             }
             context.porosityArray.push({...row})
@@ -126,7 +132,7 @@ export default {
                 context.isArray = true;
                 context.typeOfPorosityDistributionForm.qSelects[0].value = 1
                 context.selectTypeOfPorosityDistribution({value: 1})
-                context.arrayPorosityDistributionForm.tables[0].rows = rock.porosity.porosity2D.map((row) => {
+                context.arrayPorosityDistributionForm.tables[0].rows = rock.porosity.porosityArray.map((row) => {
                     return {...row}
                 })
                 break;

@@ -1,3 +1,5 @@
+import { examples } from "../examples/examples";
+
 const state = {
     geometry:{
         dimensions: {
@@ -19,19 +21,24 @@ const state = {
         },
     },
     rock:{
+        compressibility:{
+            typeOfCompressibility: "Constant", //Constant, Range, Array,
+            compressibility: 0,
+            compressibilityArray:[],
+        },
         porosity:{
             typeOfPorositing: "Constant", //Constant, Range, Array,
             porosity: 0,
-            porosity2D:[],
+            porosityArray:[],
         },
         permeability:{
             typeOfPermeability: "Constant", //Constant, Range, Array,
             permeabilityX: 0,
             permeabilityY: 0,
             permeabilityZ: 0,
-            permeabilityX2D:[],
-            permeabilityY2D:[],
-            permeabilityZ2D:[],
+            permeabilityXArray:[],
+            permeabilityYArray:[],
+            permeabilityZArray:[],
         },
     },
     pvt:{
@@ -41,18 +48,24 @@ const state = {
             viscosity: 0,
             fVF: 0,
             solutionGOR: 0,
+            density: 0,
+            compressibility: 0,
             table:[],
         },
         gas:{
             pressure: 0,
             viscosity: 0,
             fVF: 0,
+            density: 0,
+            compressibility: 0,
             table:[],
         },
         water:{
             pressure: 0,
             viscosity: 0,
             fVF: 0,
+            density: 0,
+            compressibility: 0,
             table:[],
         }
     },
@@ -72,10 +85,38 @@ const state = {
         timeStep: 0,
         duration: 0,
         table: []
-    }
+    },
+    boundaries:{
+        typeOfBoundaries: "Constant", //Constant, Range, Array,
+        west: {boundaryCondition: "Closed", value: 0},
+        east: {boundaryCondition: "Closed", value: 0},
+        south: {boundaryCondition: "Closed", value: 0},
+        north: {boundaryCondition: "Closed", value: 0},
+        top: {boundaryCondition: "Closed", value: 0},
+        bottom: {boundaryCondition: "Closed", value: 0},
+        westArray:[],
+        eastArray:[],
+        southArray:[],
+        northArray: [],
+        topArray: [],
+        bottomArray: [],
+    },
+    wells: [],
+    spaceDistributions: [],
+    isSelectedExample: false,
+    selectedExample: {}
 }
 
 const getters = {
+    spaceDistributions(state){
+        return state.spaceDistributions;
+    },
+    isSelectedExample(state){
+        return state.isSelectedExample;
+    },
+    selectedExample(state){
+        return state.selectedExample;
+    },
     geometry(state){
         return state.geometry;
     },
@@ -90,10 +131,77 @@ const getters = {
     },
     schedule(state){
         return state.schedule;
+    },
+    boundaries(state){
+        return state.boundaries;
+    },
+    wells(state){
+        return state.wells;
     }
 }
 
 const mutations = {
+    setSpaceDistributions(state, payload){
+        state.spaceDistributions = payload
+    },
+    setIsSelectedExample(state, payload){
+        state.isSelectedExample = payload
+    },
+    loadSelectedExample(state, payload){
+        const selectedExample = examples.find(e => e.type === payload)
+        state.geometry = {...selectedExample.geometry }
+        state.rock = {...selectedExample.rock }
+        state.pvt = {...selectedExample.pvt }
+        state.initialization = {...selectedExample.initialization }
+        state.schedule = {...selectedExample.schedule }
+        state.boundaries = {...selectedExample.boundaries }
+        state.wells = [...selectedExample.wells]
+        console.log("state: ", state)
+    },
+    setWells(state, payload){
+        state.wells = [...payload.list]
+        console.log('wells: ', state.wells)
+    },
+    setBottomBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.bottomArray = [...payload.bottomArray]
+        console.log('boundaries: ', state.boundaries)
+    },
+    setTopBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.topArray = [...payload.topArray]
+        console.log('boundaries: ', state.boundaries)
+    },
+    setNorthBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.northArray = [...payload.northArray]
+        console.log('boundaries: ', state.boundaries)
+    },
+    setSouthBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.southArray = [...payload.southArray]
+        console.log('boundaries: ', state.boundaries)
+    },
+    setEastBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.eastArray = [...payload.eastArray]
+        console.log('boundaries: ', state.boundaries)
+    },
+    setWestBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.westArray = [...payload.westArray]
+        console.log('boundaries: ', state.boundaries)
+    },
+    setConstantBoundaries(state, payload){
+        state.boundaries.typeOfBoundaries = payload.typeOfBoundaries
+        state.boundaries.west = {...payload.west }
+        state.boundaries.east = {...payload.east }
+        state.boundaries.south = {...payload.south }
+        state.boundaries.north = {...payload.north }
+        state.boundaries.top = {...payload.top }
+        state.boundaries.bottom = {...payload.bottom }
+        console.log('boundaries: ', state.boundaries)
+    },
     setDimensions(state, payload){
         state.geometry.dimensions = {...payload}
         console.log('dimensions: ', state.geometry.dimensions)

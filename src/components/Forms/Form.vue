@@ -85,7 +85,9 @@
                       v-for="table in formData.tables" 
                       :key="table.id">
                       <TableEditable
-                      :table_VM="table"/>
+                      :table_VM="table"
+                      @cellButtonAction="cellButtonAction($event)"
+                      @setCellBackground="setCellBackground($event)"/>
                     </div>
 
                     <div class="q-pa-sm"
@@ -593,6 +595,12 @@ import { getLineWidth } from 'plotly.js-dist';
           },
           onQSelectItemValueChanged(qSelect){
             this.$emit(qSelect.actionName, qSelect);
+          },
+          cellButtonAction(payload){
+            this.$emit(payload.actionName, payload);
+          },
+          setCellBackground(payload){
+            this.$emit("setCellBackground", payload);
           },
           ClickAction(actionName, formData){
               var context = this;

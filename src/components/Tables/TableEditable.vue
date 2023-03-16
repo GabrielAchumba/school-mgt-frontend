@@ -41,11 +41,40 @@
                 <q-td 
                 v-for="column in removekeys()" :key="column.name"
                 :props="props">
-                {{ props.row[column.name] }}
-                 <q-popup-edit v-model="props.row[column.name]" auto-save buttons v-slot="scope">
-                    <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
-                </q-popup-edit>
+                  <div
+                  v-if="column.isText">
+                    {{ props.row[column.name] }}
+                  </div>
+                  <!-- {{ props.row[column.name] }} -->
+                    <q-popup-edit
+                    v-if="column.isText"
+                    v-model="props.row[column.name]" auto-save buttons v-slot="scope">
+                        <q-input v-model="scope.value" dense autofocus counter @keyup.enter="scope.set" />
+                    </q-popup-edit>
+                     <q-btn 
+                      v-if="column.isButton"
+                      :class="setCellBackground(props.row[column.name])"
+                      style="width:100%"
+                      :label="props.row[column.name]"
+                      type="button"
+                      no-caps
+                      @click="cellButtonAction({actionName:column.actionName, cellPosition: props.row[column.name]})"
+                    />
                 </q-td>
+
+                <!-- <q-td 
+                v-for="column in removekeys()" :key="column.name"
+                :props="props">
+                    <q-btn 
+                    v-if="column.isText"
+                    class="q-ma-sm bg-accent text-primary"
+                      style="width:100%"
+                      :label="props.row[column.name]"
+                      type="button"
+                      no-caps
+                      @click="cellButtonAction({actionName:column.actionName, cellPosition: props.row[column.name]})"
+                    />
+                </q-td> -->
               </q-tr>
           </template>
     </q-table>
@@ -120,6 +149,23 @@
           }
         },
         methods: {
+          getRowColIndices(txt){
+              const txt1 = txt.replace(/\s/g, '');
+              const arr1 = txt1.split("(")
+              const arr2 = arr1[1].split(")")
+              const arr3 = arr2[0].split(",")
+              return {row: Number(arr3[0]), col: Number(arr3[1])}
+          },
+          setCellBackground(cellPosition){
+            var context = this;
+            const { row, col } = context.getRowColIndices(cellPosition)
+            const background = context.table_VM.rows2[row-1][col].background
+            return background
+
+          },
+          cellButtonAction(payload){
+            this.$emit("cellButtonAction", payload)
+          },
           customFilter(rows, terms){
             // rows contain the entire data
             // terms contains whatever you have as filter
@@ -169,7 +215,12 @@
                   if(column.name === "actions" 
                   || column.name === "route"  
                   || column.name === "sn"
-                  || column.name === "ij"){
+                  || column.name === "ij"
+                  || column.name === "jk"
+                  || column.name === "ik"
+                  || column.name === "ji"
+                  || column.name === "kj"
+                  || column.name === "ki"){
                       columnsNew.push(column);
                   }
               }
@@ -183,7 +234,12 @@
                   if(column.name != "actions" 
                   && column.name != "route"  
                   && column.name != "sn"
-                  && column.name != "ij"){
+                  && column.name != "ij"
+                  && column.name != "jk"
+                  && column.name != "ik"
+                  && column.name != "ji"
+                  && column.name != "kj"
+                  && column.name != "ki"){
                       columnsNew.push(column);
                   }
               }

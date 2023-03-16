@@ -3,7 +3,8 @@
      <q-header>
          <MainNavbar
          :productGroups="productGroups"
-         :serviceGroups="serviceGroups"/>
+         :serviceGroups="serviceGroups"
+         :item3Groups="item3Groups"/>
          <q-separator/>
      </q-header>
 
@@ -80,6 +81,10 @@ export default {
                 title: "Output",
                 services: [
                         {
+                            title: "Simulation Log",
+                            name: "/output/simulationlog",
+                        },
+                        {
                             title: "Pressure Distribution",
                             name: "/output/pressuredistribution",
                         },
@@ -94,6 +99,19 @@ export default {
                         {
                             title: "Reservoir Production",
                             name: "",
+                        },
+                    ]
+                },
+            ],
+            item3Groups:[
+                {
+                title: "Examples",
+                    examples: [
+                        {
+                            title: "Example 1",
+                        },
+                        {
+                            title: "Example 2",
                         },
                     ]
                 },

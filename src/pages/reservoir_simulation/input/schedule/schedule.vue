@@ -82,13 +82,14 @@ export default {
         var context = this;
         context.constantTimeStepForm.clearQInputs();
         const schedule = this.$store.getters["simulationStore/schedule"]
+        console.log("schedule: ", schedule)
 
         context.arrayTimeStepForm.tables = []
         context.timeStepArray = []
 
         const cols = []
         cols.push({ name: "sn", label: "SN", field: "", align: "left", type: "" })
-        cols.push({ name: "time", label: "Time (days)", field: "", align: "left", type: "" })
+        cols.push({ name: "time", label: "Cumulative Time (days)", field: "", align: "left", type: "", isText: true })
         
         
         for(let j = 0; j < 20; j++){
@@ -105,10 +106,11 @@ export default {
             separator: "cell",
         })
         
-        context.typeOfScheduleForm.qSelects[0].value = 0
-        context.selectTypeOfSchedule({value: 0})
+        /* context.typeOfScheduleForm.qSelects[0].value = 0
+        context.selectTypeOfSchedule({value: 0}) */
+        console.log("schedule.table: ", schedule.table)
 
-        switch(schedule.typeOfPVT){
+        switch(schedule.typeOfSchedule){
             case "Constant":
                 context.isConstant = true;
                 context.typeOfScheduleForm.qSelects[0].value = 0
@@ -120,6 +122,8 @@ export default {
                 context.isArray = true;
                 context.typeOfScheduleForm.qSelects[0].value = 1
                 context.selectTypeOfSchedule({value: 1})
+                context.arrayTimeStepForm.tables[0].rows = schedule.table
+                console.log("rows: ", context.arrayTimeStepForm.tables[0].rows)
                 break;
         }
 

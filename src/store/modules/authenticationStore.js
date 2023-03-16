@@ -261,6 +261,7 @@ const mutations = {
   setReservoirSimulationList(state, payload){
     const olasim_menuList = [
       { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/examples", tabIndex: "item3", label: "Examples"},
       { name: "/input", tabIndex: "products", label: "Input"},
       { name: "/output", tabIndex: "services", label: "Output" },
     ]

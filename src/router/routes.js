@@ -49,6 +49,26 @@ const routes = [
         component: () => import('pages/reservoir_simulation/input/schedule/schedule.vue') 
       
       },
+      {
+        path: '/input/boundaries', 
+        component: () => import('pages/reservoir_simulation/input/boundaries/boundaries.vue') 
+      
+      },
+      {
+        path: '/input/wells', 
+        component: () => import('pages/reservoir_simulation/input/wells/wells.vue') 
+      
+      },
+      {
+        path: '/output/simulationlog', 
+        component: () => import('pages/reservoir_simulation/output/simulationlog/simulationlog.vue') 
+      
+      },
+      {
+        path:   '/output/pressuredistribution', 
+        component: () => import('pages/reservoir_simulation/output/pressuredistribution/pressuredistribution.vue') 
+      
+      },
     ]
   },
   {
