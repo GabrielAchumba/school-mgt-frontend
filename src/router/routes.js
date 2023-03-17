@@ -38,7 +38,9 @@ const routes = [
       { path: '/user-createCategoryN2000', component: () => import('pages/administrators/CategoryN2000Admin/CreateCategoryN2000.vue') },
       { path: '/user-createCategoryN5000', component: () => import('pages/administrators/CategoryN5000Admin/CreateCategoryN5000.vue') },
       { path: '/user-createCategoryN10000', component: () => import('pages/administrators/CategoryN10000Admin/CreateCategoryN10000.vue') },
-      { path: '/faqs', component: () => import('pages/dashboard/faq.vue') }
+      { path: '/faqs', component: () => import('pages/dashboard/faq.vue') },
+      { path: '/unread-messages', component: () => import('pages/administrators/chat/landing.vue') },
+      { path: '/view-chat', component: () => import('pages/administrators/chat/viewCreateChat.vue') },
     ]
   },
   {

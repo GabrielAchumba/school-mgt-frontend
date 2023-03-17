@@ -17,6 +17,17 @@
       <q-tabs v-model="selected_tab" shrink>
 
         <div v-if="rightDrawerOpen">
+          <q-btn 
+          dense 
+          round flat icon="mail"
+          @click="showUnreadMessages">
+            <q-badge
+            v-if="unReadMessages.length > 0"
+            color="secondary" floating>
+              {{ unReadMessages.length }}
+            </q-badge>
+          </q-btn>
+
           <q-btn
             @click="toggleMobilePhoneMenu"
             :icon="rightMenuIcon"
@@ -180,8 +191,10 @@
 </template>
 
 <script>
+import io from "socket.io-client";
 import paymentresponse from 'pages/contribution/paymentresponse.vue';
-
+import { post } from "../store/modules/gcp-services"
+import * as http from "../store/modules/services";
 export default {
   //name: 'AdminLayout',
   computed: {
@@ -204,6 +217,10 @@ export default {
   },
   data () {
     return {
+      unReadMessages: [],
+      socket: null,
+      deviceId: "",
+      serverUrl: "http://localhost:4000/",
       leftDrawerOpen: true,
       showAccountDetails: false,
       rightMenuIcon: "menu",
@@ -266,11 +283,16 @@ export default {
                 icon: 'school',
                 to:'/user-dashboard'
               },
-              {
+              /* {
+                label:'Chat',
+                icon: 'school',
+                to:'/user-chat'
+              }, */
+              /* {
                 label:'Advertise Business',
                 icon: 'school',
                 to:'/user-dashboard'
-              },
+              }, */
               {
                 label:'FAQs',
                 icon: 'school',
@@ -356,6 +378,106 @@ export default {
       content.rightDrawerOpen = false
       if(width < 700) content.rightDrawerOpen = true;
     },
+    showUnreadMessages(){
+      this.$store.commit('dashboardStore/setSelectedCategory', "CategoryN500")
+      this.$router.push('/unread-messages')
+    },
+    async LoadUserCategories(){
+      var context = this;
+      let payload = {
+            url: `categoryn500/getcategorybycontributorid/${context.IdentityModel.id}`,
+            req: {}
+        }
+
+      let response = await http.get(payload)
+      const { 
+              data : {
+                data: categoryN500User,
+              }
+      } = response;
+      this.$store.commit('authenticationStore/setCategoryN500User', categoryN500User)
+
+      payload = {
+            url: `categoryn1000/getcategorybycontributorid/${context.IdentityModel.id}`,
+            req: {}
+        }
+
+      response = await http.get(payload)
+      const { 
+              data : {
+                data: categoryN1000User,
+              }
+      } = response;
+      this.$store.commit('authenticationStore/setCategoryN1000User', categoryN1000User)
+
+
+      payload = {
+            url: `categoryn2000/getcategorybycontributorid/${context.IdentityModel.id}`,
+            req: {}
+        }
+
+      response = await http.get(payload)
+      const { 
+              data : {
+                data: categoryN2000User,
+              }
+      } = response;
+      this.$store.commit('authenticationStore/setCategoryN2000User', categoryN2000User)
+
+      payload = {
+            url: `categoryn5000/getcategorybycontributorid/${context.IdentityModel.id}`,
+            req: {}
+        }
+
+      response = await http.get(payload)
+      const { 
+              data : {
+                data: categoryN5000User,
+              }
+      } = response;
+      this.$store.commit('authenticationStore/setCategoryN5000User', categoryN5000User)
+
+
+      payload = {
+            url: `categoryn10000/getcategorybycontributorid/${context.IdentityModel.id}`,
+            req: {}
+        }
+
+      response = await http.get(payload)
+      const { 
+              data : {
+                data: categoryN10000User,
+              }
+      } = response;
+      this.$store.commit('authenticationStore/setCategoryN10000User', categoryN10000User)
+    },
+    async loadUnreadMessages(){
+      var context = this;
+      context.fromUser = this.$store.getters['authenticationStore/categoryN500User'];
+      const payload = {
+            url: "launchstory/unreadMessages",
+            req: {
+              id: context.fromUser.categoryId,
+              selectedCategory: "CategoryN500",
+            }
+        }
+
+        const response = await post(payload) 
+
+        if(response.data.length > 0){
+            context.unReadMessages = response.data.map((row) => {
+                return {
+                    ...row,
+                }
+            })
+        }
+    },
+    connectToWebsocket() {
+        var context = this;
+        context.socket = io(context.serverUrl, {
+            transports: ["websocket"],
+        });
+    },
   },
   mounted() {
     window.addEventListener("resize", this.onResize);
@@ -363,6 +485,27 @@ export default {
   unmounted() {
     window.removeEventListener("resize", this.onResize);
   },
+  async created(){
+    var context = this;
+    await context.LoadUserCategories();
+    await context.loadUnreadMessages();
+    console.log("context.IdentityModel: ", context.IdentityModel)
+
+    context.connectToWebsocket(); 
+        context.socket.on('chat-message', (data) => {
+            
+            if(data){
+                if(data.toUserName === context.IdentityModel.username){
+                  context.unReadMessages = [1];
+                }
+            }
+        });
+
+
+    context.socket.on('connected', (deviceId) => {
+        context.deviceId = deviceId;
+    });
+  }
 }
 </script>
 

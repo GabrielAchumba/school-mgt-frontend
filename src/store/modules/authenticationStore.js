@@ -16,10 +16,34 @@ const state = {
     paystackkey: "",
     visible: false,
     showSimulatedReturnData: true,
-    rightDrawerOpen: true
+    rightDrawerOpen: true,
+    toUser: {fullName: "", contributorId: "", categoryId: ""},
+    categoryN500User: {},
+    categoryN1000User: {},
+    categoryN2000User: {},
+    categoryN5000User: {},
+    categoryN10000User: {},
   }
 
   const getters = {
+    categoryN10000User(state){
+      return state.categoryN10000User;
+    },
+    categoryN5000User(state){
+      return state.categoryN5000User;
+    },
+    categoryN2000User(state){
+      return state.categoryN2000User;
+    },
+    categoryN1000User(state){
+      return state.categoryN1000User;
+    },
+    categoryN500User(state){
+      return state.categoryN500User;
+    },
+    toUser(state){
+      return state.toUser;
+    },
     DoesNotHaveMoneyAccount(state){
       return state.DoesNotHaveMoneyAccount;
     },
@@ -68,6 +92,24 @@ const state = {
 }
 
 const mutations = {
+  setCategoryN10000User(state, payload){
+    state.categoryN10000User = {...payload }
+  },
+  setCategoryN5000User(state, payload){
+    state.categoryN5000User = {...payload }
+  },
+  setCategoryN2000User(state, payload){
+    state.categoryN2000User = {...payload }
+  },
+  setCategoryN1000User(state, payload){
+    state.categoryN1000User = {...payload }
+  },
+  setCategoryN500User(state, payload){
+    state.categoryN500User = {...payload }
+  },
+  setToUser(state, payload){
+    state.toUser = {...payload }
+  },
   setRightDrawerOpen(state, payload){
     state.rightDrawerOpen = payload
   },

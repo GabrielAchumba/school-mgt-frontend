@@ -7,9 +7,13 @@ const state = {
     fAQs: [],
     DirectDownliner: {},
     isParentUser: false,
+    selectedCategory: "",
   }
 
   const getters = {
+    selectedCategory(state){
+      return state.selectedCategory;
+    },
     isParentUser(state){
       return state.isParentUser;
     },
@@ -28,7 +32,9 @@ const state = {
 }
 
 const mutations = {
-
+    setSelectedCategory(state, payload){
+      state.selectedCategory = payload;
+    },
     UpdateDirectDownliner(state, payload){
       state.DirectDownliner = payload;
     },

@@ -1,7 +1,6 @@
 import { $http } from 'boot/axios' 
 
 const get = async (payload) => {
-    console.log("payload: ", payload)
 
   //var token = validateSession();
   var token = sessionStorage.getItem("token") 

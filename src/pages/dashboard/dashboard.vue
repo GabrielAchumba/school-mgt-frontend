@@ -77,7 +77,7 @@
                     icon="done"
                     class="bg-primary text-accent"
                     no-shadows
-                    size=sm no-caps
+                    size=md no-caps
                     flat
                     dense>
                   </q-btn>
@@ -86,7 +86,7 @@
                     icon="close"
                     class="bg-primary text-red"
                     no-shadows
-                    size=sm no-caps
+                    size=md no-caps
                     flat
                     dense>
                   </q-btn>
@@ -98,14 +98,14 @@
                       flat
                       label="complete"
                       no-shadows
-                      size=sm no-caps>
+                      size=md no-caps>
                     </q-btn>
                     <q-btn 
                       v-else
                       class="bg-red text-primary"
-                      label="incomplete"
+                      label="chat"
                       no-shadows
-                      size=sm no-caps
+                      size=md no-caps
                       @click="helpDownliner(props.row)">
                       <q-tooltip>
                         Help Downliner
@@ -165,7 +165,7 @@
               { name: "phoneNumber", label: "Phone Number", field: "phoneNumber", align: "left" },
               { name: "nLevelXRoomOneChildren", label: "Level One Count", field: "", align: "left" },
               { name: "hasPaid", label: "Investment Status", field: "hasPaid", align: "left" },
-              { name: "help", label: "Help Downliner", field: "help", align: "left" },
+              { name: "help", label: "Chat Downliner", field: "help", align: "left" },
               //{ name: "paymentReceived", label: "Amount Paid (₦)", field: "", align: "left" }
             ],
             categories: [
@@ -273,8 +273,11 @@
             else return false;
           },
           helpDownliner(selectedRow){
-            this.$store.commit('dashboardStore/UpdateDirectDownliner', selectedRow)
-            this.$store.commit('dashboardStore/UpdateIsParentUser', true)
+            var context = this;
+            //console.log("selectedRow: ", selectedRow)
+            this.$store.commit('authenticationStore/setToUser', selectedRow)
+            this.$store.commit('dashboardStore/setSelectedCategory', context.category)
+            this.$router.push('/view-chat')
           },
           async getCashOut (levelIndex, categoryId) {
             var context = this;
