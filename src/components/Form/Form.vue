@@ -441,6 +441,7 @@
 
 <script>
     import form from "./FormVM.js";
+
     export default {
         computed:{
           setIsResponsive(){
@@ -456,7 +457,12 @@
               }
           },
         },
+
         props: {
+            isFormTitle:{
+              type: Boolean,
+              default: true
+            },
             isResponsive:{
               type: Boolean,
               default: false
@@ -513,6 +519,12 @@
           },
           onQSelectItemValueChanged(qSelect){
             this.$emit(qSelect.actionName, qSelect);
+          },
+          cellButtonAction(payload){
+            this.$emit(payload.actionName, payload);
+          },
+          setCellBackground(payload){
+            this.$emit("setCellBackground", payload);
           },
           ClickAction(actionName, formData){
               var context = this;

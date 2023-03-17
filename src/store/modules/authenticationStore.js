@@ -16,6 +16,7 @@ const state = {
     paystackkey: "",
     visible: false,
     showSimulatedReturnData: true,
+<<<<<<< HEAD
     rightDrawerOpen: true,
     toUser: {fullName: "", contributorId: "", categoryId: ""},
     categoryN500User: {},
@@ -28,6 +29,103 @@ const state = {
   const getters = {
     categoryN10000User(state){
       return state.categoryN10000User;
+=======
+    tab: "login",
+    isMobile: false,
+    createURL: "",
+    importURL: "",
+    activeColumns: [],
+    globalSearchDialog: false,
+    activeRows: [],
+    newRows: [],
+    activeRoute: "",
+    backRoute: "",
+    menuList: [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/login_register", tabIndex: "products", label: "Products"},
+      { name: "/school-landing", tabIndex: "services", label: "Services" },
+      { name: "/news", tabIndex: "mentoring", label: "Mentoring"}
+    ],
+    client_menuList: [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/news", tabIndex: "news", label: "News"},
+      { name: "/about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "/contact", tabIndex: "contact", label: "Contact" },
+    ],
+    showSpinner: false,
+    isSchoolRoute: false,
+    spinnerSize: "8em",
+    spinnerThickness: 10,
+    workSheetsNames: [],
+    workSheetsData: [],
+    isError: false,
+    errorMessages: false,
+    pageTitle: "",
+    updateUserRoute: "/update-user",
+    unComfirmedUsersRoute: "/unconfirmed-users",
+    isTorpa: false,
+    productGroups: [
+      {
+        title: "Apps",
+        products: [
+          {
+            title: "Torpa",
+            name: "",
+          },
+          {
+            title: "Classic",
+            name: "",
+          },
+          {
+            title: "NewFood",
+            name: "",
+          }
+        ]
+      },
+      {
+        title: "Interiors",
+        products: [
+          {
+            title: "Bedsheets"
+          },
+          {
+            title: "Doveut"
+          },
+          {
+            title: "Throw Pillows"
+          },
+          {
+            title: "Curtains"
+          }
+        ]
+      },
+      {
+        title: "Foods",
+        products: [
+          {
+            title: "Bedsheets1"
+          },
+          {
+            title: "Doveut1"
+          },
+          {
+            title: "Throw Pillows1"
+          },
+          {
+            title: "Curtains1"
+          }
+        ]
+      }
+    ]
+  }
+
+  const getters = {
+    productGroups(state){
+      return state.productGroups;
+    },
+    isTorpa(state){
+      return state.isTorpa;
+>>>>>>> a878d1dbb818c9e222000a8def50749bffae0336
     },
     categoryN5000User(state){
       return state.categoryN5000User;
@@ -86,9 +184,45 @@ const state = {
   Admin(state){
     return state.Admin;
   },
+<<<<<<< HEAD
   rightDrawerOpen(state){
     return state.rightDrawerOpen;
   }
+=======
+  isMobile(state){
+    return state.isMobile;
+  },
+  createURL(state){
+    return state.createURL;
+  },
+  activeColumns(state){
+    return state.activeColumns;
+  },
+  globalSearchDialog(state){
+    return state.globalSearchDialog;
+  },
+  activeRows(state){
+    return state.activeRows;
+  },
+  newRows(state){
+    return state.newRows;
+  },
+  activeRoute(state){
+    return state.activeRoute;
+  },
+  menuList(state){
+    return state.menuList;
+  },
+  showSpinner(state){
+    return state.showSpinner;
+  },
+  importURL(state){
+    return state.importURL;
+  },
+  backRoute(state){
+    return state.backRoute;
+  },
+>>>>>>> a878d1dbb818c9e222000a8def50749bffae0336
 }
 
 const mutations = {
@@ -107,8 +241,53 @@ const mutations = {
   setCategoryN500User(state, payload){
     state.categoryN500User = {...payload }
   },
+<<<<<<< HEAD
   setToUser(state, payload){
     state.toUser = {...payload }
+=======
+  setImportedData(state, payload){
+    state.workSheetsNames = payload.workSheetsNames;
+    state.workSheetsData = payload.workSheetsData;
+  },
+  setIsSchoolRoute(state, payload){
+    state.isSchoolRoute = payload;
+  },
+  setShowSpinner(state, payload){
+    state.showSpinner = payload;
+  },
+  setReservoirSimulationList(state, payload){
+    const olasim_menuList = [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/examples", tabIndex: "item3", label: "Examples"},
+      { name: "/input", tabIndex: "products", label: "Input"},
+      { name: "/output", tabIndex: "services", label: "Output" },
+    ]
+    state.menuList = olasim_menuList.map((row) => {
+      return { ...row }
+    })
+  },
+  setMenuList(state, payload){
+    const torpa_menuList = [
+      { name: "/", tabIndex: "home", label: "Home" },
+      { name: "/products", tabIndex: "products", label: "Products"},
+      { name: "/services", tabIndex: "services", label: "Services" },
+      { name: "/mentoring", tabIndex: "mentoring", label: "Mentoring"},
+      { name: "/courses", tabIndex: "courses", label: "Courses"},
+      { name: "/clients", tabIndex: "clients", label: "Clients"},
+      /* { name: "/about_us", tabIndex: "about_us", label: "About Us" },
+      { name: "/contact", tabIndex: "contact", label: "Contact" }, */
+    ]
+    console.log("payload: ", payload)
+    console.log("torpa_menuList: ", torpa_menuList)
+    if(payload === true){
+      state.menuList = [...torpa_menuList]
+    }else{
+      state.menuList = state.client_menuList.map((row) => {
+        return { ...row }
+      })
+    }
+    console.log(state.menuList)
+>>>>>>> a878d1dbb818c9e222000a8def50749bffae0336
   },
   setRightDrawerOpen(state, payload){
     state.rightDrawerOpen = payload

@@ -31,6 +31,7 @@ export default function (/* { ssrContext } */) {
       dashboardStore,
       cashOutStore,
       categoryStore,
+
     },
 
     // enable strict mode (adds overhead!)
