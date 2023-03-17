@@ -37,16 +37,8 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 import Login from 'pages/authentication/login.vue'
 import PersonalData from 'pages/authentication/personalData.vue' 
-=======
-import login from 'pages/authentication/login.vue'
-import TorpaLandingPage from "./landing3.vue";
-// v-if="$q.platform.is.mobile"
-//v-if="!isMobile"
-
->>>>>>> a878d1dbb818c9e222000a8def50749bffae0336
 export default {
     components: {
             Login,

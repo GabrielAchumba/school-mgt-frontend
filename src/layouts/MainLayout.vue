@@ -220,7 +220,7 @@ export default {
       unReadMessages: [],
       socket: null,
       deviceId: "",
-      serverUrl: "http://localhost:4000/",
+      serverUrl: "https://school-mgt-backend-nestjs.herokuapp.com/", //"http://localhost:4000/", 
       leftDrawerOpen: true,
       showAccountDetails: false,
       rightMenuIcon: "menu",

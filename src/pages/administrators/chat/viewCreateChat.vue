@@ -130,7 +130,7 @@ import { post } from "../../../store/modules/gcp-services"
              fromUser: { fromId: "" },
              meetingId: "123",
              socket: null,
-             serverUrl: "http://localhost:4000/", // "http://localhost:5000/",
+             serverUrl: "https://school-mgt-backend-nestjs.herokuapp.com/", //"http://localhost:4000/", 
              newMessage: null,
             messages: [],
             typing: false,
