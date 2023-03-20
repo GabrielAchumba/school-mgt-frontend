@@ -1,4 +1,5 @@
 import { $http } from 'boot/axios' 
+import { validateSession } from './services'
 
 const state = {
     cashOuts: [],
@@ -129,7 +130,7 @@ const actions = {
   GetCompletedLevelXCategory(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -147,7 +148,7 @@ const actions = {
     },
     UploadPhoto(context, payload)
     {
-        var token = sessionStorage.getItem("token") 
+        const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
 
@@ -172,7 +173,7 @@ const actions = {
     },
     CreateCashOutDTO(context, payload)
     {
-        var token = sessionStorage.getItem("token") 
+        const { token } = validateSession(); 
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
         return new Promise((resolve, reject) => {
@@ -190,7 +191,7 @@ const actions = {
     GetCashOuts(context, payload)
     {
 
-        var token = sessionStorage.getItem("token") 
+        const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
         return new Promise((resolve, reject) => {
@@ -208,7 +209,7 @@ const actions = {
     GetCashOut(context, payload)
     {
 
-        var token = sessionStorage.getItem("token") 
+        const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
         return new Promise((resolve, reject) => {
@@ -225,7 +226,7 @@ const actions = {
     },
     GetCategoryBankDetails(context, payload)
     {
-        var token = sessionStorage.getItem("token") 
+        const { token } = validateSession(); 
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
         return new Promise((resolve, reject) => {
@@ -243,7 +244,7 @@ const actions = {
     GetCashOutByCategoryId(context, payload)
     {
 
-        var token = sessionStorage.getItem("token") 
+        const { token } = validateSession(); 
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
         return new Promise((resolve, reject) => {

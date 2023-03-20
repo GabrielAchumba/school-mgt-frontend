@@ -2,8 +2,7 @@ import { $http } from 'boot/axios'
 
 const get = async (payload) => {
 
-  //var token = validateSession();
-  var token = sessionStorage.getItem("token") 
+  const { token } = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
   return new Promise((resolve, reject) => {
@@ -21,8 +20,7 @@ const get = async (payload) => {
 
 const remove = async (payload) => {
 
-  //var token = validateSession();
-  var token = sessionStorage.getItem("token") 
+  const { token } = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
   return new Promise((resolve, reject) => {
@@ -40,8 +38,7 @@ const remove = async (payload) => {
 
 const post = (payload) => {
 
-  //var token = validateSession();
-  var token = sessionStorage.getItem("token") 
+  const { token } = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
   return new Promise((resolve, reject) => {
@@ -59,8 +56,7 @@ const post = (payload) => {
 
 const put = (payload) => {
 
-  //var token = validateSession();
-  var token = sessionStorage.getItem("token") 
+  const { token } = validateSession();
   $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
   return new Promise((resolve, reject) => {
@@ -78,9 +74,8 @@ const put = (payload) => {
 
 const uploadPhoto = async (payload) => {
 
-    //var token = validateSession();
-    var token = sessionStorage.getItem("token") 
-    $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  const { token } = validateSession();
+  $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
       $http.post(payload.url, payload.request,{
@@ -98,15 +93,18 @@ const uploadPhoto = async (payload) => {
 }
 
 const validateSession = () => {
-  const key = "token";
-  let seassionVal = sessionStorage.getItem(key);
+  const key = "seassionObj";
+  let seassionVal = localStorage.getItem(key);
+  //console.log("seassionVal: ", seassionVal)
   if (seassionVal !== null) {
     let sessionObj = JSON.parse(seassionVal);
+    const { token, user } = sessionObj.value
+    //console.log("user: ", user)
     let expiredAt = new Date(sessionObj.expiredAt);
-    if (expiredAt > new Date()) { // Validate expiry date.
-      return sessionObj.value;
+    if (expiredAt > new Date()) {
+      return { token, user };
     } else {
-      sessionStorage.removeItem(key);
+      localStorage.removeItem(key);
     }
   }
     return null;
@@ -117,5 +115,6 @@ export {
   remove,
   post,
   put,
-  uploadPhoto
+  uploadPhoto,
+  validateSession
 }

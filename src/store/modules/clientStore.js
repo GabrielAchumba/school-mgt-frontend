@@ -1,5 +1,6 @@
 import { $http } from 'boot/axios' 
 import { userController } from './backendRoutes';
+import { validateSession } from './services'
 
 const state = {
     PersonalDataDTO:{
@@ -194,7 +195,7 @@ const actions = {
   CreatePersonalDataDTO(context, PersonalDataDTO)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     var todayDate = new Date();
@@ -216,7 +217,7 @@ const actions = {
   UpdateContactDTO(context, ContactDTO)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -233,7 +234,7 @@ const actions = {
   },
   UpdateBioData(context, BioDataDTO)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     if(context.state.isAdmin == false){
@@ -254,7 +255,7 @@ const actions = {
   },
   UpdateNextOfKinDTO(context, NextOfKinDTO)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -271,7 +272,7 @@ const actions = {
   },
   UpdateBankAccountData(context, BankAccountDTO)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -287,7 +288,7 @@ const actions = {
   GetRegisteredContributors(context)
   {
     
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     return new Promise((resolve, reject) => {
       
@@ -302,7 +303,7 @@ const actions = {
   },
   GetContacts(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -320,7 +321,7 @@ const actions = {
   },
   GetBioData(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -340,7 +341,7 @@ const actions = {
   },
   GetBankDetails(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -358,7 +359,7 @@ const actions = {
   },
   GetNextOfKins(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -378,7 +379,7 @@ const actions = {
   },
   GetPersonalDataList(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -395,7 +396,7 @@ const actions = {
   },
   GetContributor(context, id)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -414,7 +415,7 @@ const actions = {
   UploadPhoto(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {

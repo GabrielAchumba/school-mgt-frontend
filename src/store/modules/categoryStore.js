@@ -1,4 +1,5 @@
 import { $http } from 'boot/axios' 
+import { validateSession } from './services'
 
 const state = {
     Categories: [],
@@ -80,7 +81,7 @@ const actions = {
   CreateCategoryDTO(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     let payload2 = {}
     if(payload.isAdmin == true){
@@ -107,7 +108,7 @@ const actions = {
   },
   GetCategories(context, payload)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -124,7 +125,7 @@ const actions = {
   },
   GetPersonalDataList(context, payload)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession(); 
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -143,7 +144,7 @@ const actions = {
   GetCompletedLevelXCategory(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {

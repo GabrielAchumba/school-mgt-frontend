@@ -10,14 +10,9 @@
         >
 
    <q-card-section>
-    <div class="row bg-accent text-primary text-center flex flex-center q-pb-lg">
-      <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-px-xl q-pb-none q-ma-none">
-      </div>
-        <div class="col-md-6 col-lg-6 col-sx-12 col-sm-12 q-gutter-lg q-px-xl q-pb-none q-ma-none">
-          <p>{{ title }}</p>
-        </div>
-        
-        <div class="col-md-3 col-lg-3 col-sx-12 col-sm-12 q-px-xl q-pb-none q-ma-none">
+    <div class="row bg-accent text-primary text-center q-pa-sm">
+      <div class="col-12 q-pa-sm text-center">
+        <p>{{ title }}</p>
       </div>
     </div>
   </q-card-section>

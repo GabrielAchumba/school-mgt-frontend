@@ -94,8 +94,8 @@
 
         <q-footer>
            <q-toolbar class="bg-accent">
-               <!-- <q-form @submit="sendMessage"> -->
                     <q-input
+                    ref="chatbox"
                     class="full-width"
                     bg-color="primary"
                     outlined
@@ -306,6 +306,8 @@ import { post } from "../../../store/modules/gcp-services"
             context.deviceId = deviceId;
             console.log("context.deviceId: ", context.deviceId)
         });
+
+        this.$refs.chatbox.$el.focus()
 
             /* socket.on('joined', (data) => {
                 context.info.push({

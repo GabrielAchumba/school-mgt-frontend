@@ -98,12 +98,13 @@
                       flat
                       label="complete"
                       no-shadows
+                      @click="helpDownliner(props.row)"
                       size=md no-caps>
                     </q-btn>
                     <q-btn 
                       v-else
                       class="bg-red text-primary"
-                      label="chat"
+                      label="Incomplete"
                       no-shadows
                       size=md no-caps
                       @click="helpDownliner(props.row)">

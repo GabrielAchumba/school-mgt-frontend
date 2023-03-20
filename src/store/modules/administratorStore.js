@@ -1,5 +1,6 @@
 import { $http } from 'boot/axios'
 import { userController } from './backendRoutes'; 
+import { validateSession } from './services'
 
 const state = {
     adminNavBarList: [
@@ -295,7 +296,7 @@ const actions = {
   CreateAdministrator(context, AdminDTO)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     
 
@@ -312,7 +313,7 @@ const actions = {
   UpdateAdministrator(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -330,7 +331,7 @@ const actions = {
 
   GetAdministrators(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -348,7 +349,7 @@ const actions = {
   },
   GetAdministrator(context, id)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -367,7 +368,7 @@ const actions = {
   UploadPhoto(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {

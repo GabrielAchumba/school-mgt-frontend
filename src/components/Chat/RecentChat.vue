@@ -1,32 +1,42 @@
 <template>
-    <div>
-         <q-toolbar class="row bg-primary text-accent">
+    <div class="row bg-primary text-accent q-pa-sm no-wrap">
+         <!-- <q-toolbar class="bg-primary text-accent"> -->
             <div class="q-pa-sm text-caption text-left">
                 <q-btn  
                     flat
                     :size="size" 
                     class="text-capitalize"
                     >
-                    <q-avatar round size="70px">
-                        <img :src="fileUrl">
+                    <q-avatar round size="50px" class="bg-accent text-primary text-center">
+                        <img 
+                        v-if="fileUrl"
+                        :src="fileUrl">
+                        <p v-else class="q-pa-sm text-center">{{title.charAt(0) }}</p>
                     </q-avatar>
                 </q-btn>
             </div>
+
             <q-space/>
+
             <div class="q-pa-sm text-left" @click="viewChat"> 
                 <span>
-                    <p  class="q-pa-none q-ma-none text-left">{{ title }}</p>
-                    <p class="text-caption text-left">{{ description }}</p>
+                    <p  class="q-pa-none q-ma-none text-left"><b>{{ title }}</b></p>
+                    <p class="text-left">{{ description }}</p>
                 </span>
             </div>
+
             <q-space/>
+
             <div class="q-pa-sm text-right"> 
                 <span>
                     <p  class="q-pa-none q-ma-none text-caption text-right">{{ date }}</p>
-                    <p class="text-caption text-center bg-accent text-primary">{{ noUnreadMessages }}</p>
+                    <q-badge
+                    color="accent">
+                    {{ noUnreadMessages}}
+                    </q-badge>
                 </span>
             </div>
-         </q-toolbar>
+         <!-- </q-toolbar> -->
 
     </div>
 </template>
@@ -36,7 +46,7 @@ export default {
     props:{
         fileUrl: {
             type: String,
-            default: "/statics/images/TorpaLogo.png",
+            default: "",
         },
         title: {
             type: String,

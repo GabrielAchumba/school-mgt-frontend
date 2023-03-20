@@ -1,4 +1,5 @@
 import { $http } from 'boot/axios' 
+import { validateSession } from './services'
 
 const state = {
     Account:{
@@ -153,7 +154,7 @@ const actions = {
   UploadPhoto(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -184,7 +185,7 @@ const actions = {
       contributor_Id: payload.request.id
     }
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -205,7 +206,7 @@ const actions = {
   OffPlatformPayment(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -222,7 +223,7 @@ const actions = {
   GetUnComfirmedAccounts(context, payload)
   {
     
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -240,7 +241,7 @@ const actions = {
   RegisteredHaveNotContributed(context, payload)
   {
 
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -258,7 +259,7 @@ const actions = {
   ComfirmPayment(context, payload)
   {
     
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {

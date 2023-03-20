@@ -141,6 +141,7 @@
   import MessageBox from "../../components/dialogs/MessageBox.vue"
   import ForgotPassword from "./ForgotPassword.vue"
   import ResetPassword from "./ResetPassword.vue"
+  import { validateSession } from "../../store/modules/services";
     export default {
        computed: {
         visible(){
@@ -286,8 +287,27 @@
             context.isForgotPassword = false
             context.isResetPassword = false
             context.title = "Log In"
-          }
+          },
+          async mainLogin(){
+            var context = this;
+            const sessionObj = validateSession();
+            //console.log("sessionObj: ", sessionObj)
+            if(sessionObj !== null){
+              const { token, user } = sessionObj
+              context.user = user;
+              context.token = token;
+              this.$store.commit('authenticationStore/Login',{
+                token: context.token,
+                user: context.user,
+              })
+            }
+          },
 
+        },
+        async created(){
+          console.log("created called")
+          var context = this;
+          await context.mainLogin();
         }
     }
 </script>

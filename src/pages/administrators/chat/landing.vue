@@ -11,7 +11,25 @@
           >
       </q-select>
     </div>
-        <q-list 
+    <div 
+     v-if="!showSpinner"
+    class="q-pa-sm col-12 text-center">
+        <div 
+            v-for="card in cardList"
+            :key="card.idd"
+            class="row bg-primary q-pa-none q-ma-none">
+             <RecentChat
+                class="q-pa-sm col-12"
+                :selectedRow="card"
+                :fileUrl="card.friendImage"
+                :title="card.fullName"
+                :description="card.content"
+                :date="card.createdDate"
+                :noUnreadMessages="card.noUnreadMessages"
+                @viewChat="viewChat($event)"/>
+        </div>
+
+       <!--  <q-list 
         v-if="!showSpinner"
         bordered separator
         class="bg-primary q-pa-none q-ma-none">
@@ -28,7 +46,9 @@
                 :noUnreadMessages="card.noUnreadMessages"
                 @viewChat="viewChat($event)"/>
             </q-item>
-        </q-list>
+        </q-list> -->
+
+    </div>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">

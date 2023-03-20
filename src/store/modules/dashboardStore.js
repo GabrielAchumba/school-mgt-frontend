@@ -1,5 +1,6 @@
 import { $http } from 'boot/axios' 
 import { cyclesController } from './backendRoutes';
+import { validateSession } from './services'
 
 const state = {
     Cycles:[],
@@ -58,7 +59,7 @@ const actions = {
 
 GetCyclesWithLevelsByUserId(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession(); 
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -76,7 +77,7 @@ GetCyclesWithLevelsByUserId(context)
 
   GetROIs(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -93,7 +94,7 @@ GetCyclesWithLevelsByUserId(context)
   },
   GetPishonLevels(context)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
@@ -113,7 +114,7 @@ GetCyclesWithLevelsByUserId(context)
   },
   GetDesendantsPerLevel(context, url)
   {
-    var token = sessionStorage.getItem("token") 
+    const { token } = validateSession();
     $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     return new Promise((resolve, reject) => {
