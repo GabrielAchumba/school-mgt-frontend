@@ -123,7 +123,7 @@
                     v-for="(product) in productItem.products" :key="product.title" 
                     class="bg-primary text-accent"
                     clickable
-                    @click="showProduct(product.name)">
+                    @click="showProduct(product)">
                         <q-item-section>
                         {{ product.title}}
                         </q-item-section>
@@ -182,6 +182,10 @@ export default {
                         {
                             title: "Torpa",
                             name: "/product/torpa",
+                        },
+                        {
+                            title: "Launchpad",
+                            name: "/product/launchpad",
                         },
                         {
                             title: "Interiors",
@@ -306,9 +310,14 @@ export default {
             return ans;
 
         },
-        showProduct(routename){
+        showProduct(product){
             var context = this;
-            this.$router.push(`${routename}`);
+            this.$store.commit("productStore/setAboutUs", product.title)
+            this.$store.commit("productStore/setGallery", product.title)
+            this.$store.commit("productStore/setPrivacyPolicy", product.title)
+            this.$store.commit("productStore/setLogo", product.title)
+            this.$store.commit("productStore/setInstall", product.title)
+            this.$router.push(`${product.name}`);
         },
         loadSelectedExample(title){
             console.log("title: ", title)

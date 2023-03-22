@@ -1,4 +1,4 @@
-export const privacyPolicyVM = {
+const privacyPolicyVM = {
     introduction:   `<h5 style="text-align: left;">
                         <span>
                             <b>
@@ -331,3 +331,10 @@ export const privacyPolicyVM = {
                     </ul>
                 </p>`,
 }
+
+export const sections = privacyPolicyVM.introduction + privacyPolicyVM.section1 +
+privacyPolicyVM.section2 + privacyPolicyVM.section3 +
+privacyPolicyVM.section4 + privacyPolicyVM.section5 +
+privacyPolicyVM.section6 + privacyPolicyVM.section7 +
+privacyPolicyVM.section8 + privacyPolicyVM.section9 +
+privacyPolicyVM.section10

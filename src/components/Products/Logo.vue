@@ -20,18 +20,11 @@
 
 <script>
 export default {
-    props:{
-        productLogo: {
-            type: Object,
-            default: () => {
-                return {
-                    fileUrl: "/statics/images/TorpaLogo.png",
-                    title: "Torpa",
-                    description: "School Management App",
-                }
-            }
+    computed:{
+        productLogo(){
+            return this.$store.getters["productStore/logo"];
         }
-    }
+    },
 
 }
 </script>

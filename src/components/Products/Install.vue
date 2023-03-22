@@ -40,23 +40,9 @@
 <script>
 
 export default {
-    props:{
-        qBtns:{
-            type: Array,
-            default: () => {
-                return [
-                    {
-                        label: "Mobile App",
-                        btnDisabled: false,
-                        name: "installApp",
-                    },
-                    {
-                        label: "Login/Register",
-                        btnDisabled: false,
-                        name: "login",
-                    }
-                ]
-            }
+    computed:{
+        qBtns(){
+            return this.$store.getters["productStore/install"];
         }
     },
     computed:{

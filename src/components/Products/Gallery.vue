@@ -29,54 +29,8 @@ export default {
             if(width < 900) return true;
             else return false;
         },
-    },
-    props:{
-        pages:{
-            type: Array,
-            default: () => {
-                return [
-                    {
-                        sn: 0,
-                        fileUrl: "/statics/images/mobile/auth.jpeg",
-                    },
-                    {
-                        sn: 1,
-                        fileUrl: "/statics/images/mobile/Ads landing.jpeg",
-                    },
-                    {
-                        sn: 2,
-                        fileUrl: "/statics/images/mobile/CBT.jpeg",
-                    },
-                    {
-                        sn: 3,
-                        fileUrl: "/statics/images/mobile/torpa admin landing 1.jpeg",
-                    },
-                    {
-                        sn: 4,
-                        fileUrl: "/statics/images/mobile/torpa admin landing 2.jpeg",
-                    },
-                    {
-                        sn: 5,
-                        fileUrl: "/statics/images/mobile/student report card.jpeg",
-                    },
-                    {
-                        sn: 6,
-                        fileUrl: "/statics/images/mobile/student report plot.jpeg",
-                    },
-                    {
-                        sn: 7,
-                        fileUrl: "/statics/images/mobile/students positions.jpeg",
-                    },
-                    {
-                        sn: 8,
-                        fileUrl: "/statics/images/mobile/subjects.jpeg",
-                    },
-                    {
-                        sn: 9,
-                        fileUrl: "/statics/images/mobile/lesson note 2.jpeg",
-                    }
-                ]
-            }
+        pages(){
+            return this.$store.getters["productStore/gallery"];
         }
     },
     data () {

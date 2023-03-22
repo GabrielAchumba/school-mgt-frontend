@@ -1,6 +1,6 @@
 import axios from 'axios'
 //const axiosInstance = axios.create({ 
-  const processEnvNOEENV = "development";
+  const processEnvNOEENV = "production";
 
   ///usr/lib/jvm/java-11-openjdk-amd64
 

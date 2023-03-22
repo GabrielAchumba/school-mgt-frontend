@@ -36,6 +36,7 @@ import cAStore from './modules/cAStore';
 import cAQuestionStore from './modules/cAQuestionStore';
 import cAAnswerStore from './modules/cAAnswerStore';
 import simulationStore from './modules/simulationStore';
+import productStore from './modules/productStore';
 
 
 Vue.use(Vuex)
@@ -86,6 +87,7 @@ export default function (/* { ssrContext } */) {
       cAQuestionStore,
       cAAnswerStore,
       simulationStore,
+      productStore,
     },
     plugins: [createPersistedState()],
 

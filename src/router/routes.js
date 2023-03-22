@@ -2,10 +2,66 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/ReservoirSimulationLayout.vue'),
+    component: () => import('layouts/TorpaLayout.vue'),
     children: [
       { 
         path: '/', 
+        component: () => import('pages/authentication/landing.vue') 
+        
+      },
+      { 
+        path: '/home', 
+        component: () => import('pages/authentication/landing.vue') 
+        
+      },
+      { 
+        path: '/news', 
+        component: () => import('pages/authentication/news.vue') 
+        
+      },
+      { 
+        path: '/about_us', 
+        component: () => import('pages/authentication/aboutus.vue') 
+        
+      },
+      { 
+        path: '/contact', 
+        component: () => import('pages/authentication/contactus.vue') 
+        
+      },
+      { 
+        path: '/login_register', 
+        component: () => import('pages/authentication/loginregister.vue') 
+        
+      },
+      { 
+        path: '/register', 
+        component: () => import('pages/authentication/register-user.vue') 
+        
+      },
+      { 
+        path: '/school-landing', 
+        component: () => import('pages/administrators/school/landing.vue') 
+        
+      },
+      { 
+        path: '/create-school', 
+        component: () => import('pages/administrators/school/create.vue') 
+        
+      },
+      { 
+        path: '/product/:product', 
+        component: () => import('pages/authentication/product.vue') 
+        
+      },
+    ]
+  },
+  {
+    path: '/olasim',
+    component: () => import('layouts/ReservoirSimulationLayout.vue'),
+    children: [
+      { 
+        path: '/olasim', 
         component: () => import('pages/reservoir_simulation/landing.vue') 
         
       },
@@ -68,62 +124,6 @@ const routes = [
         path:   '/output/pressuredistribution', 
         component: () => import('pages/reservoir_simulation/output/pressuredistribution/pressuredistribution.vue') 
       
-      },
-    ]
-  },
-  {
-    path: '/home',
-    component: () => import('layouts/TorpaLayout.vue'),
-    children: [
-      { 
-        path: '/home', 
-        component: () => import('pages/authentication/landing.vue') 
-        
-      },
-      { 
-        path: '/home', 
-        component: () => import('pages/authentication/landing.vue') 
-        
-      },
-      { 
-        path: '/news', 
-        component: () => import('pages/authentication/news.vue') 
-        
-      },
-      { 
-        path: '/about_us', 
-        component: () => import('pages/authentication/aboutus.vue') 
-        
-      },
-      { 
-        path: '/contact', 
-        component: () => import('pages/authentication/contactus.vue') 
-        
-      },
-      { 
-        path: '/login_register', 
-        component: () => import('pages/authentication/loginregister.vue') 
-        
-      },
-      { 
-        path: '/register', 
-        component: () => import('pages/authentication/register-user.vue') 
-        
-      },
-      { 
-        path: '/school-landing', 
-        component: () => import('pages/administrators/school/landing.vue') 
-        
-      },
-      { 
-        path: '/create-school', 
-        component: () => import('pages/administrators/school/create.vue') 
-        
-      },
-      { 
-        path: '/product/:product', 
-        component: () => import('pages/authentication/product.vue') 
-        
       },
     ]
   },
