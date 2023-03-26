@@ -195,8 +195,9 @@ const actions = {
   CreatePersonalDataDTO(context, PersonalDataDTO)
   {
 
-    const { token } = validateSession();
-    $http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    //const { token } = validateSession();
+    //console.log("token: ", token)
+    //$http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
 
     var todayDate = new Date();
     PersonalDataDTO.createdYear = todayDate.getFullYear();

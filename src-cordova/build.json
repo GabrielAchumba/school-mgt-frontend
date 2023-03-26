@@ -6,7 +6,7 @@
             "alias": "mylaunchpad",
             "password": "123456",
             "keystoreType": "",
-            "packageType": "apk"
+            "packageType": "bundle"
         },
         "release": {
             "keystore": "./launchpad-release-key.keystore",
@@ -14,7 +14,7 @@
             "alias": "mylaunchpad",
             "password": "123456",
             "keystoreType": "",
-            "packageType": "apk"
+            "packageType": "bundle"
         }
     }
 }
