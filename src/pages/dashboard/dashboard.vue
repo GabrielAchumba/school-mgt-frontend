@@ -31,7 +31,8 @@
       </q-select>
     </div>
 
-    <div class="col-12 q-pa-sm text-center">
+    <div v-if="!showSpinner"
+    class="col-12 q-pa-sm text-center">
       
       <q-card class="q-pa-none"> 
 
@@ -126,6 +127,16 @@
 
 
     </div>
+
+    <div v-show="showSpinner"
+    class="col-12 q-pa-sm absolute-center flex flex-center">
+        <q-spinner
+            color="accent"
+            :size="spinnerSize"
+            :thickness="spinnerThickness"
+        />
+    </div>
+
   </div>
 </template>
 
@@ -141,7 +152,10 @@
     import { cashoutn1000Controller } from '../../store/modules/backendRoutes'
     import { cashoutn2000Controller } from '../../store/modules/backendRoutes'
     import { cashoutn5000Controller } from '../../store/modules/backendRoutes'
-    import { cashoutn10000Controller } from '../../store/modules/backendRoutes'
+    import { cashoutn10000Controller, cyclesController } from '../../store/modules/backendRoutes'
+
+    import { get } from "../../store/modules/services";
+
     export default {
         computed: {
           IdentityModel(){
@@ -149,6 +163,15 @@
         },
         DescendantDTO(){
             return this.$store.getters['dashboardStore/DescendantDTO'];
+        },
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       data () {
@@ -222,8 +245,15 @@
               url = `${accountn10000Controller}/getdescendantsbylevel/${levelIndex}/${context.IdentityModel.id}`;
             break;
           }
-              var response = await this.$store.dispatch('dashboardStore/GetDesendantsPerLevel', url)
-              console.log("account response: ", response)
+
+            const payload = {
+              url,
+              req: {}
+            }
+
+            this.$store.commit("authenticationStore/setShowSpinner", true);
+              var response = await get(payload)
+               this.$store.commit("authenticationStore/setShowSpinner", false);
 
             const categoriesDTO = []
              const { 
@@ -304,9 +334,13 @@
           }
 
           console.log("url: ", url)
-          response = await this.$store.dispatch('cashOutStore/GetCashOutByCategoryId', {
-                url
-          })
+          const payload = {
+            url,
+            req: {}
+          }
+          this.$store.commit("authenticationStore/setShowSpinner", true);
+          response = await get(payload)
+          this.$store.commit("authenticationStore/setShowSpinner", false);
 
           console.log("cashout response: ", response)
 
@@ -345,7 +379,11 @@
         },
         async created() {
           var context = this;
-        var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
+          const payload = {
+            url: `${cyclesController}/getcycleswithlevelsbyuserid`,
+            req: {}
+          }
+        var response = await get(payload)
 
         const { 
               data : {
@@ -362,13 +400,6 @@
               name: row.label,
             }
           })
-          /* this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result[0].children.map((row) => {
-            return {
-              ...row,
-              type: row.label,
-              name: row.label,
-            }
-          })) */
         }
 
       },

@@ -12,6 +12,7 @@
 <script>
   import registeredHaveNotContributed from "../../../components/AccountAdmin/registeredHaveNotContributed.vue"
   import { accountn1000Controller } from '../../../store/modules/backendRoutes'
+  import { get } from "../../../store/modules/services";
     export default {
         computed: {
         contributorsHavNotCoontriuted(){
@@ -35,9 +36,10 @@
         async created() {
         var context = this;
         var url = `${accountn1000Controller}/registeredhavenotcontributed`;
-        var response = await this.$store.dispatch('accountStore/RegisteredHaveNotContributed', {
+        const payload = {
           url
-        })
+        }
+        var response = await get(payload)
 
         const { 
               data : {

@@ -1,7 +1,7 @@
 <template>
 <div>
 
-<q-scroll-area style="height: 100vh; max-width: 100%;">
+<q-scroll-area v-if="!showSpinner" style="height: 100vh; max-width: 100%;">
 <div class="row">
 
   <div class="col-12 q-pa-sm bg-primary text-accent">
@@ -63,6 +63,13 @@
         
     <div class="row">
 
+      <StatusBar class="col-12 text-center q-pa-sm"
+      :savingStatus="savingStatus"
+      :message="messageOffPlatformPayment"
+      :saveComplete="saveComplete"
+      :saveError="saveError"
+      @updateStatusBar="updateStatusBar"/>
+
       <div class="col-5 q-pa-sm">           
 
         <div>
@@ -80,7 +87,7 @@
             exact
             size="md" style="width:95%" dense label="Submit"
             type="button"
-            @click="uploadAndSavePayment" />
+            @click="okayOffPlatformPaymentSucess" />
       </div>
 
     </div>
@@ -88,7 +95,7 @@
 
 </div>
 
-<q-dialog v-model="isUploadFileDialog">
+<!-- <q-dialog v-model="isUploadFileDialog">
   <MessageBox
   title="Upload Pay Slip"
   :message="`Do you want to upload pay slip?`"
@@ -98,9 +105,9 @@
   @cancelUploadFile="cancelUploadFile($event)"
   >
   </MessageBox>
-</q-dialog>
+</q-dialog> -->
 
-<q-dialog v-model="isUploadFileSuccessDialog">
+<!-- <q-dialog v-model="isUploadFileSuccessDialog">
   <MessageBox
   title="Success"
   :message="`Pay slip uploaded successfully.`"
@@ -110,9 +117,9 @@
   @cancelUploadFileSuccess="cancelUploadFileSuccess($event)"
   >
   </MessageBox>
-</q-dialog>
+</q-dialog> -->
 
-<q-dialog v-model="isUploadFileFailureDialog">
+<!-- <q-dialog v-model="isUploadFileFailureDialog">
   <MessageBox
   title="Failure"
   :message="`${message}.`"
@@ -122,33 +129,33 @@
   @cancelUploadFileFailure="cancelUploadFileFailure($event)"
   >
   </MessageBox>
-</q-dialog>
+</q-dialog> -->
 
-<q-dialog v-model="isOffPlatformPaymentDialog">
+<!-- <q-dialog v-model="isOffPlatformPaymentDialog">
   <MessageBox
   title="Complete Payment"
-  :message="`Do you want to complete your payment cycle?`"
+  :message="`Do you want to invest in this category?`"
   okayEvent="okayOffPlatformPayment"
   cancelEvent="cancelOffPlatformPayment"
   @okayOffPlatformPayment="okayOffPlatformPayment($event)"
   @cancelOffPlatformPayment="cancelOffPlatformPayment($event)"
   >
   </MessageBox>
-</q-dialog>
+</q-dialog> -->
 
 <q-dialog v-model="isOffPlatformPaymentSuccessDialog">
   <MessageBox
-  title="Success"
-  :message="`Payment cycle completed successfully.`"
-  okayEvent="okayOffPlatformPaymentSucess"
+  title="Invest"
+  :message="`Do you want to invest in this category?`"
+  okayEvent="uploadAndSavePayment"
   cancelEvent="cancelOffPlatformPaymentSuccess"
-  @okayOffPlatformPaymentSucess="okayOffPlatformPaymentSucess($event)"
+  @uploadAndSavePayment="uploadAndSavePayment($event)"
   @cancelOffPlatformPaymentSuccess="cancelOffPlatformPaymentSuccess($event)"
   >
   </MessageBox>
 </q-dialog>
 
-<q-dialog v-model="isOffPlatformPaymentFailureDialog">
+<!-- <q-dialog v-model="isOffPlatformPaymentFailureDialog">
   <MessageBox
   title="Failure"
   :message="`${messageOffPlatformPayment}.`"
@@ -158,14 +165,27 @@
   @cancelOffPlatformPaymentFailure="cancelOffPlatformPaymentFailure($event)"
   >
   </MessageBox>
-</q-dialog>
+</q-dialog> -->
+
 </q-scroll-area>
+  <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+    </div>
   </div>
 </template>
 
 <script>
   import MessageBox from "../../components/dialogs/MessageBox.vue"
   import Form from "../../components/Form/Form.vue";
+  import StatusBar from "../../components/StatusBar/StatusBar.vue";
 
 import { accountn500Controller } from "../../store/modules/backendRoutes"
 import { accountn1000Controller } from "../../store/modules/backendRoutes"
@@ -195,11 +215,21 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
         },
         Account(){
           return this.$store.getters['accountStore/Account'];
+        },
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
         MessageBox,
-        Form
+        Form,
+        StatusBar
       },
       props: {
           category: {
@@ -249,6 +279,12 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
         fileName: "",
         originalFileName: "",
         fileUploadError: "No Error",
+        savingStatus: "",
+        saveError: false,
+        saveComplete: false,
+        count: 0,
+        minutes: 0,
+        seconds: 0,
         form: {
             title: "Payment Details",
             qSelects: [],
@@ -353,7 +389,7 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
           context.isUploadFileSuccessDialog = true;
         }else{
             context.isUploadFileFailureDialog = true;
-            context.message = message;
+            context.messageOffPlatformPayment = message;
         }
       },
       cancelUploadFileSuccess(){
@@ -386,7 +422,9 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
           url: `${paymentGatewayController}/getbanks`
         }
 
+        this.$store.commit("authenticationStore/setShowSpinner", true);
         var response = await get(payload)
+        this.$store.commit("authenticationStore/setShowSpinner", false);
             const { 
             data : {
                 data: result,
@@ -410,11 +448,13 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
       },
       onFileSelected(payload){
             var context = this;
+            context.isUploadFileDialog = false;
             context.form.qFiles[0].selectedFile = payload.selectedFile;
             let reader  = new FileReader();
             reader.addEventListener("load", function () {
             context.form.qFiles[0].showPreview = true;
             context.form.qFiles[0].imagePreview = reader.result;
+            context.isUploadFileDialog = true;
             }.bind(context), false);
             if(context.form.qFiles[0].selectedFile){
                 if (/\.(jpe?g|png|gif)$/i.test(context.form.qFiles[0].selectedFile.name)) {
@@ -438,23 +478,38 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
                 req: formData,
             }
             console.log("payload: ", payload)
-            //uploadLogo
-            var response = await gcphttp.post(payload)
-            context.fileUrl = response.data.url;
-            context.fileName = response.data.fileName;
-            context.originalFileName = response.data.originalFileName;
-            context.fileUploadError = response.data.error;
-            console.log("fileUrl: ", context.fileUrl)
+            try{
+              var response = await gcphttp.post(payload)
+              context.fileUrl = response.data.url;
+              context.fileName = response.data.fileName;
+              context.originalFileName = response.data.originalFileName;
+              context.fileUploadError = response.data.error;
+              if(context.fileUploadError !== "No Error"){
+                context.saveError = false;
+                context.messageOffPlatformPayment = context.fileUploadError;
+              }
+              console.log("fileUrl: ", context.fileUrl)
+
+            }catch(e){
+              context.saveError = true;
+              context.saveComplete = false;
+              context.fileUploadError = "File upload error";
+              context.messageOffPlatformPayment = context.fileUploadError;
+              context.savingStatus = ""
+            }
         },
         async uploadAndSavePayment(){
             var context = this;
-            if(context.form.qFiles[0].imagePreview){
+            context.saveError = false;
+            context.saveComplete = false;
+            context.savingStatus = "Saving Investment..."
+            if(context.form.qFiles[0].imagePreview && context.isUploadFileDialog === true){
               await context.uploadPicture();
             }
             if(context.fileUploadError === "No Error") {
               await context.okayOffPlatformPayment();
             }else{
-              alert("File upload error. Please try again")
+              context.message = "File upload error. Please try again";
             }
             
         },
@@ -474,7 +529,7 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
 
   
           const payload = {
-            request: {
+            req: {
             bankNamePaidFrom: context.bankNamePaidFrom,
             accountNamePaidFrom: context.accountNamePaidFrom,
             accountNumberPaidFrom: context.accountNumberPaidFrom,
@@ -501,29 +556,28 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
           switch(context.category){
             case "CategoryN500":
               payload.url = `${accountn500Controller}/offplatformpayment`
-              payload.request.categoryIndex = 1
-              console.log("payload: ", payload)
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.req.categoryIndex = 1
+              response = await post(payload)
             break;
             case "CategoryN1000":
               payload.url = `${accountn1000Controller}/offplatformpayment`
-              payload.request.categoryIndex = 2
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.req.categoryIndex = 2
+              response = await post(payload)
             break;
             case "CategoryN2000":
               payload.url = `${accountn2000Controller}/offplatformpayment`
-              payload.request.categoryIndex = 3
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.req.categoryIndex = 3
+              response = await post(payload)
             break;
             case "CategoryN5000":
               payload.url = `${accountn5000Controller}/offplatformpayment`
-              payload.request.categoryIndex = 4
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.req.categoryIndex = 4
+              response = await post(payload)
             break;
             case "CategoryN10000":
               payload.url = `${accountn10000Controller}/offplatformpayment`
-              payload.request.categoryIndex = 5
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.req.categoryIndex = 5
+              response = await post(payload)
             break;
           }
 
@@ -534,7 +588,7 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
                 success,
               }
         } = response
-        context.isOffPlatformPaymentDialog = false;
+        context.isOffPlatformPaymentSuccessDialog = false;
 
         if(success){
 
@@ -544,42 +598,50 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
                   makeContributionsUrl: "makeContributionsN500",
                   result
                 }) 
+                context.savingStatus = "CategoryN500 invested successfully"
               break;
               case "CategoryN1000":
                 this.$store.commit('accountStore/OffPlatformPayment', {
                   makeContributionsUrl: "makeContributionsN1000",
                   result
                 }) 
+                context.savingStatus = "CategoryN1000 invested successfully"
               break;
               case "CategoryN2000":
                 this.$store.commit('accountStore/OffPlatformPayment', {
                   makeContributionsUrl: "makeContributionsN2000",
                   result
                 }) 
+                context.savingStatus = "CategoryN2000 invested successfully"
               break;
               case "CategoryN5000":
                 this.$store.commit('accountStore/OffPlatformPayment', {
                   makeContributionsUrl: "makeContributionsN5000",
                   result
                 }) 
+                context.savingStatus = "CategoryN5000 invested successfully"
               break;
               case "CategoryN10000":
                 this.$store.commit('accountStore/OffPlatformPayment', {
                   makeContributionsUrl: "makeContributionsN10000",
                   result
                 }) 
+                context.savingStatus = "CategoryN10000 invested successfully"
               break;
           }
-          context.isOffPlatformPaymentSuccessDialog = true;
+          context.saveError = false;
+          context.saveComplete = false;
         }else{
-          context.isOffPlatformPaymentFailureDialog = true;
-          context.messageOffPlatformPayment = message;
+            context.saveComplete = false;
+            context.saveError = true;
+            context.savingStatus = ""
+            context.messageOffPlatformPayment = message;
         }
 
       },
       okayOffPlatformPaymentSucess(){
         var context = this;
-        context.isOffPlatformPaymentSuccessDialog = false;
+        context.isOffPlatformPaymentSuccessDialog = true;
       },
       cancelOffPlatformPaymentSuccess(){
         var context = this;
@@ -592,7 +654,12 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
       okayOffPlatformPaymentFailure(){
         var context = this;
         context.isOffPlatformPaymentFailureDialog = false;
-      }
+      },
+      updateStatusBar(payload){
+        var context = this;
+        context.minutes = payload.minutes
+        context.seconds = payload.seconds
+      },
     },
     async created() {
       var context = this;

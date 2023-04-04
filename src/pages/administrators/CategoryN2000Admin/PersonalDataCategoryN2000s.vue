@@ -12,6 +12,7 @@
 <script>
     import PersonalDataCategories from "../../../components/CategoryAdmin/PersonalDataCategories.vue"
     import { categoryn2000Controller } from '../../../store/modules/backendRoutes'
+    import { get } from "../../../store/modules/services";
     export default {
         computed: {
         personalDataList(){
@@ -35,9 +36,10 @@
         },
         async created() {
           var url = `${categoryn2000Controller}/getpersonaldataList`
-        var response = await this.$store.dispatch('categoryStore/GetPersonalDataList', {
-          url
-        })
+          const payload = {
+            url
+          }
+          var response = await get(payload)
 
          const { 
               data : {

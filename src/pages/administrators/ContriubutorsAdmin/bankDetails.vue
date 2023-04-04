@@ -58,6 +58,9 @@
 
 <script>
     import MessageBox from "../../../components/dialogs/MessageBox.vue"
+    import { userController } from "../../../store/modules/backendRoutes";
+    import { get } from "../../../store/modules/services";
+    
     export default {
         computed: {
           IdentityModel(){
@@ -126,7 +129,11 @@
 
         },
         async created() {
-        var response = await this.$store.dispatch('clientStore/GetBankDetails')
+        const payload = {
+          url: `${userController}/getbankdetails`,
+          req: {}
+        }
+        var response = await get(payload)
 
         const { 
               data : {

@@ -11,6 +11,7 @@
 <script>
   import cashOuts from "../../../components/AccountAdmin/cashOuts.vue"
   import { cashoutn5000Controller } from '../../../store/modules/backendRoutes'
+  import { get } from '../../../store/modules/services';
     export default {
         computed: {
         cashOuts(){
@@ -31,9 +32,6 @@
               { name: "bankName", label: "Bank Name", field: "", align: "left" },
               { name: "accountName", label: "AccountName", field: "", align: "left" },
               { name: "accountNumber", label: "Account Number", field: "", align: "left" },
-              /* { name: "categoryN5000BankName", label: "CategoryN5000 Bank Name", field: "", align: "left" },
-              { name: "categoryN5000AccountName", label: "CategoryN5000 Account Name", field: "", align: "left" },
-              { name: "categoryN5000AccountNumber", label: "CategoryN5000 Account Number", field: "", align: "left" }, */
               { name: "actions", label: "Action", field: "actions", align: "left" }
             ],
             title: "",
@@ -45,10 +43,12 @@
           var url = `${cashoutn5000Controller}/getcashouts/4`;
           context.title = "Paid Category N5000 Levels";
           context.viewCashOutUrl = "viewCashOutN5000";
+          const payload = {
+           url,
+           req: {}
+         }
 
-        var response = await this.$store.dispatch('cashOutStore/GetCashOuts', {
-           url
-         })
+        var response = await get(payload)
 
 
          const { 

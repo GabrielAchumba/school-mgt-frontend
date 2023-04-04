@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-   <q-page-container>
+   <q-page-container v-if="!showSpinner">
      <q-page class="flex flex-center bg-primary">
        <q-card
           class="personal-data-form"
@@ -26,6 +26,14 @@
 
       <div 
             class="row q-pa-sm">
+
+              <StatusBar class="col-12 text-center q-pa-sm"
+              :savingStatus="savingStatus"
+              :message="message"
+              :saveComplete="saveComplete"
+              :saveError="saveError"
+              @updateStatusBar="updateStatusBar"/>
+              
               <div class="col-12 text-center q-pa-sm">
                 <q-btn
                 label="Cancel"
@@ -94,11 +102,26 @@
 
      </q-page>
    </q-page-container>
+    <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+    </div>
  </q-layout>
 </template>
 
 <script>
   import MessageBox from "../../components/dialogs/MessageBox.vue"
+  import StatusBar from "../../components/StatusBar/StatusBar.vue";
+  import { userController } from "../../store/modules/backendRoutes";
+  import { put, get } from "../../store/modules/services";
+
     export default {
        computed: {
         selectedNextOfKin(){
@@ -110,9 +133,19 @@
         IdentityModel() {
             return this.$store.getters['authenticationStore/IdentityModel'];
         },
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
       },
       components:{
         MessageBox,
+        StatusBar,
       },
       data () {
     return {
@@ -126,6 +159,11 @@
             isUpdateSuccessDialog: false,
             isUpdateFailureDialog: false,
             message: "",
+            savingStatus: "",
+            saveComplete: false,
+            saveError: false,
+            minutes: 0,
+            seconds: 0,
           }
         },
         props: {
@@ -149,14 +187,17 @@
                 this.$router.push('/user-home');
               }
             },
-          async update(){
+      async update(){
         var context = this;
+        context.savingStatus = "";
+        context.saveComplete = false;
+        context.saveError = false;
 
         if(context.isAdmin == false){
           context.NextOfKinDTO.contributorId = context.IdentityModel.id;
         }
 
-         if (context.NextOfKinDTO.nOKNames === "") {
+        /* if (context.NextOfKinDTO.nOKNames === "") {
           alert("Enter next of kin full name");
           return;
         }
@@ -168,9 +209,19 @@
          if (context.NextOfKinDTO.nOKRelationship === "") {
           alert("Enter next of kin relationship");
           return;
+        } */
+
+        const payload = {
+          url: `${userController}/updatenextofkindto/` + context.NextOfKinDTO.contributorId,
+          req: context.NextOfKinDTO
         }
 
-        var response = await this.$store.dispatch('clientStore/UpdateNextOfKinDTO', context.NextOfKinDTO)
+        context.saveComplete = true;
+        context.savingStatus = "Updating...";
+        context.saveError = false
+
+        try{
+        var response = await put(payload)
 
          const { 
           data : {
@@ -183,10 +234,22 @@
           context.isUpdateDialog = false;
           context.message = message;
             if(success){
+              context.saveComplete = false;
+              context.savingStatus = "Updated";
+              context.saveError = false;
               context.isUpdateSuccessDialog = true;
             }else{
+              context.saveComplete = false;
+              context.savingStatus = "";
+              context.saveError = true;
               context.isUpdateFailureDialog = true;
             }
+
+        }catch(e){
+              context.saveComplete = false;
+              context.savingStatus = "";
+              context.saveError = true;
+        }
       },
       cancelUpdate(){
         var context = this;
@@ -215,14 +278,25 @@
       UpdateFailureCancel(){
         var context = this;
         context.isUpdateFailureDialog = false;
-      }
-        },
-        async created(){
+      },
+      updateStatusBar(payload){
+        var context = this;
+        context.minutes = payload.minutes
+        context.seconds = payload.seconds
+      },
+    },
+    async created(){
     var context = this;
     if(context.isAdmin == true){
       context.NextOfKinDTO = {...context.selectedNextOfKin}
     }else{
-        var response = await this.$store.dispatch('clientStore/GetContributor', context.IdentityModel.id)
+      const payload = {
+        url: `${userController}/${context.IdentityModel.id}`,
+        req: {}
+      }
+      this.$store.commit("authenticationStore/setShowSpinner", true);
+        var response = await get(payload)
+        this.$store.commit("authenticationStore/setShowSpinner", false);
           const { 
               data : {
                 data: contributor,

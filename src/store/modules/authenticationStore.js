@@ -24,9 +24,25 @@ const state = {
     categoryN2000User: {},
     categoryN5000User: {},
     categoryN10000User: {},
+    selectedUserName: "",
+    showSpinner: false,
+    spinnerSize: "8em",
+    spinnerThickness: 10,
   }
 
   const getters = {
+    spinnerThickness(state){
+      return state.spinnerThickness;
+    },
+    spinnerSize(state){
+      return state.spinnerSize;
+    },
+    showSpinner(state){
+      return state.showSpinner;
+    },
+    selectedUserName(state){
+      return state.selectedUserName;
+    },
     categoryN10000User(state){
       return state.categoryN10000User;
     },
@@ -93,6 +109,12 @@ const state = {
 }
 
 const mutations = {
+  setShowSpinner(state, payload){
+    state.showSpinner = payload;
+  },
+  setSelectedUserName(state, payload){
+    state.selectedUserName = payload;
+  },
   setCategoryN10000User(state, payload){
     state.categoryN10000User = {...payload }
   },

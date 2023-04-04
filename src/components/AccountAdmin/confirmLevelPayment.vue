@@ -73,6 +73,7 @@
 
 <script>
   import MessageBox from "../dialogs/MessageBox.vue"
+  import { get } from "../../store/modules/services"
     export default {
       components:{
         MessageBox
@@ -180,11 +181,11 @@
               }
               console.log("levelIndex: ", levelIndex)
               console.log("context.categoryIndex: ", context.categoryIndex)
-              var response = await this.$store.dispatch('categoryStore/GetCompletedLevelXCategory', {
-                  url: context.url,
-                  levelIndex,
-                  categoryIndex: context.categoryIndex,
-                  }) 
+              const payload = {
+                url: `${context.url}/${levelIndex}/${context.categoryIndex}`,
+                req: {}
+              }
+              var response = await get(payload) 
               
               const { 
               data : {

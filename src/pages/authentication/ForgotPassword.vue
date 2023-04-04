@@ -131,7 +131,8 @@
   import { initializeApp } from "firebase/app";
   import MessageBox from "../../components/dialogs/MessageBox.vue"
   import { countryCodes } from "./view_models/country_codes";
-  import { post } from "../../store/modules/services";
+  import { post } from "../../store/modules/auth-services";
+  import { userController } from "../../store/modules/backendRoutes";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB9VzN87QcRpEbSegBYjZBTqigdJLkiBAc",
@@ -207,9 +208,11 @@
           },
           async forgotPassword(){
             var context = this;
-
-            var response = await this.$store.dispatch('authenticationStore/ForgotPassword', 
-            context.forgotPasswordPayload);
+            const payload = {
+              url: `${userController}/forgotpassword`,
+              req: context.forgotPasswordPayload
+            }
+            var response = await post(payload);
             
             const { 
               data : {
@@ -279,7 +282,7 @@
           async userIsExist(){
             var context = this;
             
-            var url = `launchpadusers/user-is-exist`;
+            var url = `${userController}/user-is-exist`;
             const payload = {
                 url,
                 req: {
@@ -302,6 +305,7 @@
             }else{
               console.log("context.userExists: ", userExists);
               if(userExists){
+                this.$store.commit("authenticationStore/setSelectedUserName", context.forgotPasswordPayload.userName)
                 context.SendVerificationCode();
               }else{
                 alert("user does not exist")

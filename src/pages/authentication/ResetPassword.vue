@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-form class="q-gutter-md">
-        <q-input outlined v-model="resetPasswordPayload.userName" label="Username" lazy-rules />
+        <q-input outlined v-model="resetPasswordPayload.userName" label="Username" lazy-rules readonly/>
         <q-input type="password" outlined v-model="resetPasswordPayload.password" label="Password" lazy-rules />
         <q-input type="password" outlined v-model="resetPasswordPayload.passwordConfirm" label="Password Confirm" lazy-rules /><div class="row">
               <div class="col-12 text-center q-pa-sm">
@@ -70,6 +70,9 @@
 
 <script>
   import MessageBox from "../../components/dialogs/MessageBox.vue"
+  import { userController } from "../../store/modules/backendRoutes";
+  import { post } from "../../store/modules/auth-services";
+
     export default {
        computed: {
         visible(){
@@ -77,6 +80,9 @@
         },
         showSimulatedReturnData(){
           return this.$store.getters['authenticationStore/showSimulatedReturnData'];
+        },
+        selectedUserName(){
+          return this.$store.getters['authenticationStore/selectedUserName'];
         }
       },
       components:{
@@ -126,9 +132,11 @@
           },
           async ResetPassword(){
             var context = this;
-            console.log("context.ResetPasswordPayload: ", context.resetPasswordPayload)
-            var response = await this.$store.dispatch('authenticationStore/ResetPassword', 
-            context.resetPasswordPayload);
+            const payload = {
+              url: `${userController}/resetpassword`,
+              req: context.resetPasswordPayload
+            }
+            var response = await post(payload);
 
             const { 
               data : {
@@ -178,6 +186,10 @@
             this.$emit(context.ResetPasswordEvent2);
           }
 
+        },
+        created(){
+          var context = this;
+          context.resetPasswordPayload.userName = this.$store.getters["authenticationStore/selectedUserName"]
         }
     }
 </script>

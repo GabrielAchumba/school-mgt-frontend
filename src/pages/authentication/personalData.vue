@@ -188,6 +188,8 @@
   import { initializeApp } from "firebase/app";
   import MessageBox from "../../components/dialogs/MessageBox.vue"
   import { countryCodes } from "./view_models/country_codes";
+  import { userController } from "../../store/modules/backendRoutes";
+  import { post } from "../../store/modules/auth-services";
   
 
   const firebaseConfig = {
@@ -288,9 +290,19 @@
             },
             async savePersonalData(){
               var context = this;
-              console.log("context.PersonalDataDTO: ", context.PersonalDataDTO)
-               var response = await this.$store.dispatch('clientStore/CreatePersonalDataDTO', 
-               context.PersonalDataDTO)
+              var todayDate = new Date();
+              const payload = {
+                url: `${userController}/register`,
+                req: {
+                  ...context.PersonalDataDTO,
+                  createdYear: todayDate.getFullYear(),
+                  createdMonth: todayDate.getMonth() + 1,
+                  createdDay: todayDate.getDate()
+                }
+              }
+
+              //console.log("payload: ", payload)
+               var response = await post(payload)
 
               const { 
               data : {

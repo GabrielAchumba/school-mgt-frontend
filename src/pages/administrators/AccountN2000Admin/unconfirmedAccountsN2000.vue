@@ -10,6 +10,7 @@
 <script>
   import unconfirmedAccounts from "../../../components/AccountAdmin/unconfirmedAccounts.vue"
   import { accountn2000Controller } from '../../../store/modules/backendRoutes'
+  import { get } from "../../../store/modules/services";
     export default {
         computed: {
         uncomfirmedAccounts(){
@@ -35,9 +36,10 @@
         },
         async created() {
           var context = this;
-        var response = await this.$store.dispatch('accountStore/GetUnComfirmedAccounts', {
-          url: context.url,
-        })
+          const payload = {
+            url: context.url,
+          }
+          var response = await get(payload)
 
         const { 
               data : {

@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-   <q-page-container>
+   <q-page-container v-if="!showSpinner">
      <q-page class="flex flex-center bg-primary">
        <q-card
           class="personal-data-form"
@@ -43,6 +43,14 @@
 
       <div 
             class="row q-pa-sm">
+
+              <StatusBar class="col-12 text-center q-pa-sm"
+              :savingStatus="savingStatus"
+              :message="message"
+              :saveComplete="saveComplete"
+              :saveError="saveError"
+              @updateStatusBar="updateStatusBar"/>
+
               <div class="col-12 text-center q-pa-sm">
                 <q-btn
                 label="Cancel"
@@ -111,14 +119,26 @@
 
      </q-page>
    </q-page-container>
+    <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+            <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                <q-spinner
+                    color="accent"
+                    :size="spinnerSize"
+                    :thickness="spinnerThickness"
+                />
+            </div>
+    </div>
  </q-layout>
 </template>
 
 
 <script>
     import MessageBox from "../../components/dialogs/MessageBox.vue"
-    import { get } from "../../store/modules/services" 
-    import { paymentGatewayController } from "../../store/modules/backendRoutes"
+  import StatusBar from "../../components/StatusBar/StatusBar.vue";
+    import { get, put } from "../../store/modules/services" 
+    import { paymentGatewayController, userController } from "../../store/modules/backendRoutes"
     export default {
       computed: {
         selectedBankDetail(){
@@ -130,9 +150,19 @@
         IdentityModel() {
             return this.$store.getters['authenticationStore/IdentityModel'];
         },
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
+        }
       },
     components:{
       MessageBox,
+      StatusBar,
     },
     data () {
     return {
@@ -147,6 +177,11 @@
         isUpdateFailureDialog: false,
         message: "",
         banks: [],
+        savingStatus: "",
+        saveComplete: false,
+        saveError: false,
+        minutes: 0,
+        seconds: 0,
       }
     },
     props: {
@@ -172,7 +207,10 @@
       },
       async update(){
         var context = this;
-         if (context.BankAccountDTO.bankName === "") {
+        context.savingStatus = "";
+        context.saveComplete = false;
+        context.saveError = false;
+         /* if (context.BankAccountDTO.bankName === "") {
           alert("Enter your bank name");
           return;
         }
@@ -185,12 +223,22 @@
          if (context.BankAccountDTO.accountNumber === "") {
           alert("Enter your account number");
           return;
-        }
+        } */
 
         if(context.isAdmin == false){
           context.BankAccountDTO.contributorId = context.IdentityModel.id;
         }
-        var response = await this.$store.dispatch('clientStore/UpdateBankAccountData', context.BankAccountDTO)
+
+        const payload = {
+          url: `${userController}/updatebankaccountdata/` + context.BankAccountDTO.contributorId,
+          req: context.BankAccountDTO
+        }
+
+        context.saveComplete = true;
+        context.savingStatus = "Updating...";
+        context.saveError = false
+        try{
+        var response = await put(payload)
 
         const { 
           data : {
@@ -203,10 +251,24 @@
           context.isUpdateDialog = false;
           context.message = message;
             if(success){
+              context.saveComplete = false;
+              context.savingStatus = "Updated";
+              context.saveError = false;
               context.isUpdateSuccessDialog = true;
             }else{
+              context.saveComplete = false;
+              context.savingStatus = "";
+              context.saveError = true;
               context.isUpdateFailureDialog = true;
             }
+
+        }catch(e){
+              context.saveComplete = false;
+              context.savingStatus = "";
+              context.saveError = true;
+              context.isUpdateFailureDialog = true;
+
+        }
       },
       cancelUpdate(){
         var context = this;
@@ -252,6 +314,7 @@
             }
         } = response
 
+        console.log("response: ", response)
         if(success){
           context.banks = result.map((row) => {
             return {
@@ -262,24 +325,42 @@
         }
 
       },
-    },
-    async created(){
+      async getUser(){
         var context = this;
-        await context.getBanks();
         if(context.isAdmin == true){
           context.BankAccountDTO = {...context.selectedBankDetail}
         }else{
-          var response = await this.$store.dispatch('clientStore/GetContributor', context.IdentityModel.id)
+          const payload = {
+            url: `${userController}/${context.IdentityModel.id}`,
+            req: {}
+          }
+          
+          var response = await get(payload)
+          
           const { 
               data : {
                 data: contributor,
                 success,
                     }
               } = response
+              console.log("response: response")
           if(success){
             context.BankAccountDTO = {...contributor}
           }
         }
+      },
+      updateStatusBar(payload){
+        var context = this;
+        context.minutes = payload.minutes
+        context.seconds = payload.seconds
+      },
+    },
+    async created(){
+        var context = this;
+        this.$store.commit("authenticationStore/setShowSpinner", true);
+        await context.getBanks();
+        await context.getUser();
+        this.$store.commit("authenticationStore/setShowSpinner", false);
       }
     }
 </script>

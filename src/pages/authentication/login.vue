@@ -142,6 +142,8 @@
   import ForgotPassword from "./ForgotPassword.vue"
   import ResetPassword from "./ResetPassword.vue"
   import { validateSession } from "../../store/modules/services";
+  import { post } from "../../store/modules/auth-services";
+  import { userController } from "../../store/modules/backendRoutes"; 
     export default {
        computed: {
         visible(){
@@ -194,11 +196,15 @@
           },
           async login(){
             var context = this;
-
-            var response = await this.$store.dispatch('authenticationStore/Login', {
-             username: context.username,
-             password: context.password
-            });
+            //`${userController}/login`, payload
+            const payload = {
+              url: `${userController}/login`,
+              req: {
+                username: context.username,
+                password: context.password
+                }
+            }
+            var response = await post(payload);
 
             const { 
               data : {

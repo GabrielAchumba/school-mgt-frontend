@@ -149,6 +149,8 @@
 <script>
     import MessageBox from "../../components/dialogs/MessageBox.vue"
   import { userController } from '../../store/modules/backendRoutes'
+  import { put, get } from "../../store/modules/services";
+
     export default {
       computed: {
         SelectedAdmin(){
@@ -289,7 +291,12 @@
         if(context.isSuperAdmin == false){
           context.AdministratorDTO.contributorId = context.IdentityModel.id;
         }
-        var response = await this.$store.dispatch('administratorStore/UpdateAdministrator', context.AdministratorDTO)
+
+        const payload = {
+          url: `${userController}/updateadministratordto/` + context.AdministratorDTO.contributorId,
+          req: context.AdministratorDTO
+        }
+        var response = await put(payload)
 
         const { 
           data : {
@@ -343,7 +350,11 @@
         if(context.isSuperAdmin == true){
           context.AdministratorDTO = {...context.SelectedAdmin}
         }else{
-        var response = await this.$store.dispatch('administratorStore/GetAdministrator', context.IdentityModel.id)
+          const payload = {
+            url: `${userController}/${context.IdentityModel.id}`,
+            req: {}
+          }
+        var response = await get(payload)
           const { 
               data : {
                 data: contributor,

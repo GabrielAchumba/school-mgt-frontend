@@ -176,9 +176,9 @@ module.exports = function (/* ctx */) {
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       id: 'org.launchpad.app',
-      version: '4', 
+      version: '6', 
       description: "Developed By Newway Standard Global",
-      androidVersionCode: '4'
+      androidVersionCode: '6'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

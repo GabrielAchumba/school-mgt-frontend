@@ -2,11 +2,11 @@
   <div>
     <div class="bg-primary">
 
-      <div class="row text-center flex flex-center q-pb-lg">
+      <div class="row text-center q-pa-sm">
          <div class="text-h6 text-weight-bolder q-pa-sm col-12"> {{SelectedAccount.fullName}}</div>
       </div>
 
-    <div class="row bg-primary">
+    <div class="row text-center bg-primary">
       <div class="col-12">
         <div class="q-pa-sm">
          <q-img 
@@ -32,7 +32,7 @@
           </div>
         </div>
 
-        <div class="row text-left q-pa-sm">
+        <div class="row text-center q-pa-sm">
 
                 
               <div class="col-12 q-ma-none">
@@ -69,7 +69,7 @@
 <q-dialog v-model="isCheckPaySlipSuccessDialog">
   <MessageBox
   title="Success"
-  :message="`Pay Slip comfirmed successfully`"
+  :message="`Pay slip comfirmed successfully`"
   okayEvent="okayCheckPaySlipSucess"
   cancelEvent="cancelCheckPaySlipSucess"
   @okayCheckPaySlipSucess="okayCheckPaySlipSucess($event)"
@@ -94,6 +94,7 @@
 
 <script>
   import MessageBox from "../dialogs/MessageBox.vue"
+  import { put } from "../../store/modules/services";
   export default {
       components:{
         MessageBox
@@ -137,9 +138,12 @@
         var context = this;
         context.isCheckPaySlipDialog = false
 
-        var response = await this.$store.dispatch('accountStore/ComfirmPayment', {
-            url: context.url
-        });
+        const payload = {
+            url: `${context.url}/${context.SelectedAccount.accountId}`,
+            req: context.SelectedAccount
+        }
+
+        var response = await put(payload);
 
         const { 
               data : {

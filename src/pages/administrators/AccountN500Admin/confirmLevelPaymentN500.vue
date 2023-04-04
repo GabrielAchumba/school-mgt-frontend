@@ -11,8 +11,10 @@
 </template>
 
 <script>
-  import confirmLevelPayment from "../../../components/AccountAdmin/confirmLevelPayment.vue"
-  import { categoryn500Controller } from '../../../store/modules/backendRoutes'
+  import confirmLevelPayment from "../../../components/AccountAdmin/confirmLevelPayment.vue";
+  import { categoryn500Controller, accountn500Controller } from '../../../store/modules/backendRoutes';
+  import { cyclesController } from '../../../store/modules/backendRoutes';
+  import { get } from "../../../store/modules/services";
     export default {
       computed: {
         categoryLevelXQualifiedNotComfirmed(){
@@ -25,7 +27,7 @@
       data () {
     return {
             Cycles:[],
-            url: `${categoryn500Controller}/getcompletedlevelxcategories`,
+            url: `${accountn500Controller}/getcompletedlevelxcategories`,
             SelectedLevelUrl: "SelectedLevelN500",
             Contribution: "500",
             levelX: "",
@@ -45,7 +47,11 @@
         },
         async created() {
           var context = this;
-          var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
+          const payload = {
+            url: `${cyclesController}/getcycleswithlevelsbyuserid`,
+            req: {}
+          }
+          var response = await get(payload)
 
           const { 
                 data : {
@@ -63,7 +69,6 @@
                 name: row.label,
               }
             })
-            //this.$store.commit('dashboardStore/GetCyclesWithLevelsByUserId', result)
           }else{
               context.message = message;
           }

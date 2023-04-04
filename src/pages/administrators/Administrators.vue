@@ -71,6 +71,9 @@
 
 <script>
     import MessageBox from "../../components/dialogs/MessageBox.vue"
+    import { userController } from "../../store/modules/backendRoutes";
+    import { get } from "../../store/modules/services";
+    
     export default {
         computed: {
         Administrators(){
@@ -136,7 +139,11 @@
 
         },
         async created() {
-        var response = await this.$store.dispatch('administratorStore/GetAdministrators')
+          const payload = {
+            url: `${userController}/getadministrators`,
+            req: {}
+          }
+        var response = await get(payload)
 
         const { 
               data : {

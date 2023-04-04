@@ -16,6 +16,7 @@
 <script>
   import SelectedLevel from "../../../components/AccountAdmin/SelectedLevel.vue"
   import { cashoutn500Controller } from '../../../store/modules/backendRoutes'
+  import { get } from "../../../store/modules/services";
   export default {
       computed: {
         selectedQualifiedLevel(){
@@ -62,15 +63,18 @@
     },
     async created() {
       var context = this;
-        var payload = {
+        let payload = {
             category: context.category,
             amount: context.amount,
         }
         this.$store.commit('accountStore/onCategoryValueChanged', payload);
         this.$store.commit('cashOutStore/onCategoryValueChanged', payload);
-        var response = await this.$store.dispatch('cashOutStore/GetCategoryBankDetails', {
+        payload = {
           url: `${context.url}/${context.categoryIndex}`,
-        });
+          req: {}
+        }
+
+        var response = await get(payload);
 
         const { 
           data : {

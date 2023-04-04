@@ -1,7 +1,7 @@
 <template>
 <div>
 
-<div class="row">
+<div v-if="!showSpinner" class="row">
 
   <div class="col-12 q-pa-sm">
 
@@ -80,6 +80,17 @@
   </div>
 
 </div>
+<div 
+      v-show="showSpinner"
+      class="q-gutter-md row">
+          <div class="col-12 q-pa-sm absolute-center flex flex-center">
+              <q-spinner
+                  color="accent"
+                  :size="spinnerSize"
+                  :thickness="spinnerThickness"
+              />
+          </div>
+  </div>
 
 <q-dialog v-model="isUploadFileDialog">
   <MessageBox
@@ -185,6 +196,15 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
         },
         Account(){
           return this.$store.getters['accountStore/Account'];
+        },
+        showSpinner(){
+            return this.$store.getters["authenticationStore/showSpinner"];
+        },
+        spinnerSize(){
+            return this.$store.getters["authenticationStore/spinnerSize"];
+        },
+        spinnerThickness(){
+            return this.$store.getters["authenticationStore/spinnerThickness"];
         }
       },
       components:{
@@ -334,7 +354,9 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
           url: `${paymentGatewayController}/getbanks`
         }
 
+        this.$store.commit("authenticationStore/setShowSpinner", true);
         var response = await get(payload)
+        this.$store.commit("authenticationStore/setShowSpinner", false);
             const { 
             data : {
                 data: result,
@@ -446,7 +468,7 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
 
   
           const payload = {
-            request: {
+            req: {
             bankNamePaidFrom: context.bankNamePaidFrom,
             accountNamePaidFrom: context.accountNamePaidFrom,
             accountNumberPaidFrom: context.accountNumberPaidFrom,
@@ -471,24 +493,29 @@ import { paymentGatewayController } from "../../store/modules/backendRoutes"
 
           switch(context.category){
             case "CategoryN500":
-              payload.url = `${accountn500Controller}/offplatformpayment`,
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.url = `${accountn500Controller}/offplatformpayment`
+              payload.req.categoryIndex = 1
+              response = await post(payload)
             break;
             case "CategoryN1000":
-              payload.url = `${accountn1000Controller}/offplatformpayment`,
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.url = `${accountn1000Controller}/offplatformpayment`
+              payload.req.categoryIndex = 2
+              response = await post(payload)
             break;
             case "CategoryN2000":
-              payload.url = `${accountn2000Controller}/offplatformpayment`,
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.url = `${accountn2000Controller}/offplatformpayment`
+              payload.req.categoryIndex = 3
+              response = await post(payload)
             break;
             case "CategoryN5000":
-              payload.url = `${accountn5000Controller}/offplatformpayment`,
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.url = `${accountn5000Controller}/offplatformpayment`
+              payload.req.categoryIndex = 4
+              response = await post(payload)
             break;
             case "CategoryN10000":
-              payload.url = `${accountn10000Controller}/offplatformpayment`,
-              response = await this.$store.dispatch('accountStore/OffPlatformPayment', payload)
+              payload.url = `${accountn10000Controller}/offplatformpayment`
+              payload.req.categoryIndex = 5
+              response = await post(payload)
             break;
           }
 

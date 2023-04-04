@@ -12,7 +12,9 @@
 
 <script>
   import confirmLevelPayment from "../../../components/AccountAdmin/confirmLevelPayment.vue"
-  import { categoryn5000Controller } from '../../../store/modules/backendRoutes'
+  import { categoryn5000Controller, accountn5000Controller } from '../../../store/modules/backendRoutes'
+  import { cyclesController } from '../../../store/modules/backendRoutes';
+  import { get } from "../../../store/modules/services";
     export default {
         computed: {
         categoryLevelXQualifiedNotComfirmed(){
@@ -25,7 +27,7 @@
       data () {
     return {
             Cycles:[],
-            url: `${categoryn5000Controller}/getcompletedlevelxcategories`,
+            url: `${accountn5000Controller}/getcompletedlevelxcategories`,
             SelectedLevelUrl: "SelectedLevelN5000",
             Contribution: "5000",
             levelX: "",
@@ -45,7 +47,11 @@
         },
         async created() {
           var context = this;
-        var response = await this.$store.dispatch('dashboardStore/GetCyclesWithLevelsByUserId')
+          const payload = {
+            url: `${cyclesController}/getcycleswithlevelsbyuserid`,
+            req: {}
+          }
+          var response = await get(payload)
 
         const { 
               data : {

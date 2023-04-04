@@ -113,10 +113,10 @@ const mutations = {
   OffPlatformPayment(state, payload){
     if(state.isAdmin == true){
       state.HasNotPaid = true;
-      this.$router.push(`/${payload.makeContributionsUrl}`);
+      //this.$router.push(`/${payload.makeContributionsUrl}`);
     }else{
       state.HasNotPaid = false;
-      this.$router.push('/user-home');
+      //this.$router.push('/user-home');
     }
   },
   GetUnComfirmedAccounts(state, payload){

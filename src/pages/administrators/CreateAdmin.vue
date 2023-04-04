@@ -165,6 +165,8 @@
 <script>
     import MessageBox from "../../components/dialogs/MessageBox.vue"
     import { userController } from '../../store/modules/backendRoutes'
+    import { post } from "../../store/modules/services";
+    
     export default {
     computed:{
         isSuperAdmin(){
@@ -296,8 +298,11 @@
                 context.PhotoDto.base64String != undefined){
                   context.AdminDTO.base64String = context.PhotoDto.base64String
                 }
-               var response = await this.$store.dispatch('administratorStore/CreateAdministrator', 
-               context.AdminDTO)
+                const payload = {
+                  url: `${userController}/registeradministrator`,
+                  req: context.AdminDTO
+                }
+               var response = await post(payload)
 
               const { 
               data : {

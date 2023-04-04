@@ -172,10 +172,18 @@ import MessageBox from "../../components/dialogs/MessageBox.vue"
           },
       async update(){
         var context = this;
+        context.savingStatus = "";
+        context.saveComplete = false;
+        context.saveError = false;
 
         if(context.isAdmin == false){
           context.BioDataDTO.contributorId = context.IdentityModel.id;
         }
+
+        context.saveComplete = true;
+        context.savingStatus = "Updating...";
+        context.saveError = false
+
         var response = await this.$store.dispatch('clientStore/UpdateBioData', context.BioDataDTO)
 
          const { 

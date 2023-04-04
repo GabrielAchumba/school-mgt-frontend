@@ -11,6 +11,7 @@
 <script>
   import CategoryContributors from "../../../components/CategoryAdmin/CategoryContributors.vue"
   import { categoryn10000Controller } from '../../../store/modules/backendRoutes'
+  import { get } from "../../../store/modules/services";
     export default {
         computed: {
         Categories(){
@@ -48,9 +49,11 @@
         },
         async created() {
         var url = `${categoryn10000Controller}/getcategories`;
-        var response = await this.$store.dispatch('categoryStore/GetCategories', {
+        const payload = {
           url
-        })
+        }
+
+        var response = await get(payload)
 
         const { 
               data : {

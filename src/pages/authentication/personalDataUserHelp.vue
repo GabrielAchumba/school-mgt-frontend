@@ -116,6 +116,8 @@
 
 <script>
     import MessageBox from "../../components/dialogs/MessageBox.vue"
+  import { userController } from "../../store/modules/backendRoutes";
+  import { post } from "../../store/modules/auth-services";
     export default {
         computed: {
         date(){
@@ -182,8 +184,19 @@
             },
             async savePersonalData(){
               var context = this;
-               var response = await this.$store.dispatch('clientStore/CreatePersonalDataDTO', 
-               context.PersonalDataDTO)
+              var todayDate = new Date();
+              const payload = {
+                url: `${userController}/register`,
+                req: {
+                  ...context.PersonalDataDTO,
+                  createdYear: todayDate.getFullYear(),
+                  createdMonth: todayDate.getMonth() + 1,
+                  createdDay: todayDate.getDate()
+                }
+              }
+
+              //console.log("payload: ", payload)
+               var response = await post(payload)
 
               const { 
               data : {

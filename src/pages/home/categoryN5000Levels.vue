@@ -16,6 +16,8 @@
 
 <script>
   import CardList from "../../components/Cards/CardList.vue"
+  import { get } from "../../store/modules/services";
+  import { cyclesController } from "../../store/modules/backendRoutes";
 
     export default {
         props: {
@@ -48,7 +50,11 @@
       },
       async created(){
         var context =  this;
-        var response = await this.$store.dispatch('dashboardStore/GetROIs')
+        const payload = {
+          url: `${cyclesController}/getrois`,
+          req: {}
+        }
+        var response = await get(payload)
         
         const { 
               data : {
