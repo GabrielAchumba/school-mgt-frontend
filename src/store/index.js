@@ -4,13 +4,6 @@ import createPersistedState from "vuex-persistedstate";
 
 import authenticationStore from './modules/authenticationStore';
 import administratorStore from './modules/administratorStore';
-import staffStore from './modules/staffStore';
-import classRoomStore from './modules/classRoomStore';
-import studentStore from './modules/studentStore';
-import subjectStore from './modules/subjectStore';
-import assessmentStore from './modules/assessmentStore';
-import lessonStore from './modules/lessonStore';
-import resultStore from './modules/resultStore';
 import userStore from './modules/userStore';
 import chartStore from './modules/chartStore';
 import componentsStore from './modules/componentsStore';
@@ -25,16 +18,7 @@ import CarouselStore from './modules/CarouselStore';
 import AboutUsStore from './modules/AboutUsStore';
 import ContactStore from './modules/ContactStore';
 import CoreValueStore from './modules/CoreValueStore';
-import gradeStore from './modules/gradeStore';
-import levelStore from './modules/levelStore';
-import sessionStore from './modules/sessionStore';
-import examStore from './modules/examStore';
 import storyStore from './modules/storyStore';
-import lessonNoteStore from './modules/lessonNoteStore'
-import lessonNoteSectionStore from './modules/lessonNoteSectionStore';
-import cAStore from './modules/cAStore';
-import cAQuestionStore from './modules/cAQuestionStore';
-import cAAnswerStore from './modules/cAAnswerStore';
 
 
 Vue.use(Vuex)
@@ -53,19 +37,12 @@ export default function (/* { ssrContext } */) {
     modules: {
       authenticationStore,
       administratorStore,
-      staffStore,
-      classRoomStore,
-      studentStore,
-      subjectStore,
-      assessmentStore,
-      lessonStore,
-      resultStore,
       userStore,
-      chartStore,
       componentsStore,
       schoolStore,
       subscriptionStore,
       FileModelStore,
+      storyStore,
       LogoStore,
       VisionStore,
       MissionStore,
@@ -73,17 +50,7 @@ export default function (/* { ssrContext } */) {
       CarouselStore,
       AboutUsStore,
       ContactStore,
-      CoreValueStore,
-      gradeStore,
-      levelStore,
-      sessionStore,
-      examStore,
-      storyStore,
-      lessonNoteStore,
-      lessonNoteSectionStore,
-      cAStore,
-      cAQuestionStore,
-      cAAnswerStore,
+      CoreValueStore
     },
     plugins: [createPersistedState()],
 

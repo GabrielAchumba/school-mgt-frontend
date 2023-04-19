@@ -1,7 +1,7 @@
 <template>
   <div>
         <div class="row bg-primary">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pa-sm"
+            <div class="col-12 q-pa-sm"
                 v-for="(card, i) in cardList" :key="card.title">
                 <q-card 
                 @mouseover="hoverOver(i)" @mouseout="hoverOutTimeout(i)" 
@@ -18,7 +18,7 @@
                 <img
                   class="my-img"
                   :src="card.image"
-                  height="50%"
+                  height="80%"
                   width="50%"
                 />
                     
@@ -29,35 +29,13 @@
                   </div> -->
 
                   <q-card-section class="bg-primary absolute-bottom">
-                  <p class="text-caption text-accent">
+                  <p class="text-accent">
                     {{ card.description }}
                   </p>
                 </q-card-section>
 
                 </q-card>
             </div>
-
-         <!--  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 q-pa-sm flex flex-center"
-          style="height: 200px;" 
-          v-for="(card) in cardList" :key="card.title"> 
-            <q-card @mouseover="hoverOver(1)" @mouseout="hoverOutTimeout(1)" 
-              @click="cardClickHandler(card)"
-              class="text-center box-shadow" round bordered fit>
-              <q-bar class="q-pa-none row bg-accent text-primary">
-                  <div class="about_heading_1 text-h6 text-primary text-center q-pa-sm">{{ card.title }}</div>
-                </q-bar>
-                <q-img
-                  :src="card.image"
-                  height="100px"
-                />
-                <q-card-section class="bg-primary">
-                  <div class="text-h7 text-accent">
-                    {{ card.description }}
-                  </div>
-                </q-card-section>
-            </q-card>
-          </div> -->
-
         </div>
   </div>
 </template>
@@ -112,7 +90,7 @@
 
 .my-card{
       width: 100%;
-      height: 200px;
+      height: 400px;
       border: 1px  rgba(255,255,255, 1) solid;
       /* max-width: 250px; */
   }

@@ -35,12 +35,6 @@
           @qInputTemplateAction="LoginQInputTemplateAction($event)"
           @onToggle="onToggleLoginForm($event)"/>
 
-           <Form
-          v-if="isLoginFormWithToken"
-          :formData="loginFormWithToken"
-          @SignInWithToken="SignInWithToken($event)"
-          @onToggle="onToggleLoginFormWithToken($event)"/>
-
         <q-dialog 
             v-for="dialog in dialogs" 
             :key="dialog.title"
@@ -81,7 +75,6 @@
   import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import { getAuth } from 'firebase/auth'
 import { initializeApp } from "firebase/app";
-import { loadSchools } from "../administrators/school/utils";
 import { BIconFileEasel } from 'bootstrap-vue';
 
 
@@ -269,7 +262,7 @@ const auth = getAuth()
         async ChangePassword(){
           var context = this;
             
-            var url = `user/resetpassword`;
+            var url = `realestateuser/resetpassword`;
             const payload = {
                 url,
                 req: {
@@ -347,7 +340,7 @@ const auth = getAuth()
 
             this.$store.commit("authenticationStore/setShowSpinner", true);
             var response = await post({
-             url: "user/login",
+             url: "realestateuser/login",
              req: {
                username: context.loginForm.qInputs[0].name,
                password: context.loginForm.qInputs[1].name
@@ -379,47 +372,12 @@ const auth = getAuth()
               context.dialogFailureOrScuess( "Sign In Failure", true);
             }
         },
-        async loginWithToken(){
-            var context = this;
-
-            const schoolId = context.loginFormWithToken.qSelects[0].value;
-            const token = context.loginFormWithToken.qInputs[0].name;
-            this.$store.commit("authenticationStore/setShowSpinner", true);
-            var response = await get({
-             url: `student/loginstudent/${token}/${schoolId}`,
-            });
-            this.$store.commit("authenticationStore/setShowSpinner", false);
-
-            const { 
-              data : {
-                data: result,
-                message,
-                success,
-              }
-              } = response
-
-            
-            context.dialogFailureOrScuess("Sign In Student", false);
-            if(success){
-              context.token = result.token;
-              context.user = result.user;
-              console.log("context.user: ", context.user);
-              this.$store.commit('studentStore/SetSelectedStudent', context.user)
-              this.$store.commit('authenticationStore/Login', {
-                token: context.token,
-                user: context.user,
-              })
-              context.dialogFailureOrScuess("Sign In Student Success", true);
-            }else{
-              context.dialogFailureOrScuess( "Sign In Student Failure", true);
-            }
-        },
         async userIsExist(){
            console.log("userIsExist called")
             var context = this;
             context.forgotPasswordForm.qBtns[0].disabled = true;
             
-            var url = `user/user-is-exist2`;
+            var url = `realestateuser/user-is-exist2`;
             const payload = {
                 url,
                 req: {
@@ -460,26 +418,17 @@ const auth = getAuth()
         },
         logInSuccessOkay(){
             var context = this;
-            console.log("context.user: ", context.user);
-            console.log("context.test: ", context.test);
-           if (context.user.designationId === "CEO"){
-             this.$router.push('/super-admin');
-           }else{
-              switch(context.user.userType.toLowerCase()){
-                case "admin":
-                this.$router.push(`/admin`)
-                break;
-                case "referal":
-                this.$router.push('/referal');
-                break;
-                case "student":
-                this.$router.push('/student');
-                break;
-              case "member":
-                this.$router.push('/member');
-                break;
+            switch(context.user.userType.toLowerCase()){
+              case "admin":
+              this.$router.push(`/admin`)
+              break;
+              case "vendor":
+              this.$router.push('/vendor');
+              break;
+              case "client":
+              this.$router.push('/client');
+              break;
             }
-           }
            
           },
         async okDialog(payload){
@@ -517,9 +466,6 @@ const auth = getAuth()
                           context.isLoginForm = true;
                           context.isLoginFormWithToken = false;
                           break;
-                        case "Sign In Student":
-                            await context.loginWithToken();
-                            break;
                         case "Sign In Student Success":
                           this.$router.push('/student');
                           break;
@@ -655,14 +601,6 @@ const auth = getAuth()
        context.verifyOTPForm.clearQInputs();
        context.resetPasswordForm.clearQInputs();
        context.loginFormWithToken.clearQInputs();
-       const schools = await loadSchools();
-       this.$store.commit('schoolStore/SetSchools', schools.result);
-       context.loginFormWithToken.qSelects[0].list = schools.result.map((row) => {
-           return {
-               ...row,
-               type: row.schoolName
-           }
-       })
        context.initReCaptcha();
        this.$store.commit("authenticationStore/setShowSpinner", false);
     }

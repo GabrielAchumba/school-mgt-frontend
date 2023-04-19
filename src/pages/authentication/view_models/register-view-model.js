@@ -1,6 +1,5 @@
 import { countryCodes } from "./country-codes";
-const userTypes = ["Instructor", "Student", "Teacher", "Lecturer", "Proprietor", "Principal",
-"Vice Principal", "Headmaster", "Headmistress", "Vice Chancellor", "Member", "Staff"]
+const userTypes = ["Vendor", "Client"]
 
 const registrationForm = {
     title: "Create User",
@@ -17,38 +16,47 @@ const registrationForm = {
             }), 
             /* list: [], */
             actionName: "userTypeAction", visible: true },
-            { label: "School Name *", value: "", type: "text", 
-            list: [], actionName: "schoolNameAction", visible: true },
     ],
     qInputs: [
         { label: "First Name", name: "", type: "text", 
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
         { label: "Last Name", name: "", type: "text",
+        visible: true,
         Template: {
             sn: 1,
             iconName: "",
             visible: false,
         }},
         { label: "User Name", name: "", type: "text",
+        visible: true,
         Template: {
             sn: 2,
             iconName: "",
             visible: false,
         }},
         { label: "Password", name: "", type: "password",
+        visible: true,
         Template: {
             sn: 3,
             iconName: "visibility_off",
             visible: true,
         }},
+        { label: "Real Estate Company Name", name: "", type: "text", 
+        visible: true,
+        Template: {
+            sn: 4,
+            iconName: "",
+            visible: false,
+        }},
     ],
     qBtns: [
-        {label: "Cancel", name: "CancelCreateUser", icon: "close", btnDisabled: false},
         {label: "Next", name: "Next", icon: "navigate_next", btnDisabled: false},
+        {label: "Cancel", name: "CancelCreateUser", icon: "close", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -78,6 +86,7 @@ const phoneNumberForm = {
     ],
     qInputs: [
         { label: "Phone Number", name: "", type: "text",
+        visible: true,
         Template: {
             sn: 0,
             iconName: "send",
@@ -109,6 +118,7 @@ const otpForm = {
     title: "Verify Code",
     qInputs: [
         { label: "Enter SMS Code", name: "", type: "text", 
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
@@ -116,8 +126,8 @@ const otpForm = {
         }},
     ],
     qBtns: [
-        {label: "Cancel", name: "CancelSubmit", icon: "close", btnDisabled: false},
         {label: "Submit", name: "Submit", icon: "save_alt", btnDisabled: false},
+        {label: "Cancel", name: "CancelSubmit", icon: "close", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

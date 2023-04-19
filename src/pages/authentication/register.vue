@@ -143,7 +143,7 @@ export default {
         async Next(){
 
           const context = this;
-          context.registrationForm.qBtns[1].btnDisabled = true;
+          //context.registrationForm.qBtns[1].btnDisabled = true;
           await context.userIsExist();
         },
         Submit(){
@@ -153,7 +153,7 @@ export default {
                 i++;
                 if(dialog.title == "Verify Code"){
                     context.dialogs[i].isVisible = true;
-                    context.otpForm.qBtns[1].btnDisabled = true;
+                    //context.otpForm.qBtns[1].btnDisabled = true;
                     break;
                 }
             }
@@ -200,13 +200,8 @@ export default {
         },
         async save(){
             var context = this;
-            var user = this.$store.getters["authenticationStore/IdentityModel"]
             
-            var url = `user/create`;
-            var schoolId = context.registrationForm.qSelects[1].value;
-            if(context.registrationForm.qSelects[0].value === "Referral"){
-              schoolId = "CEO";
-            }
+            var url = `realestateuser/create`;
             const payload = {
                 url,
                 req: {
@@ -214,10 +209,10 @@ export default {
                     lastName: context.registrationForm.qInputs[1].name,
                     userName: context.registrationForm.qInputs[2].name,
                     password: context.registrationForm.qInputs[3].name,
+                    realestateCompany: context.registrationForm.qInputs[4].name,
                     phoneNumber: context.phoneNumberForm.qInputs[0].name,
                     userType: context.registrationForm.qSelects[0].value,
                     countryCode: context.phoneNumberForm.qSelects[0].value.code,
-                    schoolId,
                     createdBy: "me",
                     confirmed: false,
                 }
@@ -244,11 +239,7 @@ export default {
          async userIsExist(){
             var context = this;
             
-            var url = `user/user-is-exist`;
-            var schoolId = context.registrationForm.qSelects[1].value;
-            if(context.registrationForm.qSelects[0].value === "Referral"){
-              schoolId = "CEO";
-            }
+            var url = `realestateuser/user-is-exist`;
             const payload = {
                 url,
                 req: {
@@ -258,7 +249,6 @@ export default {
                     password: context.registrationForm.qInputs[3].name,
                     phoneNumber: context.phoneNumberForm.qInputs[0].name,
                     userType: context.registrationForm.qSelects[0].value,
-                    schoolId,
                 }
             }
 
@@ -287,7 +277,7 @@ export default {
             }else{
               alert("user already exist")
             }
-            context.registrationForm.qBtns[1].btnDisabled = false;
+            //context.registrationForm.qBtns[1].btnDisabled = false;
 
         },
         async okDialog(payload){
@@ -319,11 +309,10 @@ export default {
         },
       userTypeAction(payload){
             var context = this;
-            console.log("payload: ", payload)
-            if(payload.value === "Referral"){
-                context.registrationForm.qSelects[1].visible = false;
+            if(payload.value === "Vendor"){
+                context.registrationForm.qInputs[4].visible = true;
             }else{
-                context.registrationForm.qSelects[1].visible = true;
+                context.registrationForm.qInputs[4].visible = false;
             }
       },
       sendOtp(phNo, countryCode, sn){
@@ -411,13 +400,10 @@ export default {
        context.phoneNumberForm.clearQInputs();
        context.phoneNumberForm.clearQInputs();
        context.otpForm.clearQInputs();
-       context.registrationForm.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
-           return {
-               ...row,
-               type: row.schoolName
-           }
-       })
-
+      context.registrationForm.qSelects[0].value = context.registrationForm.qSelects[0].list[0].value
+      context.userTypeAction({
+        value: context.registrationForm.qSelects[0].value
+      })
        context.initReCaptcha();
     }
 }

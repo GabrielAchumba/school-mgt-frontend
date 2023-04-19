@@ -24,7 +24,6 @@
 <script>
 import TitleDescription from "../../components/Common/title-description.vue";
 import TitleDescriptionImage from "../../components/Common/title-description-image.vue";
-import { newses } from "../test-data/news";
 export default {
     computed:{
         newses(){

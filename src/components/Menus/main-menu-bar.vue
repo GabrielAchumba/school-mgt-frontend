@@ -91,7 +91,7 @@
             <q-space />
              <!-- <PDFWriter/> -->
 
-          <q-btn 
+          <!-- <q-btn 
           v-if="unComfirmedUsers.length > 0"
           dense 
           round flat icon="groups"
@@ -100,7 +100,7 @@
             color="secondary" floating>
               {{ unComfirmedUsers.length }}
             </q-badge>
-          </q-btn>
+          </q-btn> -->
 
             <q-btn
                 icon="menu"

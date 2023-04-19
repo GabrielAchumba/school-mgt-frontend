@@ -34,20 +34,9 @@
 <script>
 import { colors } from 'quasar'
 const { getBrand, setBrand } = colors
-import { loadClassRooms } from "../pages/administrators/classroom/utils";
-import { loadStaffs } from "../pages/administrators/staff/utils";
-import { loadStudents } from "../pages/administrators/student/utils";
-import { loadSubjects } from "../pages/administrators/subject/utils";
-import { loadAssessments } from "../pages/administrators/assessment/utils";
-import { loadGrades } from "../pages/administrators/grade/utils";
-import { loadLevels } from "../pages/administrators/level/utils";
-import { loadSessions } from "../pages/administrators/session/utils";
-import { loadSchools } from "../pages/administrators/school/utils";
-import { loadUnComfirmedUsers } from "../pages/administrators/user/utils";
 import MainMenuBar from "../components/Menus/main-menu-bar.vue";
 import searchDialog from "../components/Searches/search-list.vue";
-import { checkResultsAnalysisSubscription, menuList, torpaFeatures } from "../pages/administrators/utils";
-import { loadLogos } from "../pages/administrators/branding/logo/utils";
+import {  menuList, torpaFeatures } from "../pages/administrators/utils";
 
 export default {
   name: 'AdminLayout',
@@ -332,9 +321,9 @@ export default {
     async checkSubscritpion(){
       var context = this;
       var user = this.$store.getters["authenticationStore/IdentityModel"]
-      const { result } = await checkResultsAnalysisSubscription(user.schoolId);
+      /* const { result } = await checkResultsAnalysisSubscription(user.schoolId);
       context.checkSubscription = {...result}
-      this.$store.commit("administratorStore/SetIsSubscription", result)
+      this.$store.commit("administratorStore/SetIsSubscription", result) */
 
       console.log("context.menuList: ", context.menuList)
       var listOfMenuItems = [];
@@ -356,13 +345,13 @@ export default {
         })
       context.landingMenu.shift();
 
-      context.verifyResultsAnalysisSubscription();
+      /* context.verifyResultsAnalysisSubscription();
       context.verifyFileManagementSubscription();
       context.verifyAdevertizementSubscription();
       context.verifyExamQuizSubscription();
       context.verifyLibraryManagementSubscription();
       context.verifyOnlineLearningSubscription();
-      context.verifySocialize();
+      context.verifySocialize(); */
 
       /* context.menuList = context.contextMenuList.map((row) => {
         return {
@@ -381,16 +370,6 @@ export default {
         setBrand('accent', logo.tertiaryColor);
         setBrand('secondary', logo.secondaryColor);
     },
-    async branding(schoolId){
-            var context = this;
-            const torpaLogo = await loadLogos(schoolId);
-            if(torpaLogo.result.length === 0){
-                    torpaLogo.result.push({fileUrl: "/statics/newway.jpg", primaryColor: "#FFFFFF",
-                        secondaryColor: "#FF0000", tertiaryColor: "#056608", createdBy: "CEO"})
-            }
-            this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
-            context.initializeLogo(torpaLogo.result[0]);
-    },
   },
   async created(){
     
@@ -402,52 +381,7 @@ export default {
     
     if(window.innerWidth < 700) context.rightDrawerOpen = true;
     this.$store.commit('authenticationStore/setIsMobile', context.rightDrawerOpen);
-
-      const schools = await loadSchools();
-      this.$store.commit('schoolStore/SetSchools', schools.result);
-
-       var user = this.$store.getters["authenticationStore/IdentityModel"]
-        for(const school of schools.result){
-          if(school.id === user.schoolId){
-            context.schoolName =  school.schoolName;
-            this.$store.commit('schoolStore/SetUserSchool', school);
-            context.branding(user.schoolId);
-            break;
-          }
-        }
-
-       if(user.userType == "Admin" && user.designationId !== "CEO"){
-         
-          const classRooms = await loadClassRooms(user.schoolId);
-          this.$store.commit('classRoomStore/SetClassRooms', classRooms.result);
-          console.log("classRooms stored")
-          const staffs = await loadStaffs(user.schoolId);
-          this.$store.commit('staffStore/SetStaffs', staffs.result);
-          console.log("staffs stored")
-          const students = await loadStudents(user.schoolId);
-          this.$store.commit('studentStore/SetStudents', students.result);
-          console.log("students stored")
-          const subjects = await loadSubjects(user.schoolId);
-          this.$store.commit('subjectStore/SetSubjects', subjects.result);
-          console.log("subjects stored")
-          const assessments = await loadAssessments(user.schoolId);
-          this.$store.commit('assessmentStore/SetAssessments', assessments.result);
-          console.log("assessments stored")
-          const grades = await loadGrades(user.schoolId);
-          this.$store.commit('gradeStore/SetGrades', grades.result);
-          console.log("grades stored")
-          const levels = await loadLevels(user.schoolId);
-          this.$store.commit('levelStore/SetLevels', levels.result);
-          console.log("levels stored")
-          const sessions = await loadSessions(user.schoolId);
-          this.$store.commit('sessionStore/SetSessions', sessions.result);
-          console.log("sessions stored")
-          const unConfirmedUsers = await loadUnComfirmedUsers(user.schoolId, "@");
-          this.$store.commit('userStore/setUnComfirmedUsers', unConfirmedUsers.result)
-          console.log("unConfirmedUsers stored")
-          context.checkSubscritpion();
-       }
-
+      context.checkSubscritpion();
        context.showSpinner = false;
 
   },

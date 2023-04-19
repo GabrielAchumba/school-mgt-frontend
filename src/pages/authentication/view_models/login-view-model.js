@@ -7,12 +7,14 @@ const loginForm = {
     ], */
     qInputs: [
         { label: "User Name", name: "", type: "text", 
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
         { label: "Password", name: "", type: "password", 
+        visible: true,
         Template: {
             sn: 1,
             iconName: "visibility_off",
@@ -43,12 +45,14 @@ const forgotPasswordForm = {
     ],
     qInputs: [
         { label: "User Name", name: "", type: "text", 
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
         { label: "Phone Number", name: "", type: "phoneNumber",
+        visible: true,
         Template: {
             sn: 1,
             iconName: "phone",
@@ -82,6 +86,7 @@ const verifyOTPForm = {
     title: "Verfiy OTP",
     qInputs: [
         { label: "otp", name: "", type: "text", 
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
@@ -107,12 +112,14 @@ const resetPasswordForm = {
     title: "Reset Password",
     qInputs: [
         { label: "Password", name: "", type: "password",
+        visible: true,
         Template: {
             sn: 0,
             iconName: "visibility_off",
             visible: true,
         }},
         { label: "Password Confirm", name: "", type: "password",
+        visible: true,
         Template: {
             sn: 1,
             iconName: "visibility_off",

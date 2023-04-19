@@ -28,27 +28,20 @@
               this.$store.commit("userStore/SetSelectedUser", user);
               let backRoute= "";
               let updateUserRoute = "/update-user";
-              if(user.schoolId === "CEO"){
-                backRoute='/super-admin';
-                updateUserRoute = '/super-admin-update-user';
+              switch(user.userType){
+                case "Admin":
+                  backRoute = '/admin';
+                  updateUserRoute = '/update-user';
+                  break;
+                case "Vendor":
+                  backRoute = '/vendor';
+                  updateUserRoute = '/student-update-user';
+                  break;
+                case "client":
+                  backRoute = '/client';
+                  updateUserRoute = '/teacher-update-user';
+                  break;
               }
-              else {
-                switch(user.userType){
-                  case "Admin":
-                    backRoute = '/admin';
-                    updateUserRoute = '/update-user';
-                    break;
-                  case "Student":
-                    backRoute = '/student';
-                    updateUserRoute = '/student-update-user';
-                    break;
-                  case "Teacher":
-                    backRoute = '/teacher';
-                    updateUserRoute = '/teacher-update-user';
-                    break;
-                }
-                
-              } 
               this.$store.commit("authenticationStore/setBackRoute", backRoute);
               this.$store.commit("authenticationStore/setUpdateUserRoute", updateUserRoute);
           }
@@ -58,7 +51,7 @@
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");
         context.setRoutes();
-        this.$store.commit("authenticationStore/setPageTitle", "TORPA - NSG School App");
+        this.$store.commit("authenticationStore/setPageTitle", "NEWREAL - NSG Real Estate App");
       }
     }
 </script>

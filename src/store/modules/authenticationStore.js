@@ -29,7 +29,7 @@ const state = {
     torpa_menuList: [
       { name: "/", tabIndex: "home", label: "Home" },
       { name: "/login_register", tabIndex: "login_register", label: "Sign In"},
-      { name: "/school-landing", tabIndex: "schools", label: "Schools" },
+      /* { name: "/school-landing", tabIndex: "schools", label: "Schools" }, */
       { name: "/news", tabIndex: "news", label: "News"},
       { name: "/about_us", tabIndex: "about_us", label: "About Us" },
       { name: "/contact", tabIndex: "contact", label: "Contact" },
@@ -52,9 +52,17 @@ const state = {
     updateUserRoute: "/update-user",
     unComfirmedUsersRoute: "/unconfirmed-users",
     isTorpa: false,
+    selectedLand: {},
+    selectedHouse: {},
   }
 
   const getters = {
+    selectedLand(state){
+      return state.selectedLand;
+    },
+    selectedHouse(state){
+      return state.selectedHouse;
+    },
     isTorpa(state){
       return state.isTorpa;
     },
@@ -172,6 +180,12 @@ const state = {
 }
 
 const mutations = {
+  setSelectedHouse(state, payload){
+    state.selectedHouse = payload;
+  },
+  setSelectedLand(state, payload){
+    state.selectedLand = payload;
+  },
   setIsTorpa(state, payload){
     state.isTorpa = payload;
   },

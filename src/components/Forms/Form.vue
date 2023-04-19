@@ -166,7 +166,8 @@
                     <div class="q-pa-sm"
                       v-for="qInput in formData.qInputs" 
                       :key="qInput.label">
-                      <span><p class="q-ma-none">{{ qInput.label }}</p>
+                      <span
+                      v-if="qInput.visible"><p class="q-ma-none">{{ qInput.label }}</p>
                       <q-input class="q-ma-none bg-primary text-accent" 
                       outlined
                       v-model="qInput.name" 

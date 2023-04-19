@@ -1,7 +1,7 @@
 <template>
     <div class="q-pa-sm">
         <div class="row">
-             <AssessmentLanding 
+<!--              <AssessmentLanding 
              class="col-12"
             v-if="activeRoute=='/assessment-landing'"/>
             <ClassroomLanding 
@@ -42,13 +42,13 @@
             v-if="activeRoute=='/create-subscription'"/>
             <Invoice 
              class="col-12"
-            v-if="activeRoute=='/update-subscription'"/>
+            v-if="activeRoute=='/update-subscription'"/> -->
         </div>
     </div>
 </template>
 
 <script>
-import AssessmentLanding from "../../pages/administrators/assessment/landing.vue";
+/* import AssessmentLanding from "../../pages/administrators/assessment/landing.vue";
 import ClassroomLanding from "../../pages/administrators/classroom/landing.vue";
 import ResultsLanding from "../../pages/administrators/result/results.vue";
 import StudentResultsLanding from "../../pages/administrators/result/student-results.vue";
@@ -60,7 +60,7 @@ import StudentsPositions from "../../pages/administrators/result/analysis/Studen
 import SummariedResults from "../../pages/administrators/result/analysis/SummariedResults.vue";
 import StudentStudentsPositions from "../../pages/administrators/result/student-analysis/StudentsPositions.vue";
 import StudentSummariedResults from "../../pages/administrators/result/student-analysis/SummariedResults.vue";
-import Invoice from "../../pages/administrators/subscription/invoice.vue";
+import Invoice from "../../pages/administrators/subscription/invoice.vue"; */
 import { printableRoutes } from "./printable-routes";
 
 
@@ -72,7 +72,7 @@ export default {
         }
     },
     components:{
-        AssessmentLanding,
+        /* AssessmentLanding,
         ClassroomLanding,
         ResultsLanding,
         StudentResultsLanding,
@@ -84,7 +84,7 @@ export default {
         StudentStudentsPositions,
         SummariedResults,
         StudentSummariedResults,
-        Invoice,
+        Invoice, */
     }
 
 }
