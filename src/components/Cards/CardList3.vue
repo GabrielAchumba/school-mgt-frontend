@@ -1,40 +1,34 @@
 <template>
   <div>
         <div class="row bg-primary">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pa-sm"
-                v-for="(card, i) in cardList" :key="card.title">
-                <q-card 
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pa-sm shadow-2"
+                v-for="(card) in cardList" :key="card.title">
+               <!--  <q-card 
                 @mouseover="hoverOver(i)" @mouseout="hoverOutTimeout(i)" 
                 @click="cardClickHandler(card)"
-                class="my-card bg-primary text-accent text-center shadow-2">
-
-                <!-- <div class="text-h6 bg-accent text-primary text-center q-pa-sm">{{ card.title }}</div> -->
+                class="my-card bg-primary text-accent text-center shadow-2"> -->
 
                 <q-bar class="q-pa-none row bg-accent text-primary">
                   <div class="text-primary text-left q-pa-sm">{{ card.title }}</div>
                 </q-bar>
 
-                <!-- class="q-pa-sm absolute-center" -->
                 <img
+                @click="cardClickHandler(card)"
                   class="my-img"
                   :src="card.image"
-                  height="50%"
-                  width="50%"
+                  height="60%"
+                  width="100%"
                 />
-                    
-                    <!-- <br>
-                   
-                   <div class="text-h8 text-accent">
-                    {{ card.description }}
-                  </div> -->
 
-                  <q-card-section class="bg-primary absolute-bottom">
-                  <p class="text-caption text-accent">
-                    {{ card.description }}
-                  </p>
-                </q-card-section>
+                  <!-- <q-card-section class="bg-primary absolute-bottom"> -->
+                    <div>
+                      <p class="text-accent">
+                        {{ card.description }}
+                      </p>
+                    </div>
+                <!-- </q-card-section> -->
 
-                </q-card>
+                <!-- </q-card> -->
             </div>
 
          <!--  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 q-pa-sm flex flex-center"
@@ -111,7 +105,7 @@
 }
 
 .my-card{
-      width: 100%;
+     /*  width: 100%; */
       height: 200px;
       border: 1px  rgba(255,255,255, 1) solid;
       /* max-width: 250px; */

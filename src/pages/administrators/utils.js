@@ -313,7 +313,7 @@ export const menuListForStudents = [
     {
         name: "showPage",
         title: torpaFeatures.socialize, 
-        description: "Chat and interact with friends from same or differnet school",
+        description: "Chat with friends from same school",
         image: "/statics/images/socialize.jpg",
         to: "student-filemanagement-landing",
         isFree: true,

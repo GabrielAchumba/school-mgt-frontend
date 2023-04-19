@@ -1365,6 +1365,36 @@ const routes = [
         component: () => import('pages/administrators/lesson-note/landing.vue') 
         
       },
+      { 
+        path: '/student-exam-landing', 
+        component: () => import('pages/administrators/exam/landing.vue') 
+        
+      },
+      { 
+        path: '/student-exam-question-landing', 
+        component: () => import('src/pages/administrators/exam/question-landing.vue') 
+        
+      },
+      { 
+        path: '/student-exam-answer-landing', 
+        component: () => import('pages/administrators/exam/answer-landing.vue') 
+        
+      },
+      { 
+        path: '/student-take-exam-question',   
+        component: () => import('pages/administrators/exam/exam-rules.vue') 
+        
+      },
+      { 
+        path: '/student-start-exam',   
+        component: () => import('pages/administrators/exam/start-exam.vue') 
+        
+      },
+      { 
+        path: '/student-exam-score',   
+        component: () => import('pages/administrators/exam/exam-score.vue') 
+        
+      },
     ]
   },
   {
