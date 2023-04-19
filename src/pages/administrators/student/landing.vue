@@ -193,7 +193,7 @@
                 context.message = message;
             }
 
-            },
+        },
           setBackRoute(){
               var user = this.$store.getters["authenticationStore/IdentityModel"];
               let backRoute= "";

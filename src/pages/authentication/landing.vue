@@ -1,24 +1,24 @@
 <template>
   <div>
    <Carousel/>
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
        <q-btn fab :icon="iconName" color="primary" class="bg-accent">
         <q-menu fit>
           <ChatBox/>
         </q-menu>
       </q-btn>
-    </q-page-sticky>
+    </q-page-sticky> -->
   </div>
 </template>
 
 <script>
 import Carousel from "../../components/Carousel/carousel.vue";
-import ChatBox from "../../components/Menus/chatbox.vue";
+//import ChatBox from "../../components/Menus/chatbox.vue";
 
 export default {
   components:{
     Carousel,
-    ChatBox,
+    //ChatBox,
   },
   data(){
     return {

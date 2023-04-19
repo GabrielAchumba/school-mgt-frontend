@@ -1,5 +1,5 @@
 import { countryCodes } from "./country-codes";
-const userTypes = ["Instructor", "Student", "Teacher", "Lecturer", "Proprietor", "Principal",
+const userTypes = ["Administrator", "Instructor", "Student", "Teacher", "Lecturer", "Proprietor", "Principal",
 "Vice Principal", "Headmaster", "Headmistress", "Vice Chancellor", "Member", "Staff"]
 
 const registrationForm = {

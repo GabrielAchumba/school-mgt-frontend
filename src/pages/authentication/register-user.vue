@@ -1,10 +1,10 @@
 <template>
   <div class="row bg-primary" style="height: 95vh;">
     <div v-if="!isMobile"
-          class="col-6 bg-primary">
+          class="col-sm-0 col-xs-0 col-md-6 col-xl-6 col-lg-6 bg-primary">
           <TorpaLandingPage/>
     </div>
-    <div class="col bg-primary">
+    <div class="col-sm-12 col-xs-12 col-md-6 col-xl-6 col-lg-6 bg-primary">
         <register/>
     </div>
   </div>

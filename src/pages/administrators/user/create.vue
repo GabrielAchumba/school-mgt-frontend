@@ -219,6 +219,29 @@ export default {
             }
             await context.save();
         },
+        setRoutes(){
+              var user = this.$store.getters["authenticationStore/IdentityModel"];
+              let backRoute= "";
+              if(user.schoolId === "CEO"){
+                backRoute='/super-admin-user-landing';
+              }
+              else {
+                switch(user.userType){
+                  case "Admin":
+                    backRoute = '/user-landing';
+                    break;
+                  case "Student":
+                    backRoute = '/student';
+                    break;
+                  case "Member":
+                    backRoute = '/member';
+                    break;
+                }
+                
+              } 
+
+              this.$router.push(backRoute);
+        },
         async okDialog(payload){
             console.log("payload: ", payload)
             const context = this;
@@ -232,9 +255,10 @@ export default {
                             context.form.qBtns[1].btnDisabled = false;
                             break;
                         case "Success":
-                            var user = this.$store.getters["authenticationStore/IdentityModel"];
+                            /* var user = this.$store.getters["authenticationStore/IdentityModel"];
                             if(user.schoolId === "CEO")this.$router.push('/super-admin-user-landing')
-                            else  this.$router.push('/user-landing')
+                            else  this.$router.push('/user-landing') */
+                            context.setRoutes();
                             break;
                     }
                     context.dialogs[i].isVisible = false;

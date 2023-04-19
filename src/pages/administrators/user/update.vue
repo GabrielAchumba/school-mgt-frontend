@@ -202,7 +202,9 @@ export default {
                 }
             } = response
             if(success){
-                this.$store.commit("authenticationStore/setIdentityModel", payload.req);
+                if(user.userType !== "Admin"){
+                    this.$store.commit("authenticationStore/setIdentityModel", payload.req);
+                }
                 context.dialogs[1].isVisible = true;
             }else{
                 context.dialogs[2].message = message;
@@ -244,9 +246,10 @@ export default {
                 backRoute='/super-admin-user-landing';
               }
               else {
+                  console.log("User 2: ", user)
                 switch(user.userType){
                   case "Admin":
-                    backRoute = '/admin';
+                    backRoute = '/user-landing';
                     break;
                   case "Student":
                     backRoute = '/student';
@@ -259,7 +262,7 @@ export default {
               } 
 
               this.$router.push(backRoute);
-          }
+        }
     },
     created(){
         var context =  this;

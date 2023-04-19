@@ -93,7 +93,7 @@ export default {
         async generateTokens(){
             var context = this;
 
-            var url = `student/generatetokens`;
+            var url = `user/generatetokens`;
             const payload = {
                 url,
                 req: {

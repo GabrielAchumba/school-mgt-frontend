@@ -546,6 +546,9 @@ export default {
 
 
             context.layout = { 
+                showlegend: true,
+                legend: {x: 0.4, y: 1.2},
+				height: 700,
                 title: "", // `${xListItem.type} vs ${yListItem.type}`,
                 barmode: 'stack',
                 font: {

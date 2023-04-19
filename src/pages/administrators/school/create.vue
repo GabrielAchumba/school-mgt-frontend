@@ -99,7 +99,7 @@ export default {
                 req: {
                     schoolName: context.form.qInputs[0].name,
                     address: context.form.qInputs[1].name,
-                    referedBy: context.form.qSelects[0].value,
+                    //referedBy: context.form.qSelects[0].value,
                 }
             }
 
@@ -147,7 +147,7 @@ export default {
         var context = this;
         context.form.clearQInputs();
         context.form.clearQSelects();
-        const { result } = await loadReferals()
+        /* const { result } = await loadReferals()
         console.log("referals: ", result)
         context.form.qSelects[0].list = result.map((row) => {
             return {
@@ -165,7 +165,7 @@ export default {
                 value: "CEO",
                 type: `Nobody`
             })
-        }
+        } */
     }
 }
 </script>

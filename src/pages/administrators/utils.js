@@ -172,14 +172,14 @@ export const menuList = [
         to: "result-landing",
         isFree: true,
     },
-    {
+    /* {
         name: "showPage",
         title: torpaFeatures.libraryMgt, 
         description: "Manage school book-store",
         image: "/statics/images/library.jpg",
         to: "result-landing",
         isFree: false,
-    },
+    }, */
     {
         name: "showPage",
         title: torpaFeatures.onlineLearning, 
@@ -204,14 +204,14 @@ export const menuList = [
         to: "exam-landing",
         isFree: true,
     },
-    {
+    /* {
         name: "showPage",
         title: torpaFeatures.quizGame, 
         description: "Make cash while learning in funny way",
         image: "/statics/images/examination.jpg",
         to: "exam-landing",
         isFree: true,
-    },
+    }, */
     {
         name: "showPage",
         title: torpaFeatures.socialize, 
@@ -270,14 +270,14 @@ export const menuListForStudents = [
         to: "student-result-landing",
         isFree: true,
     },
-    {
+    /* {
         name: "showPage",
         title: torpaFeatures.libraryMgt, 
         description: "Manage school book-store",
         image: "/statics/images/library.jpg",
         to: "student-result-landing",
         isFree: false,
-    },
+    }, */
     {
         name: "showPage",
         title: torpaFeatures.onlineLearning, 
@@ -302,14 +302,14 @@ export const menuListForStudents = [
         to: "student-exam-landing",
         isFree: true,
     },
-    {
+    /* {
         name: "showPage",
         title: torpaFeatures.quizGame, 
         description: "Make cash while learning in funny way",
         image: "/statics/images/examination.jpg",
         to: "student-exam-landing",
         isFree: true,
-    },
+    }, */
     {
         name: "showPage",
         title: torpaFeatures.socialize, 

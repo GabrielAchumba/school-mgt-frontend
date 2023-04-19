@@ -1,8 +1,8 @@
 const form = {
     title: "Create School",
     qSelects: [
-         { label: "Refered By *", value: "", type: "text", 
-         list: [], actionName: "referedByAction", visible: true },
+         /* { label: "Refered By *", value: "", type: "text", 
+         list: [], actionName: "referedByAction", visible: true }, */
     ],
     qInputs: [
         { label: "School Name", name: "", type: "text", 
@@ -11,7 +11,7 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "School Address", name: "", type: "text",
+        { label: "School Address", name: "", type: "textarea",
         Template: {
             sn: 0,
             iconName: "",
@@ -41,7 +41,7 @@ const form = {
 }
 
 const dialogs = [
-    { title: "Create School", isVisible: false, message: "Do you want to create a School",
+    { title: "Create School", isVisible: false, message: "Do you want to create a school",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Success", isVisible: false, message: "School created successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },

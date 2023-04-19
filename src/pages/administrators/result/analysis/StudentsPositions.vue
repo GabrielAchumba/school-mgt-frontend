@@ -384,6 +384,9 @@ export default {
             })
 
             context.layout = { 
+                showlegend: true,
+                legend: {x: 0.4, y: 1.2},
+				height: 700,
                 title: `${yListItem.type}`, //`${xListItem.type} VERSUS ${yListItem.type}`,
                 font: {
                     },

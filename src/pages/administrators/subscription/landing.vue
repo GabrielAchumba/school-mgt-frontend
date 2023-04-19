@@ -19,14 +19,14 @@
               {
                 name: "showPage",
                 title: "Create", 
-                description: "Creat Subscription for plans for all Torpa's non-free features",
+                description: "Creat subscription plans for all Torpa's non-free features",
                 image: "/statics/images/staffs.jpg",
                 to: "/create-subscription"
               },
               {
                 name: "showPage",
                 title: "Update", 
-                description: "Update Subscription for your existing plans or add new features",
+                description: "Update subscription for your existing plans or add new features",
                 image: "/statics/images/staffs.jpg",
                 to: "/update-subscription"
               },

@@ -229,7 +229,7 @@
                 label: "Schools",
                 items: [...items],
                 originalItems: [...items],
-                isAddVisible: false,
+                isAddVisible: true,
                 isMenuListVisible: false,
             })
 

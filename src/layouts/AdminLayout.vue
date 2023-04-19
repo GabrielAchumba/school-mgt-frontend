@@ -135,7 +135,7 @@ export default {
     },
     verifyResultsAnalysisSubscription(){
       var context = this;
-      context.checkSubscription.isResultsAnalysis = true;
+      //context.checkSubscription.isResultsAnalysis = true;
       if(context.checkSubscription.isResultsAnalysis == false){
         let index = -1;
         let i = 0;
@@ -163,7 +163,7 @@ export default {
     },
     verifyFileManagementSubscription(){
        var context = this;
-       context.checkSubscription.isFileManagement = true;
+       //context.checkSubscription.isFileManagement = true;
       if(context.checkSubscription.isFileManagement == false){
         let index = -1;
         let i = 0;
@@ -191,7 +191,7 @@ export default {
     },
     verifyAdevertizementSubscription(){
        var context = this;
-       context.checkSubscription.isAdvertizement = true;
+       //context.checkSubscription.isAdvertizement = true;
       if(context.checkSubscription.isAdvertizement == false){
         let index = -1;
         let i = 0;
@@ -219,7 +219,7 @@ export default {
     },
     verifyExamQuizSubscription(){
        var context = this;
-       context.checkSubscription.isExamQuiz = true;
+       //context.checkSubscription.isExamQuiz = true;
       if(context.checkSubscription.isExamQuiz == false){
         let index = -1;
         let i = 0;
@@ -247,7 +247,7 @@ export default {
     },
     verifyLibraryManagementSubscription(){
        var context = this;
-       context.checkSubscription.isLibraryManagement = true;
+       //context.checkSubscription.isLibraryManagement = true;
       if(context.checkSubscription.isLibraryManagement == false){
         let index = -1;
         let i = 0;
@@ -275,7 +275,7 @@ export default {
     },
     verifyOnlineLearningSubscription(){
        var context = this;
-       context.checkSubscription.isOnlineLearning = true;
+       //context.checkSubscription.isOnlineLearning = true;
       if(context.checkSubscription.isOnlineLearning == false){
         let index = -1;
         let i = 0;
@@ -303,7 +303,7 @@ export default {
     },
     verifySocialize(){
        var context = this;
-       context.checkSubscription.isSocialize = true;
+       //context.checkSubscription.isSocialize = true;
       if(context.checkSubscription.isSocialize == false){
         let index = -1;
         let i = 0;
@@ -334,6 +334,7 @@ export default {
       var user = this.$store.getters["authenticationStore/IdentityModel"]
       const { result } = await checkResultsAnalysisSubscription(user.schoolId);
       context.checkSubscription = {...result}
+      console.log("context.checkSubscription: ", context.checkSubscription)
       this.$store.commit("administratorStore/SetIsSubscription", result)
 
       console.log("context.menuList: ", context.menuList)

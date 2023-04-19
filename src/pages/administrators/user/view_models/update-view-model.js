@@ -1,23 +1,23 @@
 const form = {
     title: "Update User",
     /* qSelects: [
-         { label: "Designation *", value: "", type: "text", 
+         { label: "Designation", value: "", type: "text", 
          list: [], actionName: "designationAction", visible: true },
     ], */
     qInputs: [
-        { label: "First Name *", name: "", type: "text",
+        { label: "First Name", name: "", type: "text",
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
-        { label: "Last Name *", name: "", type: "text",
+        { label: "Last Name", name: "", type: "text",
         Template: {
             sn: 1,
             iconName: "",
             visible: false,
         }},
-        { label: "User Name *", name: "", type: "text",
+        { label: "User Name", name: "", type: "text",
         Template: {
             sn: 2,
             iconName: "",

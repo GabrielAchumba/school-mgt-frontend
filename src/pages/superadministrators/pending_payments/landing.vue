@@ -2,6 +2,7 @@
   <div>
     <Table
     :table_VM="tableVM"
+    :tableRows="tableRows"
     @createPendingPayment="createPendingPayment($event)"
     @updatePendingPayment="updatePendingPayment($event)"
     @deletePendingPayment="deletePendingPayment($event)"/>
@@ -51,6 +52,7 @@
                 createItemUrl: "/create-pending-payment",
                 updateItemUrl: "/update-pending-payment",
                 },
+                tableRows: [],
                 dialogs:[
                 { title: "Delete PendingPayment", isVisible: false, message: "Do you want to delete a Class Room",
                 okayEvent: "okDialog", cancelEvent: "cancelDialog" },

@@ -8,7 +8,7 @@ const form = {
             iconName: "",
             visible: false,
         }},
-        { label: "School Address", name: "", type: "text",
+        { label: "School Address", name: "", type: "textarea",
         Template: {
             sn: 0,
             iconName: "",
@@ -24,7 +24,7 @@ const form = {
 }
 
 const dialogs = [
-    { title: "Update School", isVisible: false, message: "Do you want to update a School",
+    { title: "Update School", isVisible: false, message: "Do you want to update a school",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },
     { title: "Success", isVisible: false, message: "School updated successfully!",
     okayEvent: "okDialog", cancelEvent: "cancelDialog" },

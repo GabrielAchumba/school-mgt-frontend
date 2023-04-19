@@ -54,6 +54,7 @@
 <script>
 import { qSelect, qBtn, dialog, studentsForm } from "./view_models/results-subcription";
 import Form from "../../../../components/Forms/Form.vue";
+import { loadStudents } from "../../student/utils"
 export default {
     components:{
         Form,
@@ -98,6 +99,16 @@ export default {
                 studentsForm: context.studentsForm,
             })
         },
+        async _loadStudents(){
+            var context = this;
+            var user = this.$store.getters["authenticationStore/IdentityModel"]
+            //this.$store.commit("authenticationStore/setShowSpinner", true);
+            const { result } = await loadStudents(user.schoolId);
+            //this.$store.commit("authenticationStore/setShowSpinner", false);
+            console.log("students: ", result)
+            this.$store.commit('studentStore/SetStudents', result)
+
+        },
         initializeData(){
             var context = this;
             context.studentsForm.GroupedCheckBoxes[0].list = this.$store.getters["studentStore/students"].map((row) => {
@@ -121,9 +132,10 @@ export default {
             else context.isMobile = false;
         },
     },
-    created(){
+    async created(){
         var context = this;
         window.addEventListener("resize", this.onResize);
+        await context._loadStudents()
         context.initializeData();
         console.log("isUpdate: ", context.isUpdate);
     },

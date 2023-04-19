@@ -140,6 +140,7 @@
           },
           updateListItem(selectedSubject){
              var context = this;
+             console.log("selectedSubject: ", selectedSubject)
              this.$store.commit('subjectStore/SetSelectedSubject', selectedSubject)
             this.$router.push(context.tableVM.updateItemUrl);
           },
@@ -229,6 +230,7 @@
             context.form.qLists = [];
             const items = result.map((row) => {
                 return {
+                    id: row.id,
                     name: row.type,
                     address: "",
                     route: "/subject-landing",
@@ -246,7 +248,9 @@
                 qBtns: [
                     {label: "Edit", name: "updateListItem", icon: "update"},
                     {label: "Delete", name: "deleteListItem", icon: "delete"},
-                ]
+                ],
+                isAddVisible: true,
+                isMenuListVisible: true,
             })
             console.log("context.form.qLists: ", context.form.qLists)
 

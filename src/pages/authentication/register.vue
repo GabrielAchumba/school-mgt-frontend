@@ -207,6 +207,10 @@ export default {
             if(context.registrationForm.qSelects[0].value === "Referral"){
               schoolId = "CEO";
             }
+
+            let userType = context.registrationForm.qSelects[0].value;
+            if(context.registrationForm.qSelects[0].value === "Administrator") userType = "Admin"
+
             const payload = {
                 url,
                 req: {
@@ -215,7 +219,7 @@ export default {
                     userName: context.registrationForm.qInputs[2].name,
                     password: context.registrationForm.qInputs[3].name,
                     phoneNumber: context.phoneNumberForm.qInputs[0].name,
-                    userType: context.registrationForm.qSelects[0].value,
+                    userType,
                     countryCode: context.phoneNumberForm.qSelects[0].value.code,
                     schoolId,
                     createdBy: "me",
@@ -249,6 +253,9 @@ export default {
             if(context.registrationForm.qSelects[0].value === "Referral"){
               schoolId = "CEO";
             }
+          
+            let userType = context.registrationForm.qSelects[0].value;
+            if(context.registrationForm.qSelects[0].value === "Administrator") userType = "Admin"
             const payload = {
                 url,
                 req: {
@@ -257,7 +264,7 @@ export default {
                     userName: context.registrationForm.qInputs[2].name,
                     password: context.registrationForm.qInputs[3].name,
                     phoneNumber: context.phoneNumberForm.qInputs[0].name,
-                    userType: context.registrationForm.qSelects[0].value,
+                    userType,
                     schoolId,
                 }
             }
