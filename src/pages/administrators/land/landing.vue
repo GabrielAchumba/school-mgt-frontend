@@ -55,7 +55,7 @@ data () {
             mobileAppStepper: 7,
             webAppStepper: 25,
             limit: 0,
-            fileModel: "",
+            filterModel: "",
             page: 1,
             totalNumberOfLands: 0,
             paginatedLands: [],
@@ -152,6 +152,7 @@ data () {
             if(filter === "" || filter === undefined) filter = "@"
             this.$store.commit("authenticationStore/setShowSpinner", true);
             const { result, message } = await loadPaginatedLands(selectedPage, filter);
+            console.log("result: ", result)
             const { paginatedLands, totalNumberOfLands, limit } = result
             this.$store.commit("authenticationStore/setShowSpinner", false);
             let counter = 0;
@@ -182,6 +183,7 @@ data () {
                     title: `${row.title}  ${row.wholePlot}${row.fractionPlot} Plot(s)`,
                 }
             })
+            console.log("context.landsCardList: ", context.landsCardList)
 
         },
         createInfo(){
@@ -200,8 +202,8 @@ data () {
     },
     async created() {
         var context = this;
-        context.form.fileModel = "@";
-        await context._loadPaginatedLands(1, context.fileModel);
+        context.filterModel = "@";
+        await context._loadPaginatedLands(1, context.filterModel);
         this.$store.commit("authenticationStore/setActiveRoute", "lands");
         this.$store.commit("authenticationStore/setIsError", false);
         this.$store.commit("authenticationStore/setErrorMessages", "");

@@ -207,14 +207,14 @@ export default {
         back(){
             var context = this;
             this.$emit("back", {
-                filter:context.filterModel
+                filter: context.filterModel
             }); 
 
         },
         next(){
             var context = this;
             this.$emit("next", {
-                filter:context.filterModel
+                filter: context.filterModel
             }); 
 
         },
@@ -222,7 +222,7 @@ export default {
             var context = this;
             this.$emit("paginationAction", {
                 page,
-                filter:context.filterModel
+                filter: context.filterModel
             });
         },
         filterLands(){
@@ -238,13 +238,16 @@ export default {
 
         },
         createInfo(){
-            this.$emit("createInfo", info);
+            this.$emit("createInfo");
 
         },
     },
     created(){
         var context = this;
-        context.nextAction();
+        if(context.infos.length > 0){
+            context.nextAction(context.infos[0]);
+        }
+        
     }
 }
 </script>

@@ -1,17 +1,21 @@
 <template>
   <div class="row bg-primary">
-    <div v-if="!isMobile"
+     <TorpaLandingPage class="col-sm-0 col-xs-0 col-md-6 col-lg-g col-xl-6 bg-primary"/>
+     <Login class="col-sm-12 col-xs-12 col-md-6 col-lg-g col-xl-6 bg-primary"/>
+    
+    <!-- <div v-if="!isMobile"
           class="col-6 bg-primary">
           <TorpaLandingPage/>
     </div>
     <div class="col bg-primary">
-        <login/>
-    </div>
+        <Login/>
+    </div> -->
+
   </div>
 </template>
 
 <script>
-import login from 'pages/authentication/login.vue'
+import Login from 'pages/authentication/login.vue'
 import TorpaLandingPage from "./landing.vue";
 // v-if="$q.platform.is.mobile"
 //v-if="!isMobile"
@@ -25,7 +29,7 @@ export default {
     },
   },
   components: {
-          login,
+          Login,
           TorpaLandingPage
   },
   data(){

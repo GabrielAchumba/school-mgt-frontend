@@ -1,17 +1,21 @@
 <template>
   <div class="row bg-primary" style="height: 95vh;">
-    <div v-if="!isMobile"
+    <TorpaLandingPage class="col-sm-0 col-xs-0 col-md-6 col-lg-g col-xl-6 bg-primary"/>
+     <Register class="col-sm-12 col-xs-12 col-md-6 col-lg-g col-xl-6 bg-primary"/>
+
+    <!-- <div v-if="!isMobile"
           class="col-6 bg-primary">
           <TorpaLandingPage/>
     </div>
     <div class="col bg-primary">
-        <register/>
-    </div>
+        <Register/>
+    </div> -->
+
   </div>
 </template>
 
 <script>
-import register from 'pages/authentication/register.vue' 
+import Register from 'pages/authentication/register.vue' 
 import TorpaLandingPage from "./landing.vue";
 
 export default {
@@ -23,7 +27,7 @@ export default {
     },
   },
   components: {
-          register,
+          Register,
           TorpaLandingPage
   },
 }

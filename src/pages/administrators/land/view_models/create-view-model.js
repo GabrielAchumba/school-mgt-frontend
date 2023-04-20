@@ -4,12 +4,14 @@ const form = {
     title: "Create Land For Sale",
     qInputs: [
         { label: "Title", name: "", type: "text",
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
         { label: "Partial Address (Do not give full address)", name: "", type: "text",
+        visible: true,
         Template: {
             sn: 0,
             iconName: "",
@@ -17,8 +19,9 @@ const form = {
         }},
     ],
     qSelects:[
-        { label: "Whole Number Plot(s)", value: "", type: "text", 
+        { label: "Whole Number Plot(s)", value: "", type: "text",  visible: true,
             list: wholePlots.map((row, i) => {
+                console.log(row)
             return {
                     sn: i+1,
                     id: row,
@@ -28,7 +31,7 @@ const form = {
                 }  
             }), 
         },
-        { label: "Fraction Plot(s)", value: "", type: "text", 
+        { label: "Fraction Plot(s)", value: "", type: "text",  visible: true,
             list: fractionPlots.map((row, i) => {
             return {
                     sn: i+1,

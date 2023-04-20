@@ -150,7 +150,8 @@ export default {
     created(){
         var context = this;
         context.form.clearQInputs();
-        context.form.clearQSelects();
+        console.log("context.form: ", context.form)
+        //context.form.clearQSelects();
         this.$store.commit("authenticationStore/setPageTitle", "Create Land");  
     }
 }
