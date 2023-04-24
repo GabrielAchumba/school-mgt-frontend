@@ -1,7 +1,7 @@
 <template>
   <div>
         <div class="row bg-primary">
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 q-pa-sm shadow-2"
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 q-pa-sm shadow-2"
                 v-for="(card) in cardList" :key="card.title">
                <!--  <q-card 
                 @mouseover="hoverOver(i)" @mouseout="hoverOutTimeout(i)" 

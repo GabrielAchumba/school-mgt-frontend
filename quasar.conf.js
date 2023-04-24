@@ -186,9 +186,9 @@ module.exports = function (/* ctx */) {
     cordova: {
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
       id: 'org.torpa.app',
-      version: '2', 
+      version: '3', 
       description: "Developed By Newway Standard Global",
-      androidVersionCode: '2'
+      androidVersionCode: '3'
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

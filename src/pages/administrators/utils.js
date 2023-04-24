@@ -315,7 +315,7 @@ export const menuListForStudents = [
         title: torpaFeatures.socialize, 
         description: "Chat with friends from same school",
         image: "/statics/images/socialize.jpg",
-        to: "student-filemanagement-landing",
+        to: "student-chat-landing",
         isFree: true,
     },
 ]
@@ -327,14 +327,14 @@ export const instructorMenuList = [
         title: torpaFeatures.home, 
         description: "Landing Page",
         image: "/statics/images/staffs.jpg",
-        to: "instructor"
+        to: "member"
     },
     {
         name: "showPage",
         title: torpaFeatures.socialize, 
         description: "Chat and interact with friends from same or differnet school",
         image: "/statics/images/socialize.jpg",
-        to: "filemanagement-landing"
+        to: "member-chat-landing"
     },
     /* {
         name: "showPage",
@@ -348,34 +348,34 @@ export const instructorMenuList = [
         title: torpaFeatures.students, 
         description: "Students in the school",
         image: "/statics/images/students.jpg",
-        to: "student-landing"
+        to: "member-student-landing"
     },
     {
         name: "showPage",
         title: torpaFeatures.cAResults, 
         description: "Store students' CA results",
         image: "/statics/images/view results.jpg",
-        to: "results"
+        to: "member-results"
     },
     {
         name: "showPage",
         title: torpaFeatures.cGPAComputation, 
         description: "Compute and analyze results of students",
         image: "/statics/images/results.jpg",
-        to: "result-landing"
+        to: "member-result-landing"
     },
     {
         name: "showPage",
         title: torpaFeatures.onlineLearning, 
         description: "Setup online course programs",
         image: "/statics/images/online_learning.jpg",
-        to: "online-learning-landing"
+        to: "member-online-learning-landing"
     },
     {
         name: "showPage",
         title: torpaFeatures.continuousAssessments, 
         description: "Set home work, test, exams, etc",
         image: "/statics/images/online_learning.jpg",
-        to: "online-learning-landing"
+        to: "member-online-learning-landing"
     },
 ]

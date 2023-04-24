@@ -5,7 +5,9 @@
         @Update="Update($event)"
         @Cancel="Cancel($event)"
         @deleteResult="deleteResult($event)"
-        @typeOfInstructor="typeOfInstructor($event)"/>
+        @typeOfInstructor="typeOfInstructor($event)"
+        @getClassRoomsByLevelId="getClassRoomsByLevelId"
+        @getContinuousAssessmentBySubjectId="getContinuousAssessmentBySubjectId"/>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">
@@ -108,14 +110,14 @@ export default {
                 req: {
                     score: Number(context.form.qInputs[0].name),
                     scoreMax: Number(context.form.qInputs[1].name),
-                    classRoomId: context.form.qSelects[0].value,
-                    subjectId: context.form.qSelects[1].value,
-                    studentId: context.form.qSelects[2].value,
-                    designationId: context.form.qSelects[3].value,
-                    teacherId: context.form.qSelects[4].value,
-                    assessmentId: context.form.qSelects[5].value,
-                    levelId: context.form.qSelects[6].value,
-                    sessionId: context.form.qSelects[7].value,
+                    sessionId: context.form.qSelects[0].value,
+                    levelId: context.form.qSelects[1].value,
+                    classRoomId: context.form.qSelects[2].value,
+                    subjectId: context.form.qSelects[3].value,
+                    studentId: context.form.qSelects[4].value,
+                    designationId: context.form.qSelects[5].value,
+                    teacherId: context.form.qSelects[6].value,
+                    assessmentId: context.form.qSelects[7].value,
                     updatedAt: context.form.qDates[0].name,
                     schoolId: user.schoolId,
                 }
@@ -201,7 +203,7 @@ export default {
              var user = this.$store.getters["authenticationStore/IdentityModel"]
             const teachers = await loadUsersByCategory(payload.value, user.schoolId);
             this.$store.commit('userStore/SetTeachers', teachers.result);
-            context.form.qSelects[4].list = teachers.result.map((row) => {
+            context.form.qSelects[6].list = teachers.result.map((row) => {
                 return {
                     ...row,
                     type: `${row.firstName} ${row.lastName}`,
@@ -210,11 +212,43 @@ export default {
                 }
             }) 
         },
+        getClassRoomsByLevelId(payload){
+            console.log("leveId: ", payload.value)
+            var context = this;
+            const classRooms = this.$store.getters["classRoomStore/classRooms"];
+            context.form.qSelects[2].list = [];
+            for(const classRoom of classRooms){
+                if(classRoom.levelId === payload.value){
+                    context.form.qSelects[2].list.push({
+                        ...classRoom,
+                        type: classRoom.type,
+                        value: classRoom.id,
+                        label: classRoom.type,
+                    })
+                }
+            }
+            console.log("classRooms: ", context.form.qSelects[2].list)
+        },
+        getContinuousAssessmentBySubjectId(payload){
+            var context = this;
+            const assessments = this.$store.getters["assessmentStore/assessments"];
+            context.form.qSelects[7].list = [];
+            for(const assessment of assessments){
+                if(assessment.subjectId === payload.value){
+                    context.form.qSelects[7].list.push({
+                        ...assessment,
+                        type: assessment.type,
+                        value: assessment.id,
+                        label: assessment.type,
+                    })
+                }
+            }
+        },
         async loadSelectedResult(){
             var context =  this;
             context.selectedResult = this.$store.getters["resultStore/selectedResult"];
             console.log("context.selectedResult: ", context.selectedResult);
-            context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"].map((row) => {
+            context.form.qSelects[0].list = this.$store.getters["sessionStore/sessions"].map((row) => {
                 return {
                     ...row,
                     type: row.type,
@@ -222,7 +256,7 @@ export default {
                     label: row.type,
                 }
             })
-            context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"].map((row) => {
+            context.form.qSelects[1].list = this.$store.getters["levelStore/levels"].map((row) => {
                 return {
                     ...row,
                     type: row.type,
@@ -230,7 +264,18 @@ export default {
                     label: row.type,
                 }
             })
-            context.form.qSelects[2].list = this.$store.getters["studentStore/students"].map((row) => {
+
+            context.getClassRoomsByLevelId({value: context.selectedResult.levelId})
+
+            context.form.qSelects[3].list = this.$store.getters["subjectStore/subjects"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            })
+            context.form.qSelects[4].list = this.$store.getters["studentStore/students"].map((row) => {
                 return {
                     ...row,
                     type: `${row.firstName} ${row.lastName}`,
@@ -238,7 +283,7 @@ export default {
                     label: `${row.firstName} ${row.lastName}`,
                 }
             })
-            context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"].map((row) => {
+            context.form.qSelects[5].list = this.$store.getters["staffStore/staffs"].map((row) => {
                 return {
                     ...row,
                     type: row.type,
@@ -249,42 +294,41 @@ export default {
             await context.typeOfInstructor({
                 value: context.selectedResult.designationId,
             })
-            context.form.qSelects[5].list = this.$store.getters["assessmentStore/assessments"].map((row) => {
-                return {
-                    ...row,
-                    type: row.type,
-                    value: row.id,
-                    label: row.type,
-                }
-            })
-            context.form.qSelects[6].list = this.$store.getters["levelStore/levels"].map((row) => {
-                return {
-                    ...row,
-                    type: row.type,
-                    value: row.id,
-                    label: row.type,
-                }
-            })
-            context.form.qSelects[7].list = this.$store.getters["sessionStore/sessions"].map((row) => {
-                return {
-                    ...row,
-                    type: row.type,
-                    value: row.id,
-                    label: row.type,
-                }
-            })
+
+            context.getContinuousAssessmentBySubjectId({value: context.selectedResult.subjectId})
+            
 
             context.form.qInputs[0].name = context.selectedResult.score;
             context.form.qInputs[1].name = context.selectedResult.scoreMax;
 
-            context.form.qSelects[0].value = context.selectedResult.classRoomId;
-            context.form.qSelects[1].value = context.selectedResult.subjectId;
-            context.form.qSelects[2].value = context.selectedResult.studentId;
-            context.form.qSelects[3].value = context.selectedResult.designationId;
-            context.form.qSelects[4].value = context.selectedResult.teacherId;
-            context.form.qSelects[5].value = context.selectedResult.assessmentId;
-            context.form.qSelects[6].value = context.selectedResult.levelId;
-            context.form.qSelects[7].value = context.selectedResult.sessionId;
+            context.form.qSelects[0].value = context.selectedResult.sessionId;
+            context.form.qSelects[1].value = context.selectedResult.levelId;
+            context.form.qSelects[2].value = context.selectedResult.classRoomId;
+            context.form.qSelects[3].value = context.selectedResult.subjectId;
+            context.form.qSelects[4].value = context.selectedResult.studentId;
+            context.form.qSelects[5].value = context.selectedResult.designationId;
+            context.form.qSelects[6].value = context.selectedResult.teacherId;
+            context.form.qSelects[7].value = context.selectedResult.assessmentId;
+            
+            
+
+         /*     { label: "Session", value: "", type: "text", list: [], actionName: "session", visible: true },
+        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
+        { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
+        { label: "Subject", value: "", type: "text", list: [], actionName: "subject", visible: true },
+        { label: "Student", value: "", type: "text", list: [], actionName: "student", visible: true },
+        { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
+        { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
+        { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor", visible: true }, */
+
+            console.log("sessions: ", context.form.qSelects[0].list)
+            console.log("levels: ", context.form.qSelects[1].list)
+            console.log("classRooms: ", context.form.qSelects[2].list)
+            console.log("subjects: ", context.form.qSelects[3].list)
+            console.log("students: ", context.form.qSelects[4].list)
+            console.log("designations: ", context.form.qSelects[5].list)
+            console.log("teachers: ", context.form.qSelects[6].list)
+            console.log("assessments: ", context.form.qSelects[7].list)
 
             const dateObj = new Date(context.selectedResult.createdAt);
             var month = ('0' + (dateObj.getMonth() + 1)).slice(-2);

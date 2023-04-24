@@ -142,7 +142,7 @@
                             await context.loadResults()
                             break;
                         case "Delete Success":
-                            this.$router.push("/results");
+                             await context.loadResults()
                             break;
                         case "Delete Result":
                             await context.delete();

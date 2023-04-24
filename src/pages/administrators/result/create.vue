@@ -5,7 +5,9 @@
         :formData="form"
         @Create="Create($event)"
         @Cancel="Cancel($event)"
-        @typeOfInstructor="typeOfInstructor($event)"/>
+        @typeOfInstructor="typeOfInstructor($event)"
+        @getClassRoomsByLevelId="getClassRoomsByLevelId"
+        @getContinuousAssessmentBySubjectId="getContinuousAssessmentBySubjectId"/>
         <div 
         v-show="showSpinner"
         class="q-gutter-md row">
@@ -103,14 +105,14 @@ export default {
                 req: {
                     score: Number(context.form.qInputs[0].name),
                     scoreMax: Number(context.form.qInputs[1].name),
-                    classRoomId: context.form.qSelects[0].value,
-                    subjectId: context.form.qSelects[1].value,
-                    studentId: context.form.qSelects[2].value,
-                    designationId: context.form.qSelects[3].value,
-                    teacherId: context.form.qSelects[4].value,
-                    assessmentId: context.form.qSelects[5].value,
-                    levelId: context.form.qSelects[6].value,
-                    sessionId: context.form.qSelects[7].value,
+                    sessionId: context.form.qSelects[0].value,
+                    levelId: context.form.qSelects[1].value,
+                    classRoomId: context.form.qSelects[2].value,
+                    subjectId: context.form.qSelects[3].value,
+                    studentId: context.form.qSelects[4].value,
+                    designationId: context.form.qSelects[5].value,
+                    teacherId: context.form.qSelects[6].value,
+                    assessmentId: context.form.qSelects[7].value,
                     createdAt: context.form.qDates[0].name,
                     schoolId: user.schoolId,
                 }
@@ -162,7 +164,7 @@ export default {
             var user = this.$store.getters["authenticationStore/IdentityModel"]
             const teachers = await loadUsersByCategory(payload.value, user.schoolId);
             this.$store.commit('userStore/SetTeachers', teachers.result);
-            context.form.qSelects[4].list = teachers.result.map((row) => {
+            context.form.qSelects[6].list = teachers.result.map((row) => {
                 return {
                     ...row,
                     type: `${row.firstName} ${row.lastName}`,
@@ -170,6 +172,106 @@ export default {
                     label: row.type,
                 }
             }) 
+        },
+        getClassRoomsByLevelId(payload){
+            console.log("leveId: ", payload.value)
+            var context = this;
+            const classRooms = this.$store.getters["classRoomStore/classRooms"];
+            console.log("classRooms: ", classRooms)
+            context.form.qSelects[2].list = [];
+            for(const classRoom of classRooms){
+                if(classRoom.levelId === payload.value){
+                    context.form.qSelects[2].list.push({
+                        ...classRoom,
+                        type: classRoom.type,
+                        value: classRoom.id,
+                        label: classRoom.type,
+                    })
+                }
+            }
+            
+
+            /* context.form.qSelects[1].list = this.$store.getters["levelStore/levels"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            }) */
+
+        },
+        getContinuousAssessmentBySubjectId(payload){
+            var context = this;
+            const assessments = this.$store.getters["assessmentStore/assessments"];
+            context.form.qSelects[7].list = [];
+            for(const assessment of assessments){
+                if(assessment.subjectId === payload.value){
+                    context.form.qSelects[7].list.push({
+                        ...assessment,
+                        type: assessment.type,
+                        value: assessment.id,
+                        label: assessment.type,
+                    })
+                }
+            }
+        },
+        async loadSelectedResult(){
+            var context =  this;
+            context.form.qSelects[0].list = this.$store.getters["sessionStore/sessions"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            })
+            context.form.qSelects[1].list = this.$store.getters["levelStore/levels"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            })
+
+            context.getClassRoomsByLevelId({value: context.form.qSelects[1].list[0].value})
+            
+            context.form.qSelects[3].list = this.$store.getters["subjectStore/subjects"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            })
+      
+            context.form.qSelects[4].list = this.$store.getters["studentStore/students"].map((row) => {
+                return {
+                    ...row,
+                    type: `${row.firstName} ${row.lastName}`,
+                    value: row.id,
+                    label: `${row.firstName} ${row.lastName}`,
+                }
+            })
+            console.log("context.form.qSelects[4].list: ", context.form.qSelects[4].list)
+
+            context.form.qSelects[5].list = this.$store.getters["staffStore/staffs"].map((row) => {
+                return {
+                    ...row,
+                    type: row.type,
+                    value: row.id,
+                    label: row.type,
+                }
+            })
+
+            await context.typeOfInstructor({
+                value: context.form.qSelects[5].list[0].value,
+            })
+
+            context.getContinuousAssessmentBySubjectId({value: context.form.qSelects[3].list[0].value})
+            
+
         }
     },
     created(){
@@ -177,63 +279,7 @@ export default {
         context.form.clearQInputs();
         context.form.clearQSelects();
         context.form.clearQDates();
-        context.form.qSelects[0].list = this.$store.getters["classRoomStore/classRooms"].map((row) => {
-            return {
-                ...row,
-                type: row.type,
-                value: row.id,
-                label: row.type,
-            }
-        })
-        context.form.qSelects[1].list = this.$store.getters["subjectStore/subjects"].map((row) => {
-            return {
-                ...row,
-                type: row.type,
-                value: row.id,
-                label: row.type,
-            }
-        })
-        
-        context.form.qSelects[2].list = this.$store.getters["studentStore/students"].map((row) => {
-            return {
-                ...row,
-                type: `${row.firstName} ${row.lastName}`,
-                value: row.id,
-                label: `${row.firstName} ${row.lastName}`,
-            }
-        })
-        context.form.qSelects[3].list = this.$store.getters["staffStore/staffs"].map((row) => {
-            return {
-                ...row,
-                type: row.type,
-                value: row.id,
-                label: row.type,
-            }
-        })
-        context.form.qSelects[5].list = this.$store.getters["assessmentStore/assessments"].map((row) => {
-            return {
-                ...row,
-                type: row.type,
-                value: row.id,
-                label: row.type,
-            }
-        })
-        context.form.qSelects[6].list = this.$store.getters["levelStore/levels"].map((row) => {
-            return {
-                ...row,
-                type: row.type,
-                value: row.id,
-                label: row.type,
-            }
-        })
-        context.form.qSelects[7].list = this.$store.getters["sessionStore/sessions"].map((row) => {
-            return {
-                ...row,
-                type: row.type,
-                value: row.id,
-                label: row.type,
-            }
-        })
+        context.loadSelectedResult();
         this.$store.commit("authenticationStore/setPageTitle", "Create Result");  
     }
 }

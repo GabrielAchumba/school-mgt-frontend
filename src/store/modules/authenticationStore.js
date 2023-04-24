@@ -52,9 +52,17 @@ const state = {
     updateUserRoute: "/update-user",
     unComfirmedUsersRoute: "/unconfirmed-users",
     isTorpa: false,
+    selectedDesignation: {},
+    toUser: {},
   }
 
   const getters = {
+    toUser(state){
+      return state.toUser;
+    },
+    selectedDesignation(state){
+      return state.selectedDesignation;
+    },
     isTorpa(state){
       return state.isTorpa;
     },
@@ -172,6 +180,12 @@ const state = {
 }
 
 const mutations = {
+  setToUser(state, payload){
+    state.toUser = payload;
+  },
+  setSelectedDesignation(state, payload){
+    state.selectedDesignation = payload;
+  },
   setIsTorpa(state, payload){
     state.isTorpa = payload;
   },

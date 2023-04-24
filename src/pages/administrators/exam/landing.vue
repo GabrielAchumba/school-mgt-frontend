@@ -78,7 +78,11 @@
                 }
               }     
             }else if(user.userType === "Admin"){
-              if(user.confirmed){
+              context.cardListCopy = [...context.cardList]
+              for(let i = 0; i < context.cardListCopy.length; i++){
+                  context.cardListCopy[i].to = `/${context.cardListCopy[i].to}`
+              }        
+              /* if(user.confirmed){
                 context.cardListCopy = [...context.cardList]
                 for(let i = 0; i < context.cardListCopy.length; i++){
                     context.cardListCopy[i].to = `/${context.cardListCopy[i].to}`
@@ -88,7 +92,7 @@
                 for(let i = 0; i < context.cardListCopy.length; i++){
                     context.cardListCopy[i].to = `/${context.cardListCopy[i].to}`
                 }
-              }     
+              } */     
             }
             this.$store.commit("authenticationStore/setIsError", false);
             this.$store.commit("authenticationStore/setErrorMessages", "");

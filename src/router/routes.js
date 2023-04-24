@@ -1264,6 +1264,16 @@ const routes = [
         component: () => import('pages/administrators/chat/landing.vue') 
         
       },
+      { 
+        path: '/member-chat-landing',   
+        component: () => import('pages/administrators/chat/landing.vue') 
+        
+      },
+      { 
+        path: '/member-view-chat',   
+        component: () => import('pages/administrators/chat/viewCreateChat.vue') 
+        
+      },
     ]
   },
   {
@@ -1393,6 +1403,16 @@ const routes = [
       { 
         path: '/student-exam-score',   
         component: () => import('pages/administrators/exam/exam-score.vue') 
+        
+      },
+      { 
+        path: '/student-chat-landing',   
+        component: () => import('pages/administrators/chat/landing.vue') 
+        
+      },
+      { 
+        path: '/student-view-chat',   
+        component: () => import('pages/administrators/chat/viewCreateChat.vue') 
         
       },
     ]

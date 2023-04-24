@@ -2,14 +2,14 @@
 const form = {
     title: "Create Result",
     qSelects: [
-        { label: "Class Room", value: "", type: "text", list: [], actionName: "classRoom", visible: true },
-        { label: "Subject", value: "", type: "text", list: [], actionName: "subject", visible: true },
+        { label: "Session", value: "", type: "text", list: [], actionName: "session", visible: true },
+        { label: "Level", value: "", type: "text", list: [], actionName: "getClassRoomsByLevelId", visible: true },
+        { label: "Class Room", value: "", type: "text", list: [], actionName: "anyAction", visible: true },
+        { label: "Subject", value: "", type: "text", list: [], actionName: "getContinuousAssessmentBySubjectId", visible: true },
         { label: "Student", value: "", type: "text", list: [], actionName: "student", visible: true },
         { label: "Type of Instructor", value: "", type: "text", list: [], actionName: "typeOfInstructor", visible: true },
         { label: "Instructor Full Name", value: "", type: "text", list: [], actionName: "instructor", visible: true },
-        { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "instructor", visible: true },
-        { label: "Level", value: "", type: "text", list: [], actionName: "level", visible: true },
-        { label: "Session", value: "", type: "text", list: [], actionName: "session", visible: true },
+        { label: "Type of Assessment", value: "", type: "text", list: [], actionName: "anyAction", visible: true },
     ],
     qInputs: [
         { label: "Score", name: "", type: "text",
