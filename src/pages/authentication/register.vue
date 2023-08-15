@@ -1,21 +1,29 @@
 <template>
-    <div class="q-pa-md bg-primary">
+    <q-page class="q-pa-none bg-primary">
+    <div class="fixed-center" :style="style">
         <Form
         v-if="registrationFormVisible"
         :formData="registrationForm"
+        :rightDrawerOpen="rightDrawerOpen"
         @Next="Next($event)"
         @CancelCreateUser="CancelCreateUser($event)"
         @userTypeAction="userTypeAction($event)"
-        @qInputTemplateAction="ShowOrHidePassword($event)"/>
+        @qInputTemplateAction="ShowOrHidePassword($event)"
+        @createSchool="openCreateSchoolPage($event)"/>
 
         <Form
         v-if="phoneNumberFormVisible"
         :formData="phoneNumberForm"
         @CancelSendCodeSMS="CancelSendCodeSMS($event)"
-        @qInputTemplateAction="GenerateVerificationCode($event)"/>
-        <div 
+        @GenerateVerificationCode="GenerateVerificationCode($event)">
+        <!-- <div 
         v-show="phoneNumberFormVisible"
-        id="recaptcha-container"></div><br>
+        slot="recaptchaContainer">
+          <div id="recaptcha-container"></div>
+        </div> -->
+        </Form>
+        <div id="recaptcha-container"></div>
+
 
         <Form
         v-if="otpFormVisible"
@@ -40,13 +48,14 @@
             </MessageBox>
         </q-dialog>
     </div>
+  </q-page>
 </template>
 
 <script>
 
 import MessageBox from "../../components/dialogs/MessageBox.vue";
 import Form from "../../components/Forms/Form.vue";
-import { post } from "../../store/modules/services";
+import { post, get } from "../../store/modules/services";
 import { registrationForm, phoneNumberForm, otpForm, dialogs } from "./view_models/register-view-model";
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import { getAuth } from 'firebase/auth'
@@ -70,9 +79,25 @@ const auth = getAuth()
 //const db = app.firestore()
 
 export default {
+    computed:{
+      style(){
+          var context = this;
+          if(context.rightDrawerOpen){
+            return "width: 100%; height: 100vh;"
+          }else{
+            return "width: 40%"
+          }
+        },
+    },
     components:{
         MessageBox,
         Form
+    },
+    props:{
+      rightDrawerOpen:{
+          type: Boolean,
+          default: false
+        }
     },
     data(){
         return {
@@ -112,7 +137,7 @@ export default {
         },
         GenerateVerificationCode(payload){
             var context = this;
-            const sn = payload.sn
+            const sn = 0
             context.phoneNumberForm.qInputs[sn].Template.visible = false;
             console.log("phoneNumberFormVisible: ", context.phoneNumberFormVisible)
 
@@ -159,7 +184,7 @@ export default {
             }
         },
         CancelCreateUser(){
-            this.$router.push("/login_register")
+            this.$router.push("/login")
         },
         CancelSendCodeSMS(){
             var context = this;
@@ -316,7 +341,7 @@ export default {
                             context.registrationFormVisible = false;
                             context.phoneNumberFormVisible = false;
                             context.otpFormVisible = false;
-                            this.$router.push('/login_register')
+                            this.$router.push('/login')
                             break;
                     }
                     context.dialogs[i].isVisible = false;
@@ -409,21 +434,50 @@ export default {
           //
           context.appVerifier =  window.recaptchaVerifier
         },1000)
-      }
+      },
+      openCreateSchoolPage(payload){
+        console.log(payload)
+        this.$router.push("/create-school")
+      },
+      async reloadSchools(){
+            var context = this;
+        var url = "school";
+        var response = await get({
+          url
+        })
+
+        const { 
+                data : {
+                    data: result,
+                    message,
+                    success,
+                }
+            } = response
+
+            console.log(result)
+            console.log("success: ", success)
+            if(success){
+              context.registrationForm.qSelects[1].list = result.map((row) => {
+                  return {
+                      ...row,
+                      type: row.schoolName,
+                      name: row.schoolName,
+                      value: row.schoolName,
+                      label: row.schoolName,
+                  }
+              })
+              console.log("schools: ", context.registrationForm.qSelects[1].list)
+            }
+          },
     },
-    created(){
+    async created(){
        var context = this;
        context.registrationForm.clearQInputs();
        context.registrationForm.clearQSelects();
        context.phoneNumberForm.clearQInputs();
        context.phoneNumberForm.clearQInputs();
        context.otpForm.clearQInputs();
-       context.registrationForm.qSelects[1].list = this.$store.getters["schoolStore/schools"].map((row) => {
-           return {
-               ...row,
-               type: row.schoolName
-           }
-       })
+       await context.reloadSchools()
 
        context.initReCaptcha();
     }

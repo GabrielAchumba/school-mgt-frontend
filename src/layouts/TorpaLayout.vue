@@ -1,29 +1,18 @@
 <template>
-  <q-layout view="hHh lpR fFf" class="bg-primary">
-     <q-header>
-         <!-- <SocialMedia/> -->
-         <MainNavbar/>
-     </q-header>
+    <div class="bg-primary">
+    <q-layout view="hHh lpR fFf">
+        <!-- <q-header>
+            <MainNavbar/>
+        </q-header> -->
 
-     <q-page-container style="height: 100vh;">
-      <router-view
-      class="bg-primary"
-      v-if="!showSpinner"
-      @linkClick="linkClick($event)"
-      />
-      <div 
-      v-show="showSpinner"
-      class="q-gutter-md row">
-            <div class="col-12 q-pa-sm absolute-center flex flex-center">
-                <q-spinner
-                    color="accent"
-                    size="3em"
-                    :thickness="10"
-                />
-            </div>
-        </div>
-    </q-page-container>
-  </q-layout>
+        <q-page-container>
+            <router-view
+            @linkClick="linkClick($event)"
+            :rightDrawerOpen="rightDrawerOpen"
+            />
+        </q-page-container>
+    </q-layout>
+    </div>
 </template>
 
 <script>
@@ -47,7 +36,8 @@ export default {
     data(){
         return {
             showSpinner: true,
-            image: "/statics/images/Neway_Logo.jpg"
+            image: "/statics/images/Neway_Logo.jpg",
+            rightDrawerOpen: window.innerWidth < 700 ? true : false,
             
         }
     },
@@ -77,7 +67,7 @@ export default {
                 const torpaLogo = await loadLogos(schoolId);
                 if(torpaLogo.result.length === 0){
                     torpaLogo.result.push({fileUrl: "/statics/newway.jpg", primaryColor: "#FFFFFF",
-                        secondaryColor: "#FF0000", tertiaryColor: "#056608", createdBy: "CEO"})
+                        secondaryColor: "#FF0000", tertiaryColor: "#21BA45", createdBy: "CEO"})
                 }
                 this.$store.commit('LogoStore/SetSelectedLogo', torpaLogo.result[0]);
                 context.initializeLogo(torpaLogo.result[0]);
@@ -243,11 +233,21 @@ export default {
             }
             context.branding(school);
             this.$router.push(`/`)
-        }
+        },
+        onResize(e) {
+            const width = window.innerWidth;
+            var content = this;
+            content.rightDrawerOpen = false
+            console.log("onResize")
+            if(width < 700) {
+                content.rightDrawerOpen = true;
+            }
+        },
     },
     async created(){
         var context = this;
         context.showSpinner = true;
+        window.addEventListener("resize", this.onResize);
         console.log("context.showSpinner: ", context.showSpinner);
         await context.branding({
             schoolId: "CEO",
@@ -258,7 +258,10 @@ export default {
         console.log("context.showSpinner: ", context.showSpinner);
         // http://127.0.0.1/pgadmin4
         // http://localhost/pgadmin4/login?next=%2Fpgadmin4%2F
-    }
+    },
+  destroyed() {
+      window.removeEventListener("resize", this.onResize);
+  },
 }
 
 </script>

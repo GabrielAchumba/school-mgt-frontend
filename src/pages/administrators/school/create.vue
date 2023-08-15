@@ -3,6 +3,7 @@
         <Form
         v-if="!showSpinner"
         :formData="form"
+        :rightDrawerOpen="rightDrawerOpen"
         @Create="Create($event)"
         @Cancel="Cancel($event)"/>
         <div 
@@ -52,11 +53,27 @@ export default {
         },
         spinnerThickness(){
             return this.$store.getters["authenticationStore/spinnerThickness"];
-        }
+        },
+        style(){
+          var context = this;
+          console.log("style")
+          console.log("context.rightDrawerOpen: ", context.rightDrawerOpen)
+          if(context.rightDrawerOpen){
+            return "width: 100%; height: 100vh;"
+          }else{
+            return "width: 40%"
+          }
+        },
     },
     components:{
         MessageBox,
         Form
+    },
+    props:{    
+        rightDrawerOpen:{
+          type: Boolean,
+          default: false
+        }
     },
     data(){
         return {
@@ -77,7 +94,7 @@ export default {
             }
         },
         Cancel(){
-            this.$router.push('/school-landing')
+            this.$router.push('/register')
         },
         cancelDialog(payload){
             const context = this;
@@ -134,7 +151,7 @@ export default {
                             await context.save();
                             break;
                         case "Success":
-                            this.$router.push("/school-landing");
+                            this.$router.push("/register");
                             break;
                     }
                     context.dialogs[i].isVisible = false;

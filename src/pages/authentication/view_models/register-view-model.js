@@ -4,8 +4,10 @@ const userTypes = ["Administrator", "Instructor", "Student", "Teacher", "Lecture
 
 const registrationForm = {
     title: "Create User",
+    backRoute: { name: "", route: "/", isBackArrow: true},
     qSelects: [
             { label: "User Type", value: "", type: "text", 
+            iconName: "", selectorIconClick:"",
             list: userTypes.map((row, i) => {
               return {
                     sn: i+1,
@@ -17,34 +19,24 @@ const registrationForm = {
             }), 
             /* list: [], */
             actionName: "userTypeAction", visible: true },
-            { label: "School Name *", value: "", type: "text", 
-            list: [], actionName: "schoolNameAction", visible: true },
+            { label: "School Name", value: "", type: "text", 
+            list: [], actionName: "schoolNameAction", visible: true,
+            iconName: "add", selectorIconClick:"createSchool" },
     ],
     qInputs: [
         { label: "First Name", name: "", type: "text", 
-        Template: {
-            sn: 0,
-            iconName: "",
-            visible: false,
-        }},
-        { label: "Last Name", name: "", type: "text",
-        Template: {
-            sn: 1,
-            iconName: "",
-            visible: false,
-        }},
-        { label: "User Name", name: "", type: "text",
-        Template: {
-            sn: 2,
-            iconName: "",
-            visible: false,
-        }},
-        { label: "Password", name: "", type: "password",
-        Template: {
-            sn: 3,
-            iconName: "visibility_off",
-            visible: true,
-        }},
+        readonly: false, dense: false, disable: false, prependIcon: "",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: ""},
+        { label: "Last Name", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: ""},
+        { label: "Username", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "person",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: ""},
+        { label: "Password", name: "", type: "password", 
+        readonly: false, dense: false, disable: false, prependIcon: "lock",
+        appendIcon: "password", preInfo: "", linkName:" ",
+        postInfo:""},
     ],
     qBtns: [
         {label: "Cancel", name: "CancelCreateUser", icon: "close", btnDisabled: false},
@@ -72,12 +64,15 @@ const registrationForm = {
 
 const phoneNumberForm = {
     title: "Send Code SMS",
+    backRoute: { name: "", route: "/", isBackArrow: false},
     qSelects: [
             { label: "Country", value: "", type: "text", 
             list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
         { label: "Phone Number", name: "", type: "text",
+        readonly: false, dense: false, disable: false, prependIcon: "",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 0,
             iconName: "send",
@@ -85,6 +80,7 @@ const phoneNumberForm = {
         }},
     ],
     qBtns: [
+        {label: "Verify Phone Number", name: "GenerateVerificationCode", icon: "close", btnDisabled: false},
         {label: "Cancel", name: "CancelSendCodeSMS", icon: "close", btnDisabled: false},
     ],
     qDates: [],
@@ -107,8 +103,11 @@ const phoneNumberForm = {
 
 const otpForm = {
     title: "Verify Code",
+    backRoute: { name: "", route: "/", isBackArrow: false},
     qInputs: [
         { label: "Enter SMS Code", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 0,
             iconName: "",

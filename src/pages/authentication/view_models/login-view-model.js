@@ -2,28 +2,25 @@ import { countryCodes } from "./country-codes";
 
 const loginForm = {
     title: "Sign in User",
+    backRoute: { name: "", route: "/", isBackArrow: true},
     /* qToggles: [
         { label: "Log in student", name: "Disagreed", visible: true}
     ], */
     qInputs: [
-        { label: "User Name", name: "", type: "text", 
-        Template: {
-            sn: 0,
-            iconName: "",
-            visible: false,
-        }},
+        { label: "Username", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "person",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: ""},
         { label: "Password", name: "", type: "password", 
-        Template: {
-            sn: 1,
-            iconName: "visibility_off",
-            visible: true,
-        }},
+        readonly: false, dense: false, disable: false, prependIcon: "lock",
+        appendIcon: "password", preInfo: "", linkName:"Forgot password? Reset password",
+        postInfo:"", qInputLinkAction:"ForgotPassword"},
         
     ],
     qBtns: [
-        {label: "Forgot Password", name: "ForgotPassword", icon: "lock_reset", btnDisabled: false},
+        {label: "Sign In", name: "SignIn", icon: "login", btnDisabled: false}
+        /* {label: "Forgot Password", name: "ForgotPassword", icon: "lock_reset", btnDisabled: false},
         {label: "Sign In", name: "SignIn", icon: "login", btnDisabled: false},
-        {label: "Sign Up", name: "SignUp", icon: "how_to_reg", btnDisabled: false},
+        {label: "Sign Up", name: "SignUp", icon: "how_to_reg", btnDisabled: false}, */
     ],
     qDates: [],
     GroupedCheckBoxes: [],
@@ -37,18 +34,23 @@ const loginForm = {
 
 const forgotPasswordForm = {
     title: "Forgot User Password",
+    backRoute: { name: "", route: "/", isBackArrow: false},
     qSelects: [
             { label: "Country", value: "", type: "text", 
             list: countryCodes, actionName: "countryAction", visible: true },
     ],
     qInputs: [
         { label: "User Name", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "person",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
         { label: "Phone Number", name: "", type: "phoneNumber",
+        readonly: false, dense: false, disable: false, prependIcon: "person",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 1,
             iconName: "phone",
@@ -80,8 +82,11 @@ const forgotPasswordForm = {
 
 const verifyOTPForm = {
     title: "Verfiy OTP",
+    backRoute: { name: "", route: "/", isBackArrow: false},
     qInputs: [
         { label: "otp", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "person",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 0,
             iconName: "",
@@ -105,6 +110,7 @@ const verifyOTPForm = {
 
 const resetPasswordForm = {
     title: "Reset Password",
+    backRoute: { name: "", route: "/", isBackArrow: false},
     qInputs: [
         { label: "Password", name: "", type: "password",
         Template: {

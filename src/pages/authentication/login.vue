@@ -1,75 +1,77 @@
 <template>
-  <div class="q-pa-md bg-primary">
-    <div 
-     v-if="!showSpinner"
-     class="q-pa-md">
-          <Form
-          v-if="isForgotPassword"
-          :formData="forgotPasswordForm"
-          @SendOTP="SendOTP($event)"
-          @resetRecaptcha="resetRecaptcha($event)"
-          @CancelForgotPassword="CancelForgotPassword($event)"/>
-          <div 
-          v-show="isForgotPassword"
-          id="recaptcha-container"></div><br>
+  <q-page class="q-pa-none bg-primary">
+    <div class="fixed-center" :style="style" v-if="!showSpinner">
+      <!-- <div 
+      class="q-pa-none q-ma-none bg-red"> -->
+            <Form
+            v-if="isForgotPassword"
+            :formData="forgotPasswordForm"
+            @SendOTP="SendOTP($event)"
+            @resetRecaptcha="resetRecaptcha($event)"
+            @CancelForgotPassword="CancelForgotPassword($event)"/>
 
-          <Form
-          v-if="isVerifyOTP"
-          :formData="verifyOTPForm"
-          @VerifyOTP="VerifyOTP($event)"
-          @CancelVerifyOTP="CancelVerifyOTP($event)"/>
+            <Form
+            v-if="isVerifyOTP"
+            :formData="verifyOTPForm"
+            @VerifyOTP="VerifyOTP($event)"
+            @CancelVerifyOTP="CancelVerifyOTP($event)"/>
 
-          <Form
-          v-if="isResetPassword"
-          :formData="resetPasswordForm"
-          @ResetPassword="ResetPassword($event)"
-          @CancelResetPassword="CancelResetPassword($event)"
-          @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
+            <Form
+            v-if="isResetPassword"
+            :formData="resetPasswordForm"
+            @ResetPassword="ResetPassword($event)"
+            @CancelResetPassword="CancelResetPassword($event)"
+            @qInputTemplateAction="ResetPasswordQInputTemplateAction($event)"/>
 
-          <Form
-          v-if="isLoginForm"
-          :formData="loginForm"
-          @SignIn="SignIn($event)"
-          @ForgotPassword="ForgotPassword($event)"
-          @SignUp="SignUp($event)"
-          @qInputTemplateAction="LoginQInputTemplateAction($event)"
-          @onToggle="onToggleLoginForm($event)"/>
+            <Form
+            v-if="isLoginForm"
+            :formData="loginForm"
+            :rightDrawerOpen="rightDrawerOpen"
+            @SignIn="SignIn($event)"
+            @ForgotPassword="ForgotPassword($event)"
+            @SignUp="SignUp($event)"
+            @qInputTemplateAction="LoginQInputTemplateAction($event)"
+            @onToggle="onToggleLoginForm($event)"/>
 
-           <Form
-          v-if="isLoginFormWithToken"
-          :formData="loginFormWithToken"
-          @SignInWithToken="SignInWithToken($event)"
-          @onToggle="onToggleLoginFormWithToken($event)"/>
+            <Form
+            v-if="isLoginFormWithToken"
+            :formData="loginFormWithToken"
+            @SignInWithToken="SignInWithToken($event)"
+            @onToggle="onToggleLoginFormWithToken($event)"/>
 
-        <q-dialog 
-            v-for="dialog in dialogs" 
-            :key="dialog.title"
-            v-model="dialog.isVisible">
-            <MessageBox
-            :title="dialog.title"
-            :message="dialog.message"
-            :okayEvent="dialog.okayEvent"
-            :cancelEvent="dialog.cancelEvent"
-            @cancelDialog="cancelDialog($event)"
-            @okDialog="okDialog($event)"
-            >
-            </MessageBox>
-        </q-dialog>
-    </div>
+            <div 
+            v-show="isForgotPassword"
+            id="recaptcha-container"></div><br>
+
+          <q-dialog 
+              v-for="dialog in dialogs" 
+              :key="dialog.title"
+              v-model="dialog.isVisible">
+              <MessageBox
+              :title="dialog.title"
+              :message="dialog.message"
+              :okayEvent="dialog.okayEvent"
+              :cancelEvent="dialog.cancelEvent"
+              @cancelDialog="cancelDialog($event)"
+              @okDialog="okDialog($event)"
+              >
+              </MessageBox>
+          </q-dialog>
+      </div>
 
 
-    <div 
-      v-show="showSpinner"
-      class="q-gutter-md row">
-            <div class="col-12 q-pa-sm absolute-center flex flex-center">
-                <q-spinner
-                    color="accent"
-                    size="3em"
-                    :thickness="10"
-                />
-            </div>
-    </div>
-  </div>
+      <div 
+        v-show="showSpinner"
+        class="q-gutter-md row">
+              <div class="col-12 q-pa-sm absolute-center flex flex-center">
+                  <q-spinner
+                      color="accent"
+                      size="3em"
+                      :thickness="10"
+                  />
+              </div>
+      </div>
+  </q-page>
 </template>
 
 <script>
@@ -103,11 +105,27 @@ const auth = getAuth()
        computed: {
         showSpinner(){
             return this.$store.getters["authenticationStore/showSpinner"];
-        }
+        },
+        style(){
+          var context = this;
+          console.log("style")
+          console.log("context.rightDrawerOpen: ", context.rightDrawerOpen)
+          if(context.rightDrawerOpen){
+            return "width: 100%; height: 100vh;"
+          }else{
+            return "width: 40%"
+          }
+        },
       },
       components:{
         MessageBox,
         Form,
+      },
+      props:{
+        rightDrawerOpen:{
+          type: Boolean,
+          default: false
+        }
       },
       data () {
           return {
@@ -190,7 +208,7 @@ const auth = getAuth()
             context.isResetPassword = false;
             context.isVerifyOTP = false;
             context.isLoginFormWithToken = false;
-            context.forgotPasswordForm.qBtns[2].btnDisabled = false;
+            //context.forgotPasswordForm.qBtns[2].btnDisabled = false;
           },
           CancelVerifyOTP(){
             var context = this;
@@ -199,7 +217,7 @@ const auth = getAuth()
             context.isResetPassword = false;
             context.isVerifyOTP = false;
             context.isLoginFormWithToken = false;
-            context.verifyOTPForm.qBtns[1].btnDisabled = false;
+            //context.verifyOTPForm.qBtns[1].btnDisabled = false;
           },
           CancelResetPassword(){
             var context = this;
@@ -208,7 +226,7 @@ const auth = getAuth()
             context.isResetPassword = false;
             context.isVerifyOTP = true;
             context.isLoginFormWithToken = false;
-            context.resetPasswordForm.qBtns[1].btnDisabled = false;
+            //context.resetPasswordForm.qBtns[1].btnDisabled = false;
           },
           SendOTP(){
             const context = this;
@@ -217,7 +235,7 @@ const auth = getAuth()
                 i++;
                 if(dialog.title == "Send OTP"){
                     context.dialogs[i].isVisible = true;
-                    context.forgotPasswordForm.qBtns[0].btnDisabled = false;
+                    //context.forgotPasswordForm.qBtns[0].btnDisabled = false;
                     break;
                 }
             }
@@ -229,7 +247,7 @@ const auth = getAuth()
                 i++;
                 if(dialog.title == "Sign In"){
                     context.dialogs[i].isVisible = true;
-                    context.loginForm.qBtns[1].btnDisabled = true;
+                    //context.loginForm.qBtns[0].btnDisabled = true;
                     break;
                 }
             }
@@ -245,7 +263,7 @@ const auth = getAuth()
                 }
             }
         },
-        ForgotPassword(){
+        ForgotPassword(payload){
             var context = this;
             context.isForgotPassword = true;
             context.isResetPassword = false;
@@ -261,7 +279,7 @@ const auth = getAuth()
                 i++;
                 if(dialog.title == "Reset Password"){
                     context.dialogs[i].isVisible = true;
-                    context.resetPasswordForm.qBtns[0].btnDisabled = false;
+                    //context.resetPasswordForm.qBtns[0].btnDisabled = false;
                     break;
                 }
             }
@@ -317,25 +335,25 @@ const auth = getAuth()
                     context.dialogs[i].isVisible = FALSE;
                     switch(payload){
                       case "Send OTP":
-                        context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
+                        //context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
                         break;
                       case "Reset":
-                        context.forgotPasswordForm.qBtns[1].btnDisabled = FALSE;
+                        //context.forgotPasswordForm.qBtns[1].btnDisabled = FALSE;
                         break;
                       case "Forgot Password":
-                        context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
+                        //context.forgotPasswordForm.qBtns[0].btnDisabled = FALSE;
                         break;
                       case "Sign In":
-                        context.loginForm.qBtns[1].btnDisabled = FALSE;
+                        //context.loginForm.qBtns[1].btnDisabled = FALSE;
                         break;
                       case  "Sign Up":
-                        context.loginForm.qBtns[2].btnDisabled = FALSE;
+                        //context.loginForm.qBtns[2].btnDisabled = FALSE;
                         break;
                       case  "Verify OTP":
-                        context.verifyOTPForm.qBtns[0].btnDisabled = FALSE;
+                        //context.verifyOTPForm.qBtns[0].btnDisabled = FALSE;
                         break;
                       case  "Reset Password":
-                        context.loginForm.qBtns[1].btnDisabled = FALSE;
+                        //context.loginForm.qBtns[1].btnDisabled = FALSE;
                         break;
                     }
                     break;
@@ -444,7 +462,7 @@ const auth = getAuth()
             if(!success){
                 alert("Failed")
             }else{
-              context.forgotPasswordForm.qBtns[0].btnDisabled = false;
+              //context.forgotPasswordForm.qBtns[0].btnDisabled = false;
             }
 
             console.log("context.userExists: ", userExists);
@@ -492,7 +510,7 @@ const auth = getAuth()
                     switch(payload){
                         case "Sign In":
                             await context.login();
-                            context.loginForm.qBtns[1].btnDisabled = false;
+                            //context.loginForm.qBtns[1].btnDisabled = false;
                             break;
                         case "Sign In Success":
                             context.logInSuccessOkay();
@@ -509,7 +527,7 @@ const auth = getAuth()
                           break;
                         case "Reset Password":
                             context.ChangePassword();
-                            context.resetPasswordForm.qBtns[0].btnDisabled = true;
+                            //context.resetPasswordForm.qBtns[0].btnDisabled = true;
                         case "Reset Password Success":
                           context.isForgotPassword = false;
                           context.isVerifyOTP = false
@@ -586,7 +604,7 @@ const auth = getAuth()
       async VerifyOTP(){
           var context = this;
          this.$store.commit("authenticationStore/setShowSpinner", true);
-         context.verifyOTPForm.qBtns[0].btnDisabled = true;
+         //context.verifyOTPForm.qBtns[0].btnDisabled = true;
         await context.VerifyCode();
         this.$store.commit("authenticationStore/setShowSpinner", false);
       },
@@ -608,7 +626,7 @@ const auth = getAuth()
             context.isResetPassword = true;
             context.isLoginForm = false;
             context.isLoginFormWithToken = false;
-            context.verifyOTPForm.qBtns[0].btnDisabled = false;
+            //context.verifyOTPForm.qBtns[0].btnDisabled = false;
           }).catch(function (error) {
               alert("User couldn't sign in (bad verification code?)")
           });
@@ -639,10 +657,10 @@ const auth = getAuth()
       },
       resetRecaptcha(){
         var context = this;
-        context.forgotPasswordForm.qBtns[1].btnDisabled = true;
+        //context.forgotPasswordForm.qBtns[1].btnDisabled = true;
          window.recaptchaVerifier.clear()
          context.appVerifier =  window.recaptchaVerifier
-         context.forgotPasswordForm.qBtns[1].btnDisabled = false;
+         //context.forgotPasswordForm.qBtns[1].btnDisabled = false;
       }
       },
       async created(){
@@ -656,6 +674,7 @@ const auth = getAuth()
        context.resetPasswordForm.clearQInputs();
        context.loginFormWithToken.clearQInputs();
        const schools = await loadSchools();
+       console.log("schools: ", schools)
        this.$store.commit('schoolStore/SetSchools', schools.result);
        context.loginFormWithToken.qSelects[0].list = schools.result.map((row) => {
            return {

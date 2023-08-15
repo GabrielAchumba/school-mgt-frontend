@@ -1,17 +1,22 @@
 const form = {
     title: "Create School",
+    backRoute: { name: "", route: "/register", isBackArrow: true},
     qSelects: [
          /* { label: "Refered By *", value: "", type: "text", 
          list: [], actionName: "referedByAction", visible: true }, */
     ],
     qInputs: [
         { label: "School Name", name: "", type: "text", 
+        readonly: false, dense: false, disable: false, prependIcon: "",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 0,
             iconName: "",
             visible: false,
         }},
         { label: "School Address", name: "", type: "textarea",
+        readonly: false, dense: false, disable: false, prependIcon: "",
+        appendIcon: "", preInfo: "", linkName: "", postInfo: "",
         Template: {
             sn: 0,
             iconName: "",
@@ -19,8 +24,8 @@ const form = {
         }},
     ],
     qBtns: [
-        {label: "Cancel", name: "Cancel", icon: "close"},
-        {label: "Create", name: "Create", icon: "add"},
+        {label: "Cancel", name: "Cancel", icon: "close", btnDisabled: false},
+        {label: "Create", name: "Create", icon: "add", btnDisabled: false},
     ],
     qDates: [],
     GroupedCheckBoxes: [],

@@ -3,10 +3,14 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/TorpaLayout.vue'),
-    children: [
+    children: [{ 
+      path: '/', 
+      component: () => import('pages/landing.vue') 
+      
+    },
       { 
-        path: '/', 
-        component: () => import('pages/authentication/loginregister.vue') 
+        path: '/login', 
+        component: () => import('pages/authentication/login.vue') 
         
       },
       { 
@@ -36,7 +40,7 @@ const routes = [
       },
       { 
         path: '/register', 
-        component: () => import('pages/authentication/register-user.vue') 
+        component: () => import('pages/authentication/register.vue') 
         
       },
       { 
